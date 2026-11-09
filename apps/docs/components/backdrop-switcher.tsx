@@ -7,9 +7,10 @@ export function BackdropSwitcher() {
   const { backdrop, setBackdrop, theme, toggleTheme } = useBackdrop();
 
   const options: { id: BackdropType; label: string }[] = [
-    { id: "photo", label: "📷 Photo" },
+    { id: "fluted", label: "🌅 Coded Fluted Glass" },
+    { id: "photo", label: "📷 Wallpaper Photo" },
     { id: "video", label: "🎬 Moving Video" },
-    { id: "gradient", label: "🎨 Gradient" },
+    { id: "gradient", label: "🎨 Deep Indigo" },
     { id: "plain", label: "◻ Plain" },
   ];
 

@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, type ReactNode } from "react";
 
-export type BackdropType = "photo" | "video" | "gradient" | "plain";
+export type BackdropType = "fluted" | "photo" | "video" | "gradient" | "plain";
 
 interface BackdropContextValue {
   backdrop: BackdropType;
@@ -15,7 +15,7 @@ interface BackdropContextValue {
 const BackdropContext = createContext<BackdropContextValue | undefined>(undefined);
 
 export function BackdropProvider({ children }: { children: ReactNode }) {
-  const [backdrop, setBackdrop] = useState<BackdropType>("photo");
+  const [backdrop, setBackdrop] = useState<BackdropType>("fluted");
   const [theme, setTheme] = useState<"light" | "dark">("dark");
 
   const toggleTheme = () => {

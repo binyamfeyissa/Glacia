@@ -29,14 +29,81 @@ body {
   transition: background 300ms ease;
 }
 
-/* Photo Backdrop: High-texture photographic wallpaper with text & details to show refraction */
+/* Fluted Glass Sunset Backdrop: 100% coded reproduction of Apple Liquid Glass fluted wallpaper */
+.gl-backdrop-fluted {
+  background:
+    /* Layer 1: Fine optical fluted glass vertical ribs (cylindrical highlights and shadow troughs) */
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.12) 0px,
+      rgba(255, 255, 255, 0.19) 1.5px,
+      rgba(255, 255, 255, 0.05) 3px,
+      rgba(0, 0, 0, 0.02) 4.5px,
+      rgba(0, 0, 0, 0.12) 7.5px,
+      rgba(0, 0, 0, 0.26) 10.5px,
+      rgba(0, 0, 0, 0.14) 12.5px,
+      rgba(255, 255, 255, 0.03) 14px,
+      rgba(255, 255, 255, 0.12) 15px
+    ),
+    /* Layer 2: Radiant Golden Sunlight Top-Right */
+    radial-gradient(
+      ellipse 85% 75% at 94% 6%,
+      #ffefa5 0%,
+      #fcd564 22%,
+      #fc9f30 52%,
+      rgba(240, 100, 30, 0.4) 75%,
+      transparent 88%
+    ),
+    /* Layer 3: Fiery Sunset Flare Bottom-Right */
+    radial-gradient(
+      ellipse 95% 80% at 96% 85%,
+      #f4521e 0%,
+      #d83916 28%,
+      #862319 56%,
+      #35121b 82%,
+      transparent 100%
+    ),
+    /* Layer 4: Vivid Cerulean Sky Top-Left */
+    radial-gradient(
+      ellipse 80% 70% at 6% 10%,
+      #4fafe6 0%,
+      #2f8ecd 34%,
+      #1b64a0 64%,
+      rgba(15, 60, 110, 0.4) 85%,
+      transparent 95%
+    ),
+    /* Layer 5: Luminous Apricot Mid-Horizon */
+    radial-gradient(
+      ellipse 72% 52% at 56% 48%,
+      #fa9956 0%,
+      rgba(248, 142, 70, 0.8) 32%,
+      rgba(220, 92, 42, 0.5) 58%,
+      transparent 85%
+    ),
+    /* Layer 6: Atmospheric Cyan/Mint Seafoam Haze */
+    radial-gradient(
+      ellipse 65% 42% at 44% 12%,
+      #b6ded8 0%,
+      rgba(175, 218, 212, 0.65) 38%,
+      rgba(140, 190, 200, 0.25) 70%,
+      transparent 85%
+    ),
+    /* Layer 7: Deep Midnight Indigo Base */
+    linear-gradient(
+      155deg,
+      #1c5c90 0%,
+      #12366b 30%,
+      #081744 58%,
+      #040c24 100%
+    );
+  background-attachment: fixed;
+}
+
+/* Wallpaper Photo Backdrop: High-res fluted glass wallpaper */
 .gl-backdrop-photo {
   background:
-    radial-gradient(circle at 15% 20%, rgba(0, 136, 255, 0.45), transparent 45%),
-    radial-gradient(circle at 85% 30%, rgba(255, 59, 48, 0.4), transparent 50%),
-    radial-gradient(circle at 50% 80%, rgba(52, 199, 89, 0.35), transparent 50%),
-    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 2px, transparent 2px, transparent 8px),
-    linear-gradient(135deg, #111422 0%, #1e1b4b 50%, #030712 100%);
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.25)),
+    url("/wallpapers/fluted-glass.jpg") center/cover no-repeat;
   background-attachment: fixed;
 }
 
