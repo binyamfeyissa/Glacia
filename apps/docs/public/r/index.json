@@ -728,6 +728,219 @@
       ]
     },
     {
+      "name": "toggle-group",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.1.0",
+        "radix-ui@^1.8.1"
+      ],
+      "registryDependencies": [
+        "https://glacia.dev/r/glass.json"
+      ],
+      "files": [
+        "toggle-group.tsx"
+      ]
+    },
+    {
+      "name": "input-otp",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.1.0"
+      ],
+      "registryDependencies": [
+        "https://glacia.dev/r/glass.json"
+      ],
+      "files": [
+        "input-otp.tsx"
+      ]
+    },
+    {
+      "name": "command",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.1.0",
+        "radix-ui@^1.8.1"
+      ],
+      "registryDependencies": [
+        "https://glacia.dev/r/glass.json"
+      ],
+      "files": [
+        "command.tsx"
+      ]
+    },
+    {
+      "name": "carousel",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.1.0"
+      ],
+      "registryDependencies": [
+        "https://glacia.dev/r/glass.json"
+      ],
+      "files": [
+        "carousel.tsx"
+      ]
+    },
+    {
+      "name": "aspect-ratio",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.1.0",
+        "radix-ui@^1.8.1"
+      ],
+      "registryDependencies": [
+        "https://glacia.dev/r/glass.json"
+      ],
+      "files": [
+        "aspect-ratio.tsx"
+      ]
+    },
+    {
+      "name": "kbd",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.1.0"
+      ],
+      "registryDependencies": [
+        "https://glacia.dev/r/glass.json"
+      ],
+      "files": [
+        "kbd.tsx"
+      ]
+    },
+    {
+      "name": "code-block",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.1.0"
+      ],
+      "registryDependencies": [
+        "https://glacia.dev/r/glass.json"
+      ],
+      "files": [
+        "code-block.tsx"
+      ]
+    },
+    {
+      "name": "marker",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.1.0"
+      ],
+      "registryDependencies": [
+        "https://glacia.dev/r/glass.json"
+      ],
+      "files": [
+        "marker.tsx"
+      ]
+    },
+    {
+      "name": "menubar",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.1.0",
+        "radix-ui@^1.8.1"
+      ],
+      "registryDependencies": [
+        "https://glacia.dev/r/glass.json"
+      ],
+      "files": [
+        "menubar.tsx"
+      ]
+    },
+    {
+      "name": "resizable",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.1.0"
+      ],
+      "registryDependencies": [
+        "https://glacia.dev/r/glass.json"
+      ],
+      "files": [
+        "resizable.tsx"
+      ]
+    },
+    {
+      "name": "message",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.1.0"
+      ],
+      "registryDependencies": [
+        "https://glacia.dev/r/glass.json"
+      ],
+      "files": [
+        "message.tsx"
+      ]
+    },
+    {
+      "name": "message-scroller",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.1.0"
+      ],
+      "registryDependencies": [
+        "https://glacia.dev/r/glass.json"
+      ],
+      "files": [
+        "message-scroller.tsx"
+      ]
+    },
+    {
+      "name": "attachment",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.1.0"
+      ],
+      "registryDependencies": [
+        "https://glacia.dev/r/glass.json"
+      ],
+      "files": [
+        "attachment.tsx"
+      ]
+    },
+    {
+      "name": "questionnaire",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.1.0"
+      ],
+      "registryDependencies": [
+        "https://glacia.dev/r/glass.json"
+      ],
+      "files": [
+        "questionnaire.tsx"
+      ]
+    },
+    {
+      "name": "trace",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.1.0"
+      ],
+      "registryDependencies": [
+        "https://glacia.dev/r/glass.json"
+      ],
+      "files": [
+        "trace.tsx"
+      ]
+    },
+    {
+      "name": "direction",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.1.0",
+        "radix-ui@^1.8.1"
+      ],
+      "registryDependencies": [
+        "https://glacia.dev/r/glass.json"
+      ],
+      "files": [
+        "direction.tsx"
+      ]
+    },
+    {
       "name": "base",
       "type": "registry:base",
       "cssVars": {
@@ -812,7 +1025,23 @@
         "https://glacia.dev/r/pagination.json",
         "https://glacia.dev/r/collapsible.json",
         "https://glacia.dev/r/data-table.json",
-        "https://glacia.dev/r/native-select.json"
+        "https://glacia.dev/r/native-select.json",
+        "https://glacia.dev/r/toggle-group.json",
+        "https://glacia.dev/r/input-otp.json",
+        "https://glacia.dev/r/command.json",
+        "https://glacia.dev/r/carousel.json",
+        "https://glacia.dev/r/aspect-ratio.json",
+        "https://glacia.dev/r/kbd.json",
+        "https://glacia.dev/r/code-block.json",
+        "https://glacia.dev/r/marker.json",
+        "https://glacia.dev/r/menubar.json",
+        "https://glacia.dev/r/resizable.json",
+        "https://glacia.dev/r/message.json",
+        "https://glacia.dev/r/message-scroller.json",
+        "https://glacia.dev/r/attachment.json",
+        "https://glacia.dev/r/questionnaire.json",
+        "https://glacia.dev/r/trace.json",
+        "https://glacia.dev/r/direction.json"
       ],
       "files": []
     }

@@ -1,0 +1,17 @@
+{
+  "name": "message",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "message.tsx",
+      "content": "import { Message, MessageBubble, MessageAvatar, MessageContent, MessageTimestamp, MessageStatus } from \"glacia\";\nexport { Message, MessageBubble, MessageAvatar, MessageContent, MessageTimestamp, MessageStatus };\nexport default Message;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

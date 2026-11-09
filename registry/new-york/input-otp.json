@@ -1,0 +1,17 @@
+{
+  "name": "input-otp",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "input-otp.tsx",
+      "content": "import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator, type InputOTPProps } from \"glacia\";\nexport { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator, type InputOTPProps };\nexport default InputOTP;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

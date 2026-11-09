@@ -1,0 +1,17 @@
+{
+  "name": "carousel",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "carousel.tsx",
+      "content": "import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext, CarouselDots, useCarousel } from \"glacia\";\nexport { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext, CarouselDots, useCarousel };\nexport default Carousel;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

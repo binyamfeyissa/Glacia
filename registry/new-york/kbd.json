@@ -1,0 +1,17 @@
+{
+  "name": "kbd",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "kbd.tsx",
+      "content": "import { Kbd, type KbdProps } from \"glacia\";\nexport { Kbd, type KbdProps };\nexport default Kbd;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

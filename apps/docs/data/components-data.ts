@@ -9,7 +9,7 @@ export interface ComponentMeta {
   slug: string;
   name: string;
   description: string;
-  category: "Buttons & Actions" | "Text & Forms" | "Showing Things" | "Navigation & Layout" | "Popups & Menus";
+  category: "Buttons & Actions" | "Text & Forms" | "Showing Things" | "Navigation & Layout" | "Popups & Menus" | "Chat & AI";
   appleStatus: "Apple-faithful" | "Glacia extension";
   nativeStatus: "Yes" | "Web only" | "Web first";
   wave: 1 | 2 | 3;
@@ -1385,6 +1385,430 @@ export default function NativeSelectDemo() {
     </NativeSelect>
   );
 }`
-  }
+  },
+  {
+    slug: "toggle-group",
+    name: "Toggle Group",
+    description: "Apple segmented toolbar or filter bar for toggling one or multiple active states with haptic spring feedback.",
+    category: "Buttons & Actions",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 3,
+    props: [
+      { name: "type", type: "'single' | 'multiple'", default: "'single'", description: "Whether one or multiple items can be selected." },
+      { name: "variant", type: "'glass' | 'outline' | 'ghost'", default: "'glass'", description: "Visual glass style." },
+      { name: "size", type: "'sm' | 'md' | 'lg'", default: "'md'", description: "Sizing preset." },
+      { name: "value", type: "string | string[]", description: "Controlled value." },
+      { name: "onValueChange", type: "(val: any) => void", description: "Value change handler." }
+    ],
+    codeSnippet: `import { ToggleGroup, ToggleGroupItem } from "glacia";
 
+export default function ToggleGroupDemo() {
+  return (
+    <ToggleGroup type="multiple" defaultValue={["bold", "italic"]}>
+      <ToggleGroupItem value="bold">B</ToggleGroupItem>
+      <ToggleGroupItem value="italic">I</ToggleGroupItem>
+      <ToggleGroupItem value="underline">U</ToggleGroupItem>
+    </ToggleGroup>
+  );
+}`
+  },
+  {
+    slug: "input-otp",
+    name: "Input OTP",
+    description: "Apple ID Two-Factor Authentication SMS & Passkey 6-digit code verification entry slots with glowing focus rings.",
+    category: "Text & Forms",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 3,
+    props: [
+      { name: "maxLength", type: "number", default: "6", description: "Total number of code digits." },
+      { name: "value", type: "string", description: "Controlled input value." },
+      { name: "onChange", type: "(val: string) => void", description: "Value update callback." },
+      { name: "onComplete", type: "(val: string) => void", description: "Fires when all slots are filled." }
+    ],
+    codeSnippet: `import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from "glacia";
+
+export default function InputOTPDemo() {
+  return (
+    <InputOTP maxLength={6} onComplete={(code) => console.log(code)}>
+      <InputOTPGroup>
+        <InputOTPSlot index={0} />
+        <InputOTPSlot index={1} />
+        <InputOTPSlot index={2} />
+      </InputOTPGroup>
+      <InputOTPSeparator />
+      <InputOTPGroup>
+        <InputOTPSlot index={3} />
+        <InputOTPSlot index={4} />
+        <InputOTPSlot index={5} />
+      </InputOTPGroup>
+    </InputOTP>
+  );
+}`
+  },
+  {
+    slug: "command",
+    name: "Command",
+    description: "macOS Spotlight / Apple Command Palette floating quick-search window with categorized shortcut actions.",
+    category: "Popups & Menus",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 3,
+    props: [
+      { name: "children", type: "ReactNode", description: "Command palette items, inputs, and groups." }
+    ],
+    codeSnippet: `import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandShortcut } from "glacia";
+
+export default function CommandDemo() {
+  return (
+    <Command>
+      <CommandInput placeholder="Type a command or search…" />
+      <CommandList>
+        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandGroup heading="Suggestions">
+          <CommandItem>Calendar<CommandShortcut>⌘1</CommandShortcut></CommandItem>
+          <CommandItem>Settings<CommandShortcut>⌘,</CommandShortcut></CommandItem>
+        </CommandGroup>
+      </CommandList>
+    </Command>
+  );
+}`
+  },
+  {
+    slug: "carousel",
+    name: "Carousel",
+    description: "iOS Photos & App Store swipeable hero card carousel with momentum snapping and dynamic pill indicator dots.",
+    category: "Showing Things",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 3,
+    props: [
+      { name: "defaultIndex", type: "number", default: "0", description: "Initial active slide index." }
+    ],
+    codeSnippet: `import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext, CarouselDots } from "glacia";
+
+export default function CarouselDemo() {
+  return (
+    <Carousel className="max-w-md">
+      <CarouselContent>
+        <CarouselItem>Slide 1</CarouselItem>
+        <CarouselItem>Slide 2</CarouselItem>
+        <CarouselItem>Slide 3</CarouselItem>
+      </CarouselContent>
+      <CarouselPrevious />
+      <CarouselNext />
+      <CarouselDots />
+    </Carousel>
+  );
+}`
+  },
+  {
+    slug: "aspect-ratio",
+    name: "Aspect Ratio",
+    description: "Apple TV & Photos media container maintaining exact dimensional ratios (16:9, 4:3, 1:1) with optional specular glass frame.",
+    category: "Showing Things",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 3,
+    props: [
+      { name: "ratio", type: "number", default: "16 / 9", description: "Aspect ratio width / height." },
+      { name: "glassBorder", type: "boolean", default: "false", description: "Applies liquid glass squircle border." }
+    ],
+    codeSnippet: `import { AspectRatio } from "glacia";
+
+export default function AspectRatioDemo() {
+  return (
+    <AspectRatio ratio={16 / 9} glassBorder className="overflow-hidden">
+      <img src="/wallpaper.jpg" alt="Wallpaper" className="w-full h-full object-cover" />
+    </AspectRatio>
+  );
+}`
+  },
+  {
+    slug: "kbd",
+    name: "Kbd",
+    description: "macOS physical keycap badge with micro-bevel depth, top highlight hairline, and SF monospaced glyphs.",
+    category: "Showing Things",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web only",
+    wave: 3,
+    props: [
+      { name: "size", type: "'sm' | 'md' | 'lg'", default: "'md'", description: "Keycap dimension size." }
+    ],
+    codeSnippet: `import { Kbd } from "glacia";
+
+export default function KbdDemo() {
+  return (
+    <div className="flex gap-2 items-center">
+      <Kbd size="md">⌘</Kbd>
+      <Kbd size="md">K</Kbd>
+    </div>
+  );
+}`
+  },
+  {
+    slug: "code-block",
+    name: "Code Block",
+    description: "Apple Developer documentation & Xcode code preview window with macOS traffic light controls and haptic copy button.",
+    category: "Showing Things",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web only",
+    wave: 3,
+    props: [
+      { name: "code", type: "string", description: "Source code to display." },
+      { name: "filename", type: "string", description: "Optional filename header." },
+      { name: "language", type: "string", default: "'typescript'", description: "Programming language badge." },
+      { name: "showLineNumbers", type: "boolean", default: "true", description: "Toggles line numbers." }
+    ],
+    codeSnippet: `import { CodeBlock } from "glacia";
+
+export default function CodeBlockDemo() {
+  return (
+    <CodeBlock
+      filename="App.tsx"
+      language="typescript"
+      code="import { Glass } from 'glacia';\\n\\nexport default function App() {\\n  return <Glass>Hello</Glass>;\\n}"
+    />
+  );
+}`
+  },
+  {
+    slug: "marker",
+    name: "Marker",
+    description: "Apple Maps teardrop pin with animated pulsing ripple, and Safari luminous text highlighter marker.",
+    category: "Showing Things",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 3,
+    props: [
+      { name: "color", type: "'blue' | 'green' | 'orange' | 'red' | 'purple'", default: "'blue'", description: "Pin marker accent color." },
+      { name: "label", type: "ReactNode", description: "Floating label caption." },
+      { name: "pulse", type: "boolean", default: "true", description: "Animates pulsing radar wave." }
+    ],
+    codeSnippet: `import { Marker, TextMarker } from "glacia";
+
+export default function MarkerDemo() {
+  return (
+    <div className="flex flex-col gap-4">
+      <Marker color="blue" label="Cupertino, CA" />
+      <p>Bending light across <TextMarker variant="yellow">liquid glass</TextMarker> materials.</p>
+    </div>
+  );
+}`
+  },
+  {
+    slug: "menubar",
+    name: "Menubar",
+    description: "macOS system menu bar with liquid glass dropdown surfaces, keyboard shortcuts, and nested submenus.",
+    category: "Popups & Menus",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web only",
+    wave: 3,
+    props: [
+      { name: "children", type: "ReactNode", description: "Menubar menus and triggers." }
+    ],
+    codeSnippet: `import { Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem, MenubarShortcut, MenubarSeparator } from "glacia";
+
+export default function MenubarDemo() {
+  return (
+    <Menubar>
+      <MenubarMenu>
+        <MenubarTrigger>File</MenubarTrigger>
+        <MenubarContent>
+          <MenubarItem>New Tab <MenubarShortcut>⌘T</MenubarShortcut></MenubarItem>
+          <MenubarItem>New Window <MenubarShortcut>⌘N</MenubarShortcut></MenubarItem>
+          <MenubarSeparator />
+          <MenubarItem>Close Window <MenubarShortcut>⌘W</MenubarShortcut></MenubarItem>
+        </MenubarContent>
+      </MenubarMenu>
+      <MenubarMenu>
+        <MenubarTrigger>Edit</MenubarTrigger>
+        <MenubarContent>
+          <MenubarItem>Undo <MenubarShortcut>⌘Z</MenubarShortcut></MenubarItem>
+          <MenubarItem>Redo <MenubarShortcut>⇧⌘Z</MenubarShortcut></MenubarItem>
+        </MenubarContent>
+      </MenubarMenu>
+    </Menubar>
+  );
+}`
+  },
+  {
+    slug: "resizable",
+    name: "Resizable",
+    description: "macOS NSSplitView multi-panel layout divider with draggable liquid glass hairline handle and grip bar.",
+    category: "Navigation & Layout",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web only",
+    wave: 3,
+    props: [
+      { name: "direction", type: "'horizontal' | 'vertical'", default: "'horizontal'", description: "Layout split orientation." }
+    ],
+    codeSnippet: `import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "glacia";
+
+export default function ResizableDemo() {
+  return (
+    <ResizablePanelGroup direction="horizontal" className="min-h-[200px]">
+      <ResizablePanel defaultSize={25} order={0}>Sidebar</ResizablePanel>
+      <ResizableHandle withHandle />
+      <ResizablePanel defaultSize={75} order={1}>Editor</ResizablePanel>
+    </ResizablePanelGroup>
+  );
+}`
+  },
+  {
+    slug: "message",
+    name: "Message",
+    description: "Apple iMessage & Apple Intelligence speech bubbles in rich system gradients or frosted liquid glass.",
+    category: "Chat & AI",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 3,
+    props: [
+      { name: "role", type: "'user' | 'assistant' | 'system'", default: "'user'", description: "Message sender role." }
+    ],
+    codeSnippet: `import { Message, MessageBubble, MessageAvatar, MessageContent, MessageTimestamp, MessageStatus } from "glacia";
+
+export default function MessageDemo() {
+  return (
+    <div className="flex flex-col gap-3">
+      <Message role="assistant">
+        <MessageAvatar fallback="AI" />
+        <MessageBubble>
+          <MessageContent>Designing for iOS 26 Liquid Glass.</MessageContent>
+          <MessageTimestamp>9:41 AM</MessageTimestamp>
+        </MessageBubble>
+      </Message>
+      <Message role="user">
+        <MessageBubble>
+          <MessageContent>Looks completely authentic!</MessageContent>
+          <MessageTimestamp>9:42 AM <MessageStatus status="read" /></MessageTimestamp>
+        </MessageBubble>
+      </Message>
+    </div>
+  );
+}`
+  },
+  {
+    slug: "message-scroller",
+    name: "Message Scroller",
+    description: "iOS Messages auto-scrolling conversation feed with sticky date headers and floating glass scroll-to-bottom capsule.",
+    category: "Chat & AI",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 3,
+    props: [
+      { name: "autoScroll", type: "boolean", default: "true", description: "Auto-scrolls to bottom on new messages." }
+    ],
+    codeSnippet: `import { MessageScroller, MessageDateDivider, Message, MessageBubble } from "glacia";
+
+export default function MessageScrollerDemo() {
+  return (
+    <MessageScroller className="h-64">
+      <MessageDateDivider>Today 9:41 AM</MessageDateDivider>
+      <Message role="assistant"><MessageBubble>How can I help you?</MessageBubble></Message>
+      <Message role="user"><MessageBubble>Build Wave 3!</MessageBubble></Message>
+    </MessageScroller>
+  );
+}`
+  },
+  {
+    slug: "attachment",
+    name: "Attachment",
+    description: "iOS iMessage / Mail file attachment cards and pills with file icons, formatted sizes, and preview actions.",
+    category: "Chat & AI",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 3,
+    props: [
+      { name: "name", type: "string", description: "File name with extension." },
+      { name: "size", type: "string", description: "Human-readable file size." },
+      { name: "type", type: "'image' | 'pdf' | 'audio' | 'code' | 'file'", default: "'file'", description: "Attachment MIME kind." },
+      { name: "onRemove", type: "() => void", description: "Delete button handler." }
+    ],
+    codeSnippet: `import { Attachment } from "glacia";
+
+export default function AttachmentDemo() {
+  return (
+    <div className="flex gap-2">
+      <Attachment name="Keynote.pdf" size="4.8 MB" type="pdf" onRemove={() => {}} />
+      <Attachment name="VoiceMemo.m4a" size="1.2 MB" type="audio" />
+    </div>
+  );
+}`
+  },
+  {
+    slug: "questionnaire",
+    name: "Questionnaire",
+    description: "Apple Health & Fitness onboarding diagnostic step-by-step quiz with progress bar and option checkmarks.",
+    category: "Chat & AI",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 3,
+    props: [
+      { name: "currentStep", type: "number", default: "1", description: "Active step index." },
+      { name: "totalSteps", type: "number", default: "3", description: "Total steps count." },
+      { name: "onNext", type: "() => void", description: "Next step handler." }
+    ],
+    codeSnippet: `import { Questionnaire, QuestionnaireStep, QuestionnaireOption } from "glacia";
+
+export default function QuestionnaireDemo() {
+  return (
+    <Questionnaire currentStep={1} totalSteps={3} onNext={() => {}}>
+      <QuestionnaireStep title="Device Preference" description="Select your primary workstation">
+        <QuestionnaireOption label="MacBook Pro" description="Liquid Retina XDR display" selected />
+        <QuestionnaireOption label="Mac Studio" description="M4 Max or M4 Ultra power" />
+      </QuestionnaireStep>
+    </Questionnaire>
+  );
+}`
+  },
+  {
+    slug: "trace",
+    name: "Trace",
+    description: "Apple Intelligence / Siri execution reasoning tree with status badges, latencies, and expandable payload inspection.",
+    category: "Chat & AI",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web only",
+    wave: 3,
+    props: [
+      { name: "title", type: "ReactNode", default: "'Reasoning Trace'", description: "Header caption." }
+    ],
+    codeSnippet: `import { Trace, TraceStep, TraceDetails } from "glacia";
+
+export default function TraceDemo() {
+  return (
+    <Trace title="Apple Intelligence Reasoning">
+      <TraceStep title="Querying Semantic Index" status="completed" duration="82ms" />
+      <TraceStep title="Synthesizing Fluid Answer" status="running">
+        <TraceDetails>Streaming tokens through local neural engine...</TraceDetails>
+      </TraceStep>
+    </Trace>
+  );
+}`
+  },
+  {
+    slug: "direction",
+    name: "Direction",
+    description: "Right-to-Left (RTL) internationalization context provider supporting Arabic, Hebrew, and bidirectional layouts.",
+    category: "Navigation & Layout",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 3,
+    props: [
+      { name: "dir", type: "'ltr' | 'rtl'", description: "Text and layout reading direction." }
+    ],
+    codeSnippet: `import { DirectionProvider, Button } from "glacia";
+
+export default function DirectionDemo() {
+  return (
+    <DirectionProvider dir="rtl">
+      <div className="flex gap-2">
+        <Button>مرحبا (Hello)</Button>
+        <Button variant="glass">إلغاء (Cancel)</Button>
+      </div>
+    </DirectionProvider>
+  );
+}`
+  }
 ];

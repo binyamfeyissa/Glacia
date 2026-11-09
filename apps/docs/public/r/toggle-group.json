@@ -1,0 +1,18 @@
+{
+  "name": "toggle-group",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0",
+    "radix-ui@^1.8.1"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "toggle-group.tsx",
+      "content": "import { ToggleGroup, ToggleGroupItem, type ToggleGroupProps, type ToggleGroupItemProps } from \"glacia\";\nexport { ToggleGroup, ToggleGroupItem, type ToggleGroupProps, type ToggleGroupItemProps };\nexport default ToggleGroup;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

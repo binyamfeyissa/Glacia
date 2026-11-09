@@ -1,0 +1,17 @@
+{
+  "name": "code-block",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "code-block.tsx",
+      "content": "import { CodeBlock, type CodeBlockProps } from \"glacia\";\nexport { CodeBlock, type CodeBlockProps };\nexport default CodeBlock;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

@@ -148,6 +148,56 @@ import {
   CollapsibleContent,
   DataTable,
   NativeSelect,
+  ToggleGroup,
+  ToggleGroupItem,
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+  InputOTPSeparator,
+  Command,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandShortcut,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+  CarouselDots,
+  AspectRatio,
+  Kbd,
+  CodeBlock,
+  Marker,
+  TextMarker,
+  Menubar,
+  MenubarMenu,
+  MenubarTrigger,
+  MenubarContent,
+  MenubarItem,
+  MenubarSeparator,
+  MenubarShortcut,
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
+  Message,
+  MessageBubble,
+  MessageAvatar,
+  MessageContent,
+  MessageTimestamp,
+  MessageStatus,
+  MessageScroller,
+  MessageDateDivider,
+  Attachment,
+  Questionnaire,
+  QuestionnaireStep,
+  QuestionnaireOption,
+  Trace,
+  TraceStep,
+  TraceDetails,
+  DirectionProvider,
 } from "glacia";
 
 export function ComponentDemo({ slug }: { slug: string }) {
@@ -888,6 +938,252 @@ export function ComponentDemo({ slug }: { slug: string }) {
             <option value="light">Always Light Mode</option>
             <option value="dark">Always Dark Mode</option>
           </NativeSelect>
+        </div>
+      );
+
+    case "toggle-group":
+      return (
+        <ToggleGroup type="multiple" defaultValue={["bold", "italic"]}>
+          <ToggleGroupItem value="bold">B</ToggleGroupItem>
+          <ToggleGroupItem value="italic">I</ToggleGroupItem>
+          <ToggleGroupItem value="underline">U</ToggleGroupItem>
+        </ToggleGroup>
+      );
+
+    case "input-otp":
+      return (
+        <div className="flex flex-col items-center gap-3">
+          <InputOTP maxLength={6} defaultValue="941">
+            <InputOTPGroup>
+              <InputOTPSlot index={0} />
+              <InputOTPSlot index={1} />
+              <InputOTPSlot index={2} />
+            </InputOTPGroup>
+            <InputOTPSeparator />
+            <InputOTPGroup>
+              <InputOTPSlot index={3} />
+              <InputOTPSlot index={4} />
+              <InputOTPSlot index={5} />
+            </InputOTPGroup>
+          </InputOTP>
+          <span className="text-xs opacity-60">Type or paste 6-digit verification code</span>
+        </div>
+      );
+
+    case "command":
+      return (
+        <div className="w-full max-w-sm">
+          <Command>
+            <CommandInput placeholder="Search system settings…" />
+            <CommandList>
+              <CommandGroup heading="Quick Jump">
+                <CommandItem>
+                  <span>Wi-Fi Network</span>
+                  <CommandShortcut>⌘1</CommandShortcut>
+                </CommandItem>
+                <CommandItem>
+                  <span>Displays & True Tone</span>
+                  <CommandShortcut>⌘2</CommandShortcut>
+                </CommandItem>
+                <CommandItem>
+                  <span>Sound Output</span>
+                  <CommandShortcut>⌘3</CommandShortcut>
+                </CommandItem>
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </div>
+      );
+
+    case "carousel":
+      return (
+        <div className="w-full max-w-sm py-4">
+          <Carousel>
+            <CarouselContent>
+              {["iPhone 16 Pro", "Apple Watch Ultra 2", "MacBook Pro M4"].map((title, i) => (
+                <CarouselItem key={i}>
+                  <div className="p-8 border rounded-2xl text-center gl-glass">
+                    <span className="text-2xl mb-2 block"></span>
+                    <h4 className="font-semibold">{title}</h4>
+                    <p className="text-xs opacity-70 mt-1">Engineered with Liquid Glass</p>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+            <CarouselDots />
+          </Carousel>
+        </div>
+      );
+
+    case "aspect-ratio":
+      return (
+        <div className="w-full max-w-sm">
+          <AspectRatio ratio={16 / 9} glassBorder className="overflow-hidden bg-black/40 flex items-center justify-center">
+            <div className="text-center p-4">
+              <span className="text-3xl block mb-1">▶</span>
+              <span className="text-xs font-semibold uppercase tracking-wider opacity-80">16:9 Liquid Retina</span>
+            </div>
+          </AspectRatio>
+        </div>
+      );
+
+    case "kbd":
+      return (
+        <div className="flex flex-wrap items-center gap-2">
+          <Kbd size="lg">⌘</Kbd>
+          <Kbd size="lg">⇧</Kbd>
+          <Kbd size="lg">P</Kbd>
+          <span className="text-xs opacity-60 ml-2">Command Palette</span>
+        </div>
+      );
+
+    case "code-block":
+      return (
+        <div className="w-full max-w-md">
+          <CodeBlock
+            filename="LiquidGlass.tsx"
+            language="typescript"
+            code={`import { Glass } from "glacia";\n\nexport function Hero() {\n  return (\n    <Glass className="p-6 rounded-2xl">\n      <h1>Refractive Optics</h1>\n    </Glass>\n  );\n}`}
+          />
+        </div>
+      );
+
+    case "marker":
+      return (
+        <div className="flex flex-col items-center gap-6 py-4">
+          <Marker color="blue" label="Apple Park · 1 Apple Park Way" />
+          <p className="text-sm">
+            Inspect live elements beneath <TextMarker variant="yellow">chromatic dispersion</TextMarker> borders.
+          </p>
+        </div>
+      );
+
+    case "menubar":
+      return (
+        <div className="w-full flex justify-center">
+          <Menubar>
+            <MenubarMenu>
+              <MenubarTrigger>Glacia</MenubarTrigger>
+              <MenubarContent>
+                <MenubarItem>About Glacia</MenubarItem>
+                <MenubarItem>Settings… <MenubarShortcut>⌘,</MenubarShortcut></MenubarItem>
+                <MenubarSeparator />
+                <MenubarItem>Hide Glacia <MenubarShortcut>⌘H</MenubarShortcut></MenubarItem>
+              </MenubarContent>
+            </MenubarMenu>
+            <MenubarMenu>
+              <MenubarTrigger>File</MenubarTrigger>
+              <MenubarContent>
+                <MenubarItem>New Canvas <MenubarShortcut>⌘N</MenubarShortcut></MenubarItem>
+                <MenubarItem>Export… <MenubarShortcut>⇧⌘E</MenubarShortcut></MenubarItem>
+              </MenubarContent>
+            </MenubarMenu>
+            <MenubarMenu>
+              <MenubarTrigger>View</MenubarTrigger>
+              <MenubarContent>
+                <MenubarItem>Toggle Refraction Layer</MenubarItem>
+                <MenubarItem>Enter Full Screen <MenubarShortcut>⌃⌘F</MenubarShortcut></MenubarItem>
+              </MenubarContent>
+            </MenubarMenu>
+          </Menubar>
+        </div>
+      );
+
+    case "resizable":
+      return (
+        <div className="w-full max-w-md h-40">
+          <ResizablePanelGroup direction="horizontal">
+            <ResizablePanel defaultSize={35} order={0} className="gl-glass flex items-center justify-center text-xs font-semibold">
+              Navigator
+            </ResizablePanel>
+            <ResizableHandle withHandle />
+            <ResizablePanel defaultSize={65} order={1} className="gl-glass flex items-center justify-center text-xs font-semibold">
+              Canvas Editor
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        </div>
+      );
+
+    case "message":
+      return (
+        <div className="w-full max-w-sm flex flex-col gap-3">
+          <Message role="assistant">
+            <MessageAvatar fallback="" />
+            <MessageBubble>
+              <MessageContent>Designing for iOS 26 Liquid Glass.</MessageContent>
+              <MessageTimestamp>9:41 AM</MessageTimestamp>
+            </MessageBubble>
+          </Message>
+          <Message role="user">
+            <MessageBubble>
+              <MessageContent>Real refraction is bending underneath!</MessageContent>
+              <MessageTimestamp>9:42 AM <MessageStatus status="read" /></MessageTimestamp>
+            </MessageBubble>
+          </Message>
+        </div>
+      );
+
+    case "message-scroller":
+      return (
+        <div className="w-full max-w-sm border rounded-2xl overflow-hidden gl-glass">
+          <MessageScroller className="h-48">
+            <MessageDateDivider>Today 9:41 AM</MessageDateDivider>
+            <Message role="assistant">
+              <MessageBubble><MessageContent>Welcome to the conversation.</MessageContent></MessageBubble>
+            </Message>
+            <Message role="user">
+              <MessageBubble><MessageContent>Glad to be here!</MessageContent></MessageBubble>
+            </Message>
+          </MessageScroller>
+        </div>
+      );
+
+    case "attachment":
+      return (
+        <div className="flex flex-wrap gap-3">
+          <Attachment name="Keynote-iOS26.pdf" size="8.4 MB" type="pdf" onRemove={() => {}} />
+          <Attachment name="VoiceMemo-Optics.m4a" size="1.8 MB" type="audio" />
+        </div>
+      );
+
+    case "questionnaire":
+      return (
+        <div className="w-full max-w-sm">
+          <Questionnaire currentStep={2} totalSteps={4}>
+            <QuestionnaireStep title="Appearance" description="Choose your system aesthetics">
+              <QuestionnaireOption label="Liquid Glass" description="Real optical bending" selected />
+              <QuestionnaireOption label="Frosted Blur" description="Universal fallback" />
+            </QuestionnaireStep>
+          </Questionnaire>
+        </div>
+      );
+
+    case "trace":
+      return (
+        <div className="w-full max-w-sm">
+          <Trace title="Apple Intelligence Pipeline">
+            <TraceStep title="Vector Embeddings" status="completed" duration="42ms" />
+            <TraceStep title="Optical Shader Synthesis" status="completed" duration="88ms" />
+            <TraceStep title="Neural Engine Generation" status="running" defaultExpanded>
+              <TraceDetails>
+                Streaming tokens at 120 tok/sec with local Apple Silicon neural engine.
+              </TraceDetails>
+            </TraceStep>
+          </Trace>
+        </div>
+      );
+
+    case "direction":
+      return (
+        <div className="flex flex-col gap-3">
+          <DirectionProvider dir="rtl">
+            <div className="p-4 border rounded-xl flex gap-2 justify-end gl-glass">
+              <Button size="sm">مرحبا بكم (RTL Primary)</Button>
+              <Button size="sm" variant="glass">إلغاء (RTL Glass)</Button>
+            </div>
+          </DirectionProvider>
         </div>
       );
 

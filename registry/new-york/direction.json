@@ -1,0 +1,18 @@
+{
+  "name": "direction",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0",
+    "radix-ui@^1.8.1"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "direction.tsx",
+      "content": "import { DirectionProvider, Direction, useDirection } from \"glacia\";\nexport { DirectionProvider, Direction, useDirection };\nexport default DirectionProvider;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

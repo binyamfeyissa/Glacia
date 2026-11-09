@@ -825,6 +825,134 @@ export {
 export default NativeSelect;
 `,
   },
+  {
+    name: "toggle-group",
+    dependencies: ["glacia@^0.1.0", "radix-ui@^1.8.1"],
+    content: `import { ToggleGroup, ToggleGroupItem, type ToggleGroupProps, type ToggleGroupItemProps } from "glacia";
+export { ToggleGroup, ToggleGroupItem, type ToggleGroupProps, type ToggleGroupItemProps };
+export default ToggleGroup;
+`,
+  },
+  {
+    name: "input-otp",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator, type InputOTPProps } from "glacia";
+export { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator, type InputOTPProps };
+export default InputOTP;
+`,
+  },
+  {
+    name: "command",
+    dependencies: ["glacia@^0.1.0", "radix-ui@^1.8.1"],
+    content: `import { Command, CommandDialog, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandShortcut, CommandSeparator } from "glacia";
+export { Command, CommandDialog, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandShortcut, CommandSeparator };
+export default Command;
+`,
+  },
+  {
+    name: "carousel",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext, CarouselDots, useCarousel } from "glacia";
+export { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext, CarouselDots, useCarousel };
+export default Carousel;
+`,
+  },
+  {
+    name: "aspect-ratio",
+    dependencies: ["glacia@^0.1.0", "radix-ui@^1.8.1"],
+    content: `import { AspectRatio, type AspectRatioProps } from "glacia";
+export { AspectRatio, type AspectRatioProps };
+export default AspectRatio;
+`,
+  },
+  {
+    name: "kbd",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import { Kbd, type KbdProps } from "glacia";
+export { Kbd, type KbdProps };
+export default Kbd;
+`,
+  },
+  {
+    name: "code-block",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import { CodeBlock, type CodeBlockProps } from "glacia";
+export { CodeBlock, type CodeBlockProps };
+export default CodeBlock;
+`,
+  },
+  {
+    name: "marker",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import { Marker, TextMarker, type MarkerProps, type TextMarkerProps } from "glacia";
+export { Marker, TextMarker, type MarkerProps, type TextMarkerProps };
+export default Marker;
+`,
+  },
+  {
+    name: "menubar",
+    dependencies: ["glacia@^0.1.0", "radix-ui@^1.8.1"],
+    content: `import { Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem, MenubarSeparator, MenubarShortcut, MenubarSub, MenubarSubTrigger, MenubarSubContent } from "glacia";
+export { Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem, MenubarSeparator, MenubarShortcut, MenubarSub, MenubarSubTrigger, MenubarSubContent };
+export default Menubar;
+`,
+  },
+  {
+    name: "resizable",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "glacia";
+export { ResizablePanelGroup, ResizablePanel, ResizableHandle };
+export default ResizablePanelGroup;
+`,
+  },
+  {
+    name: "message",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import { Message, MessageBubble, MessageAvatar, MessageContent, MessageTimestamp, MessageStatus } from "glacia";
+export { Message, MessageBubble, MessageAvatar, MessageContent, MessageTimestamp, MessageStatus };
+export default Message;
+`,
+  },
+  {
+    name: "message-scroller",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import { MessageScroller, MessageDateDivider } from "glacia";
+export { MessageScroller, MessageDateDivider };
+export default MessageScroller;
+`,
+  },
+  {
+    name: "attachment",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import { Attachment, type AttachmentProps } from "glacia";
+export { Attachment, type AttachmentProps };
+export default Attachment;
+`,
+  },
+  {
+    name: "questionnaire",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import { Questionnaire, QuestionnaireStep, QuestionnaireOption } from "glacia";
+export { Questionnaire, QuestionnaireStep, QuestionnaireOption };
+export default Questionnaire;
+`,
+  },
+  {
+    name: "trace",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import { Trace, TraceStep, TraceDetails } from "glacia";
+export { Trace, TraceStep, TraceDetails };
+export default Trace;
+`,
+  },
+  {
+    name: "direction",
+    dependencies: ["glacia@^0.1.0", "radix-ui@^1.8.1"],
+    content: `import { DirectionProvider, Direction, useDirection } from "glacia";
+export { DirectionProvider, Direction, useDirection };
+export default DirectionProvider;
+`,
+  },
 ];
 
 const registryIndex = [];

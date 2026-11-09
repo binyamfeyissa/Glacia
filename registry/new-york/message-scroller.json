@@ -1,0 +1,17 @@
+{
+  "name": "message-scroller",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "message-scroller.tsx",
+      "content": "import { MessageScroller, MessageDateDivider } from \"glacia\";\nexport { MessageScroller, MessageDateDivider };\nexport default MessageScroller;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

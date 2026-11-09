@@ -1,0 +1,17 @@
+{
+  "name": "attachment",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "attachment.tsx",
+      "content": "import { Attachment, type AttachmentProps } from \"glacia\";\nexport { Attachment, type AttachmentProps };\nexport default Attachment;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

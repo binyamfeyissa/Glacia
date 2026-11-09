@@ -32,6 +32,7 @@ const CATEGORY_ORDER = [
   "Showing Things",
   "Navigation & Layout",
   "Popups & Menus",
+  "Chat & AI",
 ] as const;
 
 const FEATURES = [
@@ -120,7 +121,7 @@ export default function HomePage() {
         <div className="hero-inner">
           <span className="hero-eyebrow">
             <span className="status-dot" />
-            v0.1 · Wave 1 is live
+            v0.3.0 · Full 70-Component Catalog Shipped
           </span>
 
           <h1 className="hero-title">
@@ -136,7 +137,7 @@ export default function HomePage() {
 
           <div className="hero-actions">
             <Link href="/components/button" className="btn btn-primary">
-              Explore 33 components
+              Explore 70 components
               <ArrowRightIcon className="arrow" />
             </Link>
             <a href="#material" className="btn btn-glass">
@@ -208,9 +209,9 @@ export default function HomePage() {
               <span className="eyebrow-dot" />
               Components
             </p>
-            <h2 className="section-title">Thirty-three primitives. One language.</h2>
+            <h2 className="section-title">Seventy primitives. One language.</h2>
             <p className="section-desc">
-              Controls, forms, navigation, overlays, and data — each one measured against Apple&apos;s
+              Controls, forms, navigation, overlays, data, and AI — each one measured against Apple&apos;s
               Human Interface Guidelines and verified for keyboard and screen-reader use.
             </p>
           </div>
@@ -249,7 +250,7 @@ export default function HomePage() {
         <div className="section-head">
           <div className="section-head-copy">
             <p className="eyebrow">Full catalog</p>
-            <h2 className="section-title">All 54 components in Waves 1 &amp; 2.</h2>
+            <h2 className="section-title">All 70 components across Waves 1, 2 &amp; 3.</h2>
           </div>
         </div>
 
@@ -292,7 +293,7 @@ export default function HomePage() {
             </p>
             <h2 className="section-title">Assembled, not just individual parts.</h2>
             <p className="section-desc">
-              Two production-ready screens that show the system working together — with real state,
+              Ten production-ready screens that show the system working together — with real state,
               real tables, and real glass.
             </p>
           </div>

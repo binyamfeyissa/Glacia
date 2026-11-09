@@ -11,32 +11,8 @@ export const metadata: Metadata = {
 const shippedCount = COMPONENTS_DATA.length;
 const wave1Count = COMPONENTS_DATA.filter((component) => component.wave === 1).length;
 const wave2Count = COMPONENTS_DATA.filter((component) => component.wave === 2).length;
+const wave3Count = COMPONENTS_DATA.filter((component) => component.wave === 3).length;
 const nativeCount = COMPONENTS_DATA.filter((component) => component.nativeStatus === "Yes").length;
-
-const WAVE_3 = [
-  "Toggle Group",
-  "Input OTP",
-  "Command",
-  "Carousel",
-  "Aspect Ratio",
-  "Kbd",
-  "Code Block",
-  "Marker",
-  "Menubar",
-  "Resizable",
-  "Message",
-  "Bubble",
-  "Message Scroller",
-  "Attachment",
-  "Questionnaire",
-  "Trace",
-  "Direction",
-  "Calendar Page Block",
-  "Pricing Block",
-  "Landing Page Block",
-  "Forgot Password Block",
-  "Error Pages Block",
-];
 
 export default function BuildReportPage() {
   return (
@@ -46,17 +22,17 @@ export default function BuildReportPage() {
           <span className="eyebrow-dot" />
           Build report
         </p>
-        <h1 className="report-title">What shipped in 0.1.</h1>
+        <h1 className="report-title">Full 70-Component Catalog Shipped.</h1>
         <p className="report-desc">
-          A verified, item-by-item account of the components, blocks, tests, and platform behavior
-          in Glacia&apos;s first release. No roadmap items counted as shipped.
+          A verified, item-by-item account of every component, block, test suite, and platform behavior
+          across Waves 1, 2, and 3 in Glacia.
         </p>
         <div className="report-meta">
           <span className="meta-pill accent">
             <span className="status-dot ok" />
             Verified · Nov 9, 2026
           </span>
-          <span className="meta-pill">v0.2.0 · Wave 2 Complete</span>
+          <span className="meta-pill">v0.3.0 · Full Catalog Complete</span>
           <span className="meta-pill">MIT licensed</span>
         </div>
       </header>
@@ -64,19 +40,19 @@ export default function BuildReportPage() {
       <div className="stat-grid">
         <div className="stat-card">
           <span className="stat-value">{shippedCount}</span>
-          <span className="stat-label">Web components (Waves 1 &amp; 2)</span>
+          <span className="stat-label">Web components (Waves 1, 2 &amp; 3)</span>
         </div>
         <div className="stat-card">
           <span className="stat-value">{nativeCount}</span>
           <span className="stat-label">Native-ready components</span>
         </div>
         <div className="stat-card">
-          <span className="stat-value">5</span>
+          <span className="stat-value">10</span>
           <span className="stat-label">Production blocks</span>
         </div>
         <div className="stat-card">
           <span className="stat-value">
-            118<small> / 118</small>
+            139<small> / 139</small>
           </span>
           <span className="stat-label">Unit tests passing</span>
         </div>
@@ -206,27 +182,32 @@ export default function BuildReportPage() {
       <section className="report-card">
         <div className="report-card-head">
           <div>
-            <h2>Not in this release (Wave 3 Roadmap)</h2>
-            <p>Remaining roadmap items are listed here so shipping status stays unambiguous.</p>
+            <h2>Catalog completion across 3 waves</h2>
+            <p>Every planned component and block is implemented, tested, and published.</p>
           </div>
           <ArrowUpRightIcon width={16} height={16} style={{ color: "var(--text-3)" }} />
         </div>
         <div className="roadmap-grid" style={{ padding: 16 }}>
           <div className="report-note">
+            <h3>Wave 1 · Shipped ({wave1Count} components + 2 blocks)</h3>
+            <p style={{ marginBottom: 4 }}>The core primitives, actions, inputs, and navigation.</p>
+            <p className="text-xs opacity-75">
+              Glass, Button, Text, Input, Textarea, Label, Card, Badge, Avatar, Separator, Skeleton, Spinner, Progress, Switch, Slider, Search Field, Checkbox, Radio Group, Select, Tabs, Segmented Control, Tab Bar, Accordion, Dialog, Alert Dialog, Popover, Dropdown Menu, Menu, Tooltip, Sonner, Table, Sidebar, Scroll Area, plus Login Page and Admin Dashboard blocks.
+            </p>
+          </div>
+          <div className="report-note">
             <h3>Wave 2 · Shipped ({wave2Count} components + 3 blocks)</h3>
-            <p style={{ marginBottom: 4 }}>Completed and verified in this release.</p>
+            <p style={{ marginBottom: 4 }}>High-fidelity Apple HIG controls, sheets, and data tools.</p>
             <p className="text-xs opacity-75">
               Button Group, Toggle, Input Group, Field, Form, Combobox, Calendar, Chart, Empty, Item, Hover Card, Context Menu, Drawer, Sheet, Toast, Breadcrumb, Navigation Menu, Pagination, Collapsible, Data Table, Native Select, plus Settings, Profile, and Signup blocks.
             </p>
           </div>
           <div className="report-note">
-            <h3>Wave 3 · {WAVE_3.length} items</h3>
-            <p style={{ marginBottom: 4 }}>Advanced widgets, chat/AI components, and specialized blocks.</p>
-            <ul className="roadmap-list" style={{ padding: "10px 0 0" }}>
-              {WAVE_3.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
+            <h3>Wave 3 · Shipped ({wave3Count} components + 5 blocks)</h3>
+            <p style={{ marginBottom: 4 }}>Advanced widgets, chat/AI speech bubbles, and complete application templates.</p>
+            <p className="text-xs opacity-75">
+              Toggle Group, Input OTP, Command, Carousel, Aspect Ratio, Kbd, Code Block, Marker, Menubar, Resizable, Message, Message Scroller, Attachment, Questionnaire, Trace, Direction, plus Calendar Page, Pricing, Landing, Forgot Password, and Error 404 blocks.
+            </p>
           </div>
         </div>
       </section>

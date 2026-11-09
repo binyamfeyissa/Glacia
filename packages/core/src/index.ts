@@ -259,9 +259,136 @@ export {
   type NativeSelectProps,
 } from "./native-select";
 
-// 9. Ready-Made Page Blocks
+// 9. Wave 3 Components
+export {
+  ToggleGroup,
+  ToggleGroupItem,
+  type ToggleGroupProps,
+  type ToggleGroupItemProps,
+} from "./toggle-group";
+export {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+  InputOTPSeparator,
+  type InputOTPProps,
+  type InputOTPGroupProps,
+  type InputOTPSlotProps,
+  type InputOTPSeparatorProps,
+} from "./input-otp";
+export {
+  Command,
+  CommandDialog,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandShortcut,
+  CommandSeparator,
+  type CommandProps,
+  type CommandDialogProps,
+  type CommandInputProps,
+  type CommandListProps,
+  type CommandItemProps,
+  type CommandGroupProps,
+} from "./command";
+export {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+  CarouselDots,
+  useCarousel,
+  type CarouselProps,
+  type CarouselItemProps,
+} from "./carousel";
+export { AspectRatio, type AspectRatioProps } from "./aspect-ratio";
+export { Kbd, type KbdProps } from "./kbd";
+export { CodeBlock, type CodeBlockProps } from "./code-block";
+export { Marker, TextMarker, type MarkerProps, type TextMarkerProps } from "./marker";
+export {
+  Menubar,
+  MenubarMenu,
+  MenubarTrigger,
+  MenubarContent,
+  MenubarItem,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarGroup,
+  MenubarPortal,
+  MenubarSub,
+  MenubarSubTrigger,
+  MenubarSubContent,
+  MenubarRadioGroup,
+  type MenubarProps,
+  type MenubarTriggerProps,
+  type MenubarContentProps,
+  type MenubarItemProps,
+} from "./menubar";
+export {
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
+  type ResizablePanelGroupProps,
+  type ResizablePanelProps,
+  type ResizableHandleProps,
+} from "./resizable";
+export {
+  Message,
+  MessageBubble,
+  MessageAvatar,
+  MessageContent,
+  MessageTimestamp,
+  MessageStatus,
+  type MessageProps,
+  type MessageBubbleProps,
+  type MessageAvatarProps,
+  type MessageContentProps,
+  type MessageTimestampProps,
+  type MessageStatusProps,
+} from "./message";
+export {
+  MessageScroller,
+  MessageDateDivider,
+  type MessageScrollerProps,
+  type MessageDateDividerProps,
+} from "./message-scroller";
+export { Attachment, type AttachmentProps } from "./attachment";
+export {
+  Questionnaire,
+  QuestionnaireStep,
+  QuestionnaireOption,
+  type QuestionnaireProps,
+  type QuestionnaireStepProps,
+  type QuestionnaireOptionProps,
+} from "./questionnaire";
+export {
+  Trace,
+  TraceStep,
+  TraceDetails,
+  type TraceProps,
+  type TraceStepProps,
+  type TraceDetailsProps,
+} from "./trace";
+export {
+  DirectionProvider,
+  Direction,
+  useDirection,
+  type DirectionProviderProps,
+  type DirectionProps,
+  type DirectionType,
+} from "./direction";
+
+// 10. Ready-Made Page Blocks
 export { LoginPage, type LoginPageProps } from "./blocks/login-page";
 export { AdminDashboard } from "./blocks/admin-dashboard";
 export { SettingsBlock, type SettingsBlockProps } from "./blocks/settings-block";
 export { ProfileBlock, type ProfileBlockProps } from "./blocks/profile-block";
 export { SignupBlock, type SignupBlockProps } from "./blocks/signup-block";
+export { CalendarPageBlock } from "./blocks/calendar-page-block";
+export { PricingBlock } from "./blocks/pricing-block";
+export { LandingBlock } from "./blocks/landing-block";
+export { ForgotPasswordBlock } from "./blocks/forgot-password-block";
+export { ErrorPageBlock, type ErrorPageBlockProps } from "./blocks/error-page-block";

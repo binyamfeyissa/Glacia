@@ -1,0 +1,17 @@
+{
+  "name": "trace",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "trace.tsx",
+      "content": "import { Trace, TraceStep, TraceDetails } from \"glacia\";\nexport { Trace, TraceStep, TraceDetails };\nexport default Trace;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

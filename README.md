@@ -4,8 +4,8 @@
 > Real optical refraction, specular highlights, and authentic depth from a single unified design system.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/Tests-118%20passing-brightgreen.svg)](BUILD_REPORT.md)
-[![Web](https://img.shields.io/badge/Web-54%20components-teal.svg)](https://glacia.dev)
+[![Tests](https://img.shields.io/badge/Tests-139%20passing-brightgreen.svg)](BUILD_REPORT.md)
+[![Web](https://img.shields.io/badge/Web-70%20components-teal.svg)](https://glacia.dev)
 [![React Native](https://img.shields.io/badge/React%20Native-7%20components-indigo.svg)](https://glacia.dev)
 
 ---
@@ -105,31 +105,37 @@ Pick and choose only the components you need into your project repository:
 npx glacia add button
 
 # Add multiple components:
-npx glacia add dialog card tabs combobox calendar
+npx glacia add dialog card tabs combobox calendar command carousel
 
-# Add all 54 components:
+# Add all 70 components:
 npx glacia add all
 ```
 
 ---
 
-## What Shipped: 54 Components & 5 Blocks
+## What Shipped: 70 Components & 10 Blocks
 
-### 54 Web Components (`glacia`)
-- **Surfaces & Layout:** `Glass`, `Card`, `Separator`, `ScrollArea`, `Collapsible`, `Empty`
-- **Actions & Controls:** `Button`, `ButtonGroup`, `Toggle`, `Switch`, `Slider`, `SegmentedControl`, `TabBar`
-- **Forms & Inputs:** `Input`, `InputGroup`, `Field`, `Form`, `Combobox`, `NativeSelect`, `Textarea`, `Label`, `Checkbox`, `RadioGroup`, `Select`, `SearchField`
-- **Navigation:** `Tabs`, `Sidebar`, `Breadcrumb`, `NavigationMenu`, `Pagination`
+### 70 Web Components (`glacia`)
+- **Surfaces & Layout:** `Glass`, `Card`, `Separator`, `ScrollArea`, `Collapsible`, `Empty`, `AspectRatio`, `Resizable`
+- **Actions & Controls:** `Button`, `ButtonGroup`, `Toggle`, `ToggleGroup`, `Switch`, `Slider`, `SegmentedControl`, `TabBar`
+- **Forms & Inputs:** `Input`, `InputGroup`, `InputOTP`, `Field`, `Form`, `Combobox`, `NativeSelect`, `Textarea`, `Label`, `Checkbox`, `RadioGroup`, `Select`, `SearchField`
+- **Navigation & I18n:** `Tabs`, `Sidebar`, `Breadcrumb`, `NavigationMenu`, `Pagination`, `Direction`
 - **Data & Pickers:** `Calendar`, `Chart`, `DataTable`, `Item`, `Table`
-- **Overlays, Menus & Sheets:** `Dialog`, `AlertDialog`, `Drawer` (iOS sheet), `Sheet` (macOS slide-over), `Popover`, `DropdownMenu`, `ContextMenu`, `Menu`, `Tooltip`, `HoverCard`
-- **Feedback & Display:** `Badge`, `Avatar`, `Skeleton`, `Spinner`, `Progress`, `Toast` (Dynamic Island HUD pill), `Sonner`, `Text`
+- **Overlays, Menus & Command:** `Dialog`, `AlertDialog`, `Drawer` (iOS sheet), `Sheet` (macOS slide-over), `Popover`, `DropdownMenu`, `ContextMenu`, `Menu`, `Tooltip`, `HoverCard`, `Command`, `Menubar`
+- **Feedback & Display:** `Badge`, `Avatar`, `Skeleton`, `Spinner`, `Progress`, `Toast` (Dynamic Island HUD pill), `Sonner`, `Text`, `Kbd`, `CodeBlock`, `Marker`, `Carousel`
+- **Chat & AI:** `Message` (Speech Bubbles), `MessageScroller`, `Attachment`, `Questionnaire`, `Trace` (Reasoning Pipeline)
 
-### 5 Ready-Made Blocks
+### 10 Ready-Made Blocks
 - `LoginPage`: Complete authentication screen with centered or split layouts.
 - `AdminDashboard`: Full administrative interface with floating glass sidebar, live KPI cards, and data table.
 - `SettingsBlock`: Apple Preferences window with categorized glass sidebar, appearance mode, accent colors, True Tone toggle, and volume slider.
 - `ProfileBlock`: Apple ID contact card with avatar hero, verified badge, personal details, and linked devices list.
 - `SignupBlock`: Apple onboarding registration card with real-time animated password strength meter, passkey option, and terms agreement.
+- `CalendarPageBlock`: Full Apple macOS Calendar window with mini-month picker, iCloud accounts, upcoming agenda, and 7-column month grid.
+- `PricingBlock`: Apple-style subscription tier comparison with annual billing discount toggle, featured refractive Pro card, and feature checklists.
+- `LandingBlock`: Apple keynote marketing page with floating glass pill navigation, glowing gradient headline, 3-column feature cards, and metrics banner.
+- `ForgotPasswordBlock`: Apple ID password recovery with trusted email entry, 6-digit InputOTP code verification, resend countdown, and passkey support.
+- `ErrorPageBlock`: Apple system error screen with floating glass status card, glowing 404 frosted typography, and recovery action buttons.
 
 ### 7 React Native Components (`glacia-native`)
 - `Glass`, `Button`, `Switch`, `Slider`, `SegmentedControl`, `TabBar`, `Card`

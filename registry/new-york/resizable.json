@@ -1,0 +1,17 @@
+{
+  "name": "resizable",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "resizable.tsx",
+      "content": "import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from \"glacia\";\nexport { ResizablePanelGroup, ResizablePanel, ResizableHandle };\nexport default ResizablePanelGroup;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

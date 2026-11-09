@@ -1,0 +1,17 @@
+{
+  "name": "questionnaire",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "questionnaire.tsx",
+      "content": "import { Questionnaire, QuestionnaireStep, QuestionnaireOption } from \"glacia\";\nexport { Questionnaire, QuestionnaireStep, QuestionnaireOption };\nexport default Questionnaire;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

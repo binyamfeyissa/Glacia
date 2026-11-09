@@ -85,12 +85,36 @@ All-in-one bundle: https://glacia.dev/r/all.json
 53. DataTable: https://glacia.dev/components/data-table
 54. NativeSelect: https://glacia.dev/components/native-select
 
+## Wave 3 Components (16 Shipped)
+
+55. ToggleGroup: https://glacia.dev/components/toggle-group
+56. InputOTP: https://glacia.dev/components/input-otp
+57. Command: https://glacia.dev/components/command
+58. Carousel: https://glacia.dev/components/carousel
+59. AspectRatio: https://glacia.dev/components/aspect-ratio
+60. Kbd: https://glacia.dev/components/kbd
+61. CodeBlock: https://glacia.dev/components/code-block
+62. Marker: https://glacia.dev/components/marker
+63. Menubar: https://glacia.dev/components/menubar
+64. Resizable: https://glacia.dev/components/resizable
+65. Message: https://glacia.dev/components/message
+66. MessageScroller: https://glacia.dev/components/message-scroller
+67. Attachment: https://glacia.dev/components/attachment
+68. Questionnaire: https://glacia.dev/components/questionnaire
+69. Trace: https://glacia.dev/components/trace
+70. Direction: https://glacia.dev/components/direction
+
 ## Shipped Blocks
 - Login Page: https://glacia.dev/blocks/login
 - Admin Dashboard: https://glacia.dev/blocks/dashboard
 - Settings Block: https://glacia.dev/blocks/settings
 - Profile Block: https://glacia.dev/blocks/profile
 - Signup Block: https://glacia.dev/blocks/signup
+- Calendar Page Block: https://glacia.dev/blocks/calendar-page
+- Pricing Block: https://glacia.dev/blocks/pricing
+- Landing Page Block: https://glacia.dev/blocks/landing
+- Forgot Password Block: https://glacia.dev/blocks/forgot-password
+- Error Page Block: https://glacia.dev/blocks/error-page
 
 ## Build Report
 - https://glacia.dev/build-report

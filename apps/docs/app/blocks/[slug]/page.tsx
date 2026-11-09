@@ -1,7 +1,18 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { AdminDashboard, LoginPage, SettingsBlock, ProfileBlock, SignupBlock } from "glacia";
+import {
+  AdminDashboard,
+  LoginPage,
+  SettingsBlock,
+  ProfileBlock,
+  SignupBlock,
+  CalendarPageBlock,
+  PricingBlock,
+  LandingBlock,
+  ForgotPasswordBlock,
+  ErrorPageBlock,
+} from "glacia";
 import { CodeBlock } from "../../../components/code-block";
 import { ArrowRightIcon, SparkIcon } from "../../../components/icons";
 
@@ -71,6 +82,66 @@ export default function SignupRoute() {
   return <SignupBlock />;
 }`,
   },
+  {
+    slug: "calendar-page",
+    title: "Calendar application",
+    description:
+      "A complete Apple macOS Calendar app with left sidebar mini-picker, iCloud account categories, upcoming agenda, and 7-column month grid with interactive event pills.",
+    componentsUsed: ["Calendar", "SegmentedControl", "Glass", "Button", "Badge"],
+    code: `import { CalendarPageBlock } from "glacia";
+
+export default function CalendarRoute() {
+  return <CalendarPageBlock />;
+}`,
+  },
+  {
+    slug: "pricing",
+    title: "Pricing & tiers",
+    description:
+      "Apple-style subscription tier comparison with annual billing discount toggle, featured refractive Pro card, and feature checklists.",
+    componentsUsed: ["Glass", "Button", "Switch", "Badge"],
+    code: `import { PricingBlock } from "glacia";
+
+export default function PricingRoute() {
+  return <PricingBlock />;
+}`,
+  },
+  {
+    slug: "landing",
+    title: "Product launch landing",
+    description:
+      "Apple keynote marketing page with floating glass pill navigation, glowing gradient headline, 3-column feature cards, and metrics banner.",
+    componentsUsed: ["Glass", "Button", "Badge"],
+    code: `import { LandingBlock } from "glacia";
+
+export default function LandingRoute() {
+  return <LandingBlock />;
+}`,
+  },
+  {
+    slug: "forgot-password",
+    title: "Account recovery & OTP",
+    description:
+      "Apple ID password recovery with trusted email entry, 6-digit InputOTP code verification, resend countdown, and passkey support.",
+    componentsUsed: ["InputOTP", "Input", "Label", "Button", "Glass"],
+    code: `import { ForgotPasswordBlock } from "glacia";
+
+export default function ForgotPasswordRoute() {
+  return <ForgotPasswordBlock />;
+}`,
+  },
+  {
+    slug: "error-page",
+    title: "Error & 404 screen",
+    description:
+      "Apple system error screen with floating glass status card, glowing 404 frosted typography, and recovery action buttons.",
+    componentsUsed: ["Glass", "Button", "Badge"],
+    code: `import { ErrorPageBlock } from "glacia";
+
+export default function ErrorRoute() {
+  return <ErrorPageBlock code="404" />;
+}`,
+  },
 ];
 
 export async function generateStaticParams() {
@@ -130,6 +201,21 @@ export default async function BlockPage({ params }: { params: Promise<{ slug: st
             <Link href="/blocks/signup" data-active={slug === "signup"}>
               Signup
             </Link>
+            <Link href="/blocks/calendar-page" data-active={slug === "calendar-page"}>
+              Calendar
+            </Link>
+            <Link href="/blocks/pricing" data-active={slug === "pricing"}>
+              Pricing
+            </Link>
+            <Link href="/blocks/landing" data-active={slug === "landing"}>
+              Landing
+            </Link>
+            <Link href="/blocks/forgot-password" data-active={slug === "forgot-password"}>
+              Recovery
+            </Link>
+            <Link href="/blocks/error-page" data-active={slug === "error-page"}>
+              Error 404
+            </Link>
           </div>
         </div>
 
@@ -160,6 +246,11 @@ export default async function BlockPage({ params }: { params: Promise<{ slug: st
             {slug === "settings" && <SettingsBlock />}
             {slug === "profile" && <ProfileBlock />}
             {slug === "signup" && <SignupBlock />}
+            {slug === "calendar-page" && <CalendarPageBlock />}
+            {slug === "pricing" && <PricingBlock />}
+            {slug === "landing" && <LandingBlock />}
+            {slug === "forgot-password" && <ForgotPasswordBlock />}
+            {slug === "error-page" && <ErrorPageBlock code="404" />}
           </div>
         </div>
       </div>

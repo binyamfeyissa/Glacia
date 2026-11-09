@@ -62,6 +62,23 @@ const ALL_COMPONENTS = [
   "collapsible",
   "data-table",
   "native-select",
+  // Wave 3
+  "toggle-group",
+  "input-otp",
+  "command",
+  "carousel",
+  "aspect-ratio",
+  "kbd",
+  "code-block",
+  "marker",
+  "menubar",
+  "resizable",
+  "message",
+  "message-scroller",
+  "attachment",
+  "questionnaire",
+  "trace",
+  "direction",
 ];
 
 function printHelp() {
