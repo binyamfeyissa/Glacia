@@ -485,6 +485,346 @@ export { ScrollArea, ScrollBar };
 export default ScrollArea;
 `,
   },
+  // Wave 2
+  {
+    name: "button-group",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import { ButtonGroup, type ButtonGroupProps } from "glacia";
+
+export { ButtonGroup, type ButtonGroupProps };
+export default ButtonGroup;
+`,
+  },
+  {
+    name: "toggle",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import { Toggle, type ToggleProps } from "glacia";
+
+export { Toggle, type ToggleProps };
+export default Toggle;
+`,
+  },
+  {
+    name: "input-group",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import { InputGroup, InputGroupAddon, type InputGroupProps, type InputGroupAddonProps } from "glacia";
+
+export { InputGroup, InputGroupAddon, type InputGroupProps, type InputGroupAddonProps };
+export default InputGroup;
+`,
+  },
+  {
+    name: "field",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import { Field, type FieldProps } from "glacia";
+
+export { Field, type FieldProps };
+export default Field;
+`,
+  },
+  {
+    name: "form",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import { Form, useFormContext, type FormProps } from "glacia";
+
+export { Form, useFormContext, type FormProps };
+export default Form;
+`,
+  },
+  {
+    name: "combobox",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import { Combobox, type ComboboxOption, type ComboboxProps } from "glacia";
+
+export { Combobox, type ComboboxOption, type ComboboxProps };
+export default Combobox;
+`,
+  },
+  {
+    name: "calendar",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import { Calendar, type CalendarProps } from "glacia";
+
+export { Calendar, type CalendarProps };
+export default Calendar;
+`,
+  },
+  {
+    name: "chart",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import { Chart, type ChartDataPoint, type ChartProps } from "glacia";
+
+export { Chart, type ChartDataPoint, type ChartProps };
+export default Chart;
+`,
+  },
+  {
+    name: "empty",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import { Empty, type EmptyProps } from "glacia";
+
+export { Empty, type EmptyProps };
+export default Empty;
+`,
+  },
+  {
+    name: "item",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import { Item, type ItemProps } from "glacia";
+
+export { Item, type ItemProps };
+export default Item;
+`,
+  },
+  {
+    name: "hover-card",
+    dependencies: ["glacia@^0.1.0", "radix-ui@^1.8.1"],
+    content: `import { HoverCard, HoverCardTrigger, HoverCardContent, HoverCardPortal } from "glacia";
+
+export { HoverCard, HoverCardTrigger, HoverCardContent, HoverCardPortal };
+`,
+  },
+  {
+    name: "context-menu",
+    dependencies: ["glacia@^0.1.0", "radix-ui@^1.8.1"],
+    content: `import {
+  ContextMenu,
+  ContextMenuTrigger,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuShortcut,
+  ContextMenuGroup,
+  ContextMenuPortal,
+  ContextMenuSub,
+  ContextMenuRadioGroup,
+} from "glacia";
+
+export {
+  ContextMenu,
+  ContextMenuTrigger,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuShortcut,
+  ContextMenuGroup,
+  ContextMenuPortal,
+  ContextMenuSub,
+  ContextMenuRadioGroup,
+};
+`,
+  },
+  {
+    name: "drawer",
+    dependencies: ["glacia@^0.1.0", "radix-ui@^1.8.1"],
+    content: `import {
+  Drawer,
+  DrawerTrigger,
+  DrawerContent,
+  DrawerHeader,
+  DrawerFooter,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerClose,
+  DrawerOverlay,
+  DrawerPortal,
+} from "glacia";
+
+export {
+  Drawer,
+  DrawerTrigger,
+  DrawerContent,
+  DrawerHeader,
+  DrawerFooter,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerClose,
+  DrawerOverlay,
+  DrawerPortal,
+};
+`,
+  },
+  {
+    name: "sheet",
+    dependencies: ["glacia@^0.1.0", "radix-ui@^1.8.1"],
+    content: `import {
+  Sheet,
+  SheetTrigger,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetFooter,
+  SheetTitle,
+  SheetDescription,
+  SheetOverlay,
+  SheetPortal,
+  type SheetContentProps,
+} from "glacia";
+
+export {
+  Sheet,
+  SheetTrigger,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetFooter,
+  SheetTitle,
+  SheetDescription,
+  SheetOverlay,
+  SheetPortal,
+  type SheetContentProps,
+};
+`,
+  },
+  {
+    name: "toast",
+    dependencies: ["glacia@^0.1.0", "radix-ui@^1.8.1"],
+    content: `import {
+  ToastProvider,
+  ToastViewport,
+  Toast,
+  ToastTitle,
+  ToastDescription,
+  ToastClose,
+  ToastAction,
+  type ToastProps,
+} from "glacia";
+
+export {
+  ToastProvider,
+  ToastViewport,
+  Toast,
+  ToastTitle,
+  ToastDescription,
+  ToastClose,
+  ToastAction,
+  type ToastProps,
+};
+`,
+  },
+  {
+    name: "breadcrumb",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  BreadcrumbEllipsis,
+} from "glacia";
+
+export {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  BreadcrumbEllipsis,
+};
+`,
+  },
+  {
+    name: "navigation-menu",
+    dependencies: ["glacia@^0.1.0", "radix-ui@^1.8.1"],
+    content: `import {
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem,
+  NavigationMenuTrigger,
+  NavigationMenuContent,
+  NavigationMenuLink,
+  NavigationMenuViewport,
+  NavigationMenuIndicator,
+} from "glacia";
+
+export {
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem,
+  NavigationMenuTrigger,
+  NavigationMenuContent,
+  NavigationMenuLink,
+  NavigationMenuViewport,
+  NavigationMenuIndicator,
+};
+`,
+  },
+  {
+    name: "pagination",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationEllipsis,
+  type PaginationLinkProps,
+} from "glacia";
+
+export {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationEllipsis,
+  type PaginationLinkProps,
+};
+`,
+  },
+  {
+    name: "collapsible",
+    dependencies: ["glacia@^0.1.0", "radix-ui@^1.8.1"],
+    content: `import {
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent,
+} from "glacia";
+
+export {
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent,
+};
+`,
+  },
+  {
+    name: "data-table",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import {
+  DataTable,
+  type DataTableColumn,
+  type DataTableProps,
+} from "glacia";
+
+export {
+  DataTable,
+  type DataTableColumn,
+  type DataTableProps,
+};
+`,
+  },
+  {
+    name: "native-select",
+    dependencies: ["glacia@^0.1.0"],
+    content: `import {
+  NativeSelect,
+  type NativeSelectProps,
+} from "glacia";
+
+export {
+  NativeSelect,
+  type NativeSelectProps,
+};
+export default NativeSelect;
+`,
+  },
 ];
 
 const registryIndex = [];

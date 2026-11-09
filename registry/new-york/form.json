@@ -1,0 +1,17 @@
+{
+  "name": "form",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "form.tsx",
+      "content": "import { Form, useFormContext, type FormProps } from \"glacia\";\n\nexport { Form, useFormContext, type FormProps };\nexport default Form;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

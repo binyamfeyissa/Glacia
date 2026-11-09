@@ -1,0 +1,18 @@
+{
+  "name": "sheet",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0",
+    "radix-ui@^1.8.1"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "sheet.tsx",
+      "content": "import {\n  Sheet,\n  SheetTrigger,\n  SheetClose,\n  SheetContent,\n  SheetHeader,\n  SheetFooter,\n  SheetTitle,\n  SheetDescription,\n  SheetOverlay,\n  SheetPortal,\n  type SheetContentProps,\n} from \"glacia\";\n\nexport {\n  Sheet,\n  SheetTrigger,\n  SheetClose,\n  SheetContent,\n  SheetHeader,\n  SheetFooter,\n  SheetTitle,\n  SheetDescription,\n  SheetOverlay,\n  SheetPortal,\n  type SheetContentProps,\n};\n",
+      "type": "registry:ui"
+    }
+  ]
+}

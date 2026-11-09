@@ -1,0 +1,17 @@
+{
+  "name": "native-select",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "native-select.tsx",
+      "content": "import {\n  NativeSelect,\n  type NativeSelectProps,\n} from \"glacia\";\n\nexport {\n  NativeSelect,\n  type NativeSelectProps,\n};\nexport default NativeSelect;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "combobox",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "combobox.tsx",
+      "content": "import { Combobox, type ComboboxOption, type ComboboxProps } from \"glacia\";\n\nexport { Combobox, type ComboboxOption, type ComboboxProps };\nexport default Combobox;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

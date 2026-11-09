@@ -61,9 +61,36 @@ All-in-one bundle: https://glacia.dev/r/all.json
 32. Sidebar: https://glacia.dev/components/sidebar
 33. ScrollArea: https://glacia.dev/components/scroll-area
 
+## Wave 2 Components (21 Shipped)
+
+34. ButtonGroup: https://glacia.dev/components/button-group
+35. Toggle: https://glacia.dev/components/toggle
+36. InputGroup: https://glacia.dev/components/input-group
+37. Field: https://glacia.dev/components/field
+38. Form: https://glacia.dev/components/form
+39. Combobox: https://glacia.dev/components/combobox
+40. Calendar: https://glacia.dev/components/calendar
+41. Chart: https://glacia.dev/components/chart
+42. Empty: https://glacia.dev/components/empty
+43. Item: https://glacia.dev/components/item
+44. HoverCard: https://glacia.dev/components/hover-card
+45. ContextMenu: https://glacia.dev/components/context-menu
+46. Drawer: https://glacia.dev/components/drawer
+47. Sheet: https://glacia.dev/components/sheet
+48. Toast: https://glacia.dev/components/toast
+49. Breadcrumb: https://glacia.dev/components/breadcrumb
+50. NavigationMenu: https://glacia.dev/components/navigation-menu
+51. Pagination: https://glacia.dev/components/pagination
+52. Collapsible: https://glacia.dev/components/collapsible
+53. DataTable: https://glacia.dev/components/data-table
+54. NativeSelect: https://glacia.dev/components/native-select
+
 ## Shipped Blocks
 - Login Page: https://glacia.dev/blocks/login
 - Admin Dashboard: https://glacia.dev/blocks/dashboard
+- Settings Block: https://glacia.dev/blocks/settings
+- Profile Block: https://glacia.dev/blocks/profile
+- Signup Block: https://glacia.dev/blocks/signup
 
 ## Build Report
 - https://glacia.dev/build-report

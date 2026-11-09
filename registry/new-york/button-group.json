@@ -1,0 +1,17 @@
+{
+  "name": "button-group",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "button-group.tsx",
+      "content": "import { ButtonGroup, type ButtonGroupProps } from \"glacia\";\n\nexport { ButtonGroup, type ButtonGroupProps };\nexport default ButtonGroup;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

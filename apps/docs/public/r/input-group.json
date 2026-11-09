@@ -1,0 +1,17 @@
+{
+  "name": "input-group",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "input-group.tsx",
+      "content": "import { InputGroup, InputGroupAddon, type InputGroupProps, type InputGroupAddonProps } from \"glacia\";\n\nexport { InputGroup, InputGroupAddon, type InputGroupProps, type InputGroupAddonProps };\nexport default InputGroup;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "field",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "field.tsx",
+      "content": "import { Field, type FieldProps } from \"glacia\";\n\nexport { Field, type FieldProps };\nexport default Field;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

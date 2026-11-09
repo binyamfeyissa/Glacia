@@ -1,78 +1,130 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
-import { Button, Tabs, TabsList, TabsTrigger, TabsContent, Badge } from "glacia";
+import { useState } from "react";
+import { CodeBlock } from "./code-block";
+import { CheckIcon, CopyIcon } from "./icons";
+
+const SURFACES = [
+  { id: "aurora", label: "Aurora" },
+  { id: "fluted", label: "Fluted" },
+  { id: "dusk", label: "Dusk" },
+  { id: "graphite", label: "Graphite" },
+] as const;
+
+type Surface = (typeof SURFACES)[number]["id"];
 
 export interface ComponentPreviewProps {
   name: string;
   slug: string;
-  children: ReactNode;
+  children: React.ReactNode;
   code: string;
 }
 
 export function ComponentPreview({ name, slug, children, code }: ComponentPreviewProps) {
-  const [copied, setCopied] = useState(false);
+  const [tab, setTab] = useState<"preview" | "code">("preview");
+  const [surface, setSurface] = useState<Surface>("aurora");
   const [installTab, setInstallTab] = useState<"npm" | "cli">("npm");
+  const [copied, setCopied] = useState(false);
 
-  const copyCode = () => {
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+  const command = installTab === "npm" ? "npm install glacia" : `npx glacia add ${slug}`;
 
-  const copyInstall = () => {
-    const cmd = installTab === "npm" ? "npm install glacia" : `npx glacia add ${slug}`;
-    navigator.clipboard.writeText(cmd);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const copyInstall = async () => {
+    try {
+      await navigator.clipboard.writeText(command);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      /* clipboard can be unavailable */
+    }
   };
 
   return (
-    <div className="gl-preview-container">
-      {/* Install command selector */}
-      <div className="gl-install-bar">
-        <div className="gl-install-tabs">
-          <Button
-            size="sm"
-            variant={installTab === "npm" ? "filled" : "ghost"}
+    <div className="preview">
+      <div className="preview-bar">
+        <div className="preview-tabs" role="tablist" aria-label="Preview mode">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === "preview"}
+            data-active={tab === "preview"}
+            className="preview-tab"
+            onClick={() => setTab("preview")}
+          >
+            Preview
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === "code"}
+            data-active={tab === "code"}
+            className="preview-tab"
+            onClick={() => setTab("code")}
+          >
+            Code
+          </button>
+        </div>
+
+        {tab === "preview" && (
+          <div className="preview-surfaces">
+            <span className="preview-surfaces-label">Surface</span>
+            {SURFACES.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                className={`surface-swatch swatch-${item.id}`}
+                data-active={surface === item.id}
+                onClick={() => setSurface(item.id)}
+                aria-label={`${item.label} surface`}
+                title={item.label}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {tab === "preview" ? (
+        <div className={`preview-stage surface-${surface}`}>
+          <span className="preview-stage-label">
+            {name} · {SURFACES.find((item) => item.id === surface)?.label}
+          </span>
+          <div className="demo-surface">{children}</div>
+        </div>
+      ) : (
+        <div className="preview-code">
+          <CodeBlock code={code} filename={`${slug}.tsx`} />
+        </div>
+      )}
+
+      <div className="preview-foot">
+        <div className="preview-install-tabs" role="tablist" aria-label="Install method">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={installTab === "npm"}
+            data-active={installTab === "npm"}
+            className="preview-install-tab"
             onClick={() => setInstallTab("npm")}
           >
-            NPM Package
-          </Button>
-          <Button
-            size="sm"
-            variant={installTab === "cli" ? "filled" : "ghost"}
+            npm
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={installTab === "cli"}
+            data-active={installTab === "cli"}
+            className="preview-install-tab"
             onClick={() => setInstallTab("cli")}
           >
-            Glacia Copy Command
-          </Button>
+            CLI
+          </button>
         </div>
-        <div className="gl-install-code-box" onClick={copyInstall} role="button" tabIndex={0}>
-          <code>{installTab === "npm" ? "npm install glacia" : `npx glacia add ${slug}`}</code>
-          <span className="gl-copy-hint">{copied ? "✓ Copied" : "Copy"}</span>
+        <div className="preview-command">
+          <code>{command}</code>
+          <button type="button" onClick={copyInstall}>
+            {copied ? <CheckIcon width={13} height={13} /> : <CopyIcon width={13} height={13} />}
+            {copied ? "Copied" : "Copy"}
+          </button>
         </div>
-      </div>
-
-      {/* Live Stage */}
-      <div className="gl-preview-stage" data-glacia-backdrop>
-        {/* Optical detail background pattern to reveal refraction */}
-        <div className="gl-stage-detail-layer">
-          <span className="gl-stage-text-bg">LIQUID GLASS REFRACTION</span>
-        </div>
-        <div className="gl-preview-render">{children}</div>
-      </div>
-
-      {/* Code Sample */}
-      <div className="gl-code-box">
-        <div className="gl-code-header">
-          <span className="gl-code-filename">{slug}.tsx</span>
-          <Button size="sm" variant="glass" onClick={copyCode}>
-            {copied ? "✓ Copied Code" : "Copy Code"}
-          </Button>
-        </div>
-        <pre className="gl-code-pre">
-          <code>{code}</code>
-        </pre>
       </div>
     </div>
   );

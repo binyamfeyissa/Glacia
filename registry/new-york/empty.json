@@ -1,0 +1,17 @@
+{
+  "name": "empty",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "empty.tsx",
+      "content": "import { Empty, type EmptyProps } from \"glacia\";\n\nexport { Empty, type EmptyProps };\nexport default Empty;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

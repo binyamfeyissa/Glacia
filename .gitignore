@@ -7,4 +7,5 @@ build
 out
 .turbo
 *.log
+*.tsbuildinfo
 .DS_Store

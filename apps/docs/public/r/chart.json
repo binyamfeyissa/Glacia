@@ -1,0 +1,17 @@
+{
+  "name": "chart",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "chart.tsx",
+      "content": "import { Chart, type ChartDataPoint, type ChartProps } from \"glacia\";\n\nexport { Chart, type ChartDataPoint, type ChartProps };\nexport default Chart;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

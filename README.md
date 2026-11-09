@@ -4,8 +4,8 @@
 > Real optical refraction, specular highlights, and authentic depth from a single unified design system.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/Tests-100%20passing-brightgreen.svg)](BUILD_REPORT.md)
-[![Web](https://img.shields.io/badge/Web-33%20components-teal.svg)](https://glacia.dev)
+[![Tests](https://img.shields.io/badge/Tests-118%20passing-brightgreen.svg)](BUILD_REPORT.md)
+[![Web](https://img.shields.io/badge/Web-54%20components-teal.svg)](https://glacia.dev)
 [![React Native](https://img.shields.io/badge/React%20Native-7%20components-indigo.svg)](https://glacia.dev)
 
 ---
@@ -105,27 +105,31 @@ Pick and choose only the components you need into your project repository:
 npx glacia add button
 
 # Add multiple components:
-npx glacia add dialog card tabs
+npx glacia add dialog card tabs combobox calendar
 
-# Add all 33 Wave 1 components:
+# Add all 54 components:
 npx glacia add all
 ```
 
 ---
 
-## What Shipped in V1
+## What Shipped: 54 Components & 5 Blocks
 
-### 33 Web Components (`glacia`)
-- **Surfaces & Layout:** `Glass`, `Card`, `Separator`, `ScrollArea`
-- **Actions & Controls:** `Button`, `Switch`, `Slider`, `SegmentedControl`, `TabBar`
-- **Forms & Inputs:** `Input`, `Textarea`, `Label`, `Checkbox`, `RadioGroup`, `Select`, `SearchField`
-- **Navigation:** `Tabs`, `Sidebar`
-- **Overlays & Dialogs:** `Dialog`, `AlertDialog`, `Popover`, `DropdownMenu`, `Menu`, `Tooltip`
-- **Feedback & Display:** `Badge`, `Avatar`, `Skeleton`, `Spinner`, `Progress`, `Sonner (Toast)`, `Text`, `Table`
+### 54 Web Components (`glacia`)
+- **Surfaces & Layout:** `Glass`, `Card`, `Separator`, `ScrollArea`, `Collapsible`, `Empty`
+- **Actions & Controls:** `Button`, `ButtonGroup`, `Toggle`, `Switch`, `Slider`, `SegmentedControl`, `TabBar`
+- **Forms & Inputs:** `Input`, `InputGroup`, `Field`, `Form`, `Combobox`, `NativeSelect`, `Textarea`, `Label`, `Checkbox`, `RadioGroup`, `Select`, `SearchField`
+- **Navigation:** `Tabs`, `Sidebar`, `Breadcrumb`, `NavigationMenu`, `Pagination`
+- **Data & Pickers:** `Calendar`, `Chart`, `DataTable`, `Item`, `Table`
+- **Overlays, Menus & Sheets:** `Dialog`, `AlertDialog`, `Drawer` (iOS sheet), `Sheet` (macOS slide-over), `Popover`, `DropdownMenu`, `ContextMenu`, `Menu`, `Tooltip`, `HoverCard`
+- **Feedback & Display:** `Badge`, `Avatar`, `Skeleton`, `Spinner`, `Progress`, `Toast` (Dynamic Island HUD pill), `Sonner`, `Text`
 
-### 2 Ready-Made Blocks
+### 5 Ready-Made Blocks
 - `LoginPage`: Complete authentication screen with centered or split layouts.
 - `AdminDashboard`: Full administrative interface with floating glass sidebar, live KPI cards, and data table.
+- `SettingsBlock`: Apple Preferences window with categorized glass sidebar, appearance mode, accent colors, True Tone toggle, and volume slider.
+- `ProfileBlock`: Apple ID contact card with avatar hero, verified badge, personal details, and linked devices list.
+- `SignupBlock`: Apple onboarding registration card with real-time animated password strength meter, passkey option, and terms agreement.
 
 ### 7 React Native Components (`glacia-native`)
 - `Glass`, `Button`, `Switch`, `Slider`, `SegmentedControl`, `TabBar`, `Card`

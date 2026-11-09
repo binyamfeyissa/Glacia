@@ -1,14 +1,38 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { BackdropProvider } from "../components/backdrop-context";
 import { Header } from "../components/header";
 import { Footer } from "../components/footer";
 
 export const metadata: Metadata = {
-  title: "Glacia — Apple's Liquid Glass UI Kit for React & React Native",
+  title: {
+    default: "Glacia — Liquid Glass for React & React Native",
+    template: "%s — Glacia",
+  },
   description:
-    "Apple's Liquid Glass, with real optical refraction — not frosted blur — on web and on iOS, from one unified API.",
+    "A React and React Native component library built on the real optics of Apple's Liquid Glass: refraction, specular rim light, and depth across every platform.",
+  metadataBase: new URL("https://glacia.dev"),
+  openGraph: {
+    title: "Glacia — Liquid Glass for React & React Native",
+    description:
+      "Real optical refraction, specular highlights, and native iOS 26 glass from one unified API.",
+    type: "website",
+  },
 };
+
+const themeScript = `
+(function () {
+  try {
+    var param = new URLSearchParams(window.location.search).get('theme');
+    var stored = localStorage.getItem('glacia-theme');
+    var theme = param === 'light' || param === 'dark'
+      ? param
+      : stored === 'light' || stored === 'dark'
+        ? stored
+        : 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+  } catch (error) {}
+})();
+`;
 
 export default function RootLayout({
   children,
@@ -16,13 +40,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-theme="dark">
+    <html lang="en" data-theme="dark" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body>
-        <BackdropProvider>
-          <Header />
-          {children}
-          <Footer />
-        </BackdropProvider>
+        <div className="site-aurora" aria-hidden="true" />
+        <div className="site-grain" aria-hidden="true" />
+        <Header />
+        <main className="site-main">{children}</main>
+        <Footer />
       </body>
     </html>
   );

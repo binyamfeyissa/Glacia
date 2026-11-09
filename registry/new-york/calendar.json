@@ -1,0 +1,17 @@
+{
+  "name": "calendar",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "calendar.tsx",
+      "content": "import { Calendar, type CalendarProps } from \"glacia\";\n\nexport { Calendar, type CalendarProps };\nexport default Calendar;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

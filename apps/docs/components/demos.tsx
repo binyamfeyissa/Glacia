@@ -89,6 +89,65 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   ScrollArea,
+  ButtonGroup,
+  Toggle,
+  InputGroup,
+  InputGroupAddon,
+  Field,
+  Form,
+  Combobox,
+  Calendar,
+  Chart,
+  Empty,
+  Item,
+  HoverCard,
+  HoverCardTrigger,
+  HoverCardContent,
+  ContextMenu,
+  ContextMenuTrigger,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuShortcut,
+  Drawer,
+  DrawerTrigger,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  ToastProvider,
+  ToastViewport,
+  Toast,
+  ToastTitle,
+  ToastDescription,
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem,
+  NavigationMenuTrigger,
+  NavigationMenuContent,
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent,
+  DataTable,
+  NativeSelect,
 } from "glacia";
 
 export function ComponentDemo({ slug }: { slug: string }) {
@@ -537,6 +596,299 @@ export function ComponentDemo({ slug }: { slug: string }) {
             <p>Independent, open-source under MIT.</p>
           </div>
         </ScrollArea>
+      );
+
+
+    case "button-group":
+      return (
+        <ButtonGroup variant="segmented">
+          <Button size="sm">Day</Button>
+          <Button size="sm" variant="filled">Week</Button>
+          <Button size="sm">Month</Button>
+          <Button size="sm">Year</Button>
+        </ButtonGroup>
+      );
+
+    case "toggle":
+      return (
+        <div className="flex gap-3">
+          <Toggle defaultPressed variant="glass">Live Photos</Toggle>
+          <Toggle variant="glass">Night Mode</Toggle>
+          <Toggle variant="glass">Spatial Audio</Toggle>
+        </div>
+      );
+
+    case "input-group":
+      return (
+        <div className="w-full max-w-sm">
+          <InputGroup>
+            <InputGroupAddon align="leading">https://</InputGroupAddon>
+            <Input placeholder="apple.com/vision" />
+            <InputGroupAddon align="trailing">
+              <Button size="sm" variant="ghost">Go</Button>
+            </InputGroupAddon>
+          </InputGroup>
+        </div>
+      );
+
+    case "field":
+      return (
+        <div className="w-full max-w-sm">
+          <Field label="Apple Account" required description="Your verified iCloud or Developer ID.">
+            <Input placeholder="steve@apple.com" />
+          </Field>
+        </div>
+      );
+
+    case "form":
+      return (
+        <div className="w-full max-w-sm">
+          <Form onSubmit={(e) => e.preventDefault()}>
+            <Field label="Passkey Label">
+              <Input placeholder="Studio Display Touch ID" />
+            </Field>
+            <Button type="submit" variant="filled" className="w-full">Register Passkey</Button>
+          </Form>
+        </div>
+      );
+
+    case "combobox":
+      return (
+        <div className="w-full max-w-xs">
+          <Combobox
+            placeholder="Select Campus..."
+            options={[
+              { value: "cupertino", label: "Cupertino (Apple Park)" },
+              { value: "austin", label: "Austin Campus" },
+              { value: "london", label: "Battersea Power Station" },
+              { value: "tokyo", label: "Roppongi Hills" },
+            ]}
+          />
+        </div>
+      );
+
+    case "calendar":
+      return <Calendar />;
+
+    case "chart":
+      return (
+        <div className="w-full max-w-md">
+          <Chart
+            type="area"
+            color="#34c759"
+            valueSuffix=" bpm"
+            data={[
+              { label: "Mon", value: 62 },
+              { label: "Tue", value: 68 },
+              { label: "Wed", value: 85 },
+              { label: "Thu", value: 74 },
+              { label: "Fri", value: 92 },
+              { label: "Sat", value: 104 },
+              { label: "Sun", value: 78 },
+            ]}
+          />
+        </div>
+      );
+
+    case "empty":
+      return (
+        <Empty
+          icon={<span>📬</span>}
+          title="All Caught Up"
+          description="There are no pending review items in your Glacia queue."
+          action={<Button variant="filled">Check Again</Button>}
+        />
+      );
+
+    case "item":
+      return (
+        <div className="w-full max-w-sm space-y-2">
+          <Item
+            icon={<span>📶</span>}
+            iconTint="#0088ff"
+            title="Wi-Fi"
+            description="Apple Park 5GHz"
+            accessory={<Switch defaultChecked />}
+          />
+          <Separator />
+          <Item
+            icon={<span>🔊</span>}
+            iconTint="#ff9500"
+            title="Sound & Haptics"
+            description="Personalized Spatial Audio"
+            accessory={<span className="text-xs opacity-60">›</span>}
+            interactive
+          />
+        </div>
+      );
+
+    case "hover-card":
+      return (
+        <HoverCard>
+          <HoverCardTrigger asChild>
+            <Button variant="glass">Hover over @tim_cook</Button>
+          </HoverCardTrigger>
+          <HoverCardContent className="w-64 p-4 space-y-2">
+            <div className="flex gap-3 items-center">
+              <Avatar><AvatarFallback>TC</AvatarFallback></Avatar>
+              <div>
+                <p className="font-semibold text-sm">Tim Cook</p>
+                <p className="text-xs opacity-70">CEO at Apple</p>
+              </div>
+            </div>
+          </HoverCardContent>
+        </HoverCard>
+      );
+
+    case "context-menu":
+      return (
+        <ContextMenu>
+          <ContextMenuTrigger className="p-8 border border-dashed rounded-xl text-center text-sm w-full max-w-sm">
+            Right-click or press-and-hold here
+          </ContextMenuTrigger>
+          <ContextMenuContent>
+            <ContextMenuItem>Back <ContextMenuShortcut>⌘[</ContextMenuShortcut></ContextMenuItem>
+            <ContextMenuItem>Forward <ContextMenuShortcut>⌘]</ContextMenuShortcut></ContextMenuItem>
+            <ContextMenuItem>Reload <ContextMenuShortcut>⌘R</ContextMenuShortcut></ContextMenuItem>
+            <ContextMenuSeparator />
+            <ContextMenuItem destructive>Delete</ContextMenuItem>
+          </ContextMenuContent>
+        </ContextMenu>
+      );
+
+    case "drawer":
+      return (
+        <Drawer>
+          <DrawerTrigger asChild>
+            <Button variant="filled">Open Apple Sheet</Button>
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>Share with Nearby Devices</DrawerTitle>
+              <DrawerDescription>AirDrop is active and discovering contacts.</DrawerDescription>
+            </DrawerHeader>
+          </DrawerContent>
+        </Drawer>
+      );
+
+    case "sheet":
+      return (
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="glass">Open Side Inspector</Button>
+          </SheetTrigger>
+          <SheetContent side="right">
+            <SheetHeader>
+              <SheetTitle>Properties Inspector</SheetTitle>
+              <SheetDescription>Real refraction parameters and live tokens.</SheetDescription>
+            </SheetHeader>
+          </SheetContent>
+        </Sheet>
+      );
+
+    case "toast":
+      return (
+        <ToastProvider>
+          <Toast defaultOpen>
+            <div>
+              <ToastTitle>AirPods Pro (2nd Gen)</ToastTitle>
+              <ToastDescription>Connected · 98% Battery</ToastDescription>
+            </div>
+          </Toast>
+          <ToastViewport />
+        </ToastProvider>
+      );
+
+    case "breadcrumb":
+      return (
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem><BreadcrumbLink href="/">iCloud Drive</BreadcrumbLink></BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem><BreadcrumbLink href="#">Designs</BreadcrumbLink></BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem><BreadcrumbPage>Liquid Glass</BreadcrumbPage></BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      );
+
+    case "navigation-menu":
+      return (
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>Mac</NavigationMenuTrigger>
+              <NavigationMenuContent className="p-4 w-48">
+                <p className="text-sm font-semibold">MacBook Pro</p>
+                <p className="text-xs opacity-70">M4 Pro & M4 Max</p>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>iPad</NavigationMenuTrigger>
+              <NavigationMenuContent className="p-4 w-48">
+                <p className="text-sm font-semibold">iPad Pro</p>
+                <p className="text-xs opacity-70">Ultra Retina XDR</p>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+      );
+
+    case "pagination":
+      return (
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem><PaginationPrevious href="#" /></PaginationItem>
+            <PaginationItem><PaginationLink href="#" isActive>1</PaginationLink></PaginationItem>
+            <PaginationItem><PaginationLink href="#">2</PaginationLink></PaginationItem>
+            <PaginationItem><PaginationLink href="#">3</PaginationLink></PaginationItem>
+            <PaginationItem><PaginationNext href="#" /></PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      );
+
+    case "collapsible":
+      return (
+        <Collapsible defaultOpen className="p-4 border rounded-xl w-full max-w-sm">
+          <CollapsibleTrigger asChild>
+            <Button variant="ghost" className="w-full justify-between">
+              <span>Developer Details</span>
+              <span className="opacity-60">⌄</span>
+            </Button>
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-2 text-xs opacity-80 leading-relaxed">
+            WebGL2 and SVG refraction displacement diagnostics. Layer 1 frosted blur supported in Safari/Firefox.
+          </CollapsibleContent>
+        </Collapsible>
+      );
+
+    case "data-table":
+      return (
+        <div className="w-full max-w-lg">
+          <DataTable
+            data={[
+              { id: 1, name: "Mac Studio M4", category: "Desktop", price: "$1,999" },
+              { id: 2, name: "Studio Display", category: "Display", price: "$1,599" },
+              { id: 3, name: "Pro Display XDR", category: "Pro Display", price: "$4,999" },
+            ]}
+            columns={[
+              { key: "name", header: "Hardware", sortable: true },
+              { key: "category", header: "Category" },
+              { key: "price", header: "Starting Price", sortable: true },
+            ]}
+          />
+        </div>
+      );
+
+    case "native-select":
+      return (
+        <div className="w-full max-w-xs">
+          <NativeSelect defaultValue="auto">
+            <option value="auto">Automatic (System HIG)</option>
+            <option value="light">Always Light Mode</option>
+            <option value="dark">Always Dark Mode</option>
+          </NativeSelect>
+        </div>
       );
 
     default:

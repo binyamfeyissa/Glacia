@@ -1,0 +1,18 @@
+{
+  "name": "context-menu",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0",
+    "radix-ui@^1.8.1"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "context-menu.tsx",
+      "content": "import {\n  ContextMenu,\n  ContextMenuTrigger,\n  ContextMenuContent,\n  ContextMenuItem,\n  ContextMenuSeparator,\n  ContextMenuShortcut,\n  ContextMenuGroup,\n  ContextMenuPortal,\n  ContextMenuSub,\n  ContextMenuRadioGroup,\n} from \"glacia\";\n\nexport {\n  ContextMenu,\n  ContextMenuTrigger,\n  ContextMenuContent,\n  ContextMenuItem,\n  ContextMenuSeparator,\n  ContextMenuShortcut,\n  ContextMenuGroup,\n  ContextMenuPortal,\n  ContextMenuSub,\n  ContextMenuRadioGroup,\n};\n",
+      "type": "registry:ui"
+    }
+  ]
+}

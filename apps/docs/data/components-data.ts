@@ -834,4 +834,557 @@ export default function ScrollAreaDemo() {
   );
 }`,
   },
+
+  {
+    slug: "button-group",
+    name: "Button Group",
+    description: "Apple-style unified segmented button grouping for toolbars and multi-action controls.",
+    category: "Buttons & Actions",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 2,
+    props: [
+      { name: "orientation", type: "'horizontal' | 'vertical'", default: "'horizontal'", description: "Layout axis of buttons in the group." },
+      { name: "variant", type: "'segmented' | 'attached' | 'ghost'", default: "'segmented'", description: "Border and glass container styling." },
+      { name: "size", type: "'sm' | 'md' | 'lg'", default: "'md'", description: "Button size in the group." }
+    ],
+    codeSnippet: `import { ButtonGroup, Button } from "glacia";
+
+export default function ButtonGroupDemo() {
+  return (
+    <ButtonGroup variant="segmented">
+      <Button size="sm">Day</Button>
+      <Button size="sm" variant="filled">Week</Button>
+      <Button size="sm">Month</Button>
+      <Button size="sm">Year</Button>
+    </ButtonGroup>
+  );
+}`
+  },
+  {
+    slug: "toggle",
+    name: "Toggle",
+    description: "Two-state glass button with luminous active state, inspired by Apple Control Center controls.",
+    category: "Buttons & Actions",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 2,
+    props: [
+      { name: "pressed", type: "boolean", description: "Controlled pressed state." },
+      { name: "defaultPressed", type: "boolean", default: "false", description: "Uncontrolled initial pressed state." },
+      { name: "onPressedChange", type: "(pressed: boolean) => void", description: "Fired when pressed state changes." },
+      { name: "variant", type: "'glass' | 'outline' | 'filled'", default: "'glass'", description: "Glass visual style." }
+    ],
+    codeSnippet: `import { Toggle } from "glacia";
+
+export default function ToggleDemo() {
+  return (
+    <Toggle defaultPressed variant="glass">
+      Live Photos
+    </Toggle>
+  );
+}`
+  },
+  {
+    slug: "input-group",
+    name: "Input Group",
+    description: "Composite input with attached glass prefixes, suffixes, icons, and interactive action buttons.",
+    category: "Text & Forms",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 2,
+    props: [
+      { name: "size", type: "'sm' | 'md' | 'lg'", default: "'md'", description: "Size of composite group." },
+      { name: "disabled", type: "boolean", default: "false", description: "Disables inputs and addons." }
+    ],
+    codeSnippet: `import { InputGroup, InputGroupAddon, Input, Button } from "glacia";
+
+export default function InputGroupDemo() {
+  return (
+    <InputGroup>
+      <InputGroupAddon align="leading">https://</InputGroupAddon>
+      <Input placeholder="apple.com" />
+      <InputGroupAddon align="trailing">
+        <Button size="sm" variant="ghost">Go</Button>
+      </InputGroupAddon>
+    </InputGroup>
+  );
+}`
+  },
+  {
+    slug: "field",
+    name: "Field",
+    description: "Form field container bundling label, control slot, description, and Apple system red error text.",
+    category: "Text & Forms",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 2,
+    props: [
+      { name: "label", type: "ReactNode", description: "Primary label text." },
+      { name: "required", type: "boolean", default: "false", description: "Shows required indicator." },
+      { name: "description", type: "ReactNode", description: "Help text beneath input." },
+      { name: "error", type: "ReactNode", description: "Error text displayed in Apple red." },
+      { name: "orientation", type: "'vertical' | 'horizontal'", default: "'vertical'", description: "Stacked or inline Mac preferences layout." }
+    ],
+    codeSnippet: `import { Field, Input } from "glacia";
+
+export default function FieldDemo() {
+  return (
+    <Field label="Apple ID" required description="Enter your iCloud account email address.">
+      <Input placeholder="name@icloud.com" />
+    </Field>
+  );
+}`
+  },
+  {
+    slug: "form",
+    name: "Form",
+    description: "Accessible form container with context provider for validation handling and submission.",
+    category: "Text & Forms",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web first",
+    wave: 2,
+    props: [
+      { name: "disabled", type: "boolean", default: "false", description: "Disables all child inputs." }
+    ],
+    codeSnippet: `import { Form, Field, Input, Button } from "glacia";
+
+export default function FormDemo() {
+  return (
+    <Form onSubmit={(e) => e.preventDefault()}>
+      <Field label="Passkey Name">
+        <Input placeholder="MacBook Pro Touch ID" />
+      </Field>
+      <Button type="submit" variant="filled">Register Key</Button>
+    </Form>
+  );
+}`
+  },
+  {
+    slug: "combobox",
+    name: "Combobox",
+    description: "Apple Spotlight / Safari autocomplete input with floating liquid glass dropdown list and checkmark indicator.",
+    category: "Text & Forms",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 2,
+    props: [
+      { name: "options", type: "ComboboxOption[]", description: "List of items with value, label, and icon." },
+      { name: "value", type: "string", description: "Controlled value." },
+      { name: "placeholder", type: "string", default: "'Select option...'", description: "Placeholder string." }
+    ],
+    codeSnippet: `import { Combobox } from "glacia";
+
+const OPTIONS = [
+  { value: "cupertino", label: "Cupertino (Apple Park)" },
+  { value: "austin", label: "Austin Campus" },
+  { value: "london", label: "Battersea Power Station" }
+];
+
+export default function ComboboxDemo() {
+  return <Combobox options={OPTIONS} placeholder="Select campus..." />;
+}`
+  },
+  {
+    slug: "calendar",
+    name: "Calendar",
+    description: "Apple iOS/macOS Calendar widget with circular selection in Apple blue and today dot.",
+    category: "Text & Forms",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 2,
+    props: [
+      { name: "selected", type: "Date", description: "Selected date." },
+      { name: "onSelect", type: "(date: Date) => void", description: "Date change handler." }
+    ],
+    codeSnippet: `import { Calendar } from "glacia";
+
+export default function CalendarDemo() {
+  return <Calendar onSelect={(d) => console.log(d)} />;
+}`
+  },
+  {
+    slug: "chart",
+    name: "Chart",
+    description: "Apple Health & Fitness inspired minimalist glass metrics chart with glowing SVG gradient fills and hover tooltip.",
+    category: "Showing Things",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 2,
+    props: [
+      { name: "data", type: "ChartDataPoint[]", description: "Array of { label, value } points." },
+      { name: "type", type: "'bar' | 'line' | 'area'", default: "'bar'", description: "Chart visualization type." },
+      { name: "color", type: "string", default: "'#0088ff'", description: "Accent stroke & fill color." }
+    ],
+    codeSnippet: `import { Chart } from "glacia";
+
+const DATA = [
+  { label: "Mon", value: 34 },
+  { label: "Tue", value: 45 },
+  { label: "Wed", value: 68 },
+  { label: "Thu", value: 52 },
+  { label: "Fri", value: 89 },
+  { label: "Sat", value: 95 },
+  { label: "Sun", value: 78 }
+];
+
+export default function ChartDemo() {
+  return <Chart data={DATA} type="area" color="#34c759" valueSuffix=" bpm" />;
+}`
+  },
+  {
+    slug: "empty",
+    name: "Empty",
+    description: "Apple empty state screen featuring glass squircle icon plate, clear headline, and action button.",
+    category: "Showing Things",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 2,
+    props: [
+      { name: "title", type: "string", description: "Headline text." },
+      { name: "description", type: "string", description: "Explanatory note." },
+      { name: "icon", type: "ReactNode", description: "Icon inside squircle badge." },
+      { name: "action", type: "ReactNode", description: "Interactive call to action." }
+    ],
+    codeSnippet: `import { Empty, Button } from "glacia";
+
+export default function EmptyDemo() {
+  return (
+    <Empty
+      icon={<span>📬</span>}
+      title="No Unread Mail"
+      description="All conversations in your VIP inbox have been reviewed."
+      action={<Button variant="filled">Check All Mail</Button>}
+    />
+  );
+}`
+  },
+  {
+    slug: "item",
+    name: "Item",
+    description: "Apple iOS Settings and list row with leading squircle icon, titles, and trailing accessory slot.",
+    category: "Showing Things",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 2,
+    props: [
+      { name: "title", type: "ReactNode", description: "Primary title." },
+      { name: "description", type: "ReactNode", description: "Secondary detail text." },
+      { name: "icon", type: "ReactNode", description: "Leading icon." },
+      { name: "iconTint", type: "string", description: "Background tint of icon squircle." },
+      { name: "accessory", type: "ReactNode", description: "Trailing accessory element." },
+      { name: "interactive", type: "boolean", default: "false", description: "Enables hover highlight and click feedback." }
+    ],
+    codeSnippet: `import { Item, Switch } from "glacia";
+
+export default function ItemDemo() {
+  return (
+    <Item
+      icon={<span>📶</span>}
+      iconTint="#0088ff"
+      title="Wi-Fi"
+      description="Apple Park 5GHz"
+      accessory={<Switch defaultChecked />}
+    />
+  );
+}`
+  },
+  {
+    slug: "hover-card",
+    name: "Hover Card",
+    description: "macOS QuickLook and Safari link preview hover card floating over liquid glass.",
+    category: "Popups & Menus",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web only",
+    wave: 2,
+    props: [
+      { name: "align", type: "'center' | 'start' | 'end'", default: "'center'", description: "Popover alignment relative to trigger." }
+    ],
+    codeSnippet: `import { HoverCard, HoverCardTrigger, HoverCardContent, Avatar, AvatarFallback } from "glacia";
+
+export default function HoverCardDemo() {
+  return (
+    <HoverCard>
+      <HoverCardTrigger className="underline cursor-pointer">@tim_cook</HoverCardTrigger>
+      <HoverCardContent className="w-64 p-4 space-y-2">
+        <div className="flex gap-3 items-center">
+          <Avatar><AvatarFallback>TC</AvatarFallback></Avatar>
+          <div>
+            <p className="font-semibold text-sm">Tim Cook</p>
+            <p className="text-xs opacity-70">CEO at Apple</p>
+          </div>
+        </div>
+      </HoverCardContent>
+    </HoverCard>
+  );
+}`
+  },
+  {
+    slug: "context-menu",
+    name: "Context Menu",
+    description: "macOS / iOS long-press and right-click context menu with keyboard shortcuts and destructive red actions.",
+    category: "Popups & Menus",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web only",
+    wave: 2,
+    props: [],
+    codeSnippet: `import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuShortcut } from "glacia";
+
+export default function ContextMenuDemo() {
+  return (
+    <ContextMenu>
+      <ContextMenuTrigger className="p-8 border border-dashed rounded-xl text-center">
+        Right-click here
+      </ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuItem>Back <ContextMenuShortcut>⌘[</ContextMenuShortcut></ContextMenuItem>
+        <ContextMenuItem>Reload <ContextMenuShortcut>⌘R</ContextMenuShortcut></ContextMenuItem>
+        <ContextMenuSeparator />
+        <ContextMenuItem destructive>Delete</ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
+  );
+}`
+  },
+  {
+    slug: "drawer",
+    name: "Drawer",
+    description: "Apple iOS modal sheet with glass pull grabber handle, rounded top squircle corners, and backdrop blur.",
+    category: "Popups & Menus",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 2,
+    props: [],
+    codeSnippet: `import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, Button } from "glacia";
+
+export default function DrawerDemo() {
+  return (
+    <Drawer>
+      <DrawerTrigger asChild>
+        <Button variant="filled">Open Apple Sheet</Button>
+      </DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>Share with Nearby Devices</DrawerTitle>
+          <DrawerDescription>AirDrop is active and discovering contacts.</DrawerDescription>
+        </DrawerHeader>
+      </DrawerContent>
+    </Drawer>
+  );
+}`
+  },
+  {
+    slug: "sheet",
+    name: "Sheet",
+    description: "Apple slide-over panel sliding from right, left, top, or bottom with frosted glass elevation.",
+    category: "Popups & Menus",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 2,
+    props: [
+      { name: "side", type: "'top' | 'bottom' | 'left' | 'right'", default: "'right'", description: "Slide-in entry side." }
+    ],
+    codeSnippet: `import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription, Button } from "glacia";
+
+export default function SheetDemo() {
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="glass">Open Inspector</Button>
+      </SheetTrigger>
+      <SheetContent side="right">
+        <SheetHeader>
+          <SheetTitle>Properties Inspector</SheetTitle>
+          <SheetDescription>Configure Liquid Glass shader parameters.</SheetDescription>
+        </SheetHeader>
+      </SheetContent>
+    </Sheet>
+  );
+}`
+  },
+  {
+    slug: "toast",
+    name: "Toast",
+    description: "Apple Dynamic Island / HUD notification pill floating at the top of the viewport with spring entrance.",
+    category: "Popups & Menus",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 2,
+    props: [
+      { name: "variant", type: "'default' | 'destructive' | 'success'", default: "'default'", description: "Accent styling." }
+    ],
+    codeSnippet: `import { ToastProvider, ToastViewport, Toast, ToastTitle, ToastDescription } from "glacia";
+
+export default function ToastDemo() {
+  return (
+    <ToastProvider>
+      <Toast defaultOpen>
+        <div>
+          <ToastTitle>AirPods Pro</ToastTitle>
+          <ToastDescription>Connected · 98% Battery</ToastDescription>
+        </div>
+      </Toast>
+      <ToastViewport />
+    </ToastProvider>
+  );
+}`
+  },
+  {
+    slug: "breadcrumb",
+    name: "Breadcrumb",
+    description: "macOS Finder path bar and iOS navigation hierarchy with glass pills and chevron dividers.",
+    category: "Navigation & Layout",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 2,
+    props: [],
+    codeSnippet: `import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "glacia";
+
+export default function BreadcrumbDemo() {
+  return (
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem><BreadcrumbLink href="/">iCloud Drive</BreadcrumbLink></BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem><BreadcrumbLink href="/documents">Documents</BreadcrumbLink></BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem><BreadcrumbPage>Liquid Glass</BreadcrumbPage></BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+  );
+}`
+  },
+  {
+    slug: "navigation-menu",
+    name: "Navigation Menu",
+    description: "macOS application menu bar / top navigation with glass trigger items and animated dropdown viewport panels.",
+    category: "Navigation & Layout",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web only",
+    wave: 2,
+    props: [],
+    codeSnippet: `import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent } from "glacia";
+
+export default function NavigationMenuDemo() {
+  return (
+    <NavigationMenu>
+      <NavigationMenuList>
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>Products</NavigationMenuTrigger>
+          <NavigationMenuContent className="p-4 w-48">
+            <p className="text-sm font-medium">Vision Pro</p>
+            <p className="text-xs opacity-70">Spatial computing glass</p>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+      </NavigationMenuList>
+    </NavigationMenu>
+  );
+}`
+  },
+  {
+    slug: "pagination",
+    name: "Pagination",
+    description: "Apple-style pagination pills with previous/next glass chevron buttons and active state indicator.",
+    category: "Navigation & Layout",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 2,
+    props: [],
+    codeSnippet: `import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationLink, PaginationNext } from "glacia";
+
+export default function PaginationDemo() {
+  return (
+    <Pagination>
+      <PaginationContent>
+        <PaginationItem><PaginationPrevious href="#" /></PaginationItem>
+        <PaginationItem><PaginationLink href="#" isActive>1</PaginationLink></PaginationItem>
+        <PaginationItem><PaginationLink href="#">2</PaginationLink></PaginationItem>
+        <PaginationItem><PaginationNext href="#" /></PaginationItem>
+      </PaginationContent>
+    </Pagination>
+  );
+}`
+  },
+  {
+    slug: "collapsible",
+    name: "Collapsible",
+    description: "Apple disclosure widget with rotating chevron and smooth expansion.",
+    category: "Navigation & Layout",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 2,
+    props: [
+      { name: "defaultOpen", type: "boolean", default: "false", description: "Initial open state." }
+    ],
+    codeSnippet: `import { Collapsible, CollapsibleTrigger, CollapsibleContent, Button } from "glacia";
+
+export default function CollapsibleDemo() {
+  return (
+    <Collapsible defaultOpen className="p-4 border rounded-xl">
+      <CollapsibleTrigger asChild>
+        <Button variant="ghost">Developer Options</Button>
+      </CollapsibleTrigger>
+      <CollapsibleContent className="mt-2 text-sm opacity-80">
+        WebGL2 and SVG refraction displacement diagnostics.
+      </CollapsibleContent>
+    </Collapsible>
+  );
+}`
+  },
+  {
+    slug: "data-table",
+    name: "Data Table",
+    description: "Apple Numbers / Finder column view interactive table with search bar, column sorting, and multi-row selection.",
+    category: "Navigation & Layout",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web first",
+    wave: 2,
+    props: [
+      { name: "data", type: "Record<string, any>[]", description: "Array of data records." },
+      { name: "columns", type: "DataTableColumn[]", description: "Column definitions with headers and keys." },
+      { name: "searchable", type: "boolean", default: "true", description: "Shows search input bar." },
+      { name: "selectable", type: "boolean", default: "true", description: "Enables row select checkboxes." }
+    ],
+    codeSnippet: `import { DataTable } from "glacia";
+
+const DATA = [
+  { id: 1, name: "Mac Studio M4 Ultra", status: "Active", price: "$3,999" },
+  { id: 2, name: "Studio Display XDR", status: "In Transit", price: "$1,599" },
+  { id: 3, name: "Magic Keyboard with Touch ID", status: "Delivered", price: "$199" }
+];
+
+const COLUMNS = [
+  { key: "name", header: "Device", sortable: true },
+  { key: "status", header: "Status" },
+  { key: "price", header: "Price", sortable: true }
+];
+
+export default function DataTableDemo() {
+  return <DataTable data={DATA} columns={COLUMNS} />;
+}`
+  },
+  {
+    slug: "native-select",
+    name: "Native Select",
+    description: "Semantic native select dropdown styled with Glacia glass, custom glass chevron, and mobile OS picker support.",
+    category: "Text & Forms",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Yes",
+    wave: 2,
+    props: [
+      { name: "sizeVariant", type: "'sm' | 'md' | 'lg'", default: "'md'", description: "Size of select wrapper." }
+    ],
+    codeSnippet: `import { NativeSelect } from "glacia";
+
+export default function NativeSelectDemo() {
+  return (
+    <NativeSelect defaultValue="auto">
+      <option value="auto">Automatic (System HIG)</option>
+      <option value="light">Always Light Mode</option>
+      <option value="dark">Always Dark Mode</option>
+    </NativeSelect>
+  );
+}`
+  }
+
 ];

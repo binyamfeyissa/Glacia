@@ -1,0 +1,17 @@
+{
+  "name": "data-table",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "data-table.tsx",
+      "content": "import {\n  DataTable,\n  type DataTableColumn,\n  type DataTableProps,\n} from \"glacia\";\n\nexport {\n  DataTable,\n  type DataTableColumn,\n  type DataTableProps,\n};\n",
+      "type": "registry:ui"
+    }
+  ]
+}

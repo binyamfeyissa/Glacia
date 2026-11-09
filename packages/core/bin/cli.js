@@ -40,6 +40,28 @@ const ALL_COMPONENTS = [
   "table",
   "sidebar",
   "scroll-area",
+  // Wave 2
+  "button-group",
+  "toggle",
+  "input-group",
+  "field",
+  "form",
+  "combobox",
+  "calendar",
+  "chart",
+  "empty",
+  "item",
+  "hover-card",
+  "context-menu",
+  "drawer",
+  "sheet",
+  "toast",
+  "breadcrumb",
+  "navigation-menu",
+  "pagination",
+  "collapsible",
+  "data-table",
+  "native-select",
 ];
 
 function printHelp() {

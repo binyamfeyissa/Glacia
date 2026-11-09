@@ -1,115 +1,234 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { Button, SearchField, Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "glacia";
+import { usePathname } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+  SearchField,
+} from "glacia";
 import { COMPONENTS_DATA } from "../data/components-data";
+import { ThemeToggle } from "./theme-toggle";
+import {
+  ArrowUpRightIcon,
+  CloseIcon,
+  GithubIcon,
+  MenuIcon,
+  SearchIcon,
+  SnowflakeIcon,
+} from "./icons";
+
+const NAV = [
+  { href: "/", label: "Overview" },
+  { href: "/components/button", label: "Components", match: "/components" },
+  { href: "/blocks/dashboard", label: "Blocks", match: "/blocks" },
+  { href: "/build-report", label: "Build report", match: "/build-report" },
+];
 
 export function Header() {
+  const pathname = usePathname();
   const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [query, setQuery] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const filteredComponents = searchQuery.trim()
-    ? COMPONENTS_DATA.filter((c) =>
-        c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.description.toLowerCase().includes(searchQuery.toLowerCase()),
-      )
-    : [];
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setSearchOpen((open) => !open);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
+  const results = useMemo(() => {
+    const value = query.trim().toLowerCase();
+    if (!value) return [];
+    return COMPONENTS_DATA.filter(
+      (component) =>
+        component.name.toLowerCase().includes(value) ||
+        component.description.toLowerCase().includes(value) ||
+        component.category.toLowerCase().includes(value),
+    ).slice(0, 8);
+  }, [query]);
+
+  const isActive = (item: (typeof NAV)[number]) => {
+    if (item.href === "/") return pathname === "/";
+    return pathname.startsWith(item.match ?? item.href);
+  };
 
   return (
-    <header className="gl-glass gl-site-header">
-      <div className="gl-header-container">
-        <div className="gl-header-left">
-          <Link href="/" className="gl-header-logo">
-            <span className="gl-logo-mark">❄</span>
-            <span className="gl-logo-text">Glacia</span>
+    <header className="site-header">
+      <div className="header-inner">
+        <div className="header-left">
+          <Link href="/" className="brand" aria-label="Glacia home">
+            <span className="brand-mark">
+              <SnowflakeIcon width={17} height={17} />
+            </span>
+            <span className="brand-name">Glacia</span>
           </Link>
-          <nav className="gl-header-nav">
-            <Link href="/" className="gl-nav-link">
-              Home
-            </Link>
-            <Link href="/components/button" className="gl-nav-link">
-              Components
-            </Link>
-            <Link href="/blocks/dashboard" className="gl-nav-link">
-              Blocks
-            </Link>
-            <Link href="/build-report" className="gl-nav-link">
-              Build Report
-            </Link>
+          <nav className="header-nav" aria-label="Main">
+            {NAV.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="nav-link"
+                aria-current={isActive(item) ? "page" : undefined}
+              >
+                {item.label}
+              </Link>
+            ))}
           </nav>
         </div>
 
-        <div className="gl-header-right">
-          {/* Search Trigger with Dialog */}
-          <Dialog open={searchOpen} onOpenChange={setSearchOpen}>
-            <DialogTrigger asChild>
-              <Button size="sm" variant="glass" className="gl-header-search-btn">
-                <span>🔍 Search components...</span>
-                <kbd className="gl-search-kbd">⌘K</kbd>
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="gl-search-dialog">
-              <DialogHeader>
-                <DialogTitle>Quick Search</DialogTitle>
-                <DialogDescription>Find any Glacia component or block instantly.</DialogDescription>
-              </DialogHeader>
-              <div className="gl-search-input-wrapper">
-                <SearchField
-                  placeholder="Type to filter..."
-                  value={searchQuery}
-                  onValueChange={setSearchQuery}
-                  autoFocus
-                />
-              </div>
-              <div className="gl-search-results">
-                {filteredComponents.length > 0 ? (
-                  filteredComponents.map((item) => (
-                    <Link
-                      key={item.slug}
-                      href={`/components/${item.slug}`}
-                      onClick={() => setSearchOpen(false)}
-                      className="gl-search-item"
-                    >
-                      <span className="gl-search-item-title">{item.name}</span>
-                      <span className="gl-search-item-desc">{item.description}</span>
-                    </Link>
-                  ))
-                ) : searchQuery ? (
-                  <p className="gl-search-empty">No components found matching "{searchQuery}"</p>
-                ) : (
-                  <div className="gl-search-suggestions">
-                    <p className="gl-suggestions-label">Popular components:</p>
-                    <div className="gl-suggestions-list">
-                      {COMPONENTS_DATA.slice(0, 6).map((c) => (
-                        <Link
-                          key={c.slug}
-                          href={`/components/${c.slug}`}
-                          onClick={() => setSearchOpen(false)}
-                          className="gl-suggestion-tag"
-                        >
-                          {c.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </DialogContent>
-          </Dialog>
-
+        <div className="header-actions">
+          <button
+            type="button"
+            className="search-trigger"
+            onClick={() => setSearchOpen(true)}
+            aria-label="Search components"
+          >
+            <SearchIcon width={15} height={15} />
+            <span className="search-trigger-label">Search</span>
+            <kbd className="search-kbd">⌘K</kbd>
+          </button>
+          <ThemeToggle />
           <a
             href="https://github.com/open-pluto/glacia"
             target="_blank"
             rel="noreferrer"
-            className="gl-github-link"
+            className="icon-button"
+            aria-label="Glacia on GitHub"
+            title="GitHub"
           >
-            <Button size="sm" variant="glass">
-              ★ GitHub
-            </Button>
+            <GithubIcon width={17} height={17} />
           </a>
+          <button
+            type="button"
+            className="icon-button menu-trigger"
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-expanded={menuOpen}
+            aria-label="Toggle navigation"
+          >
+            {menuOpen ? <CloseIcon width={18} height={18} /> : <MenuIcon width={18} height={18} />}
+          </button>
         </div>
       </div>
+
+      {menuOpen && (
+        <div className="mobile-nav">
+          {NAV.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="mobile-nav-link"
+              aria-current={isActive(item) ? "page" : undefined}
+            >
+              {item.label}
+              <ArrowUpRightIcon width={15} height={15} />
+            </Link>
+          ))}
+          <a
+            href="https://github.com/open-pluto/glacia"
+            target="_blank"
+            rel="noreferrer"
+            className="mobile-nav-link"
+          >
+            GitHub
+            <GithubIcon width={15} height={15} />
+          </a>
+        </div>
+      )}
+
+      <Dialog
+        open={searchOpen}
+        onOpenChange={(open) => {
+          setSearchOpen(open);
+          if (!open) setQuery("");
+        }}
+      >
+        <DialogContent className="search-dialog">
+          <DialogTitle className="visually-hidden">Search Glacia</DialogTitle>
+          <DialogDescription className="visually-hidden">
+            Search every component in the library.
+          </DialogDescription>
+
+          <div className="search-dialog-field">
+            <SearchField
+              placeholder="Search components, props, categories…"
+              value={query}
+              onValueChange={setQuery}
+              autoFocus
+            />
+          </div>
+
+          <div className="search-dialog-body">
+            {query.trim() ? (
+              results.length > 0 ? (
+                <div className="search-results">
+                  {results.map((component) => (
+                    <Link
+                      key={component.slug}
+                      href={`/components/${component.slug}`}
+                      className="search-result"
+                      onClick={() => {
+                        setSearchOpen(false);
+                        setQuery("");
+                      }}
+                    >
+                      <span className="search-result-mark">{component.name.slice(0, 1)}</span>
+                      <span className="search-result-copy">
+                        <span className="search-result-name">{component.name}</span>
+                        <span className="search-result-desc">{component.description}</span>
+                      </span>
+                      <span className="search-result-cat">{component.category}</span>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <p className="search-empty">No components match “{query}”.</p>
+              )
+            ) : (
+              <div className="search-suggestions">
+                <p className="search-suggestions-label">Jump to</p>
+                <div className="search-suggestion-grid">
+                  {["button", "card", "dialog", "tab-bar", "segmented-control", "table"].map(
+                    (slug) => {
+                      const component = COMPONENTS_DATA.find((c) => c.slug === slug);
+                      if (!component) return null;
+                      return (
+                        <Link
+                          key={slug}
+                          href={`/components/${slug}`}
+                          className="search-suggestion"
+                          onClick={() => setSearchOpen(false)}
+                        >
+                          {component.name}
+                        </Link>
+                      );
+                    },
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="search-dialog-foot">
+            <span>54 components · 5 blocks</span>
+            <span>
+              <kbd>esc</kbd> to close
+            </span>
+          </div>
+        </DialogContent>
+      </Dialog>
     </header>
   );
 }

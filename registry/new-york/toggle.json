@@ -1,0 +1,17 @@
+{
+  "name": "toggle",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "toggle.tsx",
+      "content": "import { Toggle, type ToggleProps } from \"glacia\";\n\nexport { Toggle, type ToggleProps };\nexport default Toggle;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

@@ -2111,6 +2111,11 @@
   margin: 8px 0;
 }
 
+.gl-login-divider .gl-separator {
+  flex: 1 1 0;
+  width: auto;
+}
+
 .gl-divider-text {
   font-size: 11px;
   color: var(--gl-muted);
@@ -2346,4 +2351,1015 @@
 
 .gl-order-amount {
   font-weight: 600;
+}
+
+
+/* ==========================================================================
+   WAVE 2 COMPONENTS & BLOCKS
+   ========================================================================== */
+
+/* 1. Button Group */
+.gl-button-group {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  border-radius: var(--gl-radius-md, 20px);
+}
+
+.gl-button-group[data-orientation="horizontal"] {
+  flex-direction: row;
+}
+
+.gl-button-group[data-orientation="vertical"] {
+  flex-direction: column;
+}
+
+.gl-button-group[data-variant="segmented"] {
+  background: var(--gl-glass);
+  padding: 3px;
+  border: 1px solid var(--gl-edge);
+  backdrop-filter: blur(20px) saturate(190%);
+  -webkit-backdrop-filter: blur(20px) saturate(190%);
+  gap: 2px;
+}
+
+.gl-button-group[data-variant="attached"] .gl-button {
+  border-radius: 0;
+  margin-left: -1px;
+}
+
+.gl-button-group[data-variant="attached"] .gl-button:first-child {
+  border-top-left-radius: var(--gl-radius-md, 20px);
+  border-bottom-left-radius: var(--gl-radius-md, 20px);
+  margin-left: 0;
+}
+
+.gl-button-group[data-variant="attached"] .gl-button:last-child {
+  border-top-right-radius: var(--gl-radius-md, 20px);
+  border-bottom-right-radius: var(--gl-radius-md, 20px);
+}
+
+/* 2. Toggle */
+.gl-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 18px;
+  padding: 0 14px;
+  height: 36px;
+  transition: all 180ms ease;
+  user-select: none;
+}
+
+.gl-toggle[data-state="on"] {
+  background: var(--gl-fill);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 10px rgba(0, 136, 255, 0.35);
+}
+
+.gl-toggle[data-size="sm"] {
+  height: 28px;
+  padding: 0 10px;
+  font-size: 12px;
+  border-radius: 14px;
+}
+
+.gl-toggle[data-size="lg"] {
+  height: 44px;
+  padding: 0 18px;
+  font-size: 16px;
+  border-radius: 22px;
+}
+
+/* 3. Input Group */
+.gl-input-group {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+}
+
+.gl-input-group .gl-input {
+  flex: 1;
+}
+
+.gl-input-group .gl-input-group-addon[data-align="leading"] + .gl-input {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.gl-input-group .gl-input:has(+ .gl-input-group-addon[data-align="trailing"]) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.gl-input-group-addon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  font-size: 13px;
+  color: var(--gl-muted);
+  background: var(--gl-glass);
+  border: 1px solid var(--gl-edge);
+  height: 40px;
+  user-select: none;
+}
+
+.gl-input-group-addon[data-align="leading"] {
+  border-right: none;
+  border-radius: 12px 0 0 12px;
+}
+
+.gl-input-group-addon[data-align="trailing"] {
+  border-left: none;
+  border-radius: 0 12px 12px 0;
+}
+
+/* 4. Field & Form */
+.gl-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.gl-field[data-orientation="horizontal"] {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gl-field-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gl-foreground);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.gl-field-required {
+  color: #ff3b30;
+  font-weight: bold;
+}
+
+.gl-field-description {
+  margin: 0;
+  font-size: 12px;
+  color: var(--gl-muted);
+  line-height: 1.4;
+}
+
+.gl-field-error {
+  margin: 0;
+  font-size: 12px;
+  color: #ff3b30;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.gl-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+/* 5. Combobox */
+.gl-combobox {
+  position: relative;
+  width: 100%;
+}
+
+.gl-combobox-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.gl-combobox-placeholder {
+  color: var(--gl-muted);
+}
+
+.gl-combobox-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 50;
+  border-radius: 14px;
+  padding: 6px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  max-height: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gl-combobox-search-wrapper {
+  padding: 4px;
+}
+
+.gl-combobox-search {
+  width: 100%;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--gl-edge);
+  border-radius: 8px;
+  padding: 0 10px;
+  color: var(--gl-foreground);
+  font-size: 13px;
+  outline: none;
+}
+
+.gl-combobox-options {
+  overflow-y: auto;
+  max-height: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gl-combobox-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.gl-combobox-option[data-highlighted],
+.gl-combobox-option:hover {
+  background: var(--gl-glass-active);
+}
+
+.gl-combobox-check {
+  color: var(--gl-fill);
+}
+
+.gl-combobox-empty {
+  padding: 16px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--gl-muted);
+}
+
+/* 6. Calendar */
+.gl-calendar {
+  display: inline-flex;
+  flex-direction: column;
+  padding: 16px;
+  border-radius: 20px;
+  width: 280px;
+  user-select: none;
+}
+
+.gl-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.gl-calendar-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gl-foreground);
+}
+
+.gl-calendar-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  color: var(--gl-foreground);
+  cursor: pointer;
+  transition: background 140ms ease;
+}
+
+.gl-calendar-nav-btn:hover {
+  background: var(--gl-glass-active);
+}
+
+.gl-calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gl-muted);
+  margin-bottom: 8px;
+}
+
+.gl-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.gl-calendar-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  width: 34px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  color: var(--gl-foreground);
+  cursor: pointer;
+  position: relative;
+  transition: all 140ms ease;
+  margin: auto;
+}
+
+.gl-calendar-day[data-current-month="false"],
+.gl-calendar-day:not([data-current-month]) {
+  opacity: 0.35;
+}
+
+.gl-calendar-day:hover {
+  background: var(--gl-glass-active);
+}
+
+.gl-calendar-day[data-selected] {
+  background: var(--gl-fill) !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+.gl-calendar-today-dot {
+  position: absolute;
+  bottom: 3px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--gl-fill);
+}
+
+/* 7. Chart */
+.gl-chart-card {
+  position: relative;
+  padding: 18px;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.gl-chart-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.gl-chart-tooltip {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  background: var(--gl-glass-active);
+  backdrop-filter: blur(12px);
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--gl-edge);
+  display: flex;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.gl-chart-tooltip-label {
+  color: var(--gl-muted);
+}
+
+.gl-chart-tooltip-value {
+  font-weight: 600;
+  color: var(--gl-foreground);
+}
+
+.gl-chart-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  padding: 0 12px;
+}
+
+.gl-chart-label {
+  font-size: 10px;
+  color: var(--gl-muted);
+  transition: color 140ms ease;
+}
+
+.gl-chart-label[data-hovered] {
+  color: var(--gl-foreground);
+  font-weight: 600;
+}
+
+/* 8. Empty State */
+.gl-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 24px;
+  border-radius: 24px;
+}
+
+.gl-empty-icon-plate {
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--gl-edge);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+
+.gl-empty-title {
+  margin: 0 0 6px;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--gl-foreground);
+}
+
+.gl-empty-description {
+  margin: 0 0 20px;
+  font-size: 13px;
+  color: var(--gl-muted);
+  max-width: 300px;
+  line-height: 1.45;
+}
+
+.gl-empty-action {
+  display: inline-flex;
+}
+
+/* 9. Item */
+.gl-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  transition: background 140ms ease;
+  user-select: none;
+}
+
+.gl-item[data-interactive] {
+  cursor: pointer;
+}
+
+.gl-item[data-interactive]:hover {
+  background: var(--gl-glass-active);
+}
+
+.gl-item-icon-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #fff;
+  background: var(--gl-fill);
+  flex-shrink: 0;
+}
+
+.gl-item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.gl-item-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gl-foreground);
+}
+
+.gl-item-description {
+  font-size: 12px;
+  color: var(--gl-muted);
+  line-height: 1.35;
+}
+
+.gl-item-accessory {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+/* 10. Hover Card & Context Menu */
+.gl-hover-card-content {
+  border-radius: 16px;
+  padding: 14px;
+  max-width: 280px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+  animation: gl-popover-in 180ms ease forwards;
+}
+
+.gl-context-menu-content {
+  min-width: 180px;
+  border-radius: 14px;
+  padding: 5px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+.gl-context-menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--gl-foreground);
+  cursor: pointer;
+  outline: none;
+  transition: background 100ms ease;
+}
+
+.gl-context-menu-item:hover,
+.gl-context-menu-item[data-highlighted] {
+  background: var(--gl-glass-active);
+}
+
+.gl-context-menu-item[data-destructive] {
+  color: #ff3b30;
+}
+
+.gl-context-menu-separator {
+  height: 1px;
+  background: var(--gl-separator);
+  margin: 4px 0;
+}
+
+.gl-context-menu-shortcut {
+  font-size: 11px;
+  color: var(--gl-muted);
+  font-family: var(--gl-mono, monospace);
+}
+
+/* 11. Drawer & Sheet */
+.gl-drawer-overlay,
+.gl-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 100;
+}
+
+.gl-drawer-content {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-top-left-radius: 28px;
+  border-top-right-radius: 28px;
+  padding: 16px 24px 32px;
+  z-index: 101;
+  max-height: 85vh;
+  box-shadow: 0 -12px 36px rgba(0, 0, 0, 0.4);
+}
+
+.gl-drawer-handle {
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--gl-muted);
+  opacity: 0.5;
+  margin: 0 auto 16px;
+}
+
+.gl-sheet-content {
+  position: fixed;
+  z-index: 101;
+  padding: 24px;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+}
+
+.gl-sheet-content[data-side="right"] {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 360px;
+  border-left: 1px solid var(--gl-edge);
+}
+
+.gl-sheet-content[data-side="left"] {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 360px;
+  border-right: 1px solid var(--gl-edge);
+}
+
+.gl-sheet-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--gl-glass);
+  border: 1px solid var(--gl-edge);
+  color: var(--gl-foreground);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* 12. Toast (HUD / Dynamic Island) */
+.gl-toast-viewport {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  z-index: 999;
+  pointer-events: none;
+}
+
+.gl-toast-hud {
+  pointer-events: auto;
+  border-radius: 22px;
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+  min-width: 240px;
+  animation: gl-toast-in 240ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes gl-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.gl-toast-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gl-foreground);
+}
+
+.gl-toast-description {
+  font-size: 12px;
+  color: var(--gl-muted);
+}
+
+/* 13. Breadcrumb */
+.gl-breadcrumb-list {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 13px;
+}
+
+.gl-breadcrumb-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gl-breadcrumb-link {
+  color: var(--gl-muted);
+  text-decoration: none;
+  transition: color 120ms ease;
+}
+
+.gl-breadcrumb-link:hover {
+  color: var(--gl-foreground);
+}
+
+.gl-breadcrumb-page {
+  font-weight: 600;
+  color: var(--gl-foreground);
+}
+
+.gl-breadcrumb-separator {
+  color: var(--gl-muted);
+  opacity: 0.6;
+}
+
+/* 14. Navigation Menu */
+.gl-navigation-menu {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  z-index: 50;
+}
+
+.gl-navigation-menu-list {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 18px;
+  list-style: none;
+  margin: 0;
+}
+
+.gl-navigation-menu-trigger {
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gl-foreground);
+  padding: 6px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 140ms ease;
+}
+
+.gl-navigation-menu-trigger:hover,
+.gl-navigation-menu-trigger[data-state="open"] {
+  background: var(--gl-glass-active);
+}
+
+.gl-navigation-menu-viewport-wrapper {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.gl-navigation-menu-viewport {
+  position: relative;
+  margin-top: 8px;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.4);
+  animation: gl-popover-in 180ms ease forwards;
+}
+
+/* 15. Pagination */
+.gl-pagination {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.gl-pagination-content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.gl-pagination-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  min-width: 36px;
+  padding: 0 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gl-foreground);
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  transition: all 140ms ease;
+}
+
+.gl-pagination-link[data-active] {
+  background: var(--gl-fill);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* 16. Collapsible */
+.gl-collapsible-trigger {
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+}
+
+.gl-collapsible-content {
+  overflow: hidden;
+  transition: height 200ms ease;
+}
+
+/* 17. Data Table */
+.gl-data-table-container {
+  border-radius: 18px;
+  overflow: hidden;
+  padding: 16px;
+}
+
+.gl-data-table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.gl-data-table-search {
+  max-width: 260px;
+}
+
+.gl-data-table-header-content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gl-sort-arrow {
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+.gl-data-table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--gl-muted);
+}
+
+.gl-data-table-pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 18. Native Select */
+.gl-native-select-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 12px;
+  height: 40px;
+  padding: 0 32px 0 12px;
+}
+
+.gl-native-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  color: var(--gl-foreground);
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  width: 100%;
+  cursor: pointer;
+}
+
+.gl-native-select-chevron {
+  position: absolute;
+  right: 12px;
+  pointer-events: none;
+  color: var(--gl-muted);
+}
+
+/* 19. Settings Block */
+.gl-settings-block {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 24px;
+  min-height: 520px;
+}
+
+.gl-settings-sidebar {
+  border-radius: 20px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.gl-settings-user-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px;
+}
+
+.gl-settings-user-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.gl-settings-user-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gl-foreground);
+}
+
+.gl-settings-user-id {
+  font-size: 11px;
+  color: var(--gl-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gl-settings-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gl-settings-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: transparent;
+  border: none;
+  color: var(--gl-foreground);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 140ms ease;
+  text-align: left;
+}
+
+.gl-settings-nav-item:hover {
+  background: var(--gl-glass-active);
+}
+
+.gl-settings-nav-item[data-active] {
+  background: var(--gl-fill);
+  color: #fff;
+}
+
+.gl-settings-nav-badge {
+  margin-left: auto;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* 20. Profile Block */
+.gl-profile-online-badge {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #34c759;
+  border: 2px solid var(--gl-glass);
 }

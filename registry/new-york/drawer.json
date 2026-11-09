@@ -1,0 +1,18 @@
+{
+  "name": "drawer",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0",
+    "radix-ui@^1.8.1"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "drawer.tsx",
+      "content": "import {\n  Drawer,\n  DrawerTrigger,\n  DrawerContent,\n  DrawerHeader,\n  DrawerFooter,\n  DrawerTitle,\n  DrawerDescription,\n  DrawerClose,\n  DrawerOverlay,\n  DrawerPortal,\n} from \"glacia\";\n\nexport {\n  Drawer,\n  DrawerTrigger,\n  DrawerContent,\n  DrawerHeader,\n  DrawerFooter,\n  DrawerTitle,\n  DrawerDescription,\n  DrawerClose,\n  DrawerOverlay,\n  DrawerPortal,\n};\n",
+      "type": "registry:ui"
+    }
+  ]
+}

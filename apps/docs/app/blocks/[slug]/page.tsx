@@ -1,13 +1,16 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BackdropSwitcher } from "../../../components/backdrop-switcher";
-import { LoginPage, AdminDashboard, Badge, Button } from "glacia";
+import type { Metadata } from "next";
+import { AdminDashboard, LoginPage, SettingsBlock, ProfileBlock, SignupBlock } from "glacia";
+import { CodeBlock } from "../../../components/code-block";
+import { ArrowRightIcon, SparkIcon } from "../../../components/icons";
 
 const BLOCKS = [
   {
     slug: "dashboard",
-    title: "Admin Dashboard Block",
-    description: "Complete administration dashboard with iPad-style floating glass sidebar, live stat cards, chart flow, and real-time orders data table.",
+    title: "Admin dashboard",
+    description:
+      "A complete administration screen with a floating glass sidebar, live KPI cards, revenue flow, and an orders table. Built from Sidebar, Card, Badge, Button, and Table.",
     componentsUsed: ["Sidebar", "Card", "Badge", "Button", "Table"],
     code: `import { AdminDashboard } from "glacia";
 
@@ -17,86 +20,166 @@ export default function DashboardRoute() {
   },
   {
     slug: "login",
-    title: "Login Page Block",
-    description: "Production-ready user authentication screen featuring centred glass card, email/password fields, social OAuth buttons, and remember-me checkbox.",
+    title: "Login page",
+    description:
+      "A production-ready authentication screen with a centered glass card, email and password fields, OAuth providers, and remember-me. Also available in a split layout.",
     componentsUsed: ["Card", "Input", "Button", "Label", "Checkbox", "Separator"],
     code: `import { LoginPage } from "glacia";
 
 export default function LoginRoute() {
-  return <LoginPage layout="centered" onSubmit={(e) => console.log("Login submitted")} />;
+  return (
+    <LoginPage
+      layout="centered"
+      onSubmit={() => console.log("Login submitted")}
+    />
+  );
+}`,
+  },
+  {
+    slug: "settings",
+    title: "System settings",
+    description:
+      "An authentic Apple macOS/iPadOS Preferences window with a categorized glass sidebar, appearance options, haptics, and volume controls.",
+    componentsUsed: ["Sidebar", "Card", "Item", "Switch", "Slider", "SegmentedControl", "Button", "Avatar", "Separator"],
+    code: `import { SettingsBlock } from "glacia";
+
+export default function SettingsRoute() {
+  return <SettingsBlock />;
+}`,
+  },
+  {
+    slug: "profile",
+    title: "User profile",
+    description:
+      "Apple ID contact card profile with an avatar hero, linked Apple devices, verification badge, and contact action buttons.",
+    componentsUsed: ["Card", "Item", "Avatar", "Badge", "Button", "Separator"],
+    code: `import { ProfileBlock } from "glacia";
+
+export default function ProfileRoute() {
+  return <ProfileBlock />;
+}`,
+  },
+  {
+    slug: "signup",
+    title: "Account registration",
+    description:
+      "Apple onboarding account creation screen with real-time animated password strength meter, passkey option, and terms agreement.",
+    componentsUsed: ["Card", "Input", "Button", "Label", "Checkbox", "Separator"],
+    code: `import { SignupBlock } from "glacia";
+
+export default function SignupRoute() {
+  return <SignupBlock />;
 }`,
   },
 ];
 
 export async function generateStaticParams() {
-  return BLOCKS.map((b) => ({
-    slug: b.slug,
-  }));
+  return BLOCKS.map((block) => ({ slug: block.slug }));
 }
 
-export default async function BlockPage({
+export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
-}) {
+}): Promise<Metadata> {
   const { slug } = await params;
-  const block = BLOCKS.find((b) => b.slug === slug);
+  const block = BLOCKS.find((item) => item.slug === slug);
+  if (!block) return { title: "Block not found" };
+  return { title: block.title, description: block.description };
+}
+
+export default async function BlockPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const block = BLOCKS.find((item) => item.slug === slug);
 
   if (!block) {
     notFound();
   }
 
   return (
-    <div className="gl-block-page">
-      <BackdropSwitcher />
+    <div className="block-page">
+      <header className="block-head">
+        <nav className="breadcrumbs" aria-label="Breadcrumb">
+          <Link href="/">Home</Link>
+          <span>/</span>
+          <span>Blocks</span>
+          <span>/</span>
+          <span>{block.title}</span>
+        </nav>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="mb-8">
-          <div className="flex gap-2 mb-3">
-            <Badge variant="default">Glacia Block</Badge>
-            <Badge variant="secondary">Wave 1 Shippable</Badge>
+        <div className="block-head-top" style={{ marginTop: 18 }}>
+          <div>
+            <p className="docs-kicker">Glacia block · Wave 1</p>
+            <h1 className="block-title">{block.title}</h1>
+            <p className="block-desc">{block.description}</p>
           </div>
-          <h1 className="text-3xl font-bold mb-2">{block.title}</h1>
-          <p className="text-base text-muted-foreground mb-4">{block.description}</p>
-          <div className="flex gap-2 items-center">
-            <span className="text-xs font-semibold opacity-70">Components used:</span>
-            {block.componentsUsed.map((comp) => (
-              <Badge key={comp} variant="outline">{comp}</Badge>
-            ))}
+
+          <div className="block-switch" aria-label="Switch block">
+            <Link href="/blocks/dashboard" data-active={slug === "dashboard"}>
+              Dashboard
+            </Link>
+            <Link href="/blocks/login" data-active={slug === "login"}>
+              Login
+            </Link>
+            <Link href="/blocks/settings" data-active={slug === "settings"}>
+              Settings
+            </Link>
+            <Link href="/blocks/profile" data-active={slug === "profile"}>
+              Profile
+            </Link>
+            <Link href="/blocks/signup" data-active={slug === "signup"}>
+              Signup
+            </Link>
           </div>
         </div>
 
-        {/* Live Block Render Stage */}
-        <div className="border border-zinc-700/50 rounded-2xl overflow-hidden mb-12 shadow-2xl">
-          <div className="p-4 bg-zinc-900/60 border-b border-zinc-700/50 flex justify-between items-center">
-            <span className="text-xs font-mono opacity-80">Live Interactive Block Preview</span>
-            <div className="flex gap-2">
-              <Link href="/blocks/dashboard">
-                <Button size="sm" variant={slug === "dashboard" ? "filled" : "glass"}>
-                  Dashboard
-                </Button>
-              </Link>
-              <Link href="/blocks/login">
-                <Button size="sm" variant={slug === "login" ? "filled" : "glass"}>
-                  Login Page
-                </Button>
-              </Link>
-            </div>
-          </div>
-          <div className="p-6 overflow-auto max-h-[850px]">
-            {slug === "dashboard" ? <AdminDashboard /> : <LoginPage layout="centered" />}
-          </div>
+        <div className="block-card-tags" style={{ marginTop: 18 }}>
+          {block.componentsUsed.map((component) => (
+            <span className="block-tag" key={component}>
+              {component}
+            </span>
+          ))}
         </div>
+      </header>
 
-        {/* Code to copy */}
-        <div className="border border-zinc-700/50 rounded-2xl overflow-hidden bg-black/60">
-          <div className="p-4 bg-zinc-900/80 border-b border-zinc-700/50 flex justify-between items-center">
-            <span className="text-xs font-mono">page.tsx</span>
-          </div>
-          <pre className="p-6 overflow-x-auto text-sm font-mono text-zinc-300">
-            <code>{block.code}</code>
-          </pre>
+      <div className="block-stage">
+        <div className="block-stage-bar">
+          <span className="block-stage-label">
+            <span className="status-dot" />
+            Live preview · rendered from the published package
+          </span>
+          <Link href="/components/card" className="section-link">
+            Explore the parts
+            <ArrowRightIcon />
+          </Link>
         </div>
+        <div className="block-stage-body">
+          <div className="block-stage-frame">
+            {slug === "dashboard" && <AdminDashboard />}
+            {slug === "login" && <LoginPage layout="centered" />}
+            {slug === "settings" && <SettingsBlock />}
+            {slug === "profile" && <ProfileBlock />}
+            {slug === "signup" && <SignupBlock />}
+          </div>
+        </div>
+      </div>
+      <p className="block-stage-note">
+        <SparkIcon
+          width={11}
+          height={11}
+          style={{ display: "inline-block", verticalAlign: "-1px", marginRight: 5 }}
+        />
+        Fully interactive. The same component ships in the npm package and the copy command.
+      </p>
+
+      <div className="block-code">
+        <div className="docs-section-head">
+          <div>
+            <h2 className="docs-section-title">Usage</h2>
+            <p className="docs-section-desc">Drop the block into any route and pass your own data.</p>
+          </div>
+        </div>
+        <CodeBlock code={block.code} filename="page.tsx" />
       </div>
     </div>
   );

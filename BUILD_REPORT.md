@@ -1,9 +1,9 @@
 # Glacia Build Report
 
 **Verified Release Date:** 2026-11-09  
-**Version:** v0.1.0 (Wave 1)
+**Version:** v0.2.0 (Wave 1 + Wave 2 Complete)
 
-This report provides an honest, verified account of all components, blocks, packages, and test suites shipped in Glacia v0.1.0, along with tested browser capabilities and future roadmap items.
+This report provides an honest, verified account of all components, blocks, packages, and test suites shipped in Glacia, along with tested browser capabilities and future roadmap items.
 
 ---
 
@@ -11,18 +11,44 @@ This report provides an honest, verified account of all components, blocks, pack
 
 | Category | Shipped Count | Status |
 | :--- | :--- | :--- |
-| **Wave 1 Web Components** | 33 | Built, tested, and verified |
+| **Shipped Web Components** | **54** (33 Wave 1 + 21 Wave 2) | Built, tested, and verified |
 | **React Native Components** | 7 | Shipped with iOS 26+ `UIGlassEffect` & fallback ladder |
-| **Production Ready-Made Blocks** | 2 | Login Page, Admin Dashboard |
-| **Passing Automated Unit Tests** | 100 / 100 | 92 `glacia` (core) + 8 `glacia-native` |
+| **Production Ready-Made Blocks** | **5** | Login Page, Admin Dashboard, Settings, Profile, Signup |
+| **Passing Automated Unit Tests** | **118 / 118** | 110 `glacia` (core) + 8 `glacia-native` |
 | **Design Tokens** | Complete | Cross-platform JSON, CSS, and React Native maps |
 | **CLI & Registry Distribution** | Functional | `npx glacia add <comp>`, `npx glacia add all`, npm packages |
 
 ---
 
-## Shipped Wave 1 Web Components (33)
+## Shipped Wave 2 Web Components (21 New)
 
-Every component listed below is fully implemented in `packages/core`, interactive, accessible (WAI-ARIA compliant), responsive to light/dark themes, and available via npm (`glacia`) and the copy-command registry.
+| # | Component | Category | Apple HIG Classification | React Native Support |
+| :- | :--- | :--- | :--- | :--- |
+| 34 | **ButtonGroup** | Buttons & Actions | Apple-faithful | Web first |
+| 35 | **Toggle** | Buttons & Actions | Apple-faithful | Web first |
+| 36 | **InputGroup** | Text & Forms | Apple-faithful | Web first |
+| 37 | **Field** | Text & Forms | Apple-faithful | Web first |
+| 38 | **Form** | Text & Forms | Glacia extension | Web first |
+| 39 | **Combobox** | Text & Forms | Apple-faithful | Web first |
+| 40 | **Calendar** | Text & Forms | Apple-faithful | Web first |
+| 41 | **Chart** | Showing Things | Apple-faithful | Web first |
+| 42 | **Empty** | Showing Things | Apple-faithful | Web first |
+| 43 | **Item** | Showing Things | Apple-faithful | Web first |
+| 44 | **HoverCard** | Popups & Menus | Apple-faithful | Web only |
+| 45 | **ContextMenu** | Popups & Menus | Apple-faithful | Web only |
+| 46 | **Drawer** | Popups & Menus | Apple-faithful | Web first |
+| 47 | **Sheet** | Popups & Menus | Apple-faithful | Web first |
+| 48 | **Toast** | Popups & Menus | Apple-faithful | Web first |
+| 49 | **Breadcrumb** | Navigation & Layout | Apple-faithful | Web first |
+| 50 | **NavigationMenu** | Navigation & Layout | Apple-faithful | Web only |
+| 51 | **Pagination** | Navigation & Layout | Apple-faithful | Web first |
+| 52 | **Collapsible** | Navigation & Layout | Apple-faithful | Web first |
+| 53 | **DataTable** | Navigation & Layout | Glacia extension | Web first |
+| 54 | **NativeSelect** | Text & Forms | Apple-faithful | Yes (`glacia-native`) |
+
+---
+
+## Shipped Wave 1 Web Components (33)
 
 | # | Component | Category | Apple HIG Classification | React Native Support |
 | :- | :--- | :--- | :--- | :--- |
@@ -60,7 +86,24 @@ Every component listed below is fully implemented in `packages/core`, interactiv
 | 32 | **Sidebar** | Navigation | Apple-faithful | Web only |
 | 33 | **ScrollArea** | Layout | Glacia extension | Web only |
 
-*Note on Apple HIG classification:* Apple restricts Liquid Glass primarily to floating controls, sheets, tab bars, sidebars, and alerts. Where Glacia applies glass to content surfaces (such as Cards, Tables, and Form inputs), it is explicitly marked as a **Glacia extension**.
+---
+
+## Shipped Ready-Made Blocks (5)
+
+1. **Login Page (`LoginPage`):**
+   - Centered and split layouts.
+   - Glass authentication card with email, password, OAuth buttons, and remember-me checkbox.
+2. **Admin Dashboard (`AdminDashboard`):**
+   - Floating iPad-style glass sidebar.
+   - Live revenue and KPI metric cards.
+   - Responsive orders table and trend analytics visualization.
+3. **Settings Block (`SettingsBlock`):**
+   - Apple macOS / iPadOS Preferences window with categorized glass sidebar.
+   - Appearance mode switch, accent colors, True Tone toggle, and haptic volume slider.
+4. **Profile Block (`ProfileBlock`):**
+   - Apple ID contact card with avatar hero, verified badge, personal information, and linked devices list.
+5. **Signup Block (`SignupBlock`):**
+   - Clean Apple onboarding registration card with real-time animated password strength meter, passkey option, and terms agreement.
 
 ---
 
@@ -73,24 +116,6 @@ Every component listed below is fully implemented in `packages/core`, interactiv
 5. `SegmentedControl` — Floating glass segment switcher
 6. `TabBar` — Bottom floating glass navigation bar
 7. `Card` — Elevation glass container for iOS and fallback Android
-
-### Native Platform Fallback Ladder
-- **iOS 26+:** Real Apple `UIGlassEffect` via `@callstack/liquid-glass`.
-- **iOS <26:** Semi-transparent frosted glass approximation via `react-native-blur` or translucency with identical metrics.
-- **Android:** Semi-transparent surface tint matching exact layout and elevation with zero layout shift.
-- **Expo Go:** Gracefully runs using the non-native fallback ladder without throwing native module linking errors.
-
----
-
-## Shipped Blocks (2)
-
-1. **Login Page (`LoginPage`):**
-   - Centered and split layouts.
-   - Glass authentication card with email, password, OAuth buttons, and remember-me checkbox.
-2. **Admin Dashboard (`AdminDashboard`):**
-   - Floating iPad-style glass sidebar.
-   - Live revenue and KPI metric cards.
-   - Responsive orders table and trend analytics visualization.
 
 ---
 
@@ -107,13 +132,7 @@ Glacia web uses a two-layer rendering architecture designed to avoid WebKit bug 
 
 ---
 
-## Roadmap: What is NOT in V1
-
-### Wave 2 Roadmap (24 components & blocks)
-- **Controls & Forms:** Button Group, Toggle, Input Group, Field, Form, Combobox, Native Select
-- **Data & Display:** Calendar, Chart, Empty, Item, Hover Card, Context Menu, Collapsible, Data Table
-- **Navigation & Overlays:** Drawer, Sheet, Toast, Breadcrumb, Navigation Menu, Pagination
-- **Blocks:** Settings Block, Profile Block, Signup Block
+## Roadmap: Remaining (Wave 3)
 
 ### Wave 3 Roadmap (22 components & blocks)
 - **Advanced Controls:** Toggle Group, Input OTP, Command, Carousel, Aspect Ratio, Kbd, Code Block, Marker
