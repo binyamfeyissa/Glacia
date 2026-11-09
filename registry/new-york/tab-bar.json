@@ -1,0 +1,17 @@
+{
+  "name": "tab-bar",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "tab-bar.tsx",
+      "content": "import { TabBar, type TabBarItem, type TabBarProps } from \"glacia\";\n\nexport { TabBar, type TabBarItem, type TabBarProps };\nexport default TabBar;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

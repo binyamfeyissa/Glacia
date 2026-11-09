@@ -1,0 +1,17 @@
+{
+  "name": "search-field",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "search-field.tsx",
+      "content": "import { SearchField, type SearchFieldProps } from \"glacia\";\n\nexport { SearchField, type SearchFieldProps };\nexport default SearchField;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

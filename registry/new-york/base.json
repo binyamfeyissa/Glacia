@@ -1,0 +1,24 @@
+{
+  "name": "base",
+  "type": "registry:base",
+  "cssVars": {
+    "light": {
+      "--gl-foreground": "rgb(0 0 0 / 0.88)",
+      "--gl-muted": "rgb(60 60 67 / 0.6)",
+      "--gl-glass": "rgb(255 255 255 / 0.6)",
+      "--gl-glass-active": "rgb(236 236 240 / 0.85)",
+      "--gl-edge": "rgb(0 0 0 / 0.08)",
+      "--gl-fill": "#0088ff",
+      "--gl-ring": "rgb(0 0 0 / 0.4)"
+    },
+    "dark": {
+      "--gl-foreground": "rgb(255 255 255)",
+      "--gl-muted": "rgb(235 235 245 / 0.6)",
+      "--gl-glass": "rgb(40 40 40 / 0.62)",
+      "--gl-glass-active": "rgb(70 70 70 / 0.62)",
+      "--gl-edge": "rgb(255 255 255 / 0.08)",
+      "--gl-fill": "#0091ff",
+      "--gl-ring": "rgb(255 255 255 / 0.5)"
+    }
+  }
+}

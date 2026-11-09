@@ -1,0 +1,18 @@
+{
+  "name": "tabs",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0",
+    "radix-ui@^1.8.1"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "tabs.tsx",
+      "content": "import { Tabs, TabsList, TabsTrigger, TabsContent } from \"glacia\";\n\nexport { Tabs, TabsList, TabsTrigger, TabsContent };\nexport default Tabs;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

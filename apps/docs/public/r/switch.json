@@ -1,0 +1,17 @@
+{
+  "name": "switch",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "switch.tsx",
+      "content": "import { Switch, type SwitchProps } from \"glacia\";\n\nexport { Switch, type SwitchProps };\nexport default Switch;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "glacia-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Monorepo for Glacia: Apple's Liquid Glass UI kit for React and React Native",
+  "scripts": {
+    "build": "pnpm --filter glacia-tokens build && pnpm --filter glacia build && pnpm --filter glacia-native build && pnpm registry:build && pnpm --filter docs build",
+    "dev": "pnpm --filter docs dev",
+    "test": "pnpm --filter glacia test && pnpm --filter glacia-native test",
+    "typecheck": "pnpm -r run typecheck",
+    "registry:build": "node scripts/build-registry.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  },
+  "packageManager": "pnpm@12.18.0"
+}

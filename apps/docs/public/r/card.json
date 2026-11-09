@@ -1,0 +1,17 @@
+{
+  "name": "card",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "card.tsx",
+      "content": "import {\n  Card,\n  CardHeader,\n  CardTitle,\n  CardDescription,\n  CardContent,\n  CardBody,\n  CardFooter,\n  type CardProps,\n} from \"glacia\";\n\nexport {\n  Card,\n  CardHeader,\n  CardTitle,\n  CardDescription,\n  CardContent,\n  CardBody,\n  CardFooter,\n  type CardProps,\n};\nexport default Card;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

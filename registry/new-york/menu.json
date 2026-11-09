@@ -1,0 +1,17 @@
+{
+  "name": "menu",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "menu.tsx",
+      "content": "import { Menu, type MenuEntry, type MenuItem, type MenuProps } from \"glacia\";\n\nexport { Menu, type MenuEntry, type MenuItem, type MenuProps };\nexport default Menu;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

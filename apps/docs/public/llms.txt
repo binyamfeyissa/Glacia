@@ -1,0 +1,69 @@
+# Glacia — Liquid Glass UI Kit for React & React Native
+
+> Apple's Liquid Glass, with real refraction — not frosted blur — on web and on iOS, from one API.
+
+## Distribution & Installation
+
+Web (NPM package):
+\`\`\`bash
+npm install glacia
+\`\`\`
+
+React Native (iOS 26+):
+\`\`\`bash
+npm install glacia-native
+\`\`\`
+
+Glacia Copy Command (component files into your project):
+\`\`\`bash
+npx glacia add <component>
+npx glacia add all
+\`\`\`
+
+Registry URL base:
+https://glacia.dev/r/{component}.json
+Full registry catalog index: https://glacia.dev/r/index.json
+All-in-one bundle: https://glacia.dev/r/all.json
+
+## Wave 1 Components (33 Shipped)
+
+1. Glass (primitive): https://glacia.dev/components/glass
+2. Button: https://glacia.dev/components/button
+3. Text: https://glacia.dev/components/text
+4. Input: https://glacia.dev/components/input
+5. Textarea: https://glacia.dev/components/textarea
+6. Label: https://glacia.dev/components/label
+7. Card: https://glacia.dev/components/card
+8. Badge: https://glacia.dev/components/badge
+9. Avatar: https://glacia.dev/components/avatar
+10. Separator: https://glacia.dev/components/separator
+11. Skeleton: https://glacia.dev/components/skeleton
+12. Spinner: https://glacia.dev/components/spinner
+13. Progress: https://glacia.dev/components/progress
+14. Switch: https://glacia.dev/components/switch
+15. Slider: https://glacia.dev/components/slider
+16. SearchField: https://glacia.dev/components/search-field
+17. Checkbox: https://glacia.dev/components/checkbox
+18. RadioGroup: https://glacia.dev/components/radio-group
+19. Select: https://glacia.dev/components/select
+20. Tabs: https://glacia.dev/components/tabs
+21. SegmentedControl: https://glacia.dev/components/segmented-control
+22. TabBar: https://glacia.dev/components/tab-bar
+23. Accordion: https://glacia.dev/components/accordion
+24. Dialog: https://glacia.dev/components/dialog
+25. AlertDialog: https://glacia.dev/components/alert-dialog
+26. Popover: https://glacia.dev/components/popover
+27. DropdownMenu: https://glacia.dev/components/dropdown-menu
+28. Menu: https://glacia.dev/components/menu
+29. Tooltip: https://glacia.dev/components/tooltip
+30. Sonner (Toast): https://glacia.dev/components/sonner
+31. Table: https://glacia.dev/components/table
+32. Sidebar: https://glacia.dev/components/sidebar
+33. ScrollArea: https://glacia.dev/components/scroll-area
+
+## Shipped Blocks
+- Login Page: https://glacia.dev/blocks/login
+- Admin Dashboard: https://glacia.dev/blocks/dashboard
+
+## Build Report
+- https://glacia.dev/build-report

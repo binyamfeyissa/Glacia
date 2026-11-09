@@ -1,0 +1,17 @@
+{
+  "name": "textarea",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "textarea.tsx",
+      "content": "import { Textarea, type TextareaProps } from \"glacia\";\n\nexport { Textarea, type TextareaProps };\nexport default Textarea;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

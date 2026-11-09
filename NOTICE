@@ -1,0 +1,11 @@
+Glacia
+Copyright (c) 2026 Glacia Contributors
+
+This project includes software developed by:
+- Glisse (https://github.com/0kzh/glisse):
+  Copyright (c) 2026 Kelvin Zhang <me@kelvinzhang.ca>
+  Licensed under the MIT License.
+
+- @callstack/liquid-glass (https://github.com/callstack/liquid-glass):
+  Copyright (c) 2026 Callstack
+  Licensed under the MIT License.

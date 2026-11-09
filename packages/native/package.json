@@ -1,0 +1,35 @@
+{
+  "name": "glacia-native",
+  "version": "0.1.0",
+  "description": "Liquid Glass UI components for React Native — real iOS 26 glass, with a clean fallback on Android and older iOS.",
+  "license": "MIT",
+  "main": "lib/commonjs/index.js",
+  "module": "lib/module/index.js",
+  "types": "lib/typescript/index.d.ts",
+  "react-native": "src/index.ts",
+  "files": [
+    "lib",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-native": ">=0.80",
+    "@callstack/liquid-glass": ">=0.7.0"
+  },
+  "dependencies": {
+    "glacia-tokens": "workspace:*"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.3",
+    "@types/react": "^19.3.0",
+    "jsdom": "^29.1.1",
+    "react": "^19.3.1",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.0"
+  }
+}

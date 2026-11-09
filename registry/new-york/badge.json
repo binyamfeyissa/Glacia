@@ -1,0 +1,17 @@
+{
+  "name": "badge",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "badge.tsx",
+      "content": "import { Badge, type BadgeProps } from \"glacia\";\n\nexport { Badge, type BadgeProps };\nexport default Badge;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

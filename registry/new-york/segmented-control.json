@@ -1,0 +1,17 @@
+{
+  "name": "segmented-control",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "segmented-control.tsx",
+      "content": "import {\n  SegmentedControl,\n  type SegmentedControlItem,\n  type SegmentedControlProps,\n} from \"glacia\";\n\nexport {\n  SegmentedControl,\n  type SegmentedControlItem,\n  type SegmentedControlProps,\n};\nexport default SegmentedControl;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

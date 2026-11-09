@@ -1,0 +1,17 @@
+{
+  "name": "glass",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "glass.tsx",
+      "content": "import { Glass, type GlassProps } from \"glacia\";\n\nexport { Glass, type GlassProps };\nexport default Glass;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

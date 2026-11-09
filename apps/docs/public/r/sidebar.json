@@ -1,0 +1,17 @@
+{
+  "name": "sidebar",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "sidebar.tsx",
+      "content": "import {\n  SidebarProvider,\n  Sidebar,\n  SidebarTrigger,\n  SidebarHeader,\n  SidebarContent,\n  SidebarFooter,\n  SidebarMenu,\n  SidebarMenuItem,\n  SidebarMenuButton,\n  useSidebar,\n  type SidebarMenuButtonProps,\n} from \"glacia\";\n\nexport {\n  SidebarProvider,\n  Sidebar,\n  SidebarTrigger,\n  SidebarHeader,\n  SidebarContent,\n  SidebarFooter,\n  SidebarMenu,\n  SidebarMenuItem,\n  SidebarMenuButton,\n  useSidebar,\n  type SidebarMenuButtonProps,\n};\nexport default Sidebar;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

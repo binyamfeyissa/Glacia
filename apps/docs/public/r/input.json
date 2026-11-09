@@ -1,0 +1,17 @@
+{
+  "name": "input",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "input.tsx",
+      "content": "import { Input, type InputProps } from \"glacia\";\n\nexport { Input, type InputProps };\nexport default Input;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

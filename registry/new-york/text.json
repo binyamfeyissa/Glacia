@@ -1,0 +1,17 @@
+{
+  "name": "text",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "text.tsx",
+      "content": "import { Text, type TextProps, type TextVariant } from \"glacia\";\n\nexport { Text, type TextProps, type TextVariant };\nexport default Text;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

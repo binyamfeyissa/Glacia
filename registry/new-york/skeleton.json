@@ -1,0 +1,17 @@
+{
+  "name": "skeleton",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "skeleton.tsx",
+      "content": "import { Skeleton, type SkeletonProps } from \"glacia\";\n\nexport { Skeleton, type SkeletonProps };\nexport default Skeleton;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

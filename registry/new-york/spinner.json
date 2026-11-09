@@ -1,0 +1,17 @@
+{
+  "name": "spinner",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "spinner.tsx",
+      "content": "import { Spinner, type SpinnerProps } from \"glacia\";\n\nexport { Spinner, type SpinnerProps };\nexport default Spinner;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

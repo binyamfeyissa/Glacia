@@ -1,0 +1,17 @@
+{
+  "name": "table",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "table.tsx",
+      "content": "import {\n  Table,\n  TableHeader,\n  TableBody,\n  TableFooter,\n  TableRow,\n  TableHead,\n  TableCell,\n  TableCaption,\n} from \"glacia\";\n\nexport {\n  Table,\n  TableHeader,\n  TableBody,\n  TableFooter,\n  TableRow,\n  TableHead,\n  TableCell,\n  TableCaption,\n};\nexport default Table;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

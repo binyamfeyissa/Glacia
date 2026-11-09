@@ -1,0 +1,17 @@
+{
+  "name": "sonner",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "sonner.tsx",
+      "content": "import { Toaster, toast, type ToasterProps, type ToastData } from \"glacia\";\n\nexport { Toaster, toast, type ToasterProps, type ToastData };\nexport default Toaster;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

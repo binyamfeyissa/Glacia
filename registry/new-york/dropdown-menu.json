@@ -1,0 +1,18 @@
+{
+  "name": "dropdown-menu",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0",
+    "radix-ui@^1.8.1"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "dropdown-menu.tsx",
+      "content": "import {\n  DropdownMenu,\n  DropdownMenuTrigger,\n  DropdownMenuGroup,\n  DropdownMenuPortal,\n  DropdownMenuRadioGroup,\n  DropdownMenuContent,\n  DropdownMenuItem,\n  DropdownMenuLabel,\n  DropdownMenuSeparator,\n  DropdownMenuShortcut,\n} from \"glacia\";\n\nexport {\n  DropdownMenu,\n  DropdownMenuTrigger,\n  DropdownMenuGroup,\n  DropdownMenuPortal,\n  DropdownMenuRadioGroup,\n  DropdownMenuContent,\n  DropdownMenuItem,\n  DropdownMenuLabel,\n  DropdownMenuSeparator,\n  DropdownMenuShortcut,\n};\nexport default DropdownMenu;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

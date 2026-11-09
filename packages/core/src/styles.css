@@ -1,0 +1,2349 @@
+:where(:root, [data-theme="light"]) {
+  --gl-foreground: rgb(0 0 0 / 0.88);
+  --gl-muted: rgb(60 60 67 / 0.6);
+  --gl-glass: rgb(255 255 255 / 0.6);
+  --gl-glass-active: rgb(236 236 240 / 0.85);
+  --gl-edge: rgb(0 0 0 / 0.08);
+  --gl-drop: rgb(0 0 0 / 0.06);
+  --gl-selection: rgb(0 0 0 / 0.1);
+  --gl-lens: rgb(0 0 0 / 0.03);
+  --gl-lens-drop: rgb(0 0 0 / 0.11);
+  --gl-segment-track: rgb(118 118 128 / 0.12);
+  --gl-segment-thumb: rgb(255 255 255);
+  --gl-segment-label: rgb(0 0 0);
+  --gl-segment-lens: rgb(0 0 0 / 0.03);
+  --gl-surface: rgb(250 250 252 / 0.86);
+  --gl-surface-edge: rgb(0 0 0 / 0.08);
+  --gl-shadow: rgb(25 25 35 / 0.12);
+  --gl-highlight: rgb(60 60 67 / 0.09);
+  --gl-separator: rgb(60 60 67 / 0.15);
+  --gl-destructive: #ff383c;
+  --gl-track: rgb(59 59 66 / 0.3);
+  --gl-rail: rgb(0 0 0 / 0.1);
+  --gl-on: #34c759;
+  --gl-fill: #0088ff;
+  --gl-ring: rgb(0 0 0 / 0.4);
+  --gl-lens-shine: -1.5;
+  --gl-rim-shine: 0.3;
+  --gl-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+:where([data-theme="dark"]) {
+  --gl-foreground: rgb(255 255 255);
+  --gl-muted: rgb(235 235 245 / 0.6);
+  --gl-glass: rgb(40 40 40 / 0.62);
+  --gl-glass-active: rgb(70 70 70 / 0.62);
+  --gl-edge: rgb(255 255 255 / 0.08);
+  --gl-drop: transparent;
+  --gl-selection: rgb(255 255 255 / 0.145);
+  --gl-lens: rgb(255 255 255 / 0.055);
+  --gl-lens-drop: transparent;
+  --gl-segment-track: transparent;
+  --gl-segment-thumb: rgb(235 235 245 / 0.3);
+  --gl-segment-label: rgb(255 255 255);
+  --gl-segment-lens: transparent;
+  --gl-surface: rgb(28 28 31 / 0.86);
+  --gl-surface-edge: rgb(255 255 255 / 0.13);
+  --gl-shadow: rgb(0 0 0 / 0.38);
+  --gl-highlight: rgb(235 235 245 / 0.13);
+  --gl-separator: rgb(235 235 245 / 0.16);
+  --gl-destructive: #ff4245;
+  --gl-track: rgb(235 235 245 / 0.3);
+  --gl-rail: rgb(255 255 255 / 0.1);
+  --gl-on: #30d158;
+  --gl-fill: #0091ff;
+  --gl-ring: rgb(255 255 255 / 0.5);
+  --gl-lens-shine: 1;
+  --gl-rim-shine: 0.13;
+}
+
+@media (prefers-color-scheme: dark) {
+  :where(:root:not([data-theme="light"])) {
+    --gl-foreground: rgb(255 255 255);
+    --gl-muted: rgb(235 235 245 / 0.6);
+    --gl-glass: rgb(40 40 40 / 0.62);
+    --gl-glass-active: rgb(70 70 70 / 0.62);
+    --gl-edge: rgb(255 255 255 / 0.08);
+    --gl-drop: transparent;
+    --gl-selection: rgb(255 255 255 / 0.145);
+    --gl-lens: rgb(255 255 255 / 0.055);
+    --gl-lens-drop: transparent;
+    --gl-segment-track: transparent;
+    --gl-segment-thumb: rgb(235 235 245 / 0.3);
+    --gl-segment-label: rgb(255 255 255);
+    --gl-segment-lens: transparent;
+    --gl-surface: rgb(28 28 31 / 0.86);
+    --gl-surface-edge: rgb(255 255 255 / 0.13);
+    --gl-shadow: rgb(0 0 0 / 0.38);
+    --gl-highlight: rgb(235 235 245 / 0.13);
+    --gl-separator: rgb(235 235 245 / 0.16);
+    --gl-destructive: #ff4245;
+    --gl-track: rgb(235 235 245 / 0.3);
+    --gl-rail: rgb(255 255 255 / 0.1);
+    --gl-on: #30d158;
+    --gl-fill: #0091ff;
+    --gl-ring: rgb(255 255 255 / 0.5);
+  --gl-lens-shine: 1;
+    --gl-rim-shine: 0.13;
+  }
+}
+
+/* Glass */
+
+.gl-glass {
+  position: relative;
+  background-color: var(--gl-glass);
+  background-image: var(--gl-rim, none);
+  background-size: 100% 100%;
+  -webkit-backdrop-filter: blur(var(--gl-blur, 20px)) saturate(1.8);
+  backdrop-filter: blur(var(--gl-blur, 20px)) saturate(1.8);
+  box-shadow:
+    inset 0 0 0 0.5px var(--gl-edge),
+    0 1px 3px var(--gl-drop);
+}
+
+/* Layer 2 — The bend, Chromium only. Gated behind @supports check so Safari and Firefox
+   keep Layer 1 frosted blur and never throw away the blur or break. */
+@supports (backdrop-filter: url("#test")) or (-webkit-backdrop-filter: url("#test")) {
+  .gl-glass[data-refracting] {
+    -webkit-backdrop-filter: blur(var(--gl-blur, 3px)) var(--gl-filter, saturate(1.5));
+    backdrop-filter: blur(var(--gl-blur, 3px)) var(--gl-filter, saturate(1.5));
+  }
+}
+
+/* Glass that paints its rim (see refraction.ts) draws its edge line there,
+   under the light, which an inset shadow would cover. */
+.gl-glass[data-rim] {
+  box-shadow: 0 1px 3px var(--gl-drop);
+}
+
+.gl-glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    circle 240px at var(--gl-x, 50%) var(--gl-y, 50%),
+    rgb(255 255 255 / 0.035),
+    rgb(255 255 255 / 0.025) 50%,
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 220ms ease-in-out;
+}
+
+.gl-glass[data-pressed]::after {
+  opacity: 1;
+  transition-duration: 0s;
+}
+
+/* Button */
+
+.gl-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 20px;
+  color: var(--gl-foreground);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  /* A long press keeps pressing, as on iOS, rather than selecting the label. */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: background-color 200ms ease;
+}
+
+.gl-button[data-icon] {
+  padding-left: 12px;
+}
+
+.gl-button[data-icon="only"] {
+  width: 40px;
+  padding: 0;
+}
+
+.gl-button > svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+}
+
+/* Lights up at once when pressed, as on iOS, and fades on release. */
+.gl-button:is(:active, [data-pressed]) {
+  background-color: var(--gl-glass-active);
+  transition-duration: 0s;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gl-button:hover {
+    background-color: var(--gl-glass-active);
+  }
+}
+
+.gl-button:disabled {
+  background-color: var(--gl-glass);
+  opacity: 0.35;
+  cursor: default;
+}
+
+.gl-button[data-destructive]:not([data-tint]) {
+  --gl-tint: var(--gl-destructive);
+}
+
+.gl-button:is([data-tint], [data-destructive]) {
+  color: var(--gl-tint);
+}
+
+.gl-button[data-variant="filled"] {
+  --gl-button-fill: var(--gl-tint, var(--gl-fill));
+  color: #fff;
+}
+
+.gl-button[data-variant="filled"],
+.gl-button[data-variant="filled"]:disabled {
+  background-color: var(--gl-button-fill);
+}
+
+.gl-button[data-variant="filled"]:is(:active, [data-pressed]) {
+  background-color: color-mix(in srgb, var(--gl-button-fill) 85%, #000);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gl-button[data-variant="filled"]:hover {
+    background-color: color-mix(in srgb, var(--gl-button-fill) 88%, #fff);
+  }
+
+  .gl-button[data-variant="filled"]:hover:is(:active, [data-pressed]) {
+    background-color: color-mix(in srgb, var(--gl-button-fill) 85%, #000);
+  }
+}
+
+.gl-button:focus-visible,
+.gl-tab:focus-visible,
+.gl-switch:focus-visible,
+.gl-menu-item:focus-visible {
+  outline: 2px solid var(--gl-ring);
+  outline-offset: 2px;
+}
+
+/* Tab bar */
+
+/* The bar's padding is --gl-tab-inset. The selection fills its slot, less
+   --gl-thumb-inset on every side: none here, 2px on a segmented control. */
+.gl-tab-bar {
+  --gl-tab-width: 84px;
+  --gl-tab-height: 32px;
+  --gl-tab-inset: 4px;
+  --gl-thumb-inset: 0px;
+  --gl-lens-grow-x: 27px;
+  --gl-lens-grow-y: 20px;
+  position: relative;
+  display: inline-flex;
+  padding: var(--gl-tab-inset);
+  border-radius: calc(var(--gl-tab-height) / 2 + var(--gl-tab-inset));
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.gl-tab-bar-glass {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.gl-tab-bar-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle 260px at var(--gl-x, 20%) 50%,
+    rgb(255 255 255 / 0.09),
+    rgb(255 255 255 / 0.045) 60%,
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+
+:is(.gl-tab-bar, .gl-segmented)[data-lifted] .gl-tab-bar-glass::before {
+  opacity: 1;
+  transition-duration: 120ms;
+}
+
+/* The labels, with room around them for the whole lifted lens, which
+   refracts them (see lens.ts): Safari paints none of a filter outside its
+   element. The room hangs outside the bar and takes no clicks. */
+.gl-tab-labels {
+  --gl-room-x: calc(var(--gl-lens-grow-x) / 2 + 4px);
+  --gl-room-y: calc(var(--gl-lens-grow-y) / 2 + 4px);
+  position: relative;
+  z-index: 1;
+  display: flex;
+  margin: calc(var(--gl-room-y) * -1) calc(var(--gl-room-x) * -1);
+  padding: var(--gl-room-y) var(--gl-room-x);
+  pointer-events: none;
+}
+
+/* What the lifted lens shows in place of the labels: the same labels in full
+   colour, laid exactly over them and seen only through the lens. */
+.gl-tab-lensed {
+  position: absolute;
+  top: var(--gl-tab-inset);
+  left: var(--gl-tab-inset);
+  color: var(--gl-tab-selected, var(--gl-foreground));
+  visibility: hidden;
+}
+
+:is(.gl-tab-bar, .gl-segmented)[data-lensing] .gl-tab-tint {
+  visibility: hidden;
+}
+
+.gl-tab,
+.gl-tab-copy {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--gl-tab-width);
+  height: var(--gl-tab-height);
+  font: inherit;
+  font-size: 14px;
+}
+
+.gl-tab {
+  position: relative;
+  z-index: 1;
+  padding: 0;
+  border: 0;
+  border-radius: calc(var(--gl-tab-height) / 2);
+  color: var(--gl-muted);
+  background: none;
+  text-decoration: none;
+  cursor: pointer;
+  pointer-events: auto;
+  -webkit-touch-callout: none;
+  transition: color 200ms ease;
+}
+
+.gl-tab:focus-visible {
+  outline-offset: -2px;
+}
+
+/* A tab's own label, wrapped so its colour can change at once, without the
+   tab's colour transition. While the selection is over the selected tab (no
+   data-away), it draws that tab's label alone: drawn twice, the copy on its
+   own layer lands a fraction of a pixel off and the label beneath fringes it.
+   Transparent, not hidden, so the tab keeps its name. */
+.gl-tab-face {
+  display: contents;
+}
+
+.gl-tab-bar:not([data-away]) .gl-tab[data-selected] > .gl-tab-face {
+  color: transparent;
+}
+
+/* A label alone, centred by its letters: its box is trimmed to the height of
+   the capitals above the baseline, so neither the font's ascent and descent
+   nor the page's line height moves it off centre. Browsers without text-box
+   centre its line box instead. */
+.gl-tab-text {
+  display: block;
+  text-box: trim-both cap alphabetic;
+}
+
+/* Tabs with icons, as in an iOS tab bar: each icon over a small label, the
+   others in full colour and the selected one in --gl-tab-selected. */
+.gl-tab-bar[data-icons] {
+  --gl-tab-width: 72px;
+  --gl-tab-height: 52px;
+  --gl-lens-grow-x: 24px;
+  --gl-lens-grow-y: 16px;
+  --gl-tab-selected: var(--gl-fill);
+}
+
+.gl-tab-bar[data-icons] :is(.gl-tab, .gl-tab-copy) {
+  flex-direction: column;
+  gap: 1px;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.gl-tab-bar[data-icons] .gl-tab {
+  color: var(--gl-foreground);
+}
+
+.gl-tab-icon {
+  display: flex;
+}
+
+.gl-tab-icon > svg {
+  width: 26px;
+  height: 26px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gl-tab:hover {
+    color: var(--gl-foreground);
+  }
+}
+
+.gl-tab-lens,
+.gl-tab-tint,
+.gl-segmented-thumb {
+  position: absolute;
+  top: calc(var(--gl-tab-inset) + var(--gl-thumb-inset));
+  left: calc(var(--gl-tab-inset) + var(--gl-thumb-inset));
+  width: calc(var(--gl-tab-width) - 2 * var(--gl-thumb-inset));
+  height: calc(var(--gl-tab-height) - 2 * var(--gl-thumb-inset));
+  border-radius: calc(var(--gl-tab-height) / 2 - var(--gl-thumb-inset));
+  pointer-events: none;
+  transform: translateX(calc(var(--gl-tab-width) * var(--gl-index, 0)));
+  transition: opacity 140ms ease;
+  will-change: transform;
+}
+
+.gl-tab-tint {
+  z-index: 1;
+  overflow: hidden;
+  color: var(--gl-tab-selected, var(--gl-foreground));
+}
+
+/* The labels again, set back by the tint's inset so they line up. */
+.gl-tab-row {
+  display: flex;
+  height: var(--gl-tab-height);
+  margin: calc(var(--gl-thumb-inset) * -1) 0 0 calc(var(--gl-thumb-inset) * -1);
+  transform: translateX(calc(var(--gl-tab-width) * var(--gl-index, 0) * -1));
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+/* Lifted, the lens casts iOS's shadow (fitted to iOS 26.1), faded in with its
+   lift (--gl-lift) and kept to iOS's size against its own stretch
+   (--gl-lift-y). The page's --gl-lens-drop colours it: none on a dark page. */
+.gl-tab-lens.gl-glass {
+  z-index: 2;
+  background-color: transparent;
+  background-image: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: 0 calc(7px / var(--gl-lift-y, 1)) calc(11px / var(--gl-lift-y, 1))
+    color-mix(in srgb, var(--gl-lens-drop) calc(var(--gl-lift, 0) * 100%), transparent);
+  transition:
+    opacity 140ms ease,
+    background-color 140ms ease;
+}
+
+.gl-tab-bar[data-lifted] .gl-tab-lens.gl-glass {
+  background-color: var(--gl-lens);
+  transition-duration: 100ms;
+}
+
+.gl-tab-lens::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--gl-selection);
+  transition: opacity 140ms ease;
+}
+
+.gl-tab-lens[data-pressed]::after {
+  opacity: 0.2;
+}
+
+.gl-tab-bar[data-lifted] .gl-tab-lens::before {
+  opacity: 0;
+  transition-duration: 100ms;
+}
+
+:is(.gl-tab-bar, .gl-segmented)[data-refracting] .gl-tab-lens.gl-glass {
+  background-image: var(--gl-rim, none);
+}
+
+/* On a light page (data-light), where a faint lens is lost against light
+   glass, the lifted lens stands out as iOS 26.1's does: it drops under the
+   labels and bends the bar's glass and the page behind it, where the browser
+   can (--gl-filter), and takes iOS's brighter rim. The labels it bends on its
+   own, so they bend once. At rest it lies over the labels, as before. */
+:is(.gl-tab-bar, .gl-segmented)[data-refracting][data-light] .gl-tab-lens.gl-glass {
+  background-image: var(--gl-rim-bright, var(--gl-rim, none));
+}
+
+.gl-segmented[data-refracting][data-light] .gl-tab-lens.gl-glass,
+.gl-tab-bar[data-under][data-light] .gl-tab-lens.gl-glass {
+  z-index: 0;
+  -webkit-backdrop-filter: var(--gl-filter, none);
+  backdrop-filter: var(--gl-filter, none);
+}
+
+/* A tab bar's lens on a light page changes over with its lift, so the
+   selected label never changes colour at once: the grey of the selection,
+   which lies over the label at rest, fades as the lens lifts (--gl-rest),
+   the lens drops under the labels once it's gone (data-under), and only then
+   does its fill come in (--gl-under), as its bend does. Settling, the same
+   in reverse. */
+.gl-tab-bar[data-light] .gl-tab-lens::before {
+  opacity: var(--gl-rest, 1);
+  transition: none;
+}
+
+.gl-tab-bar[data-light] .gl-tab-lens.gl-glass {
+  background-color: color-mix(in srgb, var(--gl-lens) calc(var(--gl-under, 0) * 100%), transparent);
+  transition: opacity 140ms ease;
+}
+
+:is(.gl-tab-bar, .gl-segmented)[data-hidden] :is(.gl-tab-lens, .gl-tab-tint, .gl-segmented-thumb),
+:is(.gl-tab-bar, .gl-segmented):not([data-ready]):not(:has([data-selected])) :is(.gl-tab-lens, .gl-tab-tint, .gl-segmented-thumb) {
+  opacity: 0;
+}
+
+/* Segmented control, sized as iOS 26.1's, measured from UIKit: a 32px
+   capsule, segments of 13px labels, and under the selected one a thumb inset
+   2px on every side. Held, the thumb fades and the lens lifts in its place,
+   24px wider and 16px taller. Its track is the tab bar's glass. On a light
+   page it's tinted with iOS's track fill (--gl-segment-track), or the white
+   thumb would vanish against a white page; on a dark one it's the glass
+   alone, exactly as the tab bar's. */
+.gl-segmented {
+  --gl-tab-width: 84px;
+  --gl-tab-height: 32px;
+  --gl-tab-inset: 0px;
+  --gl-thumb-inset: 2px;
+  --gl-lens-grow-x: 24px;
+  --gl-lens-grow-y: 16px;
+  --gl-tab-selected: var(--gl-segment-label);
+  position: relative;
+  display: inline-flex;
+  border-radius: calc(var(--gl-tab-height) / 2);
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.gl-segmented > .gl-tab-bar-glass {
+  background-image: var(--gl-rim, none), linear-gradient(var(--gl-segment-track) 0 0);
+}
+
+.gl-segmented :is(.gl-tab, .gl-tab-copy) {
+  font-size: 13px;
+}
+
+/* Every label in full colour, the selected one in medium, as UIKit sets it.
+   With no colour to change under the thumb, there's no tint: a second copy
+   of a label drawn over it would thicken it. */
+.gl-segmented .gl-tab,
+.gl-segmented .gl-tab:hover {
+  color: var(--gl-segment-label);
+}
+
+.gl-segmented :is(.gl-tab, .gl-tab-copy)[data-selected] {
+  font-weight: 500;
+}
+
+.gl-segmented .gl-tab-tint {
+  display: none;
+}
+
+.gl-segmented-thumb {
+  background: var(--gl-segment-thumb);
+}
+
+.gl-segmented[data-lifted] .gl-segmented-thumb {
+  opacity: 0;
+  transition-duration: 100ms;
+}
+
+.gl-segmented .gl-tab-lens::before {
+  content: none;
+}
+
+.gl-segmented[data-lifted] .gl-tab-lens.gl-glass {
+  background-color: var(--gl-segment-lens);
+  transition-duration: 100ms;
+}
+
+/* Input */
+
+.gl-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 360px;
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 20px;
+  color: var(--gl-foreground);
+  transition: background-color 200ms ease;
+}
+
+.gl-input:focus-within {
+  background-color: var(--gl-glass-active);
+}
+
+.gl-input input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  color: inherit;
+  background: none;
+  font: inherit;
+  font-size: 14px;
+}
+
+.gl-input input::placeholder {
+  color: var(--gl-muted);
+}
+
+.gl-input input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.gl-input-icon {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: var(--gl-muted);
+}
+
+.gl-input-icon {
+  display: grid;
+  place-items: center;
+}
+
+.gl-input-icon > svg {
+  width: 100%;
+  height: 100%;
+}
+
+.gl-input-clear {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin-right: -8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  color: var(--gl-muted);
+  background: none;
+  cursor: pointer;
+}
+
+.gl-input-clear svg {
+  width: 14px;
+  height: 14px;
+}
+
+.gl-input:has(input:disabled) {
+  opacity: 0.35;
+}
+
+/* Switch and slider thumbs */
+
+/* At rest, a white knob. Held, it lifts into clear glass, a lens that bends the
+   track under its rim (see lens.ts), so the blur and brightening clear as it
+   lifts and the track shows through true, all but a little frost:
+   --gl-thumb-frost, the blur kept on the lifted glass. */
+.gl-switch-thumb,
+.gl-slider-thumb {
+  --gl-settled: calc(1 - var(--gl-lift, 0));
+  --gl-thumb-blur: calc(2px * var(--gl-settled) + var(--gl-thumb-frost, 0.5px) * var(--gl-lift, 0));
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+  -webkit-backdrop-filter: blur(var(--gl-thumb-blur)) brightness(calc(1 + 0.15 * var(--gl-settled))) saturate(1.5);
+  backdrop-filter: blur(var(--gl-thumb-blur)) brightness(calc(1 + 0.15 * var(--gl-settled))) saturate(1.5);
+  box-shadow:
+    0 6px 24px rgb(0 0 0 / 0.2),
+    inset 0 0 0 1.5px rgb(255 255 255 / 0.5),
+    inset 0 2px 1px rgb(255 255 255 / 0.45),
+    inset 2px 7px 24px rgb(0 0 0 / 0.09),
+    inset -2px -7px 24px rgb(255 255 255 / 0.16);
+}
+
+.gl-thumb-face {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: #fff;
+}
+
+/* Switch */
+
+.gl-switch {
+  --gl-scale: 0.375;
+  position: relative;
+  flex: none;
+  width: calc(160px * var(--gl-scale));
+  height: calc(67px * var(--gl-scale));
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  cursor: pointer;
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+.gl-switch::before {
+  content: "";
+  position: absolute;
+  inset: min(0px, calc((67px * var(--gl-scale) - 44px) / 2)) -8px;
+}
+
+/* What the lifted thumb refracts: the track, with room around it for the
+   whole lens, since Safari paints none of a filter outside its element. */
+.gl-switch-bed {
+  position: absolute;
+  inset: -6px -12px;
+  pointer-events: none;
+}
+
+.gl-switch-track,
+.gl-switch-fill {
+  position: absolute;
+  border-radius: 999px;
+}
+
+.gl-switch-track {
+  inset: 6px 12px;
+  background: var(--gl-track);
+}
+
+.gl-switch-fill {
+  inset: 0;
+  background: var(--gl-on);
+  opacity: 0;
+}
+
+/* What the lifted thumb shows in place of the track: the track as Aave's
+   switch draws it, a little smaller so the glass rings it, growing as the
+   thumb does. It's seen only through the thumb (see lens.ts). */
+.gl-switch-inset {
+  visibility: hidden;
+}
+
+/* Centred by margins rather than a transform: WebKit sizes a filter's box by
+   its content's untransformed layout, so nothing may sit past it even before
+   a transform moves it back. */
+.gl-switch-inset .gl-switch-track {
+  inset: 0;
+  width: calc((100% - 24px) * (0.85 + 0.1 * var(--gl-lift, 0)));
+  height: calc((100% - 12px) * 0.75 * (0.525 + 0.45 * var(--gl-lift, 0)));
+  margin: auto;
+}
+
+.gl-switch-thumb {
+  top: 50%;
+  left: calc(-21.95px * var(--gl-scale));
+  width: calc(146px * var(--gl-scale));
+  height: calc(92px * var(--gl-scale));
+  transform: translate(0, -50%) scale(0.65);
+}
+
+.gl-switch[aria-checked="true"] .gl-switch-fill {
+  opacity: 1;
+}
+
+.gl-switch[aria-checked="true"] .gl-switch-thumb {
+  transform: translate(calc(57.9px * var(--gl-scale)), -50%) scale(0.65);
+}
+
+.gl-switch:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* Slider */
+
+.gl-slider {
+  position: relative;
+  width: 100%;
+  height: 40px;
+}
+
+/* What the lifted thumb refracts, with room around the track for the whole lens. */
+.gl-slider-bed {
+  position: absolute;
+  inset: -4px -16px;
+  pointer-events: none;
+}
+
+.gl-slider-track {
+  position: absolute;
+  inset: 21px 16px auto;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--gl-rail);
+}
+
+/* Ends under the middle of the thumb, where a lifted thumb shows it. It's
+   rounded rather than clipped by the track, since Safari can't refract
+   content clipped round its corners. */
+.gl-slider-fill {
+  display: block;
+  width: calc((100% - 36px) * var(--gl-progress) + 18px);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--gl-fill);
+}
+
+/* What the lifted thumb shows in place of the track: the track as Aave's
+   slider draws it, a little thicker as if magnified, growing as the thumb
+   does. It's
+   seen only through the thumb (see lens.ts). --gl-slider-line sets how thick
+   it is once the thumb is fully lifted, and --gl-slider-bend how far the
+   thumb's rim bends it. */
+.gl-slider-magnified {
+  visibility: hidden;
+}
+
+.gl-slider-magnified .gl-slider-track {
+  inset: 0 16px;
+  height: calc(var(--gl-slider-line, 8px) * (0.6 + 0.4 * var(--gl-lift, 0)));
+  margin: auto 0;
+  border-radius: 999px;
+}
+
+/* Within a few pixels of either end, the fill gives way from the middle of
+   the thumb to the end of the track, so through the thumb an empty slider
+   shows no fill and a full one no bare track. */
+.gl-slider-magnified .gl-slider-fill {
+  --gl-travel: calc((100% - 36px) * var(--gl-progress));
+  width: calc(
+    var(--gl-travel) + min(18px, var(--gl-travel) * 4) + max(0px, 18px - (100% - 36px - var(--gl-travel)) * 4)
+  );
+}
+
+.gl-slider-thumb {
+  top: 0;
+  left: calc((100% - 36px) * var(--gl-progress) - 12px);
+  width: 60px;
+  height: 40px;
+  scale: 0.6;
+}
+
+.gl-slider input {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 40px;
+  margin: 0;
+  background: transparent;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gl-slider input::-webkit-slider-runnable-track {
+  height: 6px;
+  background: transparent;
+}
+
+/* The native thumb only takes the touch; the glass thumb is drawn beneath.
+   iOS shades the native one even without its appearance, so hide it. */
+.gl-slider input::-webkit-slider-thumb {
+  width: 36px;
+  height: 40px;
+  margin-top: -17px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  opacity: 0;
+  /* A touch on the thumb drags it rather than scrolling the page; the rest of
+     the track still scrolls. Blocking touchmove instead would stop Safari's
+     own drag. */
+  touch-action: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.gl-slider input::-moz-range-track {
+  height: 6px;
+  background: transparent;
+}
+
+.gl-slider input::-moz-range-thumb {
+  width: 36px;
+  height: 40px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  opacity: 0;
+}
+
+.gl-slider:has(input:focus-visible) .gl-slider-thumb {
+  outline: 2px solid var(--gl-ring);
+  outline-offset: 3px;
+}
+
+.gl-slider:has(input:disabled) {
+  opacity: 0.35;
+}
+
+.gl-slider input:disabled {
+  cursor: default;
+}
+
+/* Menu */
+
+.gl-menu {
+  position: relative;
+  display: inline-flex;
+}
+
+.gl-menu-card {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  box-sizing: border-box;
+  width: 200px;
+  border-radius: 20px;
+  color: var(--gl-foreground);
+  font-size: 14px;
+  transform-origin: calc(100% - 20px) 20px;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.gl-menu-card[data-align="start"] {
+  right: auto;
+  left: 0;
+  transform-origin: 20px 20px;
+}
+
+.gl-menu-card[data-phase="leaving"] {
+  pointer-events: none;
+}
+
+.gl-menu-surface {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--gl-surface);
+  -webkit-backdrop-filter: blur(22px) saturate(1.9);
+  backdrop-filter: blur(22px) saturate(1.9);
+  box-shadow:
+    inset 0 0 0 0.5px var(--gl-surface-edge),
+    0 12px 40px var(--gl-shadow);
+  pointer-events: none;
+}
+
+.gl-menu-card[data-align="start"] .gl-menu-surface {
+  right: auto;
+  left: 0;
+}
+
+.gl-menu-glyph {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  pointer-events: none;
+}
+
+.gl-menu-card[data-align="start"] .gl-menu-glyph {
+  right: auto;
+  left: 0;
+}
+
+.gl-menu-glyph > svg {
+  width: 20px;
+  height: 20px;
+}
+
+.gl-menu-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+}
+
+.gl-menu-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgb(255 255 255 / 0.11), rgb(255 255 255 / 0.025));
+  opacity: 0;
+  transition: opacity 120ms ease-out;
+}
+
+.gl-menu-card[data-pressed]::after {
+  opacity: 1;
+}
+
+.gl-menu-plate {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 14px;
+  background: var(--gl-highlight);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 100ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 80ms ease-out;
+}
+
+.gl-menu-item {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 32px;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 14px;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.gl-menu-item > svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+.gl-menu-item:focus-visible {
+  outline-offset: -2px;
+  background: var(--gl-highlight);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gl-menu-item:hover:not(:disabled) {
+    background: var(--gl-highlight);
+  }
+}
+
+.gl-menu-card[data-scrubbing] .gl-menu-item {
+  background: transparent;
+  outline: none;
+}
+
+.gl-menu-item[data-destructive] {
+  color: var(--gl-destructive);
+}
+
+.gl-menu-item:disabled {
+  opacity: 0.38;
+  cursor: default;
+}
+
+.gl-menu-separator {
+  flex: none;
+  margin: 7px 11px;
+  border-top: 0.5px solid var(--gl-separator);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gl-menu-plate {
+    transition: opacity 80ms ease-out;
+  }
+
+  .gl-menu-card {
+    animation: gl-menu-fade 100ms ease-out;
+  }
+}
+
+@keyframes gl-menu-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+
+/* ==========================================================================
+   Glacia Wave 1 Components
+   ========================================================================== */
+
+/* Button Additions */
+.gl-button[data-variant="ghost"] {
+  background-color: transparent;
+  background-image: none;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gl-button[data-variant="ghost"]:hover {
+    background-color: var(--gl-glass);
+    box-shadow: inset 0 0 0 0.5px var(--gl-edge);
+  }
+}
+
+.gl-button[data-size="sm"] {
+  height: 32px;
+  padding: 0 12px;
+  font-size: 13px;
+  border-radius: 16px;
+}
+
+.gl-button[data-size="sm"][data-icon="only"] {
+  width: 32px;
+  padding: 0;
+}
+
+.gl-button[data-size="lg"] {
+  height: 48px;
+  padding: 0 22px;
+  font-size: 16px;
+  border-radius: 24px;
+}
+
+.gl-button[data-size="lg"][data-icon="only"] {
+  width: 48px;
+  padding: 0;
+}
+
+/* Typography (Text) */
+.gl-text {
+  color: var(--gl-foreground);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.gl-text-h1 {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+.gl-text-h2 {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.gl-text-h3 {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+.gl-text-h4 {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+}
+
+.gl-text-p {
+  font-size: 15px;
+}
+
+.gl-text-lead {
+  font-size: 18px;
+  color: var(--gl-muted);
+  line-height: 1.6;
+}
+
+.gl-text-large {
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.gl-text-small {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.gl-text-muted {
+  font-size: 14px;
+  color: var(--gl-muted);
+}
+
+.gl-text-blockquote {
+  border-left: 3px solid var(--gl-edge);
+  padding-left: 16px;
+  font-style: italic;
+  color: var(--gl-muted);
+}
+
+.gl-text-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 13px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background-color: var(--gl-selection);
+}
+
+/* Textarea */
+.gl-textarea {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 80px;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 14px;
+  color: var(--gl-foreground);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: vertical;
+  outline: none;
+  transition: background-color 200ms ease, box-shadow 200ms ease;
+}
+
+.gl-textarea:focus-visible {
+  outline: 2px solid var(--gl-ring);
+  outline-offset: 2px;
+}
+
+.gl-textarea:disabled {
+  opacity: 0.38;
+  cursor: default;
+}
+
+.gl-textarea[data-error] {
+  box-shadow: inset 0 0 0 1px var(--gl-destructive);
+}
+
+/* Label */
+.gl-label {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gl-foreground);
+  user-select: none;
+  cursor: default;
+}
+
+/* Card */
+.gl-card {
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: var(--gl-foreground);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.gl-card[data-variant="clear"] {
+  background-color: rgb(255 255 255 / 0.25);
+}
+
+:where([data-theme="dark"]) .gl-card[data-variant="clear"] {
+  background-color: rgb(30 30 30 / 0.35);
+}
+
+.gl-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gl-card-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.gl-card-description {
+  margin: 0;
+  font-size: 13px;
+  color: var(--gl-muted);
+}
+
+.gl-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gl-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 8px;
+}
+
+/* Badge */
+.gl-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--gl-foreground);
+  user-select: none;
+}
+
+.gl-badge[data-variant="secondary"] {
+  background-color: var(--gl-selection);
+}
+
+.gl-badge[data-variant="destructive"] {
+  background-color: color-mix(in srgb, var(--gl-destructive) 18%, transparent);
+  color: var(--gl-destructive);
+}
+
+.gl-badge[data-variant="outline"] {
+  background-color: transparent;
+  box-shadow: inset 0 0 0 1px var(--gl-edge);
+}
+
+/* Avatar */
+.gl-avatar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  overflow: hidden;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.gl-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gl-avatar-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gl-foreground);
+}
+
+/* Separator */
+.gl-separator {
+  background-color: var(--gl-separator);
+  border: 0;
+  flex-shrink: 0;
+}
+
+.gl-separator-h {
+  height: 1px;
+  width: 100%;
+}
+
+.gl-separator-v {
+  width: 1px;
+  height: 100%;
+}
+
+/* Skeleton */
+.gl-skeleton {
+  border-radius: 8px;
+  animation: gl-shimmer 2s infinite ease-in-out;
+  background-color: var(--gl-selection);
+}
+
+@keyframes gl-shimmer {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.9; }
+}
+
+/* Spinner */
+.gl-spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gl-spinner[data-size="sm"] .gl-spinner-ring { width: 16px; height: 16px; border-width: 2px; }
+.gl-spinner[data-size="md"] .gl-spinner-ring { width: 24px; height: 24px; border-width: 2.5px; }
+.gl-spinner[data-size="lg"] .gl-spinner-ring { width: 36px; height: 36px; border-width: 3.5px; }
+
+.gl-spinner-ring {
+  box-sizing: border-box;
+  border-style: solid;
+  border-color: var(--gl-ring);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: gl-spin 0.8s linear infinite;
+}
+
+@keyframes gl-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Progress */
+.gl-progress {
+  position: relative;
+  height: 8px;
+  width: 100%;
+  border-radius: 9999px;
+  overflow: hidden;
+  background-color: var(--gl-selection);
+}
+
+.gl-progress-indicator {
+  height: 100%;
+  width: 100%;
+  background-color: var(--gl-fill);
+  border-radius: inherit;
+  transition: transform 300ms ease;
+}
+
+/* Checkbox */
+.gl-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 0;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  transition: background-color 150ms ease, box-shadow 150ms ease;
+}
+
+.gl-checkbox:focus-visible {
+  outline: 2px solid var(--gl-ring);
+  outline-offset: 2px;
+}
+
+.gl-checkbox[data-state="checked"] {
+  background-color: var(--gl-fill);
+}
+
+.gl-checkbox-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gl-checkbox-icon {
+  width: 13px;
+  height: 13px;
+}
+
+/* Radio Group */
+.gl-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gl-radio-item {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 0;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 150ms ease, box-shadow 150ms ease;
+}
+
+.gl-radio-item:focus-visible {
+  outline: 2px solid var(--gl-ring);
+  outline-offset: 2px;
+}
+
+.gl-radio-item[data-state="checked"] {
+  background-color: var(--gl-fill);
+}
+
+.gl-radio-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.gl-radio-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #fff;
+}
+
+/* Select */
+.gl-select-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  height: 40px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 20px;
+  color: var(--gl-foreground);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+}
+
+.gl-select-trigger:focus-visible {
+  outline: 2px solid var(--gl-ring);
+  outline-offset: 2px;
+}
+
+.gl-select-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--gl-muted);
+}
+
+.gl-select-content {
+  border-radius: 16px;
+  padding: 6px;
+  min-width: 180px;
+  z-index: 50;
+  box-shadow: 0 10px 30px var(--gl-shadow), inset 0 0 0 0.5px var(--gl-edge);
+}
+
+.gl-select-viewport {
+  padding: 2px;
+}
+
+.gl-select-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 28px 0 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  color: var(--gl-foreground);
+  user-select: none;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.gl-select-item:hover,
+.gl-select-item:focus {
+  background-color: var(--gl-selection);
+}
+
+.gl-select-item-indicator {
+  position: absolute;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gl-check-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.gl-select-label {
+  padding: 6px 10px 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--gl-muted);
+}
+
+.gl-select-separator {
+  height: 1px;
+  background-color: var(--gl-separator);
+  margin: 4px 6px;
+}
+
+/* Tabs */
+.gl-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gl-tabs-list {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 20px;
+  align-self: flex-start;
+}
+
+.gl-tabs-trigger {
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  color: var(--gl-muted);
+  cursor: pointer;
+  outline: none;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.gl-tabs-trigger:hover {
+  color: var(--gl-foreground);
+}
+
+.gl-tabs-trigger[data-state="active"] {
+  background-color: var(--gl-selection);
+  color: var(--gl-foreground);
+}
+
+.gl-tabs-trigger:focus-visible {
+  outline: 2px solid var(--gl-ring);
+  outline-offset: 2px;
+}
+
+.gl-tabs-content {
+  outline: none;
+}
+
+/* Accordion */
+.gl-accordion-item {
+  border-radius: 16px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.gl-accordion-header {
+  margin: 0;
+}
+
+.gl-accordion-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--gl-foreground);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  outline: none;
+}
+
+.gl-accordion-chevron {
+  width: 16px;
+  height: 16px;
+  color: var(--gl-muted);
+  transition: transform 200ms ease;
+}
+
+.gl-accordion-trigger[data-state="open"] .gl-accordion-chevron {
+  transform: rotate(180deg);
+}
+
+.gl-accordion-body {
+  padding: 0 20px 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--gl-muted);
+}
+
+/* Dialog & AlertDialog */
+.gl-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgb(0 0 0 / 0.4);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  z-index: 100;
+  animation: gl-fade-in 200ms ease-out;
+}
+
+.gl-dialog-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 32px);
+  max-width: 480px;
+  border-radius: 24px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 101;
+  box-shadow: 0 20px 50px var(--gl-shadow);
+  animation: gl-dialog-scale 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes gl-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes gl-dialog-scale {
+  from { opacity: 0; transform: translate(-50%, -46%) scale(0.96); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+.gl-dialog-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--gl-selection);
+  color: var(--gl-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.gl-dialog-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gl-dialog-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--gl-foreground);
+}
+
+.gl-dialog-description {
+  margin: 0;
+  font-size: 14px;
+  color: var(--gl-muted);
+  line-height: 1.5;
+}
+
+.gl-dialog-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+/* Popover */
+.gl-popover-content {
+  border-radius: 18px;
+  padding: 16px;
+  z-index: 50;
+  box-shadow: 0 14px 40px var(--gl-shadow);
+}
+
+/* Dropdown Menu */
+.gl-dropdown-content {
+  border-radius: 16px;
+  padding: 6px;
+  min-width: 200px;
+  z-index: 50;
+  box-shadow: 0 14px 40px var(--gl-shadow);
+}
+
+.gl-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--gl-foreground);
+  user-select: none;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 150ms ease;
+}
+
+.gl-dropdown-item:hover,
+.gl-dropdown-item:focus {
+  background-color: var(--gl-selection);
+}
+
+.gl-dropdown-item[data-destructive] {
+  color: var(--gl-destructive);
+}
+
+.gl-dropdown-label {
+  padding: 6px 12px 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--gl-muted);
+}
+
+.gl-dropdown-separator {
+  height: 1px;
+  background-color: var(--gl-separator);
+  margin: 4px 6px;
+}
+
+.gl-dropdown-shortcut {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--gl-muted);
+  letter-spacing: 0.05em;
+}
+
+/* Tooltip */
+.gl-tooltip-content {
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 12px;
+  color: var(--gl-foreground);
+  z-index: 100;
+  pointer-events: none;
+  box-shadow: 0 4px 12px var(--gl-shadow);
+}
+
+/* Sonner / Toast */
+.gl-toaster {
+  position: fixed;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  pointer-events: none;
+}
+
+.gl-toaster-bottom-right { bottom: 0; right: 0; }
+.gl-toaster-bottom-left { bottom: 0; left: 0; }
+.gl-toaster-top-right { top: 0; right: 0; }
+.gl-toaster-top-left { top: 0; left: 0; }
+.gl-toaster-bottom-center { bottom: 0; left: 50%; transform: translateX(-50%); }
+.gl-toaster-top-center { top: 0; left: 50%; transform: translateX(-50%); }
+
+.gl-toast {
+  pointer-events: auto;
+  border-radius: 18px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 280px;
+  max-width: 400px;
+  box-shadow: 0 10px 30px var(--gl-shadow);
+  animation: gl-toast-in 250ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes gl-toast-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.gl-toast-body {
+  flex: 1;
+}
+
+.gl-toast-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gl-foreground);
+}
+
+.gl-toast-description {
+  font-size: 12px;
+  color: var(--gl-muted);
+  margin-top: 2px;
+}
+
+.gl-toast-action {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--gl-fill);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.gl-toast-close {
+  background: transparent;
+  border: 0;
+  font-size: 16px;
+  color: var(--gl-muted);
+  cursor: pointer;
+}
+
+/* Table */
+.gl-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 16px;
+}
+
+.gl-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+}
+
+.gl-table-header {
+  border-bottom: 1px solid var(--gl-separator);
+}
+
+.gl-table-head {
+  padding: 12px 16px;
+  font-weight: 500;
+  color: var(--gl-muted);
+  font-size: 13px;
+}
+
+.gl-table-row {
+  border-bottom: 1px solid var(--gl-separator);
+  transition: background-color 150ms ease;
+}
+
+.gl-table-row:hover {
+  background-color: var(--gl-selection);
+}
+
+.gl-table-cell {
+  padding: 12px 16px;
+  color: var(--gl-foreground);
+}
+
+/* Sidebar */
+.gl-sidebar-wrapper {
+  display: flex;
+}
+
+.gl-sidebar {
+  width: 250px;
+  min-height: 100vh;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-radius: 0 20px 20px 0;
+  transition: width 250ms ease, transform 250ms ease;
+}
+
+.gl-sidebar[data-state="collapsed"] {
+  width: 64px;
+}
+
+.gl-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gl-sidebar-content {
+  flex: 1;
+}
+
+.gl-sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gl-sidebar-menu-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 0;
+  background: transparent;
+  color: var(--gl-muted);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.gl-sidebar-menu-button:hover {
+  background-color: var(--gl-selection);
+  color: var(--gl-foreground);
+}
+
+.gl-sidebar-menu-button[data-active] {
+  background-color: var(--gl-selection);
+  color: var(--gl-foreground);
+}
+
+/* Scroll Area */
+.gl-scroll-area {
+  position: relative;
+  overflow: hidden;
+}
+
+.gl-scroll-viewport {
+  width: 100%;
+  height: 100%;
+}
+
+.gl-scrollbar {
+  display: flex;
+  user-select: none;
+  touch-action: none;
+  padding: 2px;
+  transition: background 160ms ease-out;
+}
+
+.gl-scrollbar-v { width: 8px; }
+.gl-scrollbar-h { height: 8px; flex-direction: column; }
+
+.gl-scrollbar-thumb {
+  flex: 1;
+  border-radius: 4px;
+  position: relative;
+}
+
+/* Page Blocks Styling */
+.gl-login-centered {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.gl-login-card {
+  width: 100%;
+  max-width: 420px;
+}
+
+.gl-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gl-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gl-form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gl-login-link {
+  font-size: 12px;
+  color: var(--gl-fill);
+  text-decoration: none;
+}
+
+.gl-remember-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gl-remember-label {
+  font-size: 13px;
+  color: var(--gl-muted);
+}
+
+.gl-login-submit {
+  width: 100%;
+}
+
+.gl-login-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0;
+}
+
+.gl-divider-text {
+  font-size: 11px;
+  color: var(--gl-muted);
+  white-space: nowrap;
+}
+
+.gl-oauth-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.gl-oauth-button {
+  width: 100%;
+}
+
+.gl-login-footer {
+  justify-content: center;
+}
+
+.gl-signup-text {
+  margin: 0;
+  font-size: 13px;
+  color: var(--gl-muted);
+}
+
+.gl-login-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
+
+.gl-split-backdrop {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 48px;
+  background: radial-gradient(circle at 20% 30%, #0088ff, #7928ca, #000);
+}
+
+.gl-split-quote {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.gl-split-caption {
+  font-size: 14px;
+  color: rgb(255 255 255 / 0.7);
+  margin-top: 12px;
+}
+
+.gl-split-form-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+}
+
+/* Admin Dashboard Block Styling */
+.gl-admin-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.gl-admin-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.gl-brand-icon {
+  font-size: 20px;
+}
+
+.gl-admin-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--gl-separator);
+}
+
+.gl-user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--gl-selection);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.gl-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.gl-user-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.gl-user-role {
+  font-size: 11px;
+  color: var(--gl-muted);
+}
+
+.gl-admin-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.gl-admin-topbar {
+  height: 60px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 0;
+  border-bottom: 1px solid var(--gl-separator);
+}
+
+.gl-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.gl-topbar-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.gl-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gl-admin-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.gl-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.gl-stat-card {
+  padding: 18px;
+}
+
+.gl-stat-value {
+  font-size: 26px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.gl-stat-badge {
+  align-self: flex-start;
+}
+
+.gl-dashboard-split {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 20px;
+}
+
+.gl-chart-placeholder {
+  height: 220px;
+  display: flex;
+  align-items: flex-end;
+  padding-top: 20px;
+}
+
+.gl-chart-bars {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.gl-chart-bar-col {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.gl-chart-bar {
+  width: 100%;
+  border-radius: 6px 6px 0 0;
+  background: linear-gradient(180deg, var(--gl-fill), transparent);
+  box-shadow: inset 0 0 0 0.5px var(--gl-edge);
+  transition: height 300ms ease;
+}
+
+.gl-chart-label {
+  font-size: 11px;
+  color: var(--gl-muted);
+}
+
+.gl-order-customer {
+  display: flex;
+  flex-direction: column;
+}
+
+.gl-customer-name {
+  font-weight: 500;
+}
+
+.gl-order-id {
+  font-size: 12px;
+  color: var(--gl-muted);
+}
+
+.gl-order-amount {
+  font-weight: 600;
+}

@@ -1,0 +1,17 @@
+{
+  "name": "slider",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "slider.tsx",
+      "content": "import { Slider, type SliderProps } from \"glacia\";\n\nexport { Slider, type SliderProps };\nexport default Slider;\n",
+      "type": "registry:ui"
+    }
+  ]
+}

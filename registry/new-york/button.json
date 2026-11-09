@@ -1,0 +1,17 @@
+{
+  "name": "button",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.1.0"
+  ],
+  "registryDependencies": [
+    "https://glacia.dev/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "button.tsx",
+      "content": "import { Button, type ButtonProps } from \"glacia\";\n\nexport { Button, type ButtonProps };\nexport default Button;\n",
+      "type": "registry:ui"
+    }
+  ]
+}
