@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "action-sheet",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/action-sheet.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — action-sheet\n// Copied with `npx glacia add action-sheet`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  useCallback,\n  useState,\n} from \"react\";\nimport {\n  Dialog as DialogPrimitive,\n} from \"radix-ui\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport interface ActionSheetItem {\n  /** Label shown to the user. */\n  label: string;\n  /** Called when tapped. */\n  onPress: () => void;\n  /** A destructive action reads red. */\n  destructive?: boolean;\n  /** Disabled items are greyed out. */\n  disabled?: boolean;\n}\n\nexport interface ActionSheetProps {\n  /** The items shown. Destructive items appear before the cancel button. */\n  items: ActionSheetItem[];\n  /** Label for the cancel button. */\n  cancelLabel?: string;\n  /** Called when the user dismisses the sheet. */\n  onOpenChange?: (open: boolean) => void;\n  /** Whether the sheet is open. */\n  open?: boolean;\n  /** The trigger that opens the sheet. */\n  children?: React.ReactNode;\n}\n\n/**\n * An iOS-style action sheet — slides up from the bottom with a list of\n * options and a Cancel button, in Liquid Glass.\n */\nexport function ActionSheet({\n  items,\n  cancelLabel = \"Cancel\",\n  onOpenChange,\n  open: openProp,\n  children,\n}: ActionSheetProps) {\n  const [internalOpen, setInternalOpen] = useState(false);\n  const open = openProp ?? internalOpen;\n  const setOpen = onOpenChange ?? setInternalOpen;\n\n  const handlePress = useCallback(\n    (item: ActionSheetItem) => {\n      if (!item.disabled) {\n        setOpen(false);\n        // Wait for the sheet to start closing, then fire.\n        setTimeout(() => item.onPress(), 100);\n      }\n    },\n    [setOpen],\n  );\n\n  return (\n    <DialogPrimitive.Root open={open} onOpenChange={setOpen}>\n      {children && (\n        <DialogPrimitive.Trigger asChild>\n          {children}\n        </DialogPrimitive.Trigger>\n      )}\n      <DialogPrimitive.Portal>\n        <DialogPrimitive.Overlay\n          className=\"gl-action-sheet-overlay\"\n          onClick={() => setOpen(false)}\n        />\n        <DialogPrimitive.Content\n          className=\"gl-action-sheet-content\"\n          onEscapeKeyDown={() => setOpen(false)}\n        >\n          <div role=\"menu\" className=\"gl-action-sheet-menu\">\n            {items.map((item, i) => (\n              <button\n                key={i}\n                role=\"menuitem\"\n                type=\"button\"\n                className={cx(\n                  \"gl-action-sheet-item\",\n                  item.destructive && \"gl-action-sheet-item-destructive\",\n                )}\n                disabled={item.disabled}\n                onClick={() => handlePress(item)}\n              >\n                <span className=\"gl-action-sheet-label\">{item.label}</span>\n              </button>\n            ))}\n          </div>\n          <button\n            type=\"button\"\n            className=\"gl-action-sheet-cancel gl-glass\"\n            onClick={() => setOpen(false)}\n          >\n            {cancelLabel}\n          </button>\n        </DialogPrimitive.Content>\n      </DialogPrimitive.Portal>\n    </DialogPrimitive.Root>\n  );\n}",
+      "type": "registry:ui"
+    }
+  ]
+}

@@ -76,7 +76,17 @@
     "/r/attachment.json",
     "/r/questionnaire.json",
     "/r/trace.json",
-    "/r/direction.json"
+    "/r/direction.json",
+    "/r/action-sheet.json",
+    "/r/activity-view.json",
+    "/r/color-picker.json",
+    "/r/list.json",
+    "/r/page-control.json",
+    "/r/popup-button.json",
+    "/r/stepper.json",
+    "/r/time-picker.json",
+    "/r/toolbar.json",
+    "/r/widget.json"
   ],
   "files": []
 }

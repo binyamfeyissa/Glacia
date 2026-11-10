@@ -196,6 +196,17 @@ import {
   QuestionnaireStep,
   QuestionnaireOption,
   Trace,
+  ActionSheet,
+  ActivityView,
+  ColorPicker,
+  List,
+  ListItem,
+  PageControl,
+  PopupButton,
+  Stepper,
+  TimePicker,
+  Toolbar,
+  Widget,
   TraceStep,
   TraceDetails,
   DirectionProvider,
@@ -221,6 +232,74 @@ function QuestionnaireDemo() {
           />
         </QuestionnaireStep>
       </Questionnaire>
+    </div>
+  );
+}
+
+
+/* --- Wave 4 demo helpers (need their own state) --- */
+
+function ActionSheetDemo() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="flex flex-col items-center gap-3">
+      <Button variant="filled" onClick={() => setOpen(true)}>
+        Show Action Sheet
+      </Button>
+      <ActionSheet
+        open={open}
+        onOpenChange={setOpen}
+        items={[
+          { label: "Save to Files", onPress: () => {} },
+          { label: "Copy Link", onPress: () => {} },
+          { label: "Print", onPress: () => {} },
+          { label: "Delete", onPress: () => {}, destructive: true },
+        ]}
+      />
+    </div>
+  );
+}
+
+function ColorPickerDemo() {
+  const [colour, setColour] = useState("#007AFF");
+  return (
+    <div className="flex flex-col items-center gap-3">
+      <ColorPicker value={colour} onChange={setColour} />
+      <span className="text-sm opacity-70">Selected: {colour}</span>
+    </div>
+  );
+}
+
+function PageControlDemo() {
+  const [page, setPage] = useState(0);
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <div className="gl-glass rounded-2xl px-10 py-8 text-center" style={{ minWidth: 220 }}>
+        <div className="text-xs uppercase opacity-60 mb-1">Page</div>
+        <div className="text-3xl font-semibold">{page + 1}</div>
+      </div>
+      <PageControl count={5} index={page} onChange={setPage} />
+    </div>
+  );
+}
+
+function StepperDemo() {
+  const [count, setCount] = useState(1);
+  return (
+    <div className="flex items-center gap-4">
+      <span className="text-sm opacity-70">Quantity</span>
+      <Stepper value={count} onValueChange={setCount} min={0} max={10} />
+      <span className="text-sm font-semibold">{count}</span>
+    </div>
+  );
+}
+
+function TimePickerDemo() {
+  const [time, setTime] = useState("9:41 AM");
+  return (
+    <div className="flex flex-col items-center gap-3">
+      <TimePicker value={time} onChange={setTime} />
+      <span className="text-sm opacity-70">{time}</span>
     </div>
   );
 }
@@ -1215,6 +1294,102 @@ export function ComponentDemo({ slug }: { slug: string }) {
               <Button size="sm" variant="glass">إلغاء (RTL Glass)</Button>
             </div>
           </DirectionProvider>
+        </div>
+      );
+
+    case "action-sheet":
+      return <ActionSheetDemo />;
+
+    case "activity-view":
+      return (
+        <div className="flex flex-wrap gap-3 items-stretch">
+          <ActivityView
+            title="Steps"
+            subtitle="8,412"
+            visual={
+              <div
+                style={{
+                  width: 64,
+                  height: 64,
+                  borderRadius: "50%",
+                  border: "6px solid #34c759",
+                  borderTopColor: "rgba(52,199,89,0.25)",
+                }}
+              />
+            }
+          />
+          <ActivityView
+            title="Heart Rate"
+            subtitle="62 bpm"
+            size="compact"
+            visual={<span style={{ fontSize: 22 }}>❤️</span>}
+          />
+        </div>
+      );
+
+    case "color-picker":
+      return <ColorPickerDemo />;
+
+    case "list":
+      return (
+        <div className="w-full max-w-sm">
+          <List header="Settings">
+            <ListItem leading="📶" chevron>Wi-Fi</ListItem>
+            <ListItem leading="🔵" trailing="On" chevron>Bluetooth</ListItem>
+            <ListItem leading="🔔" trailing="3" chevron>Notifications</ListItem>
+            <ListItem leading="🔒" chevron>Privacy &amp; Security</ListItem>
+          </List>
+        </div>
+      );
+
+    case "page-control":
+      return <PageControlDemo />;
+
+    case "popup-button":
+      return (
+        <PopupButton
+          label="Sort by"
+          items={[
+            { label: "Name", onPress: () => {} },
+            { label: "Date Modified", onPress: () => {} },
+            { label: "Size", onPress: () => {} },
+          ]}
+        />
+      );
+
+    case "stepper":
+      return <StepperDemo />;
+
+    case "time-picker":
+      return <TimePickerDemo />;
+
+    case "toolbar":
+      return (
+        <Toolbar
+          aria-label="Editing"
+          items={[
+            { icon: "↶", label: "Undo", onPress: () => {} },
+            { icon: "↷", label: "Redo", onPress: () => {} },
+            { icon: "B", label: "Bold", onPress: () => {}, active: true },
+            { icon: "I", label: "Italic", onPress: () => {} },
+            { icon: "⤴", label: "Share", onPress: () => {} },
+          ]}
+        />
+      );
+
+    case "widget":
+      return (
+        <div className="flex flex-wrap gap-4 items-start">
+          <Widget size="lg" leading="Weather" trailing="Cupertino">
+            <span style={{ fontSize: 46, lineHeight: 1.1 }}>21°</span>
+            <span className="text-sm opacity-70">Sunny</span>
+            <span className="text-sm opacity-70">H:24° L:15°</span>
+          </Widget>
+          <Widget size="sm" leading="Cal">
+            <span style={{ fontSize: 13, fontWeight: 600 }}>MON</span>
+            <span style={{ fontSize: 26, fontWeight: 600 }}>10</span>
+            <span className="text-xs opacity-70">3 events</span>
+          </Widget>
         </div>
       );
 

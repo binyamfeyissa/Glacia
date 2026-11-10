@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "stepper",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/stepper.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — stepper\n// Copied with `npx glacia add stepper`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  useImperativeHandle,\n  useRef,\n  type ButtonHTMLAttributes,\n  type ForwardRefExoticComponent,\n  type RefAttributes,\n} from \"react\";\n\nimport { cx } from \"glacia/internal/cx\";\nimport { usePress } from \"glacia/internal/press\";\n\nexport interface StepperProps {\n  /** Current value. */\n  value?: number;\n  /** Called with the new value when the user taps + or −. */\n  onValueChange?: (value: number) => void;\n  /** Smallest allowed value (default 0). */\n  min?: number;\n  /** Largest allowed value (default 100). */\n  max?: number;\n  /** Amount to add or subtract each tap (default 1). */\n  step?: number;\n  /** Disable both buttons. */\n  disabled?: boolean;\n  className?: string;\n}\n\nexport const Stepper: ForwardRefExoticComponent<StepperProps & RefAttributes<HTMLDivElement>> = forwardRef<\n  HTMLDivElement,\n  StepperProps\n>(function Stepper(\n  { value = 0, onValueChange, min = 0, max = 100, step = 1, disabled, className },\n  forwardedRef,\n) {\n  const ref = useRef<HTMLDivElement>(null);\n  useImperativeHandle(forwardedRef, () => ref.current!);\n\n  const isMin = value <= min;\n  const isMax = value >= max;\n\n  const stepDown = () => {\n    if (!disabled && !isMin) onValueChange?.(Math.max(min, value - step));\n  };\n  const stepUp = () => {\n    if (!disabled && !isMax) onValueChange?.(Math.min(max, value + step));\n  };\n\n  return (\n    <div ref={ref} className={cx(\"gl-stepper\", className)}>\n      <StepperButton onClick={stepDown} disabled={disabled || isMin} aria-label=\"Decrease\">\n        <span className=\"gl-stepper-sign\">−</span>\n      </StepperButton>\n      <div className=\"gl-stepper-divider\" aria-hidden />\n      <StepperButton onClick={stepUp} disabled={disabled || isMax} aria-label=\"Increase\">\n        <span className=\"gl-stepper-sign\">+</span>\n      </StepperButton>\n    </div>\n  );\n});\n\n/* A small square glass button for the stepper. */\nfunction StepperButton({\n  children,\n  ...props\n}: ButtonHTMLAttributes<HTMLButtonElement>) {\n  const ref = useRef<HTMLButtonElement>(null);\n  usePress(ref);\n  return (\n    <button ref={ref} type=\"button\" className=\"gl-glass gl-stepper-btn\" {...props}>\n      {children}\n    </button>\n  );\n}",
+      "type": "registry:ui"
+    }
+  ]
+}

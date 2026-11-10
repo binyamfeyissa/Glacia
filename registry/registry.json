@@ -714,6 +714,106 @@
       ]
     },
     {
+      "name": "action-sheet",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "activity-view",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "color-picker",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "list",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "page-control",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "popup-button",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "stepper",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "time-picker",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "toolbar",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "widget",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
       "name": "base",
       "type": "registry:style",
@@ -801,7 +901,17 @@
         "/r/attachment.json",
         "/r/questionnaire.json",
         "/r/trace.json",
-        "/r/direction.json"
+        "/r/direction.json",
+        "/r/action-sheet.json",
+        "/r/activity-view.json",
+        "/r/color-picker.json",
+        "/r/list.json",
+        "/r/page-control.json",
+        "/r/popup-button.json",
+        "/r/stepper.json",
+        "/r/time-picker.json",
+        "/r/toolbar.json",
+        "/r/widget.json"
       ],
       "files": []
     }

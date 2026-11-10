@@ -402,6 +402,23 @@ export {
   type DirectionType,
 } from "./direction";
 
+// 9b. Wave 4 — Figma-aligned iOS/ipadOS components
+export { ActionSheet, type ActionSheetItem, type ActionSheetProps } from "./action-sheet";
+export { ActivityView, type ActivityViewProps } from "./activity-view";
+export { ColorPicker, type ColorPickerProps } from "./color-picker";
+export { List, ListItem, type ListProps, type ListItemProps } from "./list";
+export { PopupButton, type PopupButtonProps } from "./popup-button";
+export { Stepper, type StepperProps } from "./stepper";
+export { TimePicker, type TimePickerProps } from "./time-picker";
+export { Toolbar, type ToolbarItem, type ToolbarProps } from "./toolbar";
+export { Widget, type WidgetProps } from "./widget";
+export {
+  PageControl,
+  PageDots,
+  type PageControlProps,
+  type PageDotsProps,
+} from "./page-control";
+
 // 10. Ready-Made Page Blocks
 export { LoginPage, type LoginPageProps } from "./blocks/login-page";
 export { AdminDashboard, type AdminDashboardProps } from "./blocks/admin-dashboard";

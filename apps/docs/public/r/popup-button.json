@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "popup-button",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/popup-button.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — popup-button\n// Copied with `npx glacia add popup-button`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  useRef,\n  useState,\n  type ForwardRefExoticComponent,\n  type HTMLAttributes,\n  type RefAttributes,\n} from \"react\";\n\nimport { cx } from \"glacia/internal/cx\";\n\nexport interface PopupButtonProps extends HTMLAttributes<HTMLButtonElement> {\n  /** The label shown on the button. */\n  label: string;\n  /** Menu items: each has a label and action. */\n  items: { label: string; onPress: () => void }[];\n  /** Disabled state. */\n  disabled?: boolean;\n}\n\n/**\n * A Pop-up Button — a glass button that, when tapped, shows a small menu of\n * choices above it. It is the iOS counterpart to a `<select>` / dropdown.\n */\nexport const PopupButton: ForwardRefExoticComponent<PopupButtonProps & RefAttributes<HTMLButtonElement>> = forwardRef<\n  HTMLButtonElement,\n  PopupButtonProps\n>(function PopupButton(\n  { label, items, disabled, className, ...props },\n  forwardedRef,\n) {\n  const ref = useRef<HTMLButtonElement>(null);\n  const [open, setOpen] = useState(false);\n\n  return (\n    <div className=\"gl-popup-button-host\">\n      <button\n        ref={forwardedRef}\n        type=\"button\"\n        className={cx(\"gl-glass gl-button gl-popup-button\", open && \"gl-popup-button-open\", className)}\n        disabled={disabled}\n        onClick={() => setOpen(!open)}\n        aria-expanded={open}\n        aria-haspopup=\"menu\"\n        {...props}\n      >\n        <span className=\"gl-popup-button-label\">{label}</span>\n        <span className=\"gl-popup-button-chevron\" aria-hidden />\n      </button>\n      {open && (\n        <>\n          <div className=\"gl-popup-button-backdrop\" onClick={() => setOpen(false)} />\n          <div role=\"menu\" className=\"gl-glass gl-popup-button-menu\">\n            {items.map((item, i) => (\n              <button\n                key={i}\n                role=\"menuitem\"\n                type=\"button\"\n                className=\"gl-popup-button-item\"\n                onClick={() => {\n                  setOpen(false);\n                  item.onPress();\n                }}\n              >\n                {item.label}\n              </button>\n            ))}\n          </div>\n        </>\n      )}\n    </div>\n  );\n});",
+      "type": "registry:ui"
+    }
+  ]
+}

@@ -38,6 +38,9 @@ const COMPONENTS = [
   "toggle-group", "input-otp", "command", "carousel", "aspect-ratio", "kbd",
   "code-block", "marker", "menubar", "resizable", "message", "bubble",
   "message-scroller", "attachment", "questionnaire", "trace", "direction",
+  // Wave 4 — Figma-aligned iOS/ipadOS components
+  "action-sheet", "activity-view", "color-picker", "list", "page-control",
+  "popup-button", "stepper", "time-picker", "toolbar", "widget",
 ];
 
 /**

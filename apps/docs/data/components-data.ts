@@ -12,7 +12,7 @@ export interface ComponentMeta {
   category: "Buttons & Actions" | "Text & Forms" | "Showing Things" | "Navigation & Layout" | "Popups & Menus" | "Chat & AI";
   appleStatus: "Apple-faithful" | "Glacia extension";
   nativeStatus: "Yes" | "Web only" | "Web first";
-  wave: 1 | 2 | 3;
+  wave: 1 | 2 | 3 | 4;
   props: PropItem[];
   codeSnippet: string;
 }
@@ -1838,6 +1838,259 @@ export default function DirectionDemo() {
         <Button variant="glass">إلغاء (Cancel)</Button>
       </div>
     </DirectionProvider>
+  );
+}`
+  },
+
+  {
+    slug: "action-sheet",
+    name: "Action Sheet",
+    description: "An iOS action sheet: options slide up from the bottom in glass, with a Cancel button below.",
+    category: "Popups & Menus",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 4,
+    props: [
+      { name: "items", type: "ActionSheetItem[]", description: "The options. Each has label, onPress, and optional destructive / disabled." },
+      { name: "cancelLabel", type: "string", default: "'Cancel'", description: "Text for the cancel button." },
+      { name: "open", type: "boolean", description: "Controlled open state." },
+      { name: "onOpenChange", type: "(open: boolean) => void", description: "Called when the sheet opens or closes." },
+      { name: "children", type: "ReactNode", description: "Optional trigger element." }
+    ],
+    codeSnippet: `import { ActionSheet } from "glacia";
+
+export default function ActionSheetDemo() {
+  return (
+    <ActionSheet
+      items={[
+        { label: "Save to Files", onPress: () => {} },
+        { label: "Copy Link", onPress: () => {} },
+        { label: "Delete", onPress: () => {}, destructive: true },
+      ]}
+    >
+      <button>Show Options</button>
+    </ActionSheet>
+  );
+}`
+  },
+  {
+    slug: "activity-view",
+    name: "Activity View",
+    description: "An iOS activity card: a ring, chart or metric in glass, for widgets and dashboards.",
+    category: "Showing Things",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 4,
+    props: [
+      { name: "title", type: "string", description: "Small caption above the value." },
+      { name: "subtitle", type: "string", description: "The large value or figure." },
+      { name: "visual", type: "ReactNode", description: "A ring, chart or icon." },
+      { name: "size", type: "'compact' | 'full'", default: "'full'", description: "Compact lays it out in a row." }
+    ],
+    codeSnippet: `import { ActivityView } from "glacia";
+
+export default function ActivityViewDemo() {
+  return (
+    <ActivityView
+      title="Steps"
+      subtitle="8,412"
+      visual={<div className="gl-activity-ring" style={{ width: 64, height: 64, borderRadius: "50%", border: "6px solid #34c759" }} />}
+    />
+  );
+}`
+  },
+  {
+    slug: "color-picker",
+    name: "Color Picker",
+    description: "An iOS colour grid with a hex field, in glass.",
+    category: "Text & Forms",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 4,
+    props: [
+      { name: "value", type: "string", description: "The selected colour as a hex string." },
+      { name: "onChange", type: "(colour: string) => void", description: "Called when a swatch or hex is committed." }
+    ],
+    codeSnippet: `import { ColorPicker } from "glacia";
+import { useState } from "react";
+
+export default function ColorPickerDemo() {
+  const [colour, setColour] = useState("#007AFF");
+  return <ColorPicker value={colour} onChange={setColour} />;
+}`
+  },
+  {
+    slug: "list",
+    name: "List",
+    description: "An iOS grouped list, like Settings or Mail: glass rows with leading icons and trailing detail.",
+    category: "Showing Things",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 4,
+    props: [
+      { name: "header", type: "string", description: "Section caption above the rows." },
+      { name: "ListItem.leading", type: "ReactNode", description: "Icon or avatar at the start of a row." },
+      { name: "ListItem.trailing", type: "ReactNode", description: "Detail shown at the end of a row." },
+      { name: "ListItem.chevron", type: "boolean", description: "Shows a disclosure chevron." },
+      { name: "ListItem.onPress", type: "() => void", description: "Makes the row a button." }
+    ],
+    codeSnippet: `import { List, ListItem } from "glacia";
+
+export default function ListDemo() {
+  return (
+    <List header="Settings">
+      <ListItem leading="Wi-Fi" chevron>Wi-Fi</ListItem>
+      <ListItem leading="BT" trailing="On" chevron>Bluetooth</ListItem>
+      <ListItem leading="P" trailing="4" chevron>Privacy</ListItem>
+    </List>
+  );
+}`
+  },
+  {
+    slug: "page-control",
+    name: "Page Control",
+    description: "The iOS row of page dots. The active dot fills and widens, and tapping one changes page.",
+    category: "Navigation & Layout",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 4,
+    props: [
+      { name: "count", type: "number", description: "How many dots to show." },
+      { name: "index", type: "number", description: "The active dot, 0-based." },
+      { name: "onChange", type: "(index: number) => void", description: "Called when a dot is tapped." },
+      { name: "tint", type: "string", description: "Colour for the active dot." },
+      { name: "hidesForSinglePage", type: "boolean", default: "true", description: "Hide when there is only one page." }
+    ],
+    codeSnippet: `import { PageControl } from "glacia";
+import { useState } from "react";
+
+export default function PageControlDemo() {
+  const [page, setPage] = useState(0);
+  return <PageControl count={5} index={page} onChange={setPage} />;
+}`
+  },
+  {
+    slug: "popup-button",
+    name: "Pop-up Button",
+    description: "A glass button that opens a small menu of choices above it, like an iOS pop-up button.",
+    category: "Buttons & Actions",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 4,
+    props: [
+      { name: "label", type: "string", description: "The text shown on the button." },
+      { name: "items", type: "{ label: string; onPress: () => void }[]", description: "The menu choices." },
+      { name: "disabled", type: "boolean", description: "Disables the button." }
+    ],
+    codeSnippet: `import { PopupButton } from "glacia";
+
+export default function PopupButtonDemo() {
+  return (
+    <PopupButton
+      label="Sort by"
+      items={[
+        { label: "Name", onPress: () => {} },
+        { label: "Date", onPress: () => {} },
+        { label: "Size", onPress: () => {} },
+      ]}
+    />
+  );
+}`
+  },
+  {
+    slug: "stepper",
+    name: "Stepper",
+    description: "An iOS stepper: a − and + pair in glass that increments and decrements a value.",
+    category: "Text & Forms",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 4,
+    props: [
+      { name: "value", type: "number", description: "Current value." },
+      { name: "onValueChange", type: "(value: number) => void", description: "Called with the new value." },
+      { name: "min", type: "number", default: "0", description: "Smallest allowed value." },
+      { name: "max", type: "number", default: "100", description: "Largest allowed value." },
+      { name: "step", type: "number", default: "1", description: "Amount changed per tap." },
+      { name: "disabled", type: "boolean", description: "Disables both buttons." }
+    ],
+    codeSnippet: `import { Stepper } from "glacia";
+import { useState } from "react";
+
+export default function StepperDemo() {
+  const [count, setCount] = useState(1);
+  return <Stepper value={count} onValueChange={setCount} min={0} max={10} />;
+}`
+  },
+  {
+    slug: "time-picker",
+    name: "Time Picker",
+    description: "An iOS time picker: hour, minute and AM/PM columns that scroll, ringed in glass.",
+    category: "Text & Forms",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 4,
+    props: [
+      { name: "value", type: "string", description: "The time, as 'h:MM AM' or 'HH:MM'." },
+      { name: "onChange", type: "(time: string) => void", description: "Called when a column settles." },
+      { name: "twelveHour", type: "boolean", default: "true", description: "Show AM/PM instead of 24 hours." }
+    ],
+    codeSnippet: `import { TimePicker } from "glacia";
+import { useState } from "react";
+
+export default function TimePickerDemo() {
+  const [time, setTime] = useState("9:41 AM");
+  return <TimePicker value={time} onChange={setTime} />;
+}`
+  },
+  {
+    slug: "toolbar",
+    name: "Toolbar",
+    description: "An iOS toolbar: a glass rail of icon buttons that sits above the tab bar.",
+    category: "Navigation & Layout",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 4,
+    props: [
+      { name: "items", type: "ToolbarItem[]", description: "Each has icon, label, onPress, and optional active / disabled." },
+      { name: "aria-label", type: "string", description: "Accessible name for the toolbar." }
+    ],
+    codeSnippet: `import { Toolbar } from "glacia";
+
+export default function ToolbarDemo() {
+  return (
+    <Toolbar
+      aria-label="Editing"
+      items={[
+        { icon: "↶", label: "Undo", onPress: () => {} },
+        { icon: "↷", label: "Redo", onPress: () => {} },
+        { icon: "B", label: "Bold", onPress: () => {}, active: true },
+        { icon: "⤴", label: "Share", onPress: () => {} },
+      ]}
+    />
+  );
+}`
+  },
+  {
+    slug: "widget",
+    name: "Widget",
+    description: "An iOS Home Screen widget in glass, sized small, medium or large, with corner slots.",
+    category: "Showing Things",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 4,
+    props: [
+      { name: "size", type: "'sm' | 'md' | 'lg'", default: "'md'", description: "Widget footprint." },
+      { name: "leading", type: "ReactNode", description: "Content in the top-left corner." },
+      { name: "trailing", type: "ReactNode", description: "Content in the top-right corner." }
+    ],
+    codeSnippet: `import { Widget } from "glacia";
+
+export default function WidgetDemo() {
+  return (
+    <Widget size="md" leading="Weather" trailing="Cupertino">
+      <span style={{ fontSize: 40 }}>21°</span>
+      <span>Sunny · H:24° L:15°</span>
+    </Widget>
   );
 }`
   }
