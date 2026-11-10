@@ -4,6 +4,15 @@
   "description": "Shared design tokens and cross-platform types for Glacia",
   "license": "MIT",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/binyamfeyissa/Glacia.git",
+    "directory": "packages/tokens"
+  },
+  "homepage": "https://github.com/binyamfeyissa/Glacia#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.mts",

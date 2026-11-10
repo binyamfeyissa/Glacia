@@ -4,6 +4,15 @@
   "description": "Liquid Glass UI components for React — real refraction on the web, with its own copy command (npx glacia add) and a React Native companion.",
   "license": "MIT",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/binyamfeyissa/Glacia.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/binyamfeyissa/Glacia#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "bin": {
     "glacia": "./bin/cli.js"
   },
