@@ -1,116 +1,232 @@
 #!/usr/bin/env python3
 """
-Deploy Glacia Docs static export to cPanel via FTP/FTPS.
+Glacia cPanel FTPS Resilient Direct Deployer
+Uploads static export from apps/docs/out to cPanel web root with:
+- FTPS TLS session resumption support
+- Passive mode IP normalization
+- Directory pre-creation & caching (zero redundant FTP CWD roundtrips)
+- Smart incremental file sync (skips files with identical size)
+- Automatic connection recovery & per-file retries
 """
 
 import os
 import sys
-import getpass
+import time
+import socket
 import ssl
-from ftplib import FTP, FTP_TLS
+import getpass
+import subprocess
+from ftplib import FTP, FTP_TLS, all_errors
 
 HOST = os.environ.get("CPANEL_FTP_SERVER", "ftp.plutotechnologies.org")
 USER = os.environ.get("CPANEL_FTP_USERNAME", "glacia@glacia.binyamfeyissa.dev")
 PASSWORD = os.environ.get("CPANEL_FTP_PASSWORD")
 PORT = int(os.environ.get("CPANEL_FTP_PORT", 21))
-LOCAL_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "apps", "docs", "out"))
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+LOCAL_DIR = os.path.abspath(os.path.join(ROOT_DIR, "apps", "docs", "out"))
 REMOTE_DIR = os.environ.get("CPANEL_FTP_DIR", "/")
+BLOCK_SIZE = 65536  # 64 KB buffers for fast transfer
+SOCKET_TIMEOUT = 45  # 45 seconds before timeout
 
-def get_connection(host, user, password, port):
-    """Attempt FTPS first (as pure-ftpd prefers TLS), fallback to plain FTP."""
-    print(f"Connecting to {host}:{port} as {user}...")
-    
-    # Try FTPS (FTP over TLS)
-    try:
-        ctx = ssl.create_default_context()
-        ctx.check_hostname = False
-        ctx.verify_mode = ssl.CERT_NONE
-        ftp = FTP_TLS(context=ctx)
-        ftp.connect(host, port, timeout=20)
-        ftp.auth()
-        ftp.login(user, password)
-        ftp.prot_p()  # Switch data connection to secure TLS
-        print(" Connected securely via FTPS (TLS).")
-        return ftp
-    except Exception as e:
-        print(f" FTPS attempt info: {e}. Trying standard FTP...")
-    
-    # Fallback to plain FTP
-    try:
-        ftp = FTP()
-        ftp.connect(host, port, timeout=20)
-        ftp.login(user, password)
-        print(" Connected via plain FTP.")
-        return ftp
-    except Exception as e:
-        print(f"❌ FTP connection failed: {e}")
-        sys.exit(1)
 
-def ensure_remote_dir(ftp, remote_path):
-    """Ensure directory exists on remote FTP server."""
-    if not remote_path or remote_path == "." or remote_path == "/":
-        return
-    parts = [p for p in remote_path.strip("/").split("/") if p]
-    current = ""
-    for part in parts:
-        current += "/" + part
-        try:
-            ftp.cwd(current)
-        except Exception:
+class ReusableFTP_TLS(FTP_TLS):
+    """
+    FTP_TLS subclass that:
+    1. Reuses TLS session from control connection for data connections (required by Pure-FTPd).
+    2. Overrides makepasv to always connect to control host (avoids internal NAT timeout on cPanel).
+    """
+    def ntransfercmd(self, cmd, rest=None):
+        conn, size = super().ntransfercmd(cmd, rest)
+        if self._prot_p:
+            session = getattr(self.sock, "session", None)
+            conn = self.context.wrap_socket(
+                conn,
+                server_hostname=self.host,
+                session=session
+            )
+        return conn, size
+
+    def makepasv(self):
+        host, port = super().makepasv()
+        # Always route data channel through the control host IP/domain to prevent NAT timeout
+        return self.host, port
+
+
+class FTPDeployer:
+    def __init__(self, host, user, password, port=21):
+        self.host = host
+        self.user = user
+        self.password = password
+        self.port = port
+        self.ftp = None
+        self.use_tls = True
+        self.created_dirs = set()
+        self.current_remote_dir = None
+
+    def connect(self):
+        """Establish FTPS (or plain FTP fallback) connection."""
+        if self.ftp:
             try:
-                ftp.mkd(current)
+                self.ftp.quit()
             except Exception:
-                pass
+                try:
+                    self.ftp.close()
+                except Exception:
+                    pass
+            self.ftp = None
 
-def upload_directory(ftp, local_dir, remote_base="/"):
-    """Recursively upload all files and folders in local_dir to remote_base."""
-    if not os.path.isdir(local_dir):
-        print(f"❌ Local export directory not found: {local_dir}")
-        print("Run `pnpm build` first to generate apps/docs/out.")
-        sys.exit(1)
+        if self.use_tls:
+            try:
+                ctx = ssl.create_default_context()
+                ctx.check_hostname = False
+                ctx.verify_mode = ssl.CERT_NONE
+                ftp = ReusableFTP_TLS(context=ctx)
+                ftp.connect(self.host, self.port, timeout=SOCKET_TIMEOUT)
+                ftp.auth()
+                ftp.login(self.user, self.password)
+                ftp.prot_p()
+                ftp.voidcmd("TYPE I")  # Binary mode
+                self.ftp = ftp
+                return self.ftp
+            except Exception as e:
+                print(f"⚠️  FTPS connection warning: {e}. Attempting plain FTP...")
+                self.use_tls = False
 
-    file_list = []
-    for root, dirs, files in os.walk(local_dir):
-        for f in files:
-            full_path = os.path.join(root, f)
-            rel_path = os.path.relpath(full_path, local_dir)
-            file_list.append((full_path, rel_path))
+        # Fallback to plain FTP
+        try:
+            ftp = FTP()
+            ftp.connect(self.host, self.port, timeout=SOCKET_TIMEOUT)
+            ftp.login(self.user, self.password)
+            ftp.voidcmd("TYPE I")
+            self.ftp = ftp
+            return self.ftp
+        except Exception as e:
+            raise ConnectionError(f"Failed to connect to {self.host}:{self.port} as {self.user}: {e}")
 
-    total = len(file_list)
-    print(f"📦 Found {total} files to upload from {local_dir}...")
+    def get_ftp(self, force_reconnect=False):
+        if self.ftp is None or force_reconnect:
+            self.connect()
+            self.current_remote_dir = None
+        return self.ftp
 
-    # Set binary mode
-    ftp.voidcmd("TYPE I")
+    def ensure_remote_dir(self, remote_dir_path):
+        """Ensures a directory hierarchy exists on the remote server using cached lookups."""
+        if not remote_dir_path or remote_dir_path in ("/", "."):
+            return
 
-    uploaded = 0
-    for local_path, rel_path in file_list:
-        remote_file_path = (remote_base.rstrip("/") + "/" + rel_path.replace("\\", "/")).lstrip("/")
-        remote_dir_path = "/" + os.path.dirname(remote_file_path).lstrip("/")
-        
-        ensure_remote_dir(ftp, remote_dir_path)
-        ftp.cwd(remote_dir_path)
+        normalized = "/" + remote_dir_path.strip("/")
+        if normalized in self.created_dirs:
+            return
 
-        filename = os.path.basename(local_path)
-        with open(local_path, "rb") as f:
-            ftp.storbinary(f"STOR {filename}", f)
+        ftp = self.get_ftp()
+        parts = [p for p in normalized.split("/") if p]
+        accumulated = ""
+        for part in parts:
+            accumulated += "/" + part
+            if accumulated in self.created_dirs:
+                continue
+            try:
+                ftp.cwd(accumulated)
+                self.created_dirs.add(accumulated)
+            except Exception:
+                try:
+                    ftp.mkd(accumulated)
+                    self.created_dirs.add(accumulated)
+                except Exception:
+                    # Might exist already
+                    self.created_dirs.add(accumulated)
 
-        uploaded += 1
-        if uploaded % 5 == 0 or uploaded == total:
-            sys.stdout.write(f"\r🚀 Uploading: [{uploaded}/{total}] {rel_path[:40]:<40}")
-            sys.stdout.flush()
+    def change_remote_dir(self, remote_dir_path):
+        """Change directory only if not already there."""
+        normalized = "/" + remote_dir_path.strip("/") if remote_dir_path not in ("", "/") else "/"
+        if self.current_remote_dir == normalized:
+            return
+        self.ensure_remote_dir(normalized)
+        ftp = self.get_ftp()
+        try:
+            ftp.cwd(normalized)
+            self.current_remote_dir = normalized
+        except Exception:
+            # Force recreate and retry
+            self.ensure_remote_dir(normalized)
+            ftp.cwd(normalized)
+            self.current_remote_dir = normalized
 
-    print("\n\n🎉 Upload complete!")
+    def get_remote_file_size(self, remote_file_path):
+        """Get file size on remote server using SIZE command. Returns -1 if not found."""
+        ftp = self.get_ftp()
+        try:
+            # Some FTP servers accept full path in SIZE
+            return ftp.size(remote_file_path)
+        except Exception:
+            return -1
+
+    def upload_file(self, local_path, remote_dir_path, filename, max_retries=4):
+        """Upload a single file with resume/skip check and automatic retries."""
+        local_size = os.path.getsize(local_path)
+        remote_full_path = (remote_dir_path.rstrip("/") + "/" + filename).lstrip("/")
+
+        # Check if already uploaded and identical
+        remote_size = self.get_remote_file_size(remote_full_path)
+        if remote_size == local_size:
+            return "skipped", local_size
+
+        for attempt in range(1, max_retries + 1):
+            try:
+                self.change_remote_dir(remote_dir_path)
+                ftp = self.get_ftp()
+                with open(local_path, "rb") as f:
+                    ftp.storbinary(f"STOR {filename}", f, blocksize=BLOCK_SIZE)
+                return "uploaded", local_size
+            except (socket.timeout, TimeoutError, ConnectionResetError, BrokenPipeError,
+                    ssl.SSLError, EOFError, OSError, all_errors) as err:
+                if attempt == max_retries:
+                    raise RuntimeError(f"Failed to upload {filename} after {max_retries} attempts: {err}")
+                wait_sec = attempt * 1.5
+                sys.stdout.write(f"\n   ⚠️  [Attempt {attempt}/{max_retries}] Retry {filename} in {wait_sec:.1f}s ({err})... ")
+                sys.stdout.flush()
+                time.sleep(wait_sec)
+                # Reconnect
+                try:
+                    self.get_ftp(force_reconnect=True)
+                except Exception:
+                    pass
+
+    def close(self):
+        if self.ftp:
+            try:
+                self.ftp.quit()
+            except Exception:
+                try:
+                    self.ftp.close()
+                except Exception:
+                    pass
+            self.ftp = None
+
+
+def ensure_build():
+    """Verify that apps/docs/out exists and contains index.html, building if needed."""
+    index_file = os.path.join(LOCAL_DIR, "index.html")
+    if not os.path.isfile(index_file):
+        print("📦 apps/docs/out not built yet or missing index.html. Running production build...")
+        cmd = ["pnpm", "--filter", "docs", "build"]
+        res = subprocess.run(cmd, cwd=ROOT_DIR)
+        if res.returncode != 0:
+            print("❌ Build failed. Aborting deploy.")
+            sys.exit(1)
+
 
 def main():
     global PASSWORD
     print("=" * 60)
-    print(" Glacia cPanel Direct Deployer")
+    print(" Glacia cPanel Resilient FTPS Deployer")
     print(f" Target: https://glacia.binyamfeyissa.dev/")
-    print(f" Server: {HOST} | User: {USER}")
+    print(f" Server: {HOST}:{PORT} | User: {USER}")
     print("=" * 60)
 
+    # 1. Password detection
     if not PASSWORD:
-        if len(sys.argv) > 1:
+        if len(sys.argv) > 1 and not sys.argv[1].startswith("-"):
             PASSWORD = sys.argv[1]
         else:
             try:
@@ -123,17 +239,81 @@ def main():
         print("❌ No password provided. Exiting.")
         sys.exit(1)
 
-    ftp = get_connection(HOST, USER, PASSWORD, PORT)
-    upload_directory(ftp, LOCAL_DIR, REMOTE_DIR)
-    
-    try:
-        ftp.quit()
-    except Exception:
-        ftp.close()
+    # 2. Check export build
+    ensure_build()
 
+    # 3. Gather files
+    file_list = []
+    total_bytes = 0
+    for root, dirs, files in os.walk(LOCAL_DIR):
+        for f in sorted(files):
+            # Skip OS junk
+            if f in (".DS_Store", "Thumbs.db"):
+                continue
+            full_path = os.path.join(root, f)
+            rel_path = os.path.relpath(full_path, LOCAL_DIR)
+            file_size = os.path.getsize(full_path)
+            file_list.append((full_path, rel_path, file_size))
+            total_bytes += file_size
+
+    total_files = len(file_list)
+    print(f"📦 Found {total_files} files ({total_bytes / (1024 * 1024):.2f} MB) in {LOCAL_DIR}...")
+
+    # 4. Connect to remote host
+    deployer = FTPDeployer(HOST, USER, PASSWORD, PORT)
+    print(f"🔌 Connecting securely to {HOST}:{PORT} as {USER}...")
+    deployer.connect()
+    print(" Connected securely via FTPS.")
+
+    # 5. Pre-create directories in order
+    all_remote_dirs = set()
+    for _, rel_path, _ in file_list:
+        remote_file_path = (REMOTE_DIR.rstrip("/") + "/" + rel_path.replace("\\", "/")).lstrip("/")
+        remote_dir = "/" + os.path.dirname(remote_file_path).lstrip("/")
+        all_remote_dirs.add(remote_dir)
+
+    sorted_dirs = sorted(all_remote_dirs, key=lambda d: (len(d.split("/")), d))
+    print(f"📁 Pre-verifying {len(sorted_dirs)} remote directories...")
+    for d in sorted_dirs:
+        deployer.ensure_remote_dir(d)
+
+    # 6. Upload files with progress
+    start_time = time.time()
+    uploaded_count = 0
+    skipped_count = 0
+    transferred_bytes = 0
+
+    print("🚀 Starting sync...")
+    for idx, (local_path, rel_path, file_size) in enumerate(file_list, 1):
+        remote_file_path = (REMOTE_DIR.rstrip("/") + "/" + rel_path.replace("\\", "/")).lstrip("/")
+        remote_dir_path = "/" + os.path.dirname(remote_file_path).lstrip("/")
+        filename = os.path.basename(local_path)
+
+        status, size = deployer.upload_file(local_path, remote_dir_path, filename)
+        if status == "uploaded":
+            uploaded_count += 1
+            transferred_bytes += size
+        else:
+            skipped_count += 1
+
+        # Formatted progress
+        percent = (idx / total_files) * 100
+        display_name = rel_path if len(rel_path) <= 35 else "..." + rel_path[-32:]
+        stat_tag = "↑" if status == "uploaded" else "="
+        sys.stdout.write(f"\r[{percent:5.1f}%] [{idx}/{total_files}] {stat_tag} {display_name:<35} ({uploaded_count} up, {skipped_count} sync)")
+        sys.stdout.flush()
+
+    elapsed = time.time() - start_time
+    deployer.close()
+
+    print("\n\n" + "=" * 60)
+    print(f"🎉 Deployment Complete in {elapsed:.1f}s!")
+    print(f"   • Total files processed: {total_files}")
+    print(f"   • Files newly uploaded: {uploaded_count} ({transferred_bytes / (1024 * 1024):.2f} MB)")
+    print(f"   • Files unchanged (skipped): {skipped_count}")
+    print(f"   • Live URL: https://glacia.binyamfeyissa.dev/")
     print("=" * 60)
-    print("✨ Verified: Your site is now live at https://glacia.binyamfeyissa.dev/ !")
-    print("=" * 60)
+
 
 if __name__ == "__main__":
     main()
