@@ -1,16 +1,17 @@
 {
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "button",
   "type": "registry:ui",
   "dependencies": [
-    "glacia@^0.1.0"
+    "glacia@^0.3.1"
   ],
   "registryDependencies": [
-    "https://glacia.dev/r/glass.json"
+    "/r/glass.json"
   ],
   "files": [
     {
-      "path": "button.tsx",
-      "content": "import { Button, type ButtonProps } from \"glacia\";\n\nexport { Button, type ButtonProps };\nexport default Button;\n",
+      "path": "components/ui/button.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — button\n// Copied with `npx glacia add button`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  useImperativeHandle,\n  useRef,\n  type ButtonHTMLAttributes,\n  type CSSProperties,\n  type ForwardRefExoticComponent,\n  type ReactNode,\n  type RefAttributes,\n} from \"react\";\n\nimport { cx } from \"glacia/internal/cx\";\nimport { usePress } from \"glacia/internal/press\";\nimport { useRefraction } from \"glacia/internal/refraction\";\n\nexport interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {\n  /** Shown before the label. On its own, the button is a circle; give it an `aria-label`. */\n  icon?: ReactNode;\n  /** `glass` is clear frosted; `filled` fills it with accent colour; `ghost` has no background until hovered. */\n  variant?: \"glass\" | \"filled\" | \"ghost\";\n  /** Button size: 'sm' (32px), 'md' (40px, default), 'lg' (48px). */\n  size?: \"sm\" | \"md\" | \"lg\";\n  /** Marks an action that deletes or can't be undone. Shorthand for a red `tint`. */\n  destructive?: boolean;\n  /** Any CSS colour. Tints a glass button's label, or a filled button's fill. */\n  tint?: string;\n}\n\nexport const Button: ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLButtonElement>> = /* @__PURE__ */ forwardRef<\n  HTMLButtonElement,\n  ButtonProps\n>(function Button(\n  { icon, variant = \"glass\", size = \"md\", destructive, tint, children, className, style, type = \"button\", ...props },\n  forwardedRef,\n) {\n  const ref = useRef<HTMLButtonElement>(null);\n  useImperativeHandle(forwardedRef, () => ref.current!);\n  usePress(ref);\n  useRefraction(ref);\n\n  return (\n    <button\n      ref={ref}\n      type={type}\n      className={cx(\"gl-glass gl-button\", className)}\n      data-icon={icon == null ? undefined : children == null ? \"only\" : \"\"}\n      data-variant={variant === \"glass\" ? undefined : variant}\n      data-size={size === \"md\" ? undefined : size}\n      data-destructive={destructive ? \"\" : undefined}\n      data-tint={tint ? \"\" : undefined}\n      style={tint ? ({ ...style, \"--gl-tint\": tint } as CSSProperties) : style}\n      {...props}\n    >\n      {icon}\n      {children}\n    </button>\n  );\n});\n",
       "type": "registry:ui"
     }
   ]

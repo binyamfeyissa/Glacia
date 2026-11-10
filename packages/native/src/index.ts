@@ -7,6 +7,7 @@ export {
   type SegmentedControlProps,
 } from "./SegmentedControl";
 export { TabBar, type TabBarProps, type TabBarItem } from "./TabBar";
+export { Tabs, type TabsProps, type TabItem } from "./Tabs";
 export {
   Card,
   CardHeader,

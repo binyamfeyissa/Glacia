@@ -1,17 +1,17 @@
 {
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "separator",
   "type": "registry:ui",
   "dependencies": [
-    "glacia@^0.1.0",
-    "radix-ui@^1.8.1"
+    "glacia@^0.3.1"
   ],
   "registryDependencies": [
-    "https://glacia.dev/r/glass.json"
+    "/r/glass.json"
   ],
   "files": [
     {
-      "path": "separator.tsx",
-      "content": "import { Separator } from \"glacia\";\n\nexport { Separator };\nexport default Separator;\n",
+      "path": "components/ui/separator.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — separator\n// Copied with `npx glacia add separator`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ComponentPropsWithoutRef,\n  type ElementRef,\n} from \"react\";\nimport { Separator as RadixSeparator } from \"radix-ui\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport const Separator = forwardRef<\n  ElementRef<typeof RadixSeparator.Root>,\n  ComponentPropsWithoutRef<typeof RadixSeparator.Root>\n>(function Separator(\n  { className, orientation = \"horizontal\", decorative = true, ...props },\n  ref,\n) {\n  return (\n    <RadixSeparator.Root\n      ref={ref}\n      decorative={decorative}\n      orientation={orientation}\n      className={cx(\n        \"gl-separator\",\n        orientation === \"horizontal\" ? \"gl-separator-h\" : \"gl-separator-v\",\n        className,\n      )}\n      {...props}\n    />\n  );\n});\n",
       "type": "registry:ui"
     }
   ]

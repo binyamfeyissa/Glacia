@@ -33,7 +33,7 @@ export const ButtonGroup: ForwardRefExoticComponent<
       <div
         ref={ref}
         role="group"
-        className={cx("gl-button-group", className)}
+        className={cx("gl-button-group", variant === "segmented" && "gl-glass", className)}
         data-orientation={orientation}
         data-size={size}
         data-variant={variant}

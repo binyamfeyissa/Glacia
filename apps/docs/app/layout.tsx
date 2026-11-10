@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Header } from "../components/header";
 import { Footer } from "../components/footer";
+import { GlassDials } from "../components/glass-dials";
 
 export const metadata: Metadata = {
   title: {
@@ -50,6 +51,7 @@ export default function RootLayout({
         <Header />
         <main className="site-main">{children}</main>
         <Footer />
+        <GlassDials />
       </body>
     </html>
   );

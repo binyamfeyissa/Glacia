@@ -190,6 +190,7 @@ import {
   MessageStatus,
   MessageScroller,
   MessageDateDivider,
+  Bubble,
   Attachment,
   Questionnaire,
   QuestionnaireStep,
@@ -199,6 +200,30 @@ import {
   TraceDetails,
   DirectionProvider,
 } from "glacia";
+
+function QuestionnaireDemo() {
+  const [choice, setChoice] = useState<"glass" | "blur">("glass");
+  return (
+    <div className="w-full max-w-sm">
+      <Questionnaire currentStep={2} totalSteps={4}>
+        <QuestionnaireStep title="Appearance" description="Choose your system aesthetics">
+          <QuestionnaireOption
+            label="Liquid Glass"
+            description="Real optical bending"
+            selected={choice === "glass"}
+            onClick={() => setChoice("glass")}
+          />
+          <QuestionnaireOption
+            label="Frosted Blur"
+            description="Universal fallback"
+            selected={choice === "blur"}
+            onClick={() => setChoice("blur")}
+          />
+        </QuestionnaireStep>
+      </Questionnaire>
+    </div>
+  );
+}
 
 export function ComponentDemo({ slug }: { slug: string }) {
   switch (slug) {
@@ -226,7 +251,7 @@ export function ComponentDemo({ slug }: { slug: string }) {
 
     case "text":
       return (
-        <div className="space-y-3 max-w-md text-left">
+        <div className="gl-glass p-6 rounded-2xl space-y-3 max-w-md text-left">
           <Text variant="h2">Optical Typography</Text>
           <Text variant="lead">Crisp legibility designed specifically over glass materials.</Text>
           <Text variant="p">
@@ -304,7 +329,7 @@ export function ComponentDemo({ slug }: { slug: string }) {
 
     case "separator":
       return (
-        <div className="w-full max-w-xs space-y-3">
+        <div className="gl-glass p-6 rounded-2xl w-full max-w-xs space-y-3">
           <p className="text-sm">Upper section</p>
           <Separator />
           <p className="text-sm">Lower section</p>
@@ -324,7 +349,7 @@ export function ComponentDemo({ slug }: { slug: string }) {
 
     case "spinner":
       return (
-        <div className="flex gap-6 items-center justify-center">
+        <div className="gl-glass p-6 rounded-2xl flex gap-6 items-center justify-center">
           <Spinner size="sm" />
           <Spinner size="md" />
           <Spinner size="lg" />
@@ -344,7 +369,7 @@ export function ComponentDemo({ slug }: { slug: string }) {
 
     case "switch":
       return (
-        <div className="flex items-center gap-4">
+        <div className="gl-glass p-6 rounded-2xl flex items-center gap-4">
           <Switch aria-label="Enable Liquid Refraction" defaultChecked />
           <span className="text-sm font-medium">Liquid Refraction</span>
         </div>
@@ -352,7 +377,7 @@ export function ComponentDemo({ slug }: { slug: string }) {
 
     case "slider":
       return (
-        <div className="w-full max-w-sm space-y-2">
+        <div className="gl-glass p-6 rounded-2xl w-full max-w-sm space-y-3">
           <div className="flex justify-between text-xs">
             <span>Refraction Strength</span>
             <span>65%</span>
@@ -793,8 +818,8 @@ export function ComponentDemo({ slug }: { slug: string }) {
     case "context-menu":
       return (
         <ContextMenu>
-          <ContextMenuTrigger className="p-8 border border-dashed rounded-xl text-center text-sm w-full max-w-sm">
-            Right-click or press-and-hold here
+          <ContextMenuTrigger className="gl-glass p-8 rounded-2xl text-center text-sm w-full max-w-sm cursor-context-menu">
+            Right-click or press-and-hold on this glass panel
           </ContextMenuTrigger>
           <ContextMenuContent>
             <ContextMenuItem>Back <ContextMenuShortcut>⌘[</ContextMenuShortcut></ContextMenuItem>
@@ -845,7 +870,7 @@ export function ComponentDemo({ slug }: { slug: string }) {
               <ToastDescription>Connected · 98% Battery</ToastDescription>
             </div>
           </Toast>
-          <ToastViewport />
+          <ToastViewport className="!relative !inset-auto !bottom-auto !right-auto" />
         </ToastProvider>
       );
 
@@ -1106,6 +1131,21 @@ export function ComponentDemo({ slug }: { slug: string }) {
         </div>
       );
 
+    case "bubble":
+      return (
+        <div className="w-full max-w-sm flex flex-col gap-2">
+          <Bubble side="assistant" time="9:41 AM">
+            Designing for iOS 26 Liquid Glass.
+          </Bubble>
+          <Bubble side="user" variant="gradient" tail="start" time="9:42 AM">
+            Real refraction is bending underneath!
+          </Bubble>
+          <Bubble side="assistant" variant="solid" tail="none" time="9:43 AM">
+            Solid and glass sit side by side.
+          </Bubble>
+        </div>
+      );
+
     case "message":
       return (
         <div className="w-full max-w-sm flex flex-col gap-3">
@@ -1149,16 +1189,7 @@ export function ComponentDemo({ slug }: { slug: string }) {
       );
 
     case "questionnaire":
-      return (
-        <div className="w-full max-w-sm">
-          <Questionnaire currentStep={2} totalSteps={4}>
-            <QuestionnaireStep title="Appearance" description="Choose your system aesthetics">
-              <QuestionnaireOption label="Liquid Glass" description="Real optical bending" selected />
-              <QuestionnaireOption label="Frosted Blur" description="Universal fallback" />
-            </QuestionnaireStep>
-          </Questionnaire>
-        </div>
-      );
+      return <QuestionnaireDemo />;
 
     case "trace":
       return (

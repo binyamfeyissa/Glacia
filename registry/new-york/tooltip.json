@@ -1,17 +1,17 @@
 {
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "tooltip",
   "type": "registry:ui",
   "dependencies": [
-    "glacia@^0.1.0",
-    "radix-ui@^1.8.1"
+    "glacia@^0.3.1"
   ],
   "registryDependencies": [
-    "https://glacia.dev/r/glass.json"
+    "/r/glass.json"
   ],
   "files": [
     {
-      "path": "tooltip.tsx",
-      "content": "import {\n  TooltipProvider,\n  Tooltip,\n  TooltipTrigger,\n  TooltipContent,\n} from \"glacia\";\n\nexport {\n  TooltipProvider,\n  Tooltip,\n  TooltipTrigger,\n  TooltipContent,\n};\nexport default Tooltip;\n",
+      "path": "components/ui/tooltip.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — tooltip\n// Copied with `npx glacia add tooltip`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ComponentPropsWithoutRef,\n  type ElementRef,\n} from \"react\";\nimport { Tooltip as RadixTooltip } from \"radix-ui\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport const TooltipProvider = RadixTooltip.Provider;\nexport const Tooltip = RadixTooltip.Root;\nexport const TooltipTrigger = RadixTooltip.Trigger;\n\nexport const TooltipContent = forwardRef<\n  ElementRef<typeof RadixTooltip.Content>,\n  ComponentPropsWithoutRef<typeof RadixTooltip.Content>\n>(function TooltipContent(\n  { className, sideOffset = 6, ...props },\n  ref,\n) {\n  return (\n    <RadixTooltip.Portal>\n      <RadixTooltip.Content\n        ref={ref}\n        sideOffset={sideOffset}\n        className={cx(\"gl-glass gl-tooltip-content\", className)}\n        {...props}\n      />\n    </RadixTooltip.Portal>\n  );\n});\n",
       "type": "registry:ui"
     }
   ]

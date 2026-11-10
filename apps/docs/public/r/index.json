@@ -1,5 +1,5 @@
 {
-  "$schema": "https://glacia.dev/schema/registry.json",
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "glacia",
   "homepage": "https://glacia.dev",
   "items": [
@@ -7,1041 +7,801 @@
       "name": "glass",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "glass.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "button",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "button.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "text",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "text.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "input",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "input.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "textarea",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "textarea.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "label",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "label.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "card",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "card.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "badge",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "badge.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "avatar",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "avatar.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "separator",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "separator.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "skeleton",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "skeleton.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "spinner",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "spinner.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "progress",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "progress.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "switch",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "switch.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "slider",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "slider.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "search-field",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "search-field.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "checkbox",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "checkbox.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "radio-group",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "radio-group.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "select",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "select.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "tabs",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "tabs.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "segmented-control",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "segmented-control.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "tab-bar",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "tab-bar.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "accordion",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "accordion.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "dialog",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "dialog.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "alert-dialog",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "alert-dialog.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "popover",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "popover.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "dropdown-menu",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "dropdown-menu.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "menu",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "menu.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "tooltip",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "tooltip.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "sonner",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "sonner.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "table",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "table.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "sidebar",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "sidebar.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "scroll-area",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "scroll-area.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "button-group",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "button-group.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "toggle",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "toggle.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "input-group",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "input-group.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "field",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "field.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "form",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "form.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "combobox",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "combobox.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "calendar",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "calendar.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "chart",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "chart.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "empty",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "empty.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "item",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "item.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "hover-card",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "hover-card.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "context-menu",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "context-menu.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "drawer",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "drawer.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "sheet",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "sheet.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "toast",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "toast.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "breadcrumb",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "breadcrumb.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "navigation-menu",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "navigation-menu.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "pagination",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "pagination.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "collapsible",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "collapsible.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "data-table",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "data-table.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "native-select",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "native-select.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "toggle-group",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "toggle-group.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "input-otp",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "input-otp.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "command",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "command.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "carousel",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "carousel.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "aspect-ratio",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "aspect-ratio.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "kbd",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "kbd.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "code-block",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "code-block.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "marker",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "marker.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "menubar",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "menubar.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "resizable",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "resizable.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "message",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "bubble",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
       ],
-      "files": [
-        "message.tsx"
+      "registryDependencies": [
+        "/r/glass.json"
       ]
     },
     {
       "name": "message-scroller",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "message-scroller.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "attachment",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "attachment.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "questionnaire",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "questionnaire.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "trace",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "trace.tsx"
+        "/r/glass.json"
       ]
     },
     {
       "name": "direction",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json"
-      ],
-      "files": [
-        "direction.tsx"
+        "/r/glass.json"
       ]
     },
     {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
       "name": "base",
-      "type": "registry:base",
-      "cssVars": {
-        "light": {
-          "--gl-foreground": "rgb(0 0 0 / 0.88)",
-          "--gl-muted": "rgb(60 60 67 / 0.6)",
-          "--gl-glass": "rgb(255 255 255 / 0.6)",
-          "--gl-glass-active": "rgb(236 236 240 / 0.85)",
-          "--gl-edge": "rgb(0 0 0 / 0.08)",
-          "--gl-fill": "#0088ff",
-          "--gl-ring": "rgb(0 0 0 / 0.4)"
-        },
-        "dark": {
-          "--gl-foreground": "rgb(255 255 255)",
-          "--gl-muted": "rgb(235 235 245 / 0.6)",
-          "--gl-glass": "rgb(40 40 40 / 0.62)",
-          "--gl-glass-active": "rgb(70 70 70 / 0.62)",
-          "--gl-edge": "rgb(255 255 255 / 0.08)",
-          "--gl-fill": "#0091ff",
-          "--gl-ring": "rgb(255 255 255 / 0.5)"
-        }
-      }
+      "type": "registry:style",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [],
+      "files": []
     },
     {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
       "name": "all",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.1.0",
-        "radix-ui@^1.8.1"
+        "glacia@^0.3.1"
       ],
       "registryDependencies": [
-        "https://glacia.dev/r/glass.json",
-        "https://glacia.dev/r/button.json",
-        "https://glacia.dev/r/text.json",
-        "https://glacia.dev/r/input.json",
-        "https://glacia.dev/r/textarea.json",
-        "https://glacia.dev/r/label.json",
-        "https://glacia.dev/r/card.json",
-        "https://glacia.dev/r/badge.json",
-        "https://glacia.dev/r/avatar.json",
-        "https://glacia.dev/r/separator.json",
-        "https://glacia.dev/r/skeleton.json",
-        "https://glacia.dev/r/spinner.json",
-        "https://glacia.dev/r/progress.json",
-        "https://glacia.dev/r/switch.json",
-        "https://glacia.dev/r/slider.json",
-        "https://glacia.dev/r/search-field.json",
-        "https://glacia.dev/r/checkbox.json",
-        "https://glacia.dev/r/radio-group.json",
-        "https://glacia.dev/r/select.json",
-        "https://glacia.dev/r/tabs.json",
-        "https://glacia.dev/r/segmented-control.json",
-        "https://glacia.dev/r/tab-bar.json",
-        "https://glacia.dev/r/accordion.json",
-        "https://glacia.dev/r/dialog.json",
-        "https://glacia.dev/r/alert-dialog.json",
-        "https://glacia.dev/r/popover.json",
-        "https://glacia.dev/r/dropdown-menu.json",
-        "https://glacia.dev/r/menu.json",
-        "https://glacia.dev/r/tooltip.json",
-        "https://glacia.dev/r/sonner.json",
-        "https://glacia.dev/r/table.json",
-        "https://glacia.dev/r/sidebar.json",
-        "https://glacia.dev/r/scroll-area.json",
-        "https://glacia.dev/r/button-group.json",
-        "https://glacia.dev/r/toggle.json",
-        "https://glacia.dev/r/input-group.json",
-        "https://glacia.dev/r/field.json",
-        "https://glacia.dev/r/form.json",
-        "https://glacia.dev/r/combobox.json",
-        "https://glacia.dev/r/calendar.json",
-        "https://glacia.dev/r/chart.json",
-        "https://glacia.dev/r/empty.json",
-        "https://glacia.dev/r/item.json",
-        "https://glacia.dev/r/hover-card.json",
-        "https://glacia.dev/r/context-menu.json",
-        "https://glacia.dev/r/drawer.json",
-        "https://glacia.dev/r/sheet.json",
-        "https://glacia.dev/r/toast.json",
-        "https://glacia.dev/r/breadcrumb.json",
-        "https://glacia.dev/r/navigation-menu.json",
-        "https://glacia.dev/r/pagination.json",
-        "https://glacia.dev/r/collapsible.json",
-        "https://glacia.dev/r/data-table.json",
-        "https://glacia.dev/r/native-select.json",
-        "https://glacia.dev/r/toggle-group.json",
-        "https://glacia.dev/r/input-otp.json",
-        "https://glacia.dev/r/command.json",
-        "https://glacia.dev/r/carousel.json",
-        "https://glacia.dev/r/aspect-ratio.json",
-        "https://glacia.dev/r/kbd.json",
-        "https://glacia.dev/r/code-block.json",
-        "https://glacia.dev/r/marker.json",
-        "https://glacia.dev/r/menubar.json",
-        "https://glacia.dev/r/resizable.json",
-        "https://glacia.dev/r/message.json",
-        "https://glacia.dev/r/message-scroller.json",
-        "https://glacia.dev/r/attachment.json",
-        "https://glacia.dev/r/questionnaire.json",
-        "https://glacia.dev/r/trace.json",
-        "https://glacia.dev/r/direction.json"
+        "/r/glass.json",
+        "/r/button.json",
+        "/r/text.json",
+        "/r/input.json",
+        "/r/textarea.json",
+        "/r/label.json",
+        "/r/card.json",
+        "/r/badge.json",
+        "/r/avatar.json",
+        "/r/separator.json",
+        "/r/skeleton.json",
+        "/r/spinner.json",
+        "/r/progress.json",
+        "/r/switch.json",
+        "/r/slider.json",
+        "/r/search-field.json",
+        "/r/checkbox.json",
+        "/r/radio-group.json",
+        "/r/select.json",
+        "/r/tabs.json",
+        "/r/segmented-control.json",
+        "/r/tab-bar.json",
+        "/r/accordion.json",
+        "/r/dialog.json",
+        "/r/alert-dialog.json",
+        "/r/popover.json",
+        "/r/dropdown-menu.json",
+        "/r/menu.json",
+        "/r/tooltip.json",
+        "/r/sonner.json",
+        "/r/table.json",
+        "/r/sidebar.json",
+        "/r/scroll-area.json",
+        "/r/button-group.json",
+        "/r/toggle.json",
+        "/r/input-group.json",
+        "/r/field.json",
+        "/r/form.json",
+        "/r/combobox.json",
+        "/r/calendar.json",
+        "/r/chart.json",
+        "/r/empty.json",
+        "/r/item.json",
+        "/r/hover-card.json",
+        "/r/context-menu.json",
+        "/r/drawer.json",
+        "/r/sheet.json",
+        "/r/toast.json",
+        "/r/breadcrumb.json",
+        "/r/navigation-menu.json",
+        "/r/pagination.json",
+        "/r/collapsible.json",
+        "/r/data-table.json",
+        "/r/native-select.json",
+        "/r/toggle-group.json",
+        "/r/input-otp.json",
+        "/r/command.json",
+        "/r/carousel.json",
+        "/r/aspect-ratio.json",
+        "/r/kbd.json",
+        "/r/code-block.json",
+        "/r/marker.json",
+        "/r/menubar.json",
+        "/r/resizable.json",
+        "/r/message.json",
+        "/r/bubble.json",
+        "/r/message-scroller.json",
+        "/r/attachment.json",
+        "/r/questionnaire.json",
+        "/r/trace.json",
+        "/r/direction.json"
       ],
       "files": []
     }

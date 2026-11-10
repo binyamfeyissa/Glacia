@@ -20,6 +20,8 @@ export interface ItemProps extends Omit<HTMLAttributes<HTMLDivElement>, "title">
   accessory?: ReactNode;
   /** Marks the item as an interactive clickable row. */
   interactive?: boolean;
+  /** Visual variant: 'glass' (frosted liquid glass surface) or 'plain'. */
+  variant?: "glass" | "plain";
 }
 
 export const Item: ForwardRefExoticComponent<
@@ -33,6 +35,7 @@ export const Item: ForwardRefExoticComponent<
       description,
       accessory,
       interactive = false,
+      variant = "glass",
       className,
       children,
       ...props
@@ -42,7 +45,7 @@ export const Item: ForwardRefExoticComponent<
     return (
       <div
         ref={ref}
-        className={cx("gl-item", className)}
+        className={cx("gl-item", variant === "glass" && "gl-glass", className)}
         data-interactive={interactive ? "" : undefined}
         {...props}
       >

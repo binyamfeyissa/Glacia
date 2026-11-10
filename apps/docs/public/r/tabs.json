@@ -1,17 +1,17 @@
 {
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "tabs",
   "type": "registry:ui",
   "dependencies": [
-    "glacia@^0.1.0",
-    "radix-ui@^1.8.1"
+    "glacia@^0.3.1"
   ],
   "registryDependencies": [
-    "https://glacia.dev/r/glass.json"
+    "/r/glass.json"
   ],
   "files": [
     {
-      "path": "tabs.tsx",
-      "content": "import { Tabs, TabsList, TabsTrigger, TabsContent } from \"glacia\";\n\nexport { Tabs, TabsList, TabsTrigger, TabsContent };\nexport default Tabs;\n",
+      "path": "components/ui/tabs.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — tabs\n// Copied with `npx glacia add tabs`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ComponentPropsWithoutRef,\n  type ElementRef,\n} from \"react\";\nimport { Tabs as RadixTabs } from \"radix-ui\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport const Tabs = forwardRef<\n  ElementRef<typeof RadixTabs.Root>,\n  ComponentPropsWithoutRef<typeof RadixTabs.Root>\n>(function Tabs({ className, ...props }, ref) {\n  return (\n    <RadixTabs.Root\n      ref={ref}\n      className={cx(\"gl-tabs\", className)}\n      {...props}\n    />\n  );\n});\n\nexport const TabsList = forwardRef<\n  ElementRef<typeof RadixTabs.List>,\n  ComponentPropsWithoutRef<typeof RadixTabs.List>\n>(function TabsList({ className, ...props }, ref) {\n  return (\n    <RadixTabs.List\n      ref={ref}\n      className={cx(\"gl-glass gl-tabs-list\", className)}\n      {...props}\n    />\n  );\n});\n\nexport const TabsTrigger = forwardRef<\n  ElementRef<typeof RadixTabs.Trigger>,\n  ComponentPropsWithoutRef<typeof RadixTabs.Trigger>\n>(function TabsTrigger({ className, ...props }, ref) {\n  return (\n    <RadixTabs.Trigger\n      ref={ref}\n      className={cx(\"gl-tabs-trigger\", className)}\n      {...props}\n    />\n  );\n});\n\nexport const TabsContent = forwardRef<\n  ElementRef<typeof RadixTabs.Content>,\n  ComponentPropsWithoutRef<typeof RadixTabs.Content>\n>(function TabsContent({ className, ...props }, ref) {\n  return (\n    <RadixTabs.Content\n      ref={ref}\n      className={cx(\"gl-tabs-content\", className)}\n      {...props}\n    />\n  );\n});\n",
       "type": "registry:ui"
     }
   ]

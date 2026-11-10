@@ -2,9 +2,10 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import http from "node:http";
 import https from "node:https";
 
-const VERSION = "0.1.0";
+const VERSION = "0.3.1";
 
 const ALL_COMPONENTS = [
   "glass",
@@ -74,6 +75,7 @@ const ALL_COMPONENTS = [
   "menubar",
   "resizable",
   "message",
+  "bubble",
   "message-scroller",
   "attachment",
   "questionnaire",
@@ -102,7 +104,9 @@ Examples:
 
 function fetchJson(url) {
   return new Promise((resolve, reject) => {
-    https
+    // http is allowed so a self-hosted or local registry can be used.
+    const client = url.startsWith("http:") ? http : https;
+    client
       .get(url, (res) => {
         if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
           return fetchJson(res.headers.location).then(resolve, reject);
@@ -147,25 +151,18 @@ async function addComponent(name, targetDir) {
   let registryItem = getLocalComponent(normName);
 
   if (!registryItem) {
-    const registryUrl = `https://glacia.dev/r/${normName}.json`;
+    // Registries are served from the docs site. Set GLACIA_REGISTRY_URL to point
+    // at a self-hosted one; it defaults to the published docs host.
+    const base = (process.env.GLACIA_REGISTRY_URL || "https://glacia.dev/r").replace(/\/+$/, "");
+    const registryUrl = `${base}/${normName}.json`;
     try {
       registryItem = await fetchJson(registryUrl);
-    } catch {
-      // Fallback: generate default template referencing glacia package
-      registryItem = {
-        name: normName,
-        type: "registry:ui",
-        files: [
-          {
-            path: `${normName}.tsx`,
-            content: `// Copied via npx glacia add ${normName}
-// Re-exported wrapper allowing full local customization
-export * from "glacia";
-`,
-            type: "registry:ui",
-          },
-        ],
-      };
+    } catch (err) {
+      throw new Error(
+        `Could not reach the Glacia registry at ${registryUrl}.\n` +
+          `Check your connection, or set GLACIA_REGISTRY_URL to a registry host.\n` +
+          `Run \`npx glacia list\` to see the available component names. (${err.message})`,
+      );
     }
   }
 
@@ -181,12 +178,7 @@ export * from "glacia";
       console.log(`✓ Added ${fileName} to ${path.relative(process.cwd(), outPath)}`);
     }
   } else {
-    const outPath = path.join(targetDir, `${normName}.tsx`);
-    const fallbackContent = `// Copied via npx glacia add ${normName}
-export * from "glacia";
-`;
-    fs.writeFileSync(outPath, fallbackContent, "utf-8");
-    console.log(`✓ Added ${normName}.tsx to ${path.relative(process.cwd(), outPath)}`);
+    throw new Error(`The registry entry for "${normName}" has no files. Nothing was written.`);
   }
 }
 
@@ -205,7 +197,7 @@ async function main() {
   const command = args[0];
 
   if (command === "list") {
-    console.log("Available Wave 1 Glacia components:\n");
+    console.log("Available Glacia components:\n");
     ALL_COMPONENTS.forEach((c) => console.log(`  - ${c}`));
     console.log(`\nInstall any component with: npx glacia add <component>`);
     return;

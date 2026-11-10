@@ -1,16 +1,17 @@
 {
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "marker",
   "type": "registry:ui",
   "dependencies": [
-    "glacia@^0.1.0"
+    "glacia@^0.3.1"
   ],
   "registryDependencies": [
-    "https://glacia.dev/r/glass.json"
+    "/r/glass.json"
   ],
   "files": [
     {
-      "path": "marker.tsx",
-      "content": "import { Marker, TextMarker, type MarkerProps, type TextMarkerProps } from \"glacia\";\nexport { Marker, TextMarker, type MarkerProps, type TextMarkerProps };\nexport default Marker;\n",
+      "path": "components/ui/marker.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — marker\n// Copied with `npx glacia add marker`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport * as React from \"react\";\n\nexport interface MarkerProps extends React.HTMLAttributes<HTMLDivElement> {\n  color?: \"blue\" | \"green\" | \"orange\" | \"red\" | \"purple\";\n  label?: React.ReactNode;\n  pulse?: boolean;\n}\n\nexport const Marker = React.forwardRef<HTMLDivElement, MarkerProps>(\n  ({ color = \"blue\", label, pulse = true, className = \"\", children, ...props }, ref) => {\n    return (\n      <div\n        ref={ref}\n        className={`gl-marker-root gl-marker-${color} ${className}`}\n        {...props}\n      >\n        <div className=\"gl-marker-pin gl-glass\">\n          {pulse && <span className=\"gl-marker-pulse\" aria-hidden=\"true\" />}\n          <span className=\"gl-marker-dot\" />\n        </div>\n        {(label || children) && (\n          <div className=\"gl-marker-label gl-glass\">\n            {label || children}\n          </div>\n        )}\n      </div>\n    );\n  }\n);\nMarker.displayName = \"Marker\";\n\nexport interface TextMarkerProps extends React.HTMLAttributes<HTMLSpanElement> {\n  variant?: \"yellow\" | \"green\" | \"blue\" | \"pink\" | \"orange\";\n}\n\nexport const TextMarker = React.forwardRef<HTMLSpanElement, TextMarkerProps>(\n  ({ variant = \"yellow\", className = \"\", children, ...props }, ref) => {\n    return (\n      <mark\n        ref={ref}\n        className={`gl-text-marker gl-text-marker-${variant} ${className}`}\n        {...props}\n      >\n        {children}\n      </mark>\n    );\n  }\n);\nTextMarker.displayName = \"TextMarker\";\n",
       "type": "registry:ui"
     }
   ]

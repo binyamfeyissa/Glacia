@@ -1,16 +1,17 @@
 {
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "toggle",
   "type": "registry:ui",
   "dependencies": [
-    "glacia@^0.1.0"
+    "glacia@^0.3.1"
   ],
   "registryDependencies": [
-    "https://glacia.dev/r/glass.json"
+    "/r/glass.json"
   ],
   "files": [
     {
-      "path": "toggle.tsx",
-      "content": "import { Toggle, type ToggleProps } from \"glacia\";\n\nexport { Toggle, type ToggleProps };\nexport default Toggle;\n",
+      "path": "components/ui/toggle.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — toggle\n// Copied with `npx glacia add toggle`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  useImperativeHandle,\n  useRef,\n  type ButtonHTMLAttributes,\n  type ForwardRefExoticComponent,\n  type ReactNode,\n  type RefAttributes,\n} from \"react\";\nimport { cx } from \"glacia/internal/cx\";\nimport { usePress } from \"glacia/internal/press\";\nimport { useRefraction } from \"glacia/internal/refraction\";\nimport { useControllable } from \"glacia/internal/controllable\";\n\nexport interface ToggleProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, \"onChange\"> {\n  /** Controlled pressed state. */\n  pressed?: boolean;\n  /** Uncontrolled default pressed state. */\n  defaultPressed?: boolean;\n  /** Callback fired when pressed state changes. */\n  onPressedChange?: (pressed: boolean) => void;\n  /** Visual variant: 'glass' (subtle frosted, default), 'outline', or 'filled'. */\n  variant?: \"glass\" | \"outline\" | \"filled\";\n  /** Size: 'sm' (32px), 'md' (40px, default), 'lg' (48px). */\n  size?: \"sm\" | \"md\" | \"lg\";\n  /** Optional leading icon. */\n  icon?: ReactNode;\n}\n\nexport const Toggle: ForwardRefExoticComponent<\n  ToggleProps & RefAttributes<HTMLButtonElement>\n> = /* @__PURE__ */ forwardRef<HTMLButtonElement, ToggleProps>(\n  function Toggle(\n    {\n      pressed: controlledPressed,\n      defaultPressed = false,\n      onPressedChange,\n      variant = \"glass\",\n      size = \"md\",\n      icon,\n      className,\n      children,\n      onClick,\n      ...props\n    },\n    forwardedRef\n  ) {\n    const ref = useRef<HTMLButtonElement>(null);\n    useImperativeHandle(forwardedRef, () => ref.current!);\n    usePress(ref);\n    useRefraction(ref);\n\n    const [isPressed, setIsPressed] = useControllable(\n      controlledPressed,\n      defaultPressed,\n      onPressedChange,\n    );\n\n    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {\n      onClick?.(e);\n      if (!e.defaultPrevented) {\n        setIsPressed(!isPressed);\n      }\n    };\n\n    return (\n      <button\n        ref={ref}\n        type=\"button\"\n        role=\"button\"\n        aria-pressed={isPressed}\n        data-state={isPressed ? \"on\" : \"off\"}\n        data-variant={variant}\n        data-size={size}\n        className={cx(\"gl-glass gl-toggle\", className)}\n        onClick={handleClick}\n        {...props}\n      >\n        {icon && <span className=\"gl-toggle-icon\">{icon}</span>}\n        {children && <span className=\"gl-toggle-label\">{children}</span>}\n      </button>\n    );\n  }\n);\n",
       "type": "registry:ui"
     }
   ]

@@ -1,3 +1,4 @@
+import { BlockBackdrop } from "../internal/block-backdrop";
 import { useState, type FormEvent } from "react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "../card";
 import { Button } from "../button";
@@ -9,9 +10,11 @@ import { Separator } from "../separator";
 export interface SignupBlockProps {
   onSubmit?: (data: { name: string; email: string }) => void;
   onLoginClick?: () => void;
+  /** Backdrop image behind the block. */
+  image?: string;
 }
 
-export function SignupBlock({ onSubmit, onLoginClick }: SignupBlockProps) {
+export function SignupBlock({ onSubmit, onLoginClick, image }: SignupBlockProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,6 +41,7 @@ export function SignupBlock({ onSubmit, onLoginClick }: SignupBlockProps) {
   };
 
   return (
+    <BlockBackdrop image={image}>
     <div className="gl-signup-block flex justify-center items-center py-8">
       <Card className="w-full max-w-md shadow-2xl">
         <CardHeader className="text-center space-y-1">
@@ -164,5 +168,6 @@ export function SignupBlock({ onSubmit, onLoginClick }: SignupBlockProps) {
         </form>
       </Card>
     </div>
+    </BlockBackdrop>
   );
 }

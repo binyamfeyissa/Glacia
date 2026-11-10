@@ -111,7 +111,7 @@ let palette: CanvasRenderingContext2D | null | undefined;
 
 // Sets the glass's --gl-rim for its size, corners and page, and marks it
 // data-rim, as its rim now draws its edge line.
-function paintRim(element: HTMLElement): void {
+export function paintRim(element: HTMLElement): void {
   const style = getComputedStyle(element);
   const shape = shapeOf(element, style);
   palette ??= document.createElement("canvas").getContext("2d");

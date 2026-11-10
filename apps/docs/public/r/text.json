@@ -1,16 +1,17 @@
 {
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "text",
   "type": "registry:ui",
   "dependencies": [
-    "glacia@^0.1.0"
+    "glacia@^0.3.1"
   ],
   "registryDependencies": [
-    "https://glacia.dev/r/glass.json"
+    "/r/glass.json"
   ],
   "files": [
     {
-      "path": "text.tsx",
-      "content": "import { Text, type TextProps, type TextVariant } from \"glacia\";\n\nexport { Text, type TextProps, type TextVariant };\nexport default Text;\n",
+      "path": "components/ui/text.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — text\n// Copied with `npx glacia add text`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ElementType,\n  type HTMLAttributes,\n  type ReactNode,\n} from \"react\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport type TextVariant =\n  | \"h1\"\n  | \"h2\"\n  | \"h3\"\n  | \"h4\"\n  | \"p\"\n  | \"blockquote\"\n  | \"code\"\n  | \"lead\"\n  | \"large\"\n  | \"small\"\n  | \"muted\";\n\nexport interface TextProps extends HTMLAttributes<HTMLElement> {\n  as?: ElementType;\n  variant?: TextVariant;\n  children?: ReactNode;\n}\n\nconst defaultTags: Record<TextVariant, ElementType> = {\n  h1: \"h1\",\n  h2: \"h2\",\n  h3: \"h3\",\n  h4: \"h4\",\n  p: \"p\",\n  blockquote: \"blockquote\",\n  code: \"code\",\n  lead: \"p\",\n  large: \"div\",\n  small: \"small\",\n  muted: \"p\",\n};\n\nexport const Text = forwardRef<HTMLElement, TextProps>(function Text(\n  { as, variant = \"p\", className, children, ...props },\n  ref,\n) {\n  const Component = as || defaultTags[variant] || \"p\";\n  return (\n    <Component\n      ref={ref as any}\n      className={cx(\"gl-text\", `gl-text-${variant}`, className)}\n      data-variant={variant}\n      {...props}\n    >\n      {children}\n    </Component>\n  );\n});\n",
       "type": "registry:ui"
     }
   ]

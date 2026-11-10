@@ -16,6 +16,8 @@ import {
 import { CodeBlock } from "../../../components/code-block";
 import { ArrowRightIcon, SparkIcon } from "../../../components/icons";
 
+const BACKDROP = "/hero/tahoe-dark.jpg";
+
 const BLOCKS = [
   {
     slug: "dashboard",
@@ -55,7 +57,7 @@ export default function LoginRoute() {
     code: `import { SettingsBlock } from "glacia";
 
 export default function SettingsRoute() {
-  return <SettingsBlock />;
+  return <SettingsBlock image={BACKDROP} />;
 }`,
   },
   {
@@ -67,7 +69,7 @@ export default function SettingsRoute() {
     code: `import { ProfileBlock } from "glacia";
 
 export default function ProfileRoute() {
-  return <ProfileBlock />;
+  return <ProfileBlock image={BACKDROP} />;
 }`,
   },
   {
@@ -79,7 +81,7 @@ export default function ProfileRoute() {
     code: `import { SignupBlock } from "glacia";
 
 export default function SignupRoute() {
-  return <SignupBlock />;
+  return <SignupBlock image={BACKDROP} />;
 }`,
   },
   {
@@ -91,7 +93,7 @@ export default function SignupRoute() {
     code: `import { CalendarPageBlock } from "glacia";
 
 export default function CalendarRoute() {
-  return <CalendarPageBlock />;
+  return <CalendarPageBlock image={BACKDROP} />;
 }`,
   },
   {
@@ -103,7 +105,7 @@ export default function CalendarRoute() {
     code: `import { PricingBlock } from "glacia";
 
 export default function PricingRoute() {
-  return <PricingBlock />;
+  return <PricingBlock image={BACKDROP} />;
 }`,
   },
   {
@@ -115,7 +117,7 @@ export default function PricingRoute() {
     code: `import { LandingBlock } from "glacia";
 
 export default function LandingRoute() {
-  return <LandingBlock />;
+  return <LandingBlock image={BACKDROP} />;
 }`,
   },
   {
@@ -127,7 +129,7 @@ export default function LandingRoute() {
     code: `import { ForgotPasswordBlock } from "glacia";
 
 export default function ForgotPasswordRoute() {
-  return <ForgotPasswordBlock />;
+  return <ForgotPasswordBlock image={BACKDROP} />;
 }`,
   },
   {
@@ -239,17 +241,21 @@ export default async function BlockPage({ params }: { params: Promise<{ slug: st
             <ArrowRightIcon />
           </Link>
         </div>
-        <div className="block-stage-body">
+        <div
+          className="block-stage-body"
+          data-glacia-backdrop="true"
+          data-glisse-backdrop="true"
+        >
           <div className="block-stage-frame">
-            {slug === "dashboard" && <AdminDashboard />}
+            {slug === "dashboard" && <AdminDashboard image={BACKDROP} />}
             {slug === "login" && <LoginPage layout="centered" />}
-            {slug === "settings" && <SettingsBlock />}
-            {slug === "profile" && <ProfileBlock />}
-            {slug === "signup" && <SignupBlock />}
-            {slug === "calendar-page" && <CalendarPageBlock />}
-            {slug === "pricing" && <PricingBlock />}
-            {slug === "landing" && <LandingBlock />}
-            {slug === "forgot-password" && <ForgotPasswordBlock />}
+            {slug === "settings" && <SettingsBlock image={BACKDROP} />}
+            {slug === "profile" && <ProfileBlock image={BACKDROP} />}
+            {slug === "signup" && <SignupBlock image={BACKDROP} />}
+            {slug === "calendar-page" && <CalendarPageBlock image={BACKDROP} />}
+            {slug === "pricing" && <PricingBlock image={BACKDROP} />}
+            {slug === "landing" && <LandingBlock image={BACKDROP} />}
+            {slug === "forgot-password" && <ForgotPasswordBlock image={BACKDROP} />}
             {slug === "error-page" && <ErrorPageBlock code="404" />}
           </div>
         </div>

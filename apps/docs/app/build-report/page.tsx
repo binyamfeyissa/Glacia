@@ -22,7 +22,7 @@ export default function BuildReportPage() {
           <span className="eyebrow-dot" />
           Build report
         </p>
-        <h1 className="report-title">Full 70-Component Catalog Shipped.</h1>
+        <h1 className="report-title">Full {shippedCount}-Component Catalog Shipped.</h1>
         <p className="report-desc">
           A verified, item-by-item account of every component, block, test suite, and platform behavior
           across Waves 1, 2, and 3 in Glacia.
@@ -52,7 +52,7 @@ export default function BuildReportPage() {
         </div>
         <div className="stat-card">
           <span className="stat-value">
-            139<small> / 139</small>
+            147<small> / 147</small>
           </span>
           <span className="stat-label">Unit tests passing</span>
         </div>

@@ -9,15 +9,37 @@ import {
 
 import { cx } from "./internal/cx";
 import { useRefraction } from "./internal/refraction";
+import type { GlassSurface } from "./internal/glass-surface";
 
-export type GlassProps = HTMLAttributes<HTMLDivElement>;
+export interface GlassProps extends HTMLAttributes<HTMLDivElement> {
+  /**
+   * The physical surface this glass is: `panel`, `control`, `field`,
+   * `overlay`, `hint` or `rail`. It selects which lens profile is fitted, so a
+   * tooltip stays a thin pane and a dialog reads as a thick slab.
+   */
+  surface?: GlassSurface;
+  /** Turn the bend off, leaving flat frosted glass. */
+  flat?: boolean;
+}
 
-export const Glass: ForwardRefExoticComponent<GlassProps & RefAttributes<HTMLDivElement>> = /* @__PURE__ */ forwardRef<
-  HTMLDivElement,
-  GlassProps
->(function Glass({ className, ...props }, forwardedRef) {
-  const ref = useRef<HTMLDivElement>(null);
-  useImperativeHandle(forwardedRef, () => ref.current!);
-  useRefraction(ref);
-  return <div ref={ref} className={cx("gl-glass", className)} {...props} />;
-});
+/**
+ * The glass primitive: bends whatever is behind it, whether that is a marked
+ * element it can follow or the live page backdrop.
+ */
+export const Glass: ForwardRefExoticComponent<GlassProps & RefAttributes<HTMLDivElement>> =
+  /* @__PURE__ */ forwardRef<HTMLDivElement, GlassProps>(function Glass(
+    { className, surface = "panel", flat = false, ...props },
+    forwardedRef,
+  ) {
+    const ref = useRef<HTMLDivElement>(null);
+    useImperativeHandle(forwardedRef, () => ref.current!);
+    useRefraction(ref);
+    return (
+      <div
+        ref={ref}
+        className={cx("gl-glass", flat && "gl-glass-flat", className)}
+        data-surface={surface}
+        {...props}
+      />
+    );
+  });

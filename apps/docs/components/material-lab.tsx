@@ -1,20 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import { Button, SegmentedControl, Slider, Switch } from "glacia";
+import { Button, SegmentedControl, Slider, Switch, resweepGlass } from "glacia";
 import { SnowflakeIcon, SparkIcon } from "./icons";
 
 const SURFACES = [
+  { id: "tahoe", label: "Tahoe" },
   { id: "aurora", label: "Aurora" },
   { id: "fluted", label: "Fluted" },
   { id: "dusk", label: "Dusk" },
   { id: "graphite", label: "Graphite" },
+  { id: "video", label: "Video" },
 ] as const;
 
 type Surface = (typeof SURFACES)[number]["id"];
 
 export function MaterialLab() {
-  const [surface, setSurface] = useState<Surface>("aurora");
+  const [surface, setSurface] = useState<Surface>("tahoe");
 
   return (
     <div className="lab-frame">
@@ -40,13 +42,30 @@ export function MaterialLab() {
         </div>
       </div>
 
-      <div className={`lab-stage surface-${surface}`}>
+      <div
+        className={`lab-stage surface-${surface}`}
+        data-glacia-backdrop="true"
+        data-glisse-backdrop="true"
+      >
+        {surface === "video" ? (
+          <video
+            className="lab-stage-video"
+            autoPlay
+            loop
+            muted
+            playsInline
+            poster="/wallpapers/flow-poster.jpg"
+            aria-hidden="true"
+          >
+            <source src="/wallpapers/flow-loop.mp4" type="video/mp4" />
+          </video>
+        ) : null}
         <div className="lab-orb lab-orb-a" aria-hidden="true" />
         <div className="lab-orb lab-orb-b" aria-hidden="true" />
         <div className="lab-grid" aria-hidden="true" />
 
         <div className="lab-widgets">
-          <div className="lab-card lab-player">
+          <div className="gl-glass lab-card lab-player">
             <div className="lab-album" aria-hidden="true">
               <SnowflakeIcon width={24} height={24} />
             </div>
@@ -74,26 +93,78 @@ export function MaterialLab() {
             </div>
           </div>
 
-          <div className="lab-card lab-mix">
+          <div className="gl-glass lab-card lab-mix">
             <div className="lab-mix-head">
               <span>Optical mix</span>
               <span className="lab-live">Live</span>
             </div>
             <div className="lab-row">
-              <span className="lab-row-label">Refraction</span>
+              <span className="lab-row-label">Bend</span>
               <div className="lab-control">
-                <Slider defaultValue={72} aria-label="Refraction strength" />
+                <Slider
+                  defaultValue={45}
+                  min={0}
+                  max={150}
+                  aria-label="Bend strength"
+                  onValueChange={(val) => {
+                    const bend = typeof val === "number" ? val / 100 : 0.45;
+                    document.documentElement.style.setProperty("--gl-glass-bend", String(bend));
+                    resweepGlass();
+                  }}
+                />
               </div>
             </div>
             <div className="lab-row">
-              <span className="lab-row-label">Rim light</span>
+              <span className="lab-row-label">Dispersion</span>
               <div className="lab-control">
-                <Switch defaultChecked aria-label="Rim light" />
+                <Slider
+                  defaultValue={40}
+                  min={0}
+                  max={150}
+                  aria-label="Dispersion"
+                  onValueChange={(val) => {
+                    const disp = typeof val === "number" ? val / 100 : 0.40;
+                    document.documentElement.style.setProperty("--gl-glass-dispersion", String(disp));
+                    resweepGlass();
+                  }}
+                />
+              </div>
+            </div>
+            <div className="lab-row">
+              <span className="lab-row-label">Frost</span>
+              <div className="lab-control">
+                <Slider
+                  defaultValue={20}
+                  min={0}
+                  max={100}
+                  aria-label="Frost"
+                  onValueChange={(val) => {
+                    const frost = typeof val === "number" ? Math.round((val / 100) * 16) : 3;
+                    document.documentElement.style.setProperty("--gl-blur", `${frost}px`);
+                    resweepGlass();
+                  }}
+                />
+              </div>
+            </div>
+            <div className="lab-row">
+              <span className="lab-row-label">Rim</span>
+              <div className="lab-control">
+                <Slider
+                  defaultValue={13}
+                  min={0}
+                  max={100}
+                  aria-label="Rim shine"
+                  onValueChange={(val) => {
+                    const shine = typeof val === "number" ? val / 100 : 0.13;
+                    document.documentElement.style.setProperty("--gl-rim-shine", String(shine));
+                    resweepGlass();
+                  }}
+                />
               </div>
             </div>
           </div>
 
-          <div className="lab-toolbar">
+          <div className="gl-glass lab-toolbar">
             <SegmentedControl
               defaultValue="day"
               items={[

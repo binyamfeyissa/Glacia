@@ -1,17 +1,17 @@
 {
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "scroll-area",
   "type": "registry:ui",
   "dependencies": [
-    "glacia@^0.1.0",
-    "radix-ui@^1.8.1"
+    "glacia@^0.3.1"
   ],
   "registryDependencies": [
-    "https://glacia.dev/r/glass.json"
+    "/r/glass.json"
   ],
   "files": [
     {
-      "path": "scroll-area.tsx",
-      "content": "import { ScrollArea, ScrollBar } from \"glacia\";\n\nexport { ScrollArea, ScrollBar };\nexport default ScrollArea;\n",
+      "path": "components/ui/scroll-area.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — scroll-area\n// Copied with `npx glacia add scroll-area`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ComponentPropsWithoutRef,\n  type ElementRef,\n} from \"react\";\nimport { ScrollArea as RadixScrollArea } from \"radix-ui\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport const ScrollArea = forwardRef<\n  ElementRef<typeof RadixScrollArea.Root>,\n  ComponentPropsWithoutRef<typeof RadixScrollArea.Root> & { variant?: \"glass\" | \"plain\" }\n>(function ScrollArea({ className, variant = \"glass\", children, ...props }, ref) {\n  return (\n    <RadixScrollArea.Root\n      ref={ref}\n      className={cx(\"gl-scroll-area\", variant === \"glass\" && \"gl-glass\", className)}\n      {...props}\n    >\n      <RadixScrollArea.Viewport className=\"gl-scroll-viewport\">\n        {children}\n      </RadixScrollArea.Viewport>\n      <ScrollBar />\n      <RadixScrollArea.Corner />\n    </RadixScrollArea.Root>\n  );\n});\n\nexport const ScrollBar = forwardRef<\n  ElementRef<typeof RadixScrollArea.ScrollAreaScrollbar>,\n  ComponentPropsWithoutRef<typeof RadixScrollArea.ScrollAreaScrollbar>\n>(function ScrollBar({ className, orientation = \"vertical\", ...props }, ref) {\n  return (\n    <RadixScrollArea.ScrollAreaScrollbar\n      ref={ref}\n      orientation={orientation}\n      className={cx(\n        \"gl-scrollbar\",\n        orientation === \"vertical\" ? \"gl-scrollbar-v\" : \"gl-scrollbar-h\",\n        className,\n      )}\n      {...props}\n    >\n      <RadixScrollArea.ScrollAreaThumb className=\"gl-glass gl-scrollbar-thumb\" />\n    </RadixScrollArea.ScrollAreaScrollbar>\n  );\n});\n",
       "type": "registry:ui"
     }
   ]

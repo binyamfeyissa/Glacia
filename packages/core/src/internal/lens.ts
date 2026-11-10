@@ -824,6 +824,7 @@ export function createBackdropLens(glass: HTMLElement, options: LensOptions): Ba
     place(built, [{ x: 0, y: 0, width, height, reach, dispersion, blur: blur * amount }], width, height, false);
     built.filter.id = `${name}-${++version}`;
     glass.style.setProperty("--gl-filter", `url("#${built.filter.id}")`);
+  glass.setAttribute("data-refracting", "");
   };
   return {
     update(next) {
@@ -848,6 +849,7 @@ export function createBackdropLens(glass: HTMLElement, options: LensOptions): Ba
       built?.filter.remove();
       built = null;
       glass.style.removeProperty("--gl-filter");
+      glass.removeAttribute("data-refracting");
     },
   };
 }
@@ -875,4 +877,5 @@ export function fitBackdropLens(glass: HTMLElement, options: LensOptions): void 
     backdrops.set(id, name);
   }
   glass.style.setProperty("--gl-filter", `url("#${name}") saturate(1.5)`);
+  glass.setAttribute("data-refracting", "");
 }

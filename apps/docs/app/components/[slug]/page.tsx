@@ -13,6 +13,7 @@ const CATEGORY_ORDER = [
   "Showing Things",
   "Navigation & Layout",
   "Popups & Menus",
+  "Chat & AI",
 ] as const;
 
 export async function generateStaticParams() {

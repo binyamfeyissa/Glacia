@@ -4,8 +4,8 @@
 > Real optical refraction, specular highlights, and authentic depth from a single unified design system.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/Tests-139%20passing-brightgreen.svg)](BUILD_REPORT.md)
-[![Web](https://img.shields.io/badge/Web-70%20components-teal.svg)](https://glacia.dev)
+[![Tests](https://img.shields.io/badge/Tests-147%20passing-brightgreen.svg)](BUILD_REPORT.md)
+[![Web](https://img.shields.io/badge/Web-71%20components-teal.svg)](https://glacia.dev)
 [![React Native](https://img.shields.io/badge/React%20Native-7%20components-indigo.svg)](https://glacia.dev)
 
 ---
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
 ```
 
 ### 3. Component Copy Command (CLI)
-Pick and choose only the components you need into your project repository:
+Pick and choose only the components you need into your project repository. The command copies the component's **real source code** — not a re-export — so you own it and can edit it.
 
 ```bash
 # Initialize or add a single component:
@@ -107,15 +107,17 @@ npx glacia add button
 # Add multiple components:
 npx glacia add dialog card tabs combobox calendar command carousel
 
-# Add all 70 components:
+# Add all 71 components:
 npx glacia add all
 ```
 
+Copied files import shared helpers and styles from the `glacia` package, so keep it installed. To point the command at your own registry host, set `GLACIA_REGISTRY_URL`.
+
 ---
 
-## What Shipped: 70 Components & 10 Blocks
+## What Shipped: 71 Components & 10 Blocks
 
-### 70 Web Components (`glacia`)
+### 71 Web Components (`glacia`)
 - **Surfaces & Layout:** `Glass`, `Card`, `Separator`, `ScrollArea`, `Collapsible`, `Empty`, `AspectRatio`, `Resizable`
 - **Actions & Controls:** `Button`, `ButtonGroup`, `Toggle`, `ToggleGroup`, `Switch`, `Slider`, `SegmentedControl`, `TabBar`
 - **Forms & Inputs:** `Input`, `InputGroup`, `InputOTP`, `Field`, `Form`, `Combobox`, `NativeSelect`, `Textarea`, `Label`, `Checkbox`, `RadioGroup`, `Select`, `SearchField`
@@ -123,7 +125,7 @@ npx glacia add all
 - **Data & Pickers:** `Calendar`, `Chart`, `DataTable`, `Item`, `Table`
 - **Overlays, Menus & Command:** `Dialog`, `AlertDialog`, `Drawer` (iOS sheet), `Sheet` (macOS slide-over), `Popover`, `DropdownMenu`, `ContextMenu`, `Menu`, `Tooltip`, `HoverCard`, `Command`, `Menubar`
 - **Feedback & Display:** `Badge`, `Avatar`, `Skeleton`, `Spinner`, `Progress`, `Toast` (Dynamic Island HUD pill), `Sonner`, `Text`, `Kbd`, `CodeBlock`, `Marker`, `Carousel`
-- **Chat & AI:** `Message` (Speech Bubbles), `MessageScroller`, `Attachment`, `Questionnaire`, `Trace` (Reasoning Pipeline)
+- **Chat & AI:** `Message` (Speech Bubbles), `Bubble`, `MessageScroller`, `Attachment`, `Questionnaire`, `Trace` (Reasoning Pipeline)
 
 ### 10 Ready-Made Blocks
 - `LoginPage`: Complete authentication screen with centered or split layouts.
@@ -148,9 +150,9 @@ See [BUILD_REPORT.md](BUILD_REPORT.md) for full verification details, HIG classi
 
 | Platform / Engine | Support Level | Implementation Details |
 | :--- | :--- | :--- |
-| **Chromium** (Chrome, Edge, Brave, Arc) | Full Optical Glass | Layer 1 frosted blur + Layer 2 real SVG refraction bend |
-| **Safari** (macOS & iOS) | Frosted Glass | Layer 1 frosted blur, specular edge highlight, soft elevation |
-| **Firefox** (macOS, Windows, Linux) | Frosted Glass | Layer 1 frosted blur, specular edge highlight, soft elevation |
+| **Chromium** (Chrome, Edge, Brave, Arc) | Full Optical Glass | Layer 1 frosted blur + Layer 2 real SVG refraction bend — verified in Chromium |
+| **Safari** (macOS & iOS) | Frosted Glass | Layer 1 frosted blur, specular edge highlight, soft elevation — not yet verified in a real browser |
+| **Firefox** (macOS, Windows, Linux) | Frosted Glass | Layer 1 frosted blur, specular edge highlight, soft elevation — verified in Firefox
 | **iOS 26+ (Native)** | Real Apple Glass | Native `UIGlassEffect` via `@callstack/liquid-glass` |
 | **iOS <26 (Native)** | Fallback Tint | Translucent tint matching geometry with zero layout shifts |
 | **Android (Native)** | Fallback Tint | Semi-transparent surface tint matching exact layout metrics |

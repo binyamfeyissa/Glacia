@@ -1690,6 +1690,36 @@ export default function MessageDemo() {
 }`
   },
   {
+    slug: "bubble",
+    name: "Bubble",
+    description: "A single chat bubble on its own: Liquid Glass, solid or gradient fill, with a pointed corner so a run of bubbles reads as one stack.",
+    category: "Chat & AI",
+    appleStatus: "Apple-faithful",
+    nativeStatus: "Web first",
+    wave: 3,
+    props: [
+      { name: "side", type: "'user' | 'assistant' | 'system'", default: "'assistant'", description: "Who the bubble belongs to; sets its side and fill." },
+      { name: "variant", type: "'glass' | 'solid' | 'gradient'", default: "'glass'", description: "The material the bubble is drawn in." },
+      { name: "tail", type: "'none' | 'start' | 'end'", default: "'end'", description: "Which bottom corner points, so consecutive bubbles stack." },
+      { name: "full", type: "boolean", default: "false", description: "Grows the bubble to the full wrap width." },
+      { name: "time", type: "string", description: "Timestamp shown under the bubble." },
+    ],
+    codeSnippet: `import { Bubble } from "glacia";
+
+export default function BubbleDemo() {
+  return (
+    <div className="flex flex-col gap-2 max-w-sm">
+      <Bubble side="assistant" time="9:41 AM">
+        Designing for iOS 26 Liquid Glass.
+      </Bubble>
+      <Bubble side="user" variant="gradient" tail="start" time="9:42 AM">
+        Real refraction is bending underneath!
+      </Bubble>
+    </div>
+  );
+}`,
+  },
+  {
     slug: "message-scroller",
     name: "Message Scroller",
     description: "iOS Messages auto-scrolling conversation feed with sticky date headers and floating glass scroll-to-bottom capsule.",

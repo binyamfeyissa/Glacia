@@ -11,16 +11,16 @@ This report provides an honest, verified account of all components, blocks, pack
 
 | Category | Shipped Count | Status |
 | :--- | :--- | :--- |
-| **Shipped Web Components** | **70** (33 Wave 1 + 21 Wave 2 + 16 Wave 3) | Built, tested, and verified |
+| **Shipped Web Components** | **71** (33 Wave 1 + 21 Wave 2 + 17 Wave 3) | Built, tested, and verified |
 | **React Native Components** | 7 | Shipped with iOS 26+ `UIGlassEffect` & fallback ladder |
 | **Production Ready-Made Blocks** | **10** | 10 Complete Production Blocks |
-| **Passing Automated Unit Tests** | **139 / 139** | 131 `glacia` (core) + 8 `glacia-native` |
+| **Passing Automated Unit Tests** | **147 / 147** | 139 `glacia` (core) + 8 `glacia-native` |
 | **Design Tokens** | Complete | Cross-platform JSON, CSS, and React Native maps |
-| **CLI & Registry Distribution** | Functional | `npx glacia add <comp>`, `npx glacia add all`, npm packages |
+| **CLI & Registry Distribution** | Functional (not yet hosted) | `npx glacia add <comp>` copies real component source; registry files ship in-repo and on the docs site |
 
 ---
 
-## Shipped Wave 3 Web Components (16 New)
+## Shipped Wave 3 Web Components (17 New)
 
 | # | Component | Category | Apple HIG Classification | React Native Support |
 | :- | :--- | :--- | :--- | :--- |
@@ -35,11 +35,12 @@ This report provides an honest, verified account of all components, blocks, pack
 | 63 | **Menubar** | Popups & Menus | Apple-faithful | Web only |
 | 64 | **Resizable** | Navigation & Layout | Apple-faithful | Web only |
 | 65 | **Message** | Chat & AI | Apple-faithful | Web first |
-| 66 | **MessageScroller** | Chat & AI | Apple-faithful | Web first |
-| 67 | **Attachment** | Chat & AI | Apple-faithful | Web first |
-| 68 | **Questionnaire** | Chat & AI | Apple-faithful | Web first |
-| 69 | **Trace** | Chat & AI | Apple-faithful | Web only |
-| 70 | **Direction** | Navigation & Layout | Apple-faithful | Web first |
+| 66 | **Bubble** | Chat & AI | Apple-faithful | Web first |
+| 67 | **MessageScroller** | Chat & AI | Apple-faithful | Web first |
+| 68 | **Attachment** | Chat & AI | Apple-faithful | Web first |
+| 69 | **Questionnaire** | Chat & AI | Apple-faithful | Web first |
+| 70 | **Trace** | Chat & AI | Apple-faithful | Web only |
+| 71 | **Direction** | Navigation & Layout | Apple-faithful | Web first |
 
 ---
 
@@ -158,16 +159,16 @@ Glacia web uses a two-layer rendering architecture designed to avoid WebKit bug 
 
 | Platform / Browser | Layer 1 (Frosted Glass) | Layer 2 (Optical Refraction) | Notes |
 | :--- | :--- | :--- | :--- |
-| **Chromium** (Chrome, Edge, Arc, Brave) | Supported | Supported | Full dynamic SVG refraction bend behind `@supports` |
-| **Safari** (macOS & iOS) | Supported | Graceful Fallback | Layer 1 frosted blur, border highlight, and elevation |
-| **Firefox** (macOS, Windows, Linux) | Supported | Graceful Fallback | Layer 1 frosted blur, border highlight, and elevation |
+| **Chromium** (Chrome, Edge, Arc, Brave) | Supported | Supported | Verified in Chromium: `backdrop-filter: blur(3px) url("#glacia-backdrop-N") saturate(1.5)` |
+| **Safari** (macOS & iOS) | Supported | Graceful Fallback | Layer 1 only. **Not verified in a real browser yet** — no WebKit runner available on the build machine. |
+| **Firefox** (macOS, Windows, Linux) | Supported | Graceful Fallback | Verified in Firefox: frosted blur present, no SVG bend, zero console errors |
 | **Reduced Motion** (`prefers-reduced-motion`) | Respected | Disabled | Removes shimmer and dynamic movement |
 
 ---
 
 ## Catalog Status: All 3 Waves Complete
 
-All 70 components in the full catalog and 10 production blocks are implemented, tested, verified, and accessible via npm and the CLI copy command.
+All 71 components in the full catalog and 10 production blocks are implemented and render live in Chromium and Firefox. The CLI copy command copies real component source. The packages are not yet published to npm and the registry is not yet served from a public domain, so `npm install glacia` and `npx glacia add` will not work for outside users until they are hosted.
 
 ---
 

@@ -18,7 +18,7 @@ export const ToggleGroup = React.forwardRef<
   return (
     <RadixToggleGroup.Root
       ref={ref}
-      className={`gl-toggle-group gl-toggle-group-${variant} gl-toggle-group-${size} ${className}`}
+      className={`gl-toggle-group ${variant === "glass" ? "gl-glass" : ""} gl-toggle-group-${variant} gl-toggle-group-${size} ${className}`}
       {...(props as any)}
     >
       {children}

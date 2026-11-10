@@ -1,17 +1,17 @@
 {
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "toggle-group",
   "type": "registry:ui",
   "dependencies": [
-    "glacia@^0.1.0",
-    "radix-ui@^1.8.1"
+    "glacia@^0.3.1"
   ],
   "registryDependencies": [
-    "https://glacia.dev/r/glass.json"
+    "/r/glass.json"
   ],
   "files": [
     {
-      "path": "toggle-group.tsx",
-      "content": "import { ToggleGroup, ToggleGroupItem, type ToggleGroupProps, type ToggleGroupItemProps } from \"glacia\";\nexport { ToggleGroup, ToggleGroupItem, type ToggleGroupProps, type ToggleGroupItemProps };\nexport default ToggleGroup;\n",
+      "path": "components/ui/toggle-group.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — toggle-group\n// Copied with `npx glacia add toggle-group`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport * as React from \"react\";\nimport { ToggleGroup as RadixToggleGroup } from \"radix-ui\";\n\nexport type ToggleGroupProps = (\n  | ({ type: \"single\" } & RadixToggleGroup.ToggleGroupSingleProps)\n  | ({ type: \"multiple\" } & RadixToggleGroup.ToggleGroupMultipleProps)\n) & {\n  variant?: \"glass\" | \"outline\" | \"ghost\";\n  size?: \"sm\" | \"md\" | \"lg\";\n  className?: string;\n  children?: React.ReactNode;\n};\n\nexport const ToggleGroup = React.forwardRef<\n  React.ElementRef<typeof RadixToggleGroup.Root>,\n  ToggleGroupProps\n>(({ className = \"\", variant = \"glass\", size = \"md\", children, ...props }, ref) => {\n  return (\n    <RadixToggleGroup.Root\n      ref={ref}\n      className={`gl-toggle-group ${variant === \"glass\" ? \"gl-glass\" : \"\"} gl-toggle-group-${variant} gl-toggle-group-${size} ${className}`}\n      {...(props as any)}\n    >\n      {children}\n    </RadixToggleGroup.Root>\n  );\n});\nToggleGroup.displayName = \"ToggleGroup\";\n\nexport interface ToggleGroupItemProps\n  extends React.ComponentPropsWithoutRef<typeof RadixToggleGroup.Item> {\n  variant?: \"glass\" | \"outline\" | \"ghost\";\n  size?: \"sm\" | \"md\" | \"lg\";\n}\n\nexport const ToggleGroupItem = React.forwardRef<\n  React.ElementRef<typeof RadixToggleGroup.Item>,\n  ToggleGroupItemProps\n>(({ className = \"\", children, ...props }, ref) => {\n  return (\n    <RadixToggleGroup.Item\n      ref={ref}\n      className={`gl-toggle-group-item ${className}`}\n      {...props}\n    >\n      {children}\n    </RadixToggleGroup.Item>\n  );\n});\nToggleGroupItem.displayName = \"ToggleGroupItem\";\n",
       "type": "registry:ui"
     }
   ]

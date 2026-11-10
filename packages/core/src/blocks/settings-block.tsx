@@ -1,4 +1,6 @@
 import { useState } from "react";
+
+import { BlockBackdrop } from "../internal/block-backdrop";
 import { Glass } from "../glass";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../card";
 import { Item } from "../item";
@@ -12,9 +14,11 @@ import { Separator } from "../separator";
 export interface SettingsBlockProps {
   initialSection?: string;
   onSave?: () => void;
+  /** Backdrop image behind the block. */
+  image?: string;
 }
 
-export function SettingsBlock({ initialSection = "appearance", onSave }: SettingsBlockProps) {
+export function SettingsBlock({ initialSection = "appearance", onSave, image }: SettingsBlockProps) {
   const [activeNav, setActiveNav] = useState(initialSection);
   const [darkMode, setDarkMode] = useState(true);
   const [autoBrightness, setAutoBrightness] = useState(true);
@@ -32,6 +36,7 @@ export function SettingsBlock({ initialSection = "appearance", onSave }: Setting
   ];
 
   return (
+    <BlockBackdrop image={image}>
     <div className="gl-settings-block">
       {/* Settings Navigation Sidebar */}
       <aside className="gl-glass gl-settings-sidebar">
@@ -169,5 +174,6 @@ export function SettingsBlock({ initialSection = "appearance", onSave }: Setting
         )}
       </main>
     </div>
+    </BlockBackdrop>
   );
 }

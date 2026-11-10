@@ -1,3 +1,4 @@
+import { BlockBackdrop } from "../internal/block-backdrop";
 import * as React from "react";
 import { Glass } from "../glass";
 import { Button } from "../button";
@@ -5,7 +6,12 @@ import { SegmentedControl } from "../segmented-control";
 import { Calendar } from "../calendar";
 import { Badge } from "../badge";
 
-export function CalendarPageBlock() {
+export interface CalendarPageBlockProps {
+  /** Backdrop image behind the block. */
+  image?: string;
+}
+
+export function CalendarPageBlock({ image }: CalendarPageBlockProps) {
   const [view, setView] = React.useState("month");
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(new Date());
 
@@ -17,6 +23,7 @@ export function CalendarPageBlock() {
   ];
 
   return (
+    <BlockBackdrop image={image}>
     <div className="gl-calendar-page-block">
       {/* Sidebar */}
       <Glass className="gl-cal-sidebar">
@@ -127,5 +134,6 @@ export function CalendarPageBlock() {
         </Glass>
       </div>
     </div>
+    </BlockBackdrop>
   );
 }

@@ -8,12 +8,12 @@ import { cx } from "./internal/cx";
 
 export const ScrollArea = forwardRef<
   ElementRef<typeof RadixScrollArea.Root>,
-  ComponentPropsWithoutRef<typeof RadixScrollArea.Root>
->(function ScrollArea({ className, children, ...props }, ref) {
+  ComponentPropsWithoutRef<typeof RadixScrollArea.Root> & { variant?: "glass" | "plain" }
+>(function ScrollArea({ className, variant = "glass", children, ...props }, ref) {
   return (
     <RadixScrollArea.Root
       ref={ref}
-      className={cx("gl-scroll-area", className)}
+      className={cx("gl-scroll-area", variant === "glass" && "gl-glass", className)}
       {...props}
     >
       <RadixScrollArea.Viewport className="gl-scroll-viewport">

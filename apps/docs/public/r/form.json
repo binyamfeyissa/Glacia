@@ -1,16 +1,17 @@
 {
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "form",
   "type": "registry:ui",
   "dependencies": [
-    "glacia@^0.1.0"
+    "glacia@^0.3.1"
   ],
   "registryDependencies": [
-    "https://glacia.dev/r/glass.json"
+    "/r/glass.json"
   ],
   "files": [
     {
-      "path": "form.tsx",
-      "content": "import { Form, useFormContext, type FormProps } from \"glacia\";\n\nexport { Form, useFormContext, type FormProps };\nexport default Form;\n",
+      "path": "components/ui/form.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — form\n// Copied with `npx glacia add form`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  createContext,\n  useContext,\n  type FormHTMLAttributes,\n  type ForwardRefExoticComponent,\n  type RefAttributes,\n  type ReactNode,\n} from \"react\";\nimport { cx } from \"glacia/internal/cx\";\n\ninterface FormContextValue {\n  disabled?: boolean;\n}\n\nconst FormContext = createContext<FormContextValue>({});\n\nexport interface FormProps extends FormHTMLAttributes<HTMLFormElement> {\n  /** Disables all fields inside the form. */\n  disabled?: boolean;\n}\n\nexport const Form: ForwardRefExoticComponent<\n  FormProps & RefAttributes<HTMLFormElement>\n> = /* @__PURE__ */ forwardRef<HTMLFormElement, FormProps>(\n  function Form({ disabled, className, children, ...props }, ref) {\n    return (\n      <FormContext.Provider value={{ disabled }}>\n        <form\n          ref={ref}\n          className={cx(\"gl-form\", className)}\n          aria-disabled={disabled}\n          {...props}\n        >\n          {children}\n        </form>\n      </FormContext.Provider>\n    );\n  }\n);\n\nexport function useFormContext() {\n  return useContext(FormContext);\n}\n",
       "type": "registry:ui"
     }
   ]

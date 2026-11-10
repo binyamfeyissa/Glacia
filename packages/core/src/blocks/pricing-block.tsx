@@ -1,10 +1,16 @@
+import { BlockBackdrop } from "../internal/block-backdrop";
 import * as React from "react";
 import { Glass } from "../glass";
 import { Button } from "../button";
 import { Switch } from "../switch";
 import { Badge } from "../badge";
 
-export function PricingBlock() {
+export interface PricingBlockProps {
+  /** Backdrop image behind the block. */
+  image?: string;
+}
+
+export function PricingBlock({ image }: PricingBlockProps) {
   const [annual, setAnnual] = React.useState(true);
 
   const tiers = [
@@ -61,6 +67,7 @@ export function PricingBlock() {
   ];
 
   return (
+    <BlockBackdrop image={image}>
     <div className="gl-pricing-block">
       <div className="gl-pricing-header">
         <Badge variant="default" className="gl-pricing-badge">
@@ -126,5 +133,6 @@ export function PricingBlock() {
         ))}
       </div>
     </div>
+    </BlockBackdrop>
   );
 }

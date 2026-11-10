@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogDescription,
   SearchField,
+  NavigationTabs,
 } from "glacia";
 import { COMPONENTS_DATA } from "../data/components-data";
 import { ThemeToggle } from "./theme-toggle";
@@ -19,14 +20,40 @@ import {
   MenuIcon,
   SearchIcon,
   SnowflakeIcon,
+  GridIcon,
+  LayersIcon,
+  CodeIcon,
 } from "./icons";
 
 const NAV = [
-  { href: "/", label: "Overview" },
-  { href: "/components/button", label: "Components", match: "/components" },
-  { href: "/blocks/dashboard", label: "Blocks", match: "/blocks" },
-  { href: "/build-report", label: "Build report", match: "/build-report" },
+  { id: "overview", href: "/", label: "Overview", icon: <SnowflakeIcon width={14} height={14} /> },
+  {
+    id: "components",
+    href: "/components/button",
+    label: "Components",
+    match: "/components",
+    icon: <GridIcon width={14} height={14} />,
+  },
+  {
+    id: "blocks",
+    href: "/blocks/dashboard",
+    label: "Blocks",
+    match: "/blocks",
+    icon: <LayersIcon width={14} height={14} />,
+  },
+  {
+    id: "build-report",
+    href: "/build-report",
+    label: "Build report",
+    match: "/build-report",
+    icon: <CodeIcon width={14} height={14} />,
+  },
 ];
+
+// The nav is the library's own NavigationTabs, so the site's primary
+// navigation is the same component developers install.
+const toNavigationItems = () =>
+  NAV.map((item) => ({ value: item.id, label: item.label, icon: item.icon, href: item.href }));
 
 export function Header() {
   const pathname = usePathname();
@@ -65,7 +92,10 @@ export function Header() {
     return pathname.startsWith(item.match ?? item.href);
   };
 
+  const activeNav = NAV.find((item) => isActive(item))?.id ?? null;
+
   return (
+    <>
     <header className="site-header">
       <div className="header-inner">
         <div className="header-left">
@@ -75,18 +105,6 @@ export function Header() {
             </span>
             <span className="brand-name">Glacia</span>
           </Link>
-          <nav className="header-nav" aria-label="Main">
-            {NAV.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="nav-link"
-                aria-current={isActive(item) ? "page" : undefined}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
         </div>
 
         <div className="header-actions">
@@ -222,13 +240,26 @@ export function Header() {
           </div>
 
           <div className="search-dialog-foot">
-            <span>70 components · 10 blocks</span>
+            <span>71 components · 10 blocks</span>
             <span>
               <kbd>esc</kbd> to close
             </span>
           </div>
         </DialogContent>
       </Dialog>
+
     </header>
+      {/* Phone-style tab bar: pinned to the bottom centre of the viewport.
+          This is the library's own TabBar engine, not a lookalike. */}
+      <div className="bottom-tabbar">
+        <NavigationTabs
+          className="bottom-tabbar-inner"
+          aria-label="Main"
+          items={toNavigationItems()}
+          value={activeNav}
+          link={Link}
+        />
+      </div>
+    </>
   );
 }

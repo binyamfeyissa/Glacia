@@ -14,12 +14,12 @@ export const Breadcrumb = forwardRef<
 
 export const BreadcrumbList = forwardRef<
   HTMLOListElement,
-  ComponentPropsWithoutRef<"ol">
->(function BreadcrumbList({ className, ...props }, ref) {
+  ComponentPropsWithoutRef<"ol"> & { variant?: "glass" | "plain" }
+>(function BreadcrumbList({ className, variant = "glass", ...props }, ref) {
   return (
     <ol
       ref={ref}
-      className={cx("gl-breadcrumb-list", className)}
+      className={cx("gl-breadcrumb-list", variant === "glass" && "gl-glass", className)}
       {...props}
     />
   );

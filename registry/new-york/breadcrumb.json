@@ -1,16 +1,17 @@
 {
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "breadcrumb",
   "type": "registry:ui",
   "dependencies": [
-    "glacia@^0.1.0"
+    "glacia@^0.3.1"
   ],
   "registryDependencies": [
-    "https://glacia.dev/r/glass.json"
+    "/r/glass.json"
   ],
   "files": [
     {
-      "path": "breadcrumb.tsx",
-      "content": "import {\n  Breadcrumb,\n  BreadcrumbList,\n  BreadcrumbItem,\n  BreadcrumbLink,\n  BreadcrumbPage,\n  BreadcrumbSeparator,\n  BreadcrumbEllipsis,\n} from \"glacia\";\n\nexport {\n  Breadcrumb,\n  BreadcrumbList,\n  BreadcrumbItem,\n  BreadcrumbLink,\n  BreadcrumbPage,\n  BreadcrumbSeparator,\n  BreadcrumbEllipsis,\n};\n",
+      "path": "components/ui/breadcrumb.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — breadcrumb\n// Copied with `npx glacia add breadcrumb`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ComponentPropsWithoutRef,\n  type ReactNode,\n} from \"react\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport const Breadcrumb = forwardRef<\n  HTMLElement,\n  ComponentPropsWithoutRef<\"nav\"> & { separator?: ReactNode }\n>(function Breadcrumb({ className, ...props }, ref) {\n  return <nav ref={ref} aria-label=\"breadcrumb\" className={cx(\"gl-breadcrumb\", className)} {...props} />;\n});\n\nexport const BreadcrumbList = forwardRef<\n  HTMLOListElement,\n  ComponentPropsWithoutRef<\"ol\"> & { variant?: \"glass\" | \"plain\" }\n>(function BreadcrumbList({ className, variant = \"glass\", ...props }, ref) {\n  return (\n    <ol\n      ref={ref}\n      className={cx(\"gl-breadcrumb-list\", variant === \"glass\" && \"gl-glass\", className)}\n      {...props}\n    />\n  );\n});\n\nexport const BreadcrumbItem = forwardRef<\n  HTMLLIElement,\n  ComponentPropsWithoutRef<\"li\">\n>(function BreadcrumbItem({ className, ...props }, ref) {\n  return (\n    <li\n      ref={ref}\n      className={cx(\"gl-breadcrumb-item\", className)}\n      {...props}\n    />\n  );\n});\n\nexport const BreadcrumbLink = forwardRef<\n  HTMLAnchorElement,\n  ComponentPropsWithoutRef<\"a\"> & { asChild?: boolean }\n>(function BreadcrumbLink({ className, ...props }, ref) {\n  return (\n    <a\n      ref={ref}\n      className={cx(\"gl-breadcrumb-link\", className)}\n      {...props}\n    />\n  );\n});\n\nexport const BreadcrumbPage = forwardRef<\n  HTMLSpanElement,\n  ComponentPropsWithoutRef<\"span\">\n>(function BreadcrumbPage({ className, ...props }, ref) {\n  return (\n    <span\n      ref={ref}\n      role=\"link\"\n      aria-disabled=\"true\"\n      aria-current=\"page\"\n      className={cx(\"gl-breadcrumb-page\", className)}\n      {...props}\n    />\n  );\n});\n\nexport const BreadcrumbSeparator = ({\n  children,\n  className,\n  ...props\n}: ComponentPropsWithoutRef<\"li\">) => (\n  <li\n    role=\"presentation\"\n    aria-hidden=\"true\"\n    className={cx(\"gl-breadcrumb-separator\", className)}\n    {...props}\n  >\n    {children ?? (\n      <svg width=\"12\" height=\"12\" viewBox=\"0 0 12 12\" fill=\"none\">\n        <path d=\"M4.5 2.5L8 6L4.5 9.5\" stroke=\"currentColor\" strokeWidth=\"1.5\" strokeLinecap=\"round\" strokeLinejoin=\"round\"/>\n      </svg>\n    )}\n  </li>\n);\n\nexport const BreadcrumbEllipsis = ({\n  className,\n  ...props\n}: ComponentPropsWithoutRef<\"span\">) => (\n  <span\n    role=\"presentation\"\n    aria-hidden=\"true\"\n    className={cx(\"gl-breadcrumb-ellipsis\", className)}\n    {...props}\n  >\n    <svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\" fill=\"none\">\n      <circle cx=\"3\" cy=\"7\" r=\"1.25\" fill=\"currentColor\" />\n      <circle cx=\"7\" cy=\"7\" r=\"1.25\" fill=\"currentColor\" />\n      <circle cx=\"11\" cy=\"7\" r=\"1.25\" fill=\"currentColor\" />\n    </svg>\n    <span className=\"sr-only\">More</span>\n  </span>\n);\n",
       "type": "registry:ui"
     }
   ]

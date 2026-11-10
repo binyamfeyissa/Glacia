@@ -1,10 +1,17 @@
+import { BlockBackdrop } from "../internal/block-backdrop";
 import * as React from "react";
 import { Glass } from "../glass";
 import { Button } from "../button";
 import { Badge } from "../badge";
 
-export function LandingBlock() {
+export interface LandingBlockProps {
+  /** Backdrop image behind the block. */
+  image?: string;
+}
+
+export function LandingBlock({ image }: LandingBlockProps) {
   return (
+    <BlockBackdrop image={image}>
     <div className="gl-landing-block">
       {/* Floating Glass Pill Nav */}
       <div className="gl-landing-nav-wrap">
@@ -101,5 +108,6 @@ export function LandingBlock() {
         </Glass>
       </section>
     </div>
+    </BlockBackdrop>
   );
 }

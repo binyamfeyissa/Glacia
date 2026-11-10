@@ -117,11 +117,29 @@ export default function HomePage() {
   return (
     <div>
       {/* Hero */}
-      <section className="hero">
+      <section className="hero hero-tahoe">
+        <div className="hero-backdrop" aria-hidden="true">
+          {/* The attached Tahoe scene, kept as the hero's whole surface rather
+              than a banner: it bleeds past the section and masks out into the
+              page below, so there is no hard edge to see. */}
+          <picture>
+            <source srcSet="/hero/tahoe-dark.jpg" type="image/jpeg" />
+            <img
+              src="/hero/tahoe-dark.png"
+              alt=""
+              aria-hidden="true"
+              decoding="async"
+              fetchPriority="high"
+            />
+          </picture>
+          <span className="hero-backdrop-tint" />
+          <span className="hero-backdrop-veil" />
+        </div>
+
         <div className="hero-inner">
           <span className="hero-eyebrow">
             <span className="status-dot" />
-            v0.3.0 · Full 70-Component Catalog Shipped
+            v0.3.1 · Full 71-Component Catalog Shipped
           </span>
 
           <h1 className="hero-title">
@@ -137,7 +155,7 @@ export default function HomePage() {
 
           <div className="hero-actions">
             <Link href="/components/button" className="btn btn-primary">
-              Explore 70 components
+              Explore 71 components
               <ArrowRightIcon className="arrow" />
             </Link>
             <a href="#material" className="btn btn-glass">
@@ -209,7 +227,7 @@ export default function HomePage() {
               <span className="eyebrow-dot" />
               Components
             </p>
-            <h2 className="section-title">Seventy primitives. One language.</h2>
+            <h2 className="section-title">Seventy-one primitives. One language.</h2>
             <p className="section-desc">
               Controls, forms, navigation, overlays, data, and AI — each one measured against Apple&apos;s
               Human Interface Guidelines and verified for keyboard and screen-reader use.
@@ -228,7 +246,11 @@ export default function HomePage() {
               href={`/components/${component.slug}`}
               className="component-card"
             >
-              <div className="component-card-stage">
+              <div
+                className="component-card-stage surface-tahoe"
+                data-glacia-backdrop="true"
+                data-glisse-backdrop="true"
+              >
                 <div className="demo-surface">
                   <ComponentThumb slug={component.slug} />
                 </div>
@@ -250,7 +272,7 @@ export default function HomePage() {
         <div className="section-head">
           <div className="section-head-copy">
             <p className="eyebrow">Full catalog</p>
-            <h2 className="section-title">All 70 components across Waves 1, 2 &amp; 3.</h2>
+            <h2 className="section-title">All 71 components across Waves 1, 2 &amp; 3.</h2>
           </div>
         </div>
 

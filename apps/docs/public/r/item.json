@@ -1,16 +1,17 @@
 {
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "item",
   "type": "registry:ui",
   "dependencies": [
-    "glacia@^0.1.0"
+    "glacia@^0.3.1"
   ],
   "registryDependencies": [
-    "https://glacia.dev/r/glass.json"
+    "/r/glass.json"
   ],
   "files": [
     {
-      "path": "item.tsx",
-      "content": "import { Item, type ItemProps } from \"glacia\";\n\nexport { Item, type ItemProps };\nexport default Item;\n",
+      "path": "components/ui/item.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — item\n// Copied with `npx glacia add item`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type HTMLAttributes,\n  type ReactNode,\n  type ForwardRefExoticComponent,\n  type RefAttributes,\n} from \"react\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport interface ItemProps extends Omit<HTMLAttributes<HTMLDivElement>, \"title\"> {\n  /** Leading icon or avatar. */\n  icon?: ReactNode;\n  /** Background tint colour for the icon squircle badge (e.g. Apple blue, green, orange). */\n  iconTint?: string;\n  /** Primary label/title. */\n  title: ReactNode;\n  /** Secondary subtitle or detail text. */\n  description?: ReactNode;\n  /** Trailing accessory: chevron '›', switch, badge, or custom element. */\n  accessory?: ReactNode;\n  /** Marks the item as an interactive clickable row. */\n  interactive?: boolean;\n  /** Visual variant: 'glass' (frosted liquid glass surface) or 'plain'. */\n  variant?: \"glass\" | \"plain\";\n}\n\nexport const Item: ForwardRefExoticComponent<\n  ItemProps & RefAttributes<HTMLDivElement>\n> = /* @__PURE__ */ forwardRef<HTMLDivElement, ItemProps>(\n  function Item(\n    {\n      icon,\n      iconTint,\n      title,\n      description,\n      accessory,\n      interactive = false,\n      variant = \"glass\",\n      className,\n      children,\n      ...props\n    },\n    ref\n  ) {\n    return (\n      <div\n        ref={ref}\n        className={cx(\"gl-item\", variant === \"glass\" && \"gl-glass\", className)}\n        data-interactive={interactive ? \"\" : undefined}\n        {...props}\n      >\n        {icon && (\n          <div\n            className=\"gl-item-icon-badge\"\n            style={iconTint ? { backgroundColor: iconTint } : undefined}\n          >\n            {icon}\n          </div>\n        )}\n        <div className=\"gl-item-content\">\n          <div className=\"gl-item-title\">{title}</div>\n          {description && <div className=\"gl-item-description\">{description}</div>}\n          {children}\n        </div>\n        {accessory && <div className=\"gl-item-accessory\">{accessory}</div>}\n      </div>\n    );\n  }\n);\n",
       "type": "registry:ui"
     }
   ]

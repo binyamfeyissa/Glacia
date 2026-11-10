@@ -1,4 +1,6 @@
 import { useState } from "react";
+
+import { BlockBackdrop } from "../internal/block-backdrop";
 import { Glass } from "../glass";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../card";
 import { Item } from "../item";
@@ -12,9 +14,11 @@ export interface ProfileBlockProps {
   role?: string;
   email?: string;
   onEdit?: () => void;
+  /** Backdrop image behind the block. */
+  image?: string;
 }
 
-export function ProfileBlock({
+export function ProfileBlock({ image, 
   name = "Alexander Wright",
   role = "Principal Design Architect",
   email = "alexander.wright@apple.design",
@@ -30,6 +34,7 @@ export function ProfileBlock({
   ];
 
   return (
+    <BlockBackdrop image={image}>
     <div className="gl-profile-block max-w-4xl mx-auto space-y-6">
       {/* Profile Header Hero Card */}
       <Card className="gl-profile-hero">
@@ -94,5 +99,6 @@ export function ProfileBlock({
         </CardContent>
       </Card>
     </div>
+    </BlockBackdrop>
   );
 }

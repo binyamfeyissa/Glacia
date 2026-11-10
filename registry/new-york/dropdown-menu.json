@@ -1,17 +1,17 @@
 {
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "dropdown-menu",
   "type": "registry:ui",
   "dependencies": [
-    "glacia@^0.1.0",
-    "radix-ui@^1.8.1"
+    "glacia@^0.3.1"
   ],
   "registryDependencies": [
-    "https://glacia.dev/r/glass.json"
+    "/r/glass.json"
   ],
   "files": [
     {
-      "path": "dropdown-menu.tsx",
-      "content": "import {\n  DropdownMenu,\n  DropdownMenuTrigger,\n  DropdownMenuGroup,\n  DropdownMenuPortal,\n  DropdownMenuRadioGroup,\n  DropdownMenuContent,\n  DropdownMenuItem,\n  DropdownMenuLabel,\n  DropdownMenuSeparator,\n  DropdownMenuShortcut,\n} from \"glacia\";\n\nexport {\n  DropdownMenu,\n  DropdownMenuTrigger,\n  DropdownMenuGroup,\n  DropdownMenuPortal,\n  DropdownMenuRadioGroup,\n  DropdownMenuContent,\n  DropdownMenuItem,\n  DropdownMenuLabel,\n  DropdownMenuSeparator,\n  DropdownMenuShortcut,\n};\nexport default DropdownMenu;\n",
+      "path": "components/ui/dropdown-menu.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — dropdown-menu\n// Copied with `npx glacia add dropdown-menu`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ComponentPropsWithoutRef,\n  type ElementRef,\n  type HTMLAttributes,\n} from \"react\";\nimport { DropdownMenu as RadixDropdownMenu } from \"radix-ui\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport const DropdownMenu = RadixDropdownMenu.Root;\nexport const DropdownMenuTrigger = RadixDropdownMenu.Trigger;\nexport const DropdownMenuGroup = RadixDropdownMenu.Group;\nexport const DropdownMenuPortal = RadixDropdownMenu.Portal;\nexport const DropdownMenuRadioGroup = RadixDropdownMenu.RadioGroup;\n\nexport const DropdownMenuContent = forwardRef<\n  ElementRef<typeof RadixDropdownMenu.Content>,\n  ComponentPropsWithoutRef<typeof RadixDropdownMenu.Content>\n>(function DropdownMenuContent(\n  { className, sideOffset = 6, ...props },\n  ref,\n) {\n  return (\n    <RadixDropdownMenu.Portal>\n      <RadixDropdownMenu.Content\n        ref={ref}\n        sideOffset={sideOffset}\n        className={cx(\"gl-glass gl-dropdown-content\", className)}\n        {...props}\n      />\n    </RadixDropdownMenu.Portal>\n  );\n});\n\nexport const DropdownMenuItem = forwardRef<\n  ElementRef<typeof RadixDropdownMenu.Item>,\n  ComponentPropsWithoutRef<typeof RadixDropdownMenu.Item> & {\n    destructive?: boolean;\n    inset?: boolean;\n  }\n>(function DropdownMenuItem({ className, destructive, inset, ...props }, ref) {\n  return (\n    <RadixDropdownMenu.Item\n      ref={ref}\n      className={cx(\"gl-dropdown-item\", inset && \"gl-dropdown-inset\", className)}\n      data-destructive={destructive ? \"\" : undefined}\n      {...props}\n    />\n  );\n});\n\nexport const DropdownMenuLabel = forwardRef<\n  ElementRef<typeof RadixDropdownMenu.Label>,\n  ComponentPropsWithoutRef<typeof RadixDropdownMenu.Label> & {\n    inset?: boolean;\n  }\n>(function DropdownMenuLabel({ className, inset, ...props }, ref) {\n  return (\n    <RadixDropdownMenu.Label\n      ref={ref}\n      className={cx(\"gl-dropdown-label\", inset && \"gl-dropdown-inset\", className)}\n      {...props}\n    />\n  );\n});\n\nexport const DropdownMenuSeparator = forwardRef<\n  ElementRef<typeof RadixDropdownMenu.Separator>,\n  ComponentPropsWithoutRef<typeof RadixDropdownMenu.Separator>\n>(function DropdownMenuSeparator({ className, ...props }, ref) {\n  return (\n    <RadixDropdownMenu.Separator\n      ref={ref}\n      className={cx(\"gl-dropdown-separator\", className)}\n      {...props}\n    />\n  );\n});\n\nexport const DropdownMenuShortcut = ({\n  className,\n  ...props\n}: HTMLAttributes<HTMLSpanElement>) => {\n  return <span className={cx(\"gl-dropdown-shortcut\", className)} {...props} />;\n};\n",
       "type": "registry:ui"
     }
   ]

@@ -62,48 +62,7 @@
   --card-shadow: 0 20px 50px rgb(20 35 60 / 0.08);
 }
 
-/* Align the library's internal material with the docs palette. */
-:root,
-[data-theme="dark"] {
-  --gl-foreground: #f3f6fb;
-  --gl-muted: rgb(226 232 243 / 0.6);
-  --gl-glass: rgb(24 26 33 / 0.62);
-  --gl-glass-active: rgb(46 49 60 / 0.72);
-  --gl-edge: rgb(255 255 255 / 0.1);
-  --gl-drop: transparent;
-  --gl-selection: rgb(255 255 255 / 0.08);
-  --gl-surface: rgb(18 20 26 / 0.86);
-  --gl-surface-edge: rgb(255 255 255 / 0.12);
-  --gl-separator: rgb(235 240 250 / 0.12);
-  --gl-shadow: rgb(0 0 0 / 0.45);
-  --gl-highlight: rgb(235 240 250 / 0.1);
-  --gl-fill: #2e9dff;
-  --gl-on: #45d483;
-  --gl-track: rgb(235 240 250 / 0.24);
-  --gl-rail: rgb(255 255 255 / 0.08);
-  --gl-ring: rgb(111 214 255 / 0.65);
-  --gl-segment-thumb: rgb(235 240 250 / 0.26);
-}
 
-[data-theme="light"] {
-  --gl-foreground: #0a0c11;
-  --gl-muted: rgb(22 26 34 / 0.6);
-  --gl-glass: rgb(255 255 255 / 0.64);
-  --gl-glass-active: rgb(240 243 248 / 0.9);
-  --gl-edge: rgb(12 16 24 / 0.09);
-  --gl-selection: rgb(12 16 24 / 0.07);
-  --gl-surface: rgb(255 255 255 / 0.9);
-  --gl-surface-edge: rgb(12 16 24 / 0.09);
-  --gl-separator: rgb(12 16 24 / 0.12);
-  --gl-shadow: rgb(20 30 50 / 0.14);
-  --gl-highlight: rgb(12 16 24 / 0.06);
-  --gl-fill: #0079f2;
-  --gl-on: #16a34a;
-  --gl-track: rgb(12 16 24 / 0.22);
-  --gl-rail: rgb(12 16 24 / 0.08);
-  --gl-ring: rgb(0 121 242 / 0.55);
-  --gl-segment-thumb: #ffffff;
-}
 
 /* ==========================================================================
    Base
@@ -1020,33 +979,78 @@ button {
   transition: background 400ms var(--ease);
 }
 
+/* A smooth gradient cannot show refraction: bending a constant colour field
+   changes nothing you can see. So every stage is built on a photograph with
+   fine detail, which is what the displacement map has to bend. The colour
+   grades differ per surface; the texture underneath is what makes the glass
+   read as glass. */
+.surface-tahoe {
+  --stage: url("/hero/tahoe-dark.jpg") center / cover no-repeat;
+}
+
+[data-theme="light"] .surface-tahoe {
+  --stage: url("/hero/tahoe-1200.jpg") center / cover no-repeat;
+}
+
 .surface-aurora {
   --stage:
-    radial-gradient(50% 60% at 20% 10%, rgb(38 122 255 / 0.5), transparent 65%),
-    radial-gradient(44% 58% at 82% 18%, rgb(130 80 255 / 0.34), transparent 66%),
-    radial-gradient(50% 46% at 60% 96%, rgb(30 200 190 / 0.24), transparent 70%),
-    linear-gradient(150deg, #0b1530 0%, #0a0d19 52%, #100c1c 100%);
+    linear-gradient(150deg, rgb(10 21 48 / 0.42) 0%, rgb(10 13 25 / 0.3) 55%, rgb(16 12 28 / 0.38) 100%),
+    radial-gradient(44% 58% at 82% 18%, rgb(130 80 255 / 0.2), transparent 66%),
+    url("/hero/texture.jpg") center / cover no-repeat;
 }
 
 .surface-fluted {
   --stage:
-    linear-gradient(rgb(0 0 0 / 0.12), rgb(0 0 0 / 0.32)),
+    linear-gradient(rgb(0 0 0 / 0.18), rgb(0 0 0 / 0.42)),
     url("/wallpapers/fluted-glass.jpg") center / cover no-repeat;
+}
+
+.surface-video {
+  --stage: #0a0d16;
+  background: #0a0d16;
+}
+
+.lab-stage-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 0.85;
+}
+
+.surface-video .lab-orb,
+.surface-video .lab-grid {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-stage-video {
+    display: none;
+  }
+
+  /* Falls back to the poster frame behind the glass. */
+  .surface-video {
+    --stage:
+      linear-gradient(rgb(0 0 0 / 0.25), rgb(0 0 0 / 0.35)),
+      url("/wallpapers/flow-poster.jpg") center / cover no-repeat;
+    background: var(--stage);
+  }
 }
 
 .surface-dusk {
   --stage:
-    radial-gradient(52% 55% at 15% 12%, rgb(255 168 76 / 0.5), transparent 66%),
-    radial-gradient(46% 52% at 85% 16%, rgb(255 84 72 / 0.38), transparent 68%),
-    radial-gradient(60% 60% at 55% 100%, rgb(64 28 96 / 0.7), transparent 70%),
-    linear-gradient(150deg, #2a1014 0%, #150d1c 60%, #09080f 100%);
+    radial-gradient(52% 55% at 15% 12%, rgb(255 168 76 / 0.3), transparent 66%),
+    radial-gradient(46% 52% at 85% 16%, rgb(255 84 72 / 0.26), transparent 68%),
+    linear-gradient(150deg, rgb(42 16 20 / 0.44) 0%, rgb(21 13 28 / 0.48) 60%, rgb(9 8 15 / 0.58) 100%),
+    url("/hero/texture.jpg") center / cover no-repeat;
 }
 
 .surface-graphite {
   --stage:
-    radial-gradient(46% 50% at 22% 8%, rgb(210 225 245 / 0.16), transparent 68%),
-    radial-gradient(46% 50% at 84% 26%, rgb(120 150 190 / 0.14), transparent 68%),
-    linear-gradient(150deg, #14171d 0%, #0b0d11 60%, #08090c 100%);
+    linear-gradient(150deg, rgb(20 23 29 / 0.46) 0%, rgb(11 13 17 / 0.54) 60%, rgb(8 9 12 / 0.62) 100%),
+    url("/hero/texture.jpg") center / cover no-repeat;
 }
 
 .lab-grid {
@@ -1093,16 +1097,16 @@ button {
   gap: 14px;
 }
 
+.surface-tahoe .lab-orb,
+.surface-tahoe .lab-grid {
+  display: none;
+}
+
 .lab-card {
-  border: 1px solid rgb(255 255 255 / 0.16);
+  border: 0;
   border-radius: 20px;
-  background: rgb(22 24 32 / 0.46);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.18),
-    0 24px 60px rgb(0 0 0 / 0.35);
-  backdrop-filter: blur(26px) saturate(1.7);
-  -webkit-backdrop-filter: blur(26px) saturate(1.7);
-  color: #f4f7fc;
+  color: var(--gl-foreground);
+  box-shadow: 0 1px 3px var(--gl-drop);
 }
 
 .lab-player {
@@ -1240,15 +1244,10 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 10px 12px;
-  border: 1px solid rgb(255 255 255 / 0.15);
+  padding: 10px 14px;
+  border: 0;
   border-radius: 999px;
-  background: rgb(20 22 30 / 0.44);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.16),
-    0 20px 50px rgb(0 0 0 / 0.3);
-  backdrop-filter: blur(26px) saturate(1.7);
-  -webkit-backdrop-filter: blur(26px) saturate(1.7);
+  box-shadow: 0 1px 3px var(--gl-drop);
 }
 
 .lab-toolbar .gl-segmented {
@@ -1406,6 +1405,18 @@ button {
     radial-gradient(60% 80% at 50% 0%, rgb(111 214 255 / 0.07), transparent 70%),
     var(--bg-soft);
   pointer-events: none;
+}
+
+.component-card-stage.surface-tahoe {
+  background:
+    linear-gradient(150deg, rgb(5 6 10 / 0.55) 0%, rgb(5 6 10 / 0.4) 55%, rgb(5 6 10 / 0.6) 100%),
+    url("/hero/tahoe-dark.jpg") center / cover no-repeat;
+}
+
+[data-theme="light"] .component-card-stage.surface-tahoe {
+  background:
+    linear-gradient(150deg, rgb(255 255 255 / 0.45) 0%, rgb(255 255 255 / 0.3) 55%, rgb(255 255 255 / 0.5) 100%),
+    url("/hero/tahoe-1200.jpg") center / cover no-repeat;
 }
 
 .component-card-stage::after {
@@ -2550,6 +2561,10 @@ button {
     0 0 0 2.5px var(--accent);
 }
 
+.swatch-tahoe {
+  background: url("/hero/tahoe-dark.jpg") center / cover;
+}
+
 .swatch-aurora {
   background: linear-gradient(135deg, #1a3f8f, #0b1220 55%, #2a1a5e);
 }
@@ -2578,6 +2593,12 @@ button {
   background: var(--stage, #0a0d16);
 }
 
+.preview-stage .gl-toast-viewport {
+  position: static;
+  transform: none;
+  pointer-events: auto;
+}
+
 .preview-stage::before {
   content: "";
   position: absolute;
@@ -2589,6 +2610,7 @@ button {
   mask-image: radial-gradient(66% 70% at 50% 45%, #000 15%, transparent 100%);
   -webkit-mask-image: radial-gradient(66% 70% at 50% 45%, #000 15%, transparent 100%);
   pointer-events: none;
+  opacity: 0.5;
 }
 
 .preview-stage-label {
@@ -3838,4 +3860,315 @@ button {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ---------------------------------------------------------------- Hero image */
+
+/* The hero is the page's own surface, not a banner sitting inside it: the
+   section runs full width and the picture bleeds to every edge. */
+.hero-tahoe {
+  max-width: none;
+  margin: 0;
+  padding: 128px 24px 0;
+  isolation: isolate;
+}
+
+.hero-backdrop {
+  position: absolute;
+  inset: 0 0 -18% 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-backdrop picture,
+.hero-backdrop img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 32%;
+}
+
+/* A very slow drift, so the scene reads as alive without pulling the eye. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-backdrop img {
+    animation: hero-drift 46s ease-in-out infinite alternate;
+    transform-origin: 50% 35%;
+  }
+
+  @keyframes hero-drift {
+    from {
+      transform: scale(1.06) translate3d(-0.6%, 0.4%, 0);
+    }
+    to {
+      transform: scale(1.12) translate3d(0.8%, -0.6%, 0);
+    }
+  }
+}
+
+/* Deepens the top and bottom so the nav and the copy both keep contrast. */
+.hero-backdrop-tint {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgb(6 10 22 / 0.72) 0%, transparent 60%),
+    linear-gradient(
+      to bottom,
+      rgb(6 10 22 / 0.66) 0%,
+      rgb(6 10 22 / 0.28) 38%,
+      rgb(6 10 22 / 0.52) 74%,
+      var(--bg) 100%
+    );
+}
+
+[data-theme="light"] .hero-backdrop-tint {
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgb(255 255 255 / 0.5) 0%, transparent 60%),
+    linear-gradient(
+      to bottom,
+      rgb(250 250 252 / 0.4) 0%,
+      rgb(250 250 252 / 0.56) 44%,
+      rgb(250 250 252 / 0.86) 78%,
+      var(--bg) 100%
+    );
+}
+
+/* The seam. The picture is masked away over the last stretch of the section
+   and what is left fades into the page background, so the next section grows
+   out of the image instead of starting under a ruled line. */
+.hero-backdrop-veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 46%,
+    color-mix(in srgb, var(--bg) 62%, transparent) 72%,
+    var(--bg) 92%,
+    var(--bg) 100%
+  );
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 100%);
+}
+
+.hero-tahoe .hero-inner {
+  max-width: 900px;
+}
+
+.hero-tahoe .hero-eyebrow,
+.hero-tahoe .hero-sub {
+  text-shadow: 0 1px 24px rgb(6 10 22 / 0.55);
+}
+
+.hero-tahoe .hero-title {
+  text-shadow: 0 2px 40px rgb(6 10 22 / 0.5);
+}
+
+[data-theme="light"] .hero-tahoe .hero-eyebrow,
+[data-theme="light"] .hero-tahoe .hero-sub,
+[data-theme="light"] .hero-tahoe .hero-title {
+  text-shadow: 0 1px 20px rgb(255 255 255 / 0.7);
+}
+
+@media (max-width: 860px) {
+  .hero-tahoe {
+    padding: 108px 18px 0;
+  }
+
+  .hero-backdrop {
+    inset: 0 0 -12% 0;
+  }
+}
+
+/* ------------------------------------------------------- Bottom phone tab bar */
+
+/* Sits over the page like an iOS tab bar: fixed, centred, floating on the
+   glass rail, with room beneath it for the safe area. */
+.bottom-tabbar {
+  position: fixed;
+  left: 50%;
+  top: auto;
+  bottom: max(14px, env(safe-area-inset-bottom, 14px));
+  transform: translateX(-50%);
+  z-index: 60;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* Inside a block preview the tab bar would sit on top of the artwork, so it
+   steps aside there instead of covering the design being shown. */
+.block-stage-body .bottom-tabbar,
+.bottom-tabbar[data-embedded] {
+  display: none;
+}
+
+.bottom-tabbar-inner {
+  pointer-events: auto;
+  --gl-tab-width: 92px;
+  width: fit-content;
+  max-width: calc(100vw - 28px);
+  margin: 0 auto;
+  box-shadow:
+    0 12px 34px rgb(0 0 0 / 0.36),
+    0 2px 8px rgb(0 0 0 / 0.24);
+}
+
+/* The nav labels are short, so the four items stay one row even on a phone. */
+@media (max-width: 520px) {
+  .bottom-tabbar-inner {
+    --gl-tab-width: 76px;
+    width: fit-content;
+    max-width: calc(100vw - 20px);
+  }
+}
+
+/* Nothing should sit under the floating bar. */
+body {
+  padding-bottom: 96px;
+}
+
+@media (max-width: 860px) {
+  /* The bar is the only navigation now, so it must never be hidden. */
+  .header-nav {
+    display: flex;
+  }
+}
+
+/* ==========================================================================
+   Liquid Glass Dials Widget
+   ========================================================================== */
+
+.glass-dials-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 99;
+}
+
+.glass-dials-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 0;
+  color: var(--gl-foreground);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 4px 16px var(--gl-shadow);
+  transition: transform 160ms var(--ease), background 160ms var(--ease);
+}
+
+.glass-dials-trigger:hover {
+  transform: translateY(-2px);
+  background-color: var(--gl-glass-active);
+}
+
+.glass-dials-panel {
+  width: 280px;
+  padding: 16px;
+  border-radius: 18px;
+  border: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 16px 40px var(--gl-shadow);
+}
+
+.glass-dials-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.glass-dials-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gl-foreground);
+}
+
+.glass-dials-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.glass-dials-reset {
+  background: none;
+  border: 0;
+  color: var(--gl-muted);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: color 140ms ease;
+}
+
+.glass-dials-reset:hover {
+  color: var(--gl-foreground);
+  background: var(--gl-glass-active);
+}
+
+.glass-dials-close {
+  background: none;
+  border: 0;
+  color: var(--gl-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  border-radius: 4px;
+  transition: color 140ms ease;
+}
+
+.glass-dials-close:hover {
+  color: var(--gl-foreground);
+}
+
+.glass-dials-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.glass-dial-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.glass-dial-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--gl-foreground);
+}
+
+.glass-dial-value {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gl-muted);
+}
+
+.glass-dial-slider {
+  width: 100%;
+  accent-color: var(--gl-fill);
+  cursor: pointer;
+  height: 4px;
+}
+
+.glass-dials-foot {
+  font-size: 11px;
+  color: var(--gl-muted);
+  text-align: center;
+  border-top: 1px solid var(--gl-separator);
+  padding-top: 8px;
 }

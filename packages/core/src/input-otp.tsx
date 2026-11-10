@@ -126,7 +126,7 @@ export const InputOTPSlot = React.forwardRef<HTMLDivElement, InputOTPSlotProps>(
     return (
       <div
         ref={ref}
-        className={`gl-input-otp-slot ${isFocused ? "gl-active" : ""} ${char ? "gl-has-value" : ""} ${className}`}
+        className={`gl-glass gl-input-otp-slot ${isFocused ? "gl-active" : ""} ${char ? "gl-has-value" : ""} ${className}`}
         {...props}
       >
         <span className="gl-input-otp-char">{char}</span>

@@ -1,10 +1,19 @@
 import { insertStyles } from "./internal/styles";
+import { resweepGlass, watchGlass } from "./internal/auto-glass";
 import css from "./styles.css?inline";
 
 insertStyles(css);
 
+// Every `.gl-glass` on the page gets the live backdrop lens, not only the
+// components that ask for it: a class alone would buy a blur and nothing more.
+watchGlass();
+
+export { resweepGlass, watchGlass } from "./internal/auto-glass";
+
 // 1. Primitive Glass
 export { Glass, type GlassProps } from "./glass";
+export type { GlassSurface } from "./internal/glass-surface";
+export { useGlass } from "./internal/glass-surface";
 
 // 2. Buttons & Actions
 export { Button, type ButtonProps } from "./button";
@@ -58,6 +67,11 @@ export {
   type SegmentedControlProps,
 } from "./segmented-control";
 export { TabBar, type TabBarItem, type TabBarProps } from "./tab-bar";
+export {
+  NavigationTabs,
+  type NavigationItem,
+  type NavigationTabsProps,
+} from "./navigation-tabs";
 export {
   Accordion,
   AccordionItem,
@@ -355,6 +369,13 @@ export {
   type MessageScrollerProps,
   type MessageDateDividerProps,
 } from "./message-scroller";
+export {
+  Bubble,
+  BubbleGroup,
+  type BubbleProps,
+  type BubbleGroupProps,
+  type BubbleSide,
+} from "./bubble";
 export { Attachment, type AttachmentProps } from "./attachment";
 export {
   Questionnaire,
@@ -383,7 +404,8 @@ export {
 
 // 10. Ready-Made Page Blocks
 export { LoginPage, type LoginPageProps } from "./blocks/login-page";
-export { AdminDashboard } from "./blocks/admin-dashboard";
+export { AdminDashboard, type AdminDashboardProps } from "./blocks/admin-dashboard";
+export { AppShell, type AppShellProps } from "./blocks/app-shell";
 export { SettingsBlock, type SettingsBlockProps } from "./blocks/settings-block";
 export { ProfileBlock, type ProfileBlockProps } from "./blocks/profile-block";
 export { SignupBlock, type SignupBlockProps } from "./blocks/signup-block";

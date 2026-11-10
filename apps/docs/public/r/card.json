@@ -1,16 +1,17 @@
 {
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "card",
   "type": "registry:ui",
   "dependencies": [
-    "glacia@^0.1.0"
+    "glacia@^0.3.1"
   ],
   "registryDependencies": [
-    "https://glacia.dev/r/glass.json"
+    "/r/glass.json"
   ],
   "files": [
     {
-      "path": "card.tsx",
-      "content": "import {\n  Card,\n  CardHeader,\n  CardTitle,\n  CardDescription,\n  CardContent,\n  CardBody,\n  CardFooter,\n  type CardProps,\n} from \"glacia\";\n\nexport {\n  Card,\n  CardHeader,\n  CardTitle,\n  CardDescription,\n  CardContent,\n  CardBody,\n  CardFooter,\n  type CardProps,\n};\nexport default Card;\n",
+      "path": "components/ui/card.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — card\n// Copied with `npx glacia add card`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  useImperativeHandle,\n  useRef,\n  type HTMLAttributes,\n} from \"react\";\nimport { cx } from \"glacia/internal/cx\";\nimport { useRefraction } from \"glacia/internal/refraction\";\n\nexport interface CardProps extends HTMLAttributes<HTMLDivElement> {\n  variant?: \"glass\" | \"clear\";\n}\n\nexport const Card = forwardRef<HTMLDivElement, CardProps>(function Card(\n  { className, variant = \"glass\", ...props },\n  forwardedRef,\n) {\n  const ref = useRef<HTMLDivElement>(null);\n  useImperativeHandle(forwardedRef, () => ref.current!);\n  useRefraction(ref);\n\n  return (\n    <div\n      ref={ref}\n      className={cx(\"gl-glass gl-card\", className)}\n      data-variant={variant === \"glass\" ? undefined : variant}\n      {...props}\n    />\n  );\n});\n\nexport const CardHeader = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(\n  function CardHeader({ className, ...props }, ref) {\n    return <div ref={ref} className={cx(\"gl-card-header\", className)} {...props} />;\n  },\n);\n\nexport const CardTitle = forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadingElement>>(\n  function CardTitle({ className, children, ...props }, ref) {\n    return (\n      <h3 ref={ref} className={cx(\"gl-card-title\", className)} {...props}>\n        {children}\n      </h3>\n    );\n  },\n);\n\nexport const CardDescription = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParagraphElement>>(\n  function CardDescription({ className, ...props }, ref) {\n    return <p ref={ref} className={cx(\"gl-card-description\", className)} {...props} />;\n  },\n);\n\nexport const CardContent = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(\n  function CardContent({ className, ...props }, ref) {\n    return <div ref={ref} className={cx(\"gl-card-content\", className)} {...props} />;\n  },\n);\n\n/** Alias for CardContent matching prompt's \"Header / Body / Footer slots\" description */\nexport const CardBody = CardContent;\n\nexport const CardFooter = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(\n  function CardFooter({ className, ...props }, ref) {\n    return <div ref={ref} className={cx(\"gl-card-footer\", className)} {...props} />;\n  },\n);\n",
       "type": "registry:ui"
     }
   ]

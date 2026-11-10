@@ -5,9 +5,9 @@ import { CodeBlock } from "./code-block";
 import { CheckIcon, CopyIcon } from "./icons";
 
 const SURFACES = [
-  { id: "aurora", label: "Aurora" },
+  { id: "tahoe", label: "Tahoe" },
   { id: "fluted", label: "Fluted" },
-  { id: "dusk", label: "Dusk" },
+  { id: "aurora", label: "Aurora" },
   { id: "graphite", label: "Graphite" },
 ] as const;
 
@@ -22,7 +22,7 @@ export interface ComponentPreviewProps {
 
 export function ComponentPreview({ name, slug, children, code }: ComponentPreviewProps) {
   const [tab, setTab] = useState<"preview" | "code">("preview");
-  const [surface, setSurface] = useState<Surface>("aurora");
+  const [surface, setSurface] = useState<Surface>("tahoe");
   const [installTab, setInstallTab] = useState<"npm" | "cli">("npm");
   const [copied, setCopied] = useState(false);
 
@@ -83,7 +83,11 @@ export function ComponentPreview({ name, slug, children, code }: ComponentPrevie
       </div>
 
       {tab === "preview" ? (
-        <div className={`preview-stage surface-${surface}`}>
+        <div
+          className={`preview-stage surface-${surface}`}
+          data-glacia-backdrop="true"
+          data-glisse-backdrop="true"
+        >
           <span className="preview-stage-label">
             {name} · {SURFACES.find((item) => item.id === surface)?.label}
           </span>

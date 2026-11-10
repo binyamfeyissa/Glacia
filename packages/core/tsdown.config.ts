@@ -22,7 +22,18 @@ const inlineCss = {
 };
 
 const config: UserConfig = defineConfig({
-  entry: ["src/index.ts"],
+  entry: [
+    "src/index.ts",
+    // Shared helpers, so copied components can import them from the package.
+    "src/internal/controllable.ts",
+    "src/internal/cx.ts",
+    "src/internal/hold.ts",
+    "src/internal/lens.ts",
+    "src/internal/press.ts",
+    "src/internal/refraction.ts",
+    "src/internal/segments.tsx",
+    "src/internal/spring.ts",
+  ],
   format: ["esm", "cjs"],
   platform: "neutral",
   dts: true,

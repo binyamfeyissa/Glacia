@@ -1,6 +1,12 @@
 :where(:root, [data-theme="light"]) {
   --gl-foreground: rgb(0 0 0 / 0.88);
   --gl-muted: rgb(60 60 67 / 0.6);
+  /* Liquid Glass dials, all upstream-readable by the engine. Set any of these
+     on :root, or on a single element, and the lens refits to it at once. */
+  --gl-glass-bend: 0.45;        /* rim band width: how far the glass bends    */
+  --gl-glass-dispersion: 0.4;   /* chromatic split: red bends 8% further      */
+  --gl-glass-frost: 1;          /* frost strength: 0 clear glass, 1 reference  */
+  --gl-rim-shine: 0.3;          /* light caught on the rim                     */
   --gl-glass: rgb(255 255 255 / 0.6);
   --gl-glass-active: rgb(236 236 240 / 0.85);
   --gl-edge: rgb(0 0 0 / 0.08);
@@ -24,13 +30,15 @@
   --gl-fill: #0088ff;
   --gl-ring: rgb(0 0 0 / 0.4);
   --gl-lens-shine: -1.5;
-  --gl-rim-shine: 0.3;
   --gl-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 :where([data-theme="dark"]) {
   --gl-foreground: rgb(255 255 255);
   --gl-muted: rgb(235 235 245 / 0.6);
+  --gl-glass-bend: 0.45;
+  --gl-glass-dispersion: 0.4;
+  --gl-glass-frost: 1;
   --gl-glass: rgb(40 40 40 / 0.62);
   --gl-glass-active: rgb(70 70 70 / 0.62);
   --gl-edge: rgb(255 255 255 / 0.08);
@@ -61,6 +69,9 @@
   :where(:root:not([data-theme="light"])) {
     --gl-foreground: rgb(255 255 255);
     --gl-muted: rgb(235 235 245 / 0.6);
+    --gl-glass-bend: 0.45;
+    --gl-glass-dispersion: 0.4;
+    --gl-glass-frost: 1;
     --gl-glass: rgb(40 40 40 / 0.62);
     --gl-glass-active: rgb(70 70 70 / 0.62);
     --gl-edge: rgb(255 255 255 / 0.08);
@@ -83,7 +94,7 @@
     --gl-on: #30d158;
     --gl-fill: #0091ff;
     --gl-ring: rgb(255 255 255 / 0.5);
-  --gl-lens-shine: 1;
+    --gl-lens-shine: 1;
     --gl-rim-shine: 0.13;
   }
 }
@@ -95,20 +106,11 @@
   background-color: var(--gl-glass);
   background-image: var(--gl-rim, none);
   background-size: 100% 100%;
-  -webkit-backdrop-filter: blur(var(--gl-blur, 20px)) saturate(1.8);
-  backdrop-filter: blur(var(--gl-blur, 20px)) saturate(1.8);
+  -webkit-backdrop-filter: blur(var(--gl-blur, calc(3px * var(--gl-glass-frost, 1)))) var(--gl-filter, saturate(1.5));
+  backdrop-filter: blur(var(--gl-blur, calc(3px * var(--gl-glass-frost, 1)))) var(--gl-filter, saturate(1.5));
   box-shadow:
     inset 0 0 0 0.5px var(--gl-edge),
     0 1px 3px var(--gl-drop);
-}
-
-/* Layer 2 — The bend, Chromium only. Gated behind @supports check so Safari and Firefox
-   keep Layer 1 frosted blur and never throw away the blur or break. */
-@supports (backdrop-filter: url("#test")) or (-webkit-backdrop-filter: url("#test")) {
-  .gl-glass[data-refracting] {
-    -webkit-backdrop-filter: blur(var(--gl-blur, 3px)) var(--gl-filter, saturate(1.5));
-    backdrop-filter: blur(var(--gl-blur, 3px)) var(--gl-filter, saturate(1.5));
-  }
 }
 
 /* Glass that paints its rim (see refraction.ts) draws its edge line there,
@@ -952,8 +954,6 @@
   height: 100%;
   border-radius: inherit;
   background: var(--gl-surface);
-  -webkit-backdrop-filter: blur(22px) saturate(1.9);
-  backdrop-filter: blur(22px) saturate(1.9);
   box-shadow:
     inset 0 0 0 0.5px var(--gl-surface-edge),
     0 12px 40px var(--gl-shadow);
@@ -1101,8 +1101,6 @@
   background-color: transparent;
   background-image: none;
   box-shadow: none;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -1111,6 +1109,7 @@
     box-shadow: inset 0 0 0 0.5px var(--gl-edge);
   }
 }
+
 
 .gl-button[data-size="sm"] {
   height: 32px;
@@ -1700,8 +1699,6 @@
   position: fixed;
   inset: 0;
   background-color: rgb(0 0 0 / 0.4);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
   z-index: 100;
   animation: gl-fade-in 200ms ease-out;
 }
@@ -2378,8 +2375,6 @@
   background: var(--gl-glass);
   padding: 3px;
   border: 1px solid var(--gl-edge);
-  backdrop-filter: blur(20px) saturate(190%);
-  -webkit-backdrop-filter: blur(20px) saturate(190%);
   gap: 2px;
 }
 
@@ -2405,36 +2400,66 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-family: inherit;
+  height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 20px;
+  color: var(--gl-foreground);
+  font: inherit;
   font-size: 14px;
-  font-weight: 500;
   cursor: pointer;
-  border-radius: 18px;
-  padding: 0 14px;
-  height: 36px;
-  transition: all 180ms ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
   user-select: none;
+  -webkit-user-select: none;
+  transition: background-color 200ms ease;
+}
+
+.gl-toggle:is(:active, [data-pressed]) {
+  background-color: var(--gl-glass-active);
+  transition-duration: 0s;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gl-toggle:hover {
+    background-color: var(--gl-glass-active);
+  }
+}
+
+.gl-toggle:disabled {
+  background-color: var(--gl-glass);
+  opacity: 0.35;
+  cursor: default;
 }
 
 .gl-toggle[data-state="on"] {
-  background: var(--gl-fill);
+  background-color: var(--gl-fill);
   color: #fff;
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 2px 10px rgba(0, 136, 255, 0.35);
+}
+
+.gl-toggle[data-state="on"]:is(:active, [data-pressed]) {
+  background-color: color-mix(in srgb, var(--gl-fill) 85%, #000);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gl-toggle[data-state="on"]:hover {
+    background-color: color-mix(in srgb, var(--gl-fill) 88%, #fff);
+  }
 }
 
 .gl-toggle[data-size="sm"] {
-  height: 28px;
-  padding: 0 10px;
+  height: 32px;
+  padding: 0 12px;
   font-size: 12px;
-  border-radius: 14px;
+  border-radius: 16px;
 }
 
 .gl-toggle[data-size="lg"] {
-  height: 44px;
-  padding: 0 18px;
+  height: 48px;
+  padding: 0 20px;
   font-size: 16px;
-  border-radius: 22px;
+  border-radius: 24px;
 }
 
 /* 3. Input Group */
@@ -2737,7 +2762,6 @@
   top: 12px;
   right: 18px;
   background: var(--gl-glass-active);
-  backdrop-filter: blur(12px);
   padding: 4px 10px;
   border-radius: 8px;
   border: 1px solid var(--gl-edge);
@@ -2927,8 +2951,6 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   z-index: 100;
 }
 
@@ -3052,6 +3074,12 @@
   padding: 0;
   margin: 0;
   font-size: 13px;
+}
+
+.gl-breadcrumb-list.gl-glass {
+  padding: 6px 14px;
+  border-radius: 9999px;
+  width: fit-content;
 }
 
 .gl-breadcrumb-item {
@@ -3377,9 +3405,12 @@
   padding: 3px;
   gap: 2px;
   background: var(--gl-surface);
-  -webkit-backdrop-filter: blur(20px) saturate(1.8);
-  backdrop-filter: blur(20px) saturate(1.8);
   box-shadow: inset 0 0 0 0.5px var(--gl-surface-edge), 0 2px 8px var(--gl-shadow);
+}
+
+.gl-toggle-group.gl-glass {
+  border: 0;
+  background-color: var(--gl-glass);
 }
 
 .gl-toggle-group-sm {
@@ -3431,9 +3462,9 @@
 }
 
 .gl-toggle-group-item[data-state="on"] {
-  color: var(--gl-foreground);
-  background: rgba(255, 255, 255, 0.22);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12), inset 0 0 0 0.5px rgba(255, 255, 255, 0.35);
+  color: var(--gl-segment-label, #fff);
+  background: var(--gl-segment-thumb, var(--gl-fill));
+  box-shadow: 0 1px 3px var(--gl-drop);
 }
 
 /* 2. Input OTP */
@@ -3470,15 +3501,12 @@
   align-items: center;
   justify-content: center;
   border-radius: 12px;
-  background: var(--gl-surface);
-  -webkit-backdrop-filter: blur(20px) saturate(1.8);
-  backdrop-filter: blur(20px) saturate(1.8);
-  box-shadow: inset 0 0 0 0.5px var(--gl-surface-edge), 0 2px 6px var(--gl-shadow);
+  border: 0;
   transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .gl-input-otp-slot.gl-active {
-  box-shadow: inset 0 0 0 1.5px #007aff, 0 0 12px rgba(0, 122, 255, 0.35);
+  box-shadow: 0 0 0 2px var(--gl-ring);
   transform: scale(1.04);
 }
 
@@ -3535,8 +3563,6 @@
   overflow: hidden;
   z-index: 100;
   background: var(--gl-surface);
-  -webkit-backdrop-filter: blur(28px) saturate(2);
-  backdrop-filter: blur(28px) saturate(2);
   box-shadow: inset 0 0 0 0.5px var(--gl-surface-edge), 0 24px 64px rgba(0, 0, 0, 0.35);
   animation: gl-command-zoom 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -3732,15 +3758,8 @@
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Mono", monospace;
   font-weight: 500;
   border-radius: 6px;
+  border: 0;
   color: var(--gl-foreground);
-  background: rgba(255, 255, 255, 0.12);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
-    0 1px 2px rgba(0, 0, 0, 0.15),
-    inset 0 0 0 0.5px var(--gl-surface-edge);
   line-height: 1;
   user-select: none;
 }
@@ -4063,8 +4082,6 @@
   height: 18px;
   border-radius: 9px;
   background: var(--gl-surface);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   display: grid;
   place-items: center;
@@ -4112,8 +4129,6 @@
 
 .gl-message-assistant .gl-message-bubble {
   background: var(--gl-surface);
-  -webkit-backdrop-filter: blur(20px) saturate(1.8);
-  backdrop-filter: blur(20px) saturate(1.8);
   box-shadow: inset 0 0 0 0.5px var(--gl-surface-edge), 0 2px 8px var(--gl-shadow);
   border-bottom-left-radius: 4px;
 }
@@ -5169,4 +5184,353 @@
 .gl-error-badge-danger {
   background: #ff3b30;
   color: #fff;
+}
+
+/* ---------------------------------------------------------------- Bubble */
+
+.gl-bubble {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-width: min(78%, 34rem);
+  width: fit-content;
+}
+
+.gl-bubble-full {
+  max-width: 100%;
+  width: 100%;
+}
+
+.gl-bubble-user {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.gl-bubble-assistant,
+.gl-bubble-system {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+.gl-bubble-body {
+  padding: 9px 13px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--gl-foreground);
+  overflow-wrap: anywhere;
+  box-shadow: 0 2px 8px var(--gl-shadow);
+}
+
+/* The pointed corner, so a run of bubbles reads as a stack. */
+.gl-bubble-tail-end.gl-bubble-user .gl-bubble-body {
+  border-bottom-right-radius: 5px;
+}
+
+.gl-bubble-tail-start.gl-bubble-user .gl-bubble-body {
+  border-bottom-left-radius: 5px;
+}
+
+.gl-bubble-tail-end.gl-bubble-assistant .gl-bubble-body,
+.gl-bubble-tail-end.gl-bubble-system .gl-bubble-body {
+  border-bottom-left-radius: 5px;
+}
+
+.gl-bubble-tail-start.gl-bubble-assistant .gl-bubble-body,
+.gl-bubble-tail-start.gl-bubble-system .gl-bubble-body {
+  border-bottom-right-radius: 5px;
+}
+
+/* glass — the default Liquid Glass bubble */
+.gl-bubble-glass .gl-bubble-body {
+  background: var(--gl-surface);
+  box-shadow:
+    inset 0 0 0 0.5px var(--gl-edge),
+    0 2px 8px var(--gl-shadow);
+}
+
+
+/* solid — the flat iOS bubble */
+.gl-bubble-solid.gl-bubble-user .gl-bubble-body {
+  background: #007aff;
+  color: #fff;
+}
+
+.gl-bubble-solid.gl-bubble-assistant .gl-bubble-body,
+.gl-bubble-solid.gl-bubble-system .gl-bubble-body {
+  background: var(--gl-glass-active);
+  color: var(--gl-foreground);
+}
+
+/* gradient — the iMessage fill */
+.gl-bubble-gradient.gl-bubble-user .gl-bubble-body {
+  background: linear-gradient(135deg, #007aff, #005ecb);
+  color: #fff;
+}
+
+.gl-bubble-gradient.gl-bubble-assistant .gl-bubble-body,
+.gl-bubble-gradient.gl-bubble-system .gl-bubble-body {
+  background: linear-gradient(135deg, var(--gl-surface), var(--gl-glass-active));
+  color: var(--gl-foreground);
+}
+
+.gl-bubble-time {
+  font-size: 11px;
+  color: var(--gl-muted);
+  padding: 0 4px;
+}
+
+.gl-bubble-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.gl-bubble-group-user {
+  align-items: flex-end;
+}
+
+.gl-bubble-group-assistant,
+.gl-bubble-group-system {
+  align-items: flex-start;
+}
+
+/* ------------------------------------------------------------ App shell
+   The layout in the reference dashboards: the whole viewport is the backdrop,
+   the sidebar is an inset panel with large radii, and content sits in rounded
+   cards separated by generous gaps. Nothing touches the window edge. */
+
+.gl-shell {
+  --gl-shell-gap: 14px;
+  --gl-shell-radius: 28px;
+  /* Heights itself against wherever it is placed: a full route or, as in the
+     docs, an inline preview frame. */
+  min-height: min(760px, 100vh);
+  box-sizing: border-box;
+  display: flex;
+  gap: var(--gl-shell-gap);
+  padding: var(--gl-shell-gap);
+  background-color: #05060a;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #f3f6fb;
+  font-family: inherit;
+}
+
+/* The image is painted with a dark scrim so text keeps its contrast while the
+   texture still reads through the glass panels above it. */
+.gl-shell[data-backdrop] {
+  background-image:
+    linear-gradient(150deg, rgb(5 6 10 / 0.82) 0%, rgb(5 6 10 / 0.7) 55%, rgb(5 6 10 / 0.86) 100%),
+    var(--gl-shell-image);
+}
+
+.gl-shell-sidebar {
+  width: 264px;
+  flex: 0 0 264px;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--gl-shell-radius);
+  border: 1px solid rgb(255 255 255 / 0.09);
+  background: rgb(12 14 20 / 0.55);
+  padding: 18px 14px;
+  gap: 18px;
+  overflow: hidden;
+}
+
+.gl-shell-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gl-shell-gap);
+}
+
+/* The top strip and the content panel are separate rounded surfaces, which is
+   what gives the reference its floating, stacked-pane feel. */
+.gl-shell-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 18px;
+  border-radius: 22px;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(12 14 20 / 0.5);
+}
+
+.gl-shell-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gl-shell-gap);
+  min-height: 0;
+}
+
+.gl-shell-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 6px 2px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.gl-shell-brand-mark {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  background: rgb(255 255 255 / 0.1);
+  border: 1px solid rgb(255 255 255 / 0.12);
+}
+
+/* Section labels: tiny, muted, widely tracked. */
+.gl-shell-group-label {
+  padding: 0 8px;
+  margin: 4px 0 6px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.4);
+}
+
+.gl-shell-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gl-shell-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 12px;
+  border: 0;
+  background: transparent;
+  color: rgb(255 255 255 / 0.62);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.gl-shell-nav-item:hover {
+  background: rgb(255 255 255 / 0.06);
+  color: rgb(255 255 255 / 0.9);
+}
+
+.gl-shell-nav-item[data-active="true"] {
+  background: rgb(255 255 255 / 0.12);
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.1);
+}
+
+.gl-shell-spacer {
+  flex: 1;
+}
+
+.gl-shell-foot {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid rgb(255 255 255 / 0.08);
+}
+
+.gl-shell-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 2px 4px;
+}
+
+.gl-shell-user-avatar {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.12);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.gl-shell-user-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.gl-shell-user-mail {
+  font-size: 11px;
+  color: rgb(255 255 255 / 0.42);
+}
+
+.gl-shell-heading {
+  margin: 0;
+  font-size: 27px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.gl-shell-subheading {
+  margin: 4px 0 0;
+  font-size: 13.5px;
+  color: rgb(255 255 255 / 0.45);
+}
+
+/* Cards: near-black, hairline border, big radius. */
+.gl-shell-panel {
+  border-radius: 24px;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(10 12 18 / 0.58);
+  padding: 20px;
+}
+
+.gl-shell-grid {
+  display: grid;
+  gap: var(--gl-shell-gap);
+}
+
+.gl-shell-grid[data-cols="4"] {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.gl-shell-grid[data-cols="2"] {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.gl-shell-stat-label {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: rgb(255 255 255 / 0.45);
+}
+
+.gl-shell-stat-value {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+@media (max-width: 900px) {
+  .gl-shell {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .gl-shell-sidebar {
+    width: auto;
+    flex: 0 0 auto;
+  }
 }

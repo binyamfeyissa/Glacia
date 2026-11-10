@@ -1,3 +1,4 @@
+import { BlockBackdrop } from "../internal/block-backdrop";
 import * as React from "react";
 import { Glass } from "../glass";
 import { Button } from "../button";
@@ -5,7 +6,12 @@ import { Input } from "../input";
 import { Label } from "../label";
 import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from "../input-otp";
 
-export function ForgotPasswordBlock() {
+export interface ForgotPasswordBlockProps {
+  /** Backdrop image behind the block. */
+  image?: string;
+}
+
+export function ForgotPasswordBlock({ image }: ForgotPasswordBlockProps) {
   const [step, setStep] = React.useState<1 | 2>(1);
   const [email, setEmail] = React.useState("alex.morgan@apple.com");
   const [otp, setOtp] = React.useState("");
@@ -19,6 +25,7 @@ export function ForgotPasswordBlock() {
   }, [step, resendTimer]);
 
   return (
+    <BlockBackdrop image={image}>
     <div className="gl-forgot-password-block">
       <Glass className="gl-auth-card gl-forgot-card">
         <div className="gl-auth-icon-squircle">
@@ -118,5 +125,6 @@ export function ForgotPasswordBlock() {
         </div>
       </Glass>
     </div>
+    </BlockBackdrop>
   );
 }

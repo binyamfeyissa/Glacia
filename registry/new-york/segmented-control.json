@@ -1,16 +1,17 @@
 {
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "segmented-control",
   "type": "registry:ui",
   "dependencies": [
-    "glacia@^0.1.0"
+    "glacia@^0.3.1"
   ],
   "registryDependencies": [
-    "https://glacia.dev/r/glass.json"
+    "/r/glass.json"
   ],
   "files": [
     {
-      "path": "segmented-control.tsx",
-      "content": "import {\n  SegmentedControl,\n  type SegmentedControlItem,\n  type SegmentedControlProps,\n} from \"glacia\";\n\nexport {\n  SegmentedControl,\n  type SegmentedControlItem,\n  type SegmentedControlProps,\n};\nexport default SegmentedControl;\n",
+      "path": "components/ui/segmented-control.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — segmented-control\n// Copied with `npx glacia add segmented-control`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport type { HTMLAttributes, JSX, ReactNode } from \"react\";\n\nimport { Segments } from \"glacia/internal/segments\";\n\nexport interface SegmentedControlItem {\n  value: string;\n  label: ReactNode;\n}\n\nexport interface SegmentedControlProps extends Omit<HTMLAttributes<HTMLDivElement>, \"defaultValue\" | \"onChange\"> {\n  items: SegmentedControlItem[];\n  /** The selected segment's `value`, or `null` for none. */\n  value?: string | null;\n  defaultValue?: string | null;\n  onValueChange?: (value: string) => void;\n}\n\n/**\n * A choice between a few options, as iOS 26's segmented control: a thumb on a\n * track that, held or dragged, lifts into a lens over the labels.\n */\nexport function SegmentedControl(props: SegmentedControlProps): JSX.Element {\n  return <Segments kind=\"segmented\" {...props} />;\n}\n",
       "type": "registry:ui"
     }
   ]

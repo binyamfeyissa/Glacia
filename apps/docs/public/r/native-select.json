@@ -1,16 +1,17 @@
 {
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "native-select",
   "type": "registry:ui",
   "dependencies": [
-    "glacia@^0.1.0"
+    "glacia@^0.3.1"
   ],
   "registryDependencies": [
-    "https://glacia.dev/r/glass.json"
+    "/r/glass.json"
   ],
   "files": [
     {
-      "path": "native-select.tsx",
-      "content": "import {\n  NativeSelect,\n  type NativeSelectProps,\n} from \"glacia\";\n\nexport {\n  NativeSelect,\n  type NativeSelectProps,\n};\nexport default NativeSelect;\n",
+      "path": "components/ui/native-select.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — native-select\n// Copied with `npx glacia add native-select`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type SelectHTMLAttributes,\n  type ForwardRefExoticComponent,\n  type RefAttributes,\n} from \"react\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport interface NativeSelectProps extends SelectHTMLAttributes<HTMLSelectElement> {\n  sizeVariant?: \"sm\" | \"md\" | \"lg\";\n}\n\nexport const NativeSelect: ForwardRefExoticComponent<\n  NativeSelectProps & RefAttributes<HTMLSelectElement>\n> = /* @__PURE__ */ forwardRef<HTMLSelectElement, NativeSelectProps>(\n  function NativeSelect(\n    { sizeVariant = \"md\", className, children, disabled, ...props },\n    ref\n  ) {\n    return (\n      <div\n        className={cx(\"gl-glass gl-native-select-wrapper\", className)}\n        data-size={sizeVariant}\n        data-disabled={disabled ? \"\" : undefined}\n      >\n        <select\n          ref={ref}\n          disabled={disabled}\n          className=\"gl-native-select\"\n          {...props}\n        >\n          {children}\n        </select>\n        <span className=\"gl-native-select-chevron\" aria-hidden=\"true\">\n          <svg width=\"12\" height=\"12\" viewBox=\"0 0 12 12\" fill=\"none\">\n            <path d=\"M3 4.5L6 7.5L9 4.5\" stroke=\"currentColor\" strokeWidth=\"1.5\" strokeLinecap=\"round\" strokeLinejoin=\"round\"/>\n          </svg>\n        </span>\n      </div>\n    );\n  }\n);\n",
       "type": "registry:ui"
     }
   ]

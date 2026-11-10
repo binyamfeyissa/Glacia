@@ -1,16 +1,17 @@
 {
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "textarea",
   "type": "registry:ui",
   "dependencies": [
-    "glacia@^0.1.0"
+    "glacia@^0.3.1"
   ],
   "registryDependencies": [
-    "https://glacia.dev/r/glass.json"
+    "/r/glass.json"
   ],
   "files": [
     {
-      "path": "textarea.tsx",
-      "content": "import { Textarea, type TextareaProps } from \"glacia\";\n\nexport { Textarea, type TextareaProps };\nexport default Textarea;\n",
+      "path": "components/ui/textarea.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — textarea\n// Copied with `npx glacia add textarea`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type TextareaHTMLAttributes,\n} from \"react\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {\n  error?: boolean;\n}\n\nexport const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea(\n  { className, error, disabled, ...props },\n  ref,\n) {\n  return (\n    <textarea\n      ref={ref}\n      disabled={disabled}\n      aria-invalid={error ? true : undefined}\n      className={cx(\"gl-glass gl-textarea\", className)}\n      data-error={error ? \"\" : undefined}\n      {...props}\n    />\n  );\n});\n",
       "type": "registry:ui"
     }
   ]

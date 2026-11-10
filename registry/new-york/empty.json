@@ -1,16 +1,17 @@
 {
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "empty",
   "type": "registry:ui",
   "dependencies": [
-    "glacia@^0.1.0"
+    "glacia@^0.3.1"
   ],
   "registryDependencies": [
-    "https://glacia.dev/r/glass.json"
+    "/r/glass.json"
   ],
   "files": [
     {
-      "path": "empty.tsx",
-      "content": "import { Empty, type EmptyProps } from \"glacia\";\n\nexport { Empty, type EmptyProps };\nexport default Empty;\n",
+      "path": "components/ui/empty.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — empty\n// Copied with `npx glacia add empty`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type HTMLAttributes,\n  type ReactNode,\n  type ForwardRefExoticComponent,\n  type RefAttributes,\n} from \"react\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport interface EmptyProps extends HTMLAttributes<HTMLDivElement> {\n  /** Icon or illustration displayed in the glass squircle badge. */\n  icon?: ReactNode;\n  /** Primary headline for the empty state. */\n  title: string;\n  /** Secondary description explaining why nothing is here or what to do next. */\n  description?: string;\n  /** Optional call-to-action button or interactive elements. */\n  action?: ReactNode;\n}\n\nexport const Empty: ForwardRefExoticComponent<\n  EmptyProps & RefAttributes<HTMLDivElement>\n> = /* @__PURE__ */ forwardRef<HTMLDivElement, EmptyProps>(\n  function Empty(\n    { icon, title, description, action, className, children, ...props },\n    ref\n  ) {\n    return (\n      <div ref={ref} className={cx(\"gl-glass gl-empty\", className)} {...props}>\n        {icon && <div className=\"gl-empty-icon-plate\">{icon}</div>}\n        <h3 className=\"gl-empty-title\">{title}</h3>\n        {description && <p className=\"gl-empty-description\">{description}</p>}\n        {action && <div className=\"gl-empty-action\">{action}</div>}\n        {children}\n      </div>\n    );\n  }\n);\n",
       "type": "registry:ui"
     }
   ]

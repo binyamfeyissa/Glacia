@@ -9,7 +9,7 @@ export const Kbd = React.forwardRef<HTMLElement, KbdProps>(
     return (
       <kbd
         ref={ref}
-        className={`gl-kbd gl-kbd-${size} ${className}`}
+        className={`gl-glass gl-kbd gl-kbd-${size} ${className}`}
         {...props}
       >
         {children}
