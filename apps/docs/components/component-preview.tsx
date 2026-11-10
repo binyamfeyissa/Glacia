@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { CodeBlock } from "./code-block";
 import { CheckIcon, CopyIcon } from "./icons";
+import { CliBlock } from "./install-command";
 
 const SURFACES = [
   { id: "tahoe", label: "Tahoe" },
@@ -23,10 +24,9 @@ export interface ComponentPreviewProps {
 export function ComponentPreview({ name, slug, children, code }: ComponentPreviewProps) {
   const [tab, setTab] = useState<"preview" | "code">("preview");
   const [surface, setSurface] = useState<Surface>("tahoe");
-  const [installTab, setInstallTab] = useState<"npm" | "cli">("npm");
   const [copied, setCopied] = useState(false);
 
-  const command = installTab === "npm" ? "npm install glacia" : `npx glacia add ${slug}`;
+  const command = "npm install glacia";
 
   const copyInstall = async () => {
     try {
@@ -100,28 +100,7 @@ export function ComponentPreview({ name, slug, children, code }: ComponentPrevie
       )}
 
       <div className="preview-foot">
-        <div className="preview-install-tabs" role="tablist" aria-label="Install method">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={installTab === "npm"}
-            data-active={installTab === "npm"}
-            className="preview-install-tab"
-            onClick={() => setInstallTab("npm")}
-          >
-            npm
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={installTab === "cli"}
-            data-active={installTab === "cli"}
-            className="preview-install-tab"
-            onClick={() => setInstallTab("cli")}
-          >
-            CLI
-          </button>
-        </div>
+        <span className="preview-foot-label">Install</span>
         <div className="preview-command">
           <code>{command}</code>
           <button type="button" onClick={copyInstall}>
@@ -130,6 +109,7 @@ export function ComponentPreview({ name, slug, children, code }: ComponentPrevie
           </button>
         </div>
       </div>
+      <CliBlock slug={slug} />
     </div>
   );
 }

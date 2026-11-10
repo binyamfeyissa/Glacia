@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { COMPONENTS_DATA } from "../data/components-data";
 import { ComponentThumb } from "../components/component-thumb";
-import { InstallCommand } from "../components/install-command";
+import { InstallCommand, InstallPicker } from "../components/install-command";
 import { MaterialLab } from "../components/material-lab";
 import { StackMarquee } from "../components/stack-marquee";
 import {
@@ -170,9 +170,11 @@ export default function HomePage() {
             </a>
           </div>
 
-          <div className="hero-install">
+          <div className="hero-install" id="install">
             <InstallCommand />
-            <span className="hero-note">TypeScript · Zero dependencies · WAI-ARIA</span>
+            <span className="hero-note">
+              Web package · React Native package · Design tokens
+            </span>
           </div>
         </div>
       </section>
@@ -469,10 +471,11 @@ export default function HomePage() {
           </p>
           <h2>Ship glass in an afternoon.</h2>
           <p>
-            Install the package, or copy exactly the components you need into your own project.
-            Both paths are supported and documented.
+            Pick the package that matches your platform — web components, React Native glass, or just
+            the tokens — and copy the exact command. Prefer to own the source? Every component can be
+            copied into your project instead.
           </p>
-          <InstallCommand />
+          <InstallPicker />
           <div className="cta-links">
             <Link href="/components/button">Read the docs</Link>
             <span>·</span>

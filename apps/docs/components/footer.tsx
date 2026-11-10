@@ -15,7 +15,24 @@ const COLUMNS = [
     links: [
       { label: "npm install glacia", href: "/#install" },
       { label: "npm install glacia-native", href: "/#install" },
+      { label: "npm install glacia-tokens", href: "/#install" },
       { label: "npx glacia add button", href: "/#install" },
+    ],
+  },
+  {
+    title: "npm",
+    links: [
+      { label: "glacia", href: "https://www.npmjs.com/package/glacia", external: true },
+      {
+        label: "glacia-native",
+        href: "https://www.npmjs.com/package/glacia-native",
+        external: true,
+      },
+      {
+        label: "glacia-tokens",
+        href: "https://www.npmjs.com/package/glacia-tokens",
+        external: true,
+      },
     ],
   },
 ];
@@ -42,11 +59,23 @@ export function Footer() {
             {COLUMNS.map((column) => (
               <div className="footer-column" key={column.title}>
                 <h3>{column.title}</h3>
-                {column.links.map((link) => (
-                  <Link key={link.label} href={link.href} className="footer-link">
-                    {link.label}
-                  </Link>
-                ))}
+                {column.links.map((link) =>
+                  "external" in link && link.external ? (
+                    <a
+                      key={link.label}
+                      href={link.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="footer-link"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link key={link.label} href={link.href} className="footer-link">
+                      {link.label}
+                    </Link>
+                  ),
+                )}
               </div>
             ))}
             <div className="footer-column">
