@@ -1,0 +1,63 @@
+name: Deploy to cPanel (glacia.binyamfeyissa.dev)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-cpanel
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    name: Build & Deploy to cPanel
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12
+          run_install: false
+
+      - name: 🟢 Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "pnpm"
+
+      - name: 📥 Install Dependencies
+        run: pnpm install --frozen-lockfile=false
+
+      - name: 🧪 Run Core Tests
+        run: pnpm --filter glacia test
+
+      - name: 🏗️ Build Packages and Static Export
+        run: pnpm build
+
+      - name: 🔍 Verify Export & .htaccess
+        run: |
+          echo "Verifying export artifacts in apps/docs/out..."
+          test -d apps/docs/out || { echo "apps/docs/out directory missing!"; exit 1; }
+          test -f apps/docs/out/index.html || { echo "index.html missing!"; exit 1; }
+          test -f apps/docs/out/.htaccess || { echo ".htaccess missing!"; exit 1; }
+          echo "Verified: $(find apps/docs/out -name "*.html" | wc -l) HTML pages ready to deploy."
+
+      - name: 🚀 Deploy to cPanel via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.CPANEL_FTP_SERVER || secrets.FTP_SERVER }}
+          username: ${{ secrets.CPANEL_FTP_USERNAME || secrets.FTP_USERNAME }}
+          password: ${{ secrets.CPANEL_FTP_PASSWORD || secrets.FTP_PASSWORD }}
+          port: ${{ secrets.CPANEL_FTP_PORT || secrets.FTP_PORT || 21 }}
+          protocol: ${{ secrets.CPANEL_FTP_PROTOCOL || secrets.FTP_PROTOCOL || 'ftp' }}
+          local-dir: ./apps/docs/out/
+          server-dir: ${{ secrets.CPANEL_FTP_DIR || secrets.FTP_TARGET_DIR || '/' }}
+          dangerous-clean-slate: false
