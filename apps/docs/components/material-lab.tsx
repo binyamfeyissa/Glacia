@@ -1,29 +1,132 @@
 "use client";
 
 import { useState } from "react";
-import { Button, SegmentedControl, Slider, Switch, resweepGlass } from "glacia";
-import { SnowflakeIcon, SparkIcon } from "./icons";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Button,
+  Calendar,
+  Chart,
+  CodeBlock,
+  Form,
+  Input,
+  Kbd,
+  Label,
+  SearchField,
+  Slider,
+  Switch,
+  TabBar,
+  Toaster,
+  toast,
+  type TabBarItem,
+} from "glacia";
+import {
+  CheckIcon,
+  CodeIcon,
+  GridIcon,
+  LayersIcon,
+  SearchIcon,
+  SnowflakeIcon,
+  SparkIcon,
+} from "./icons";
 
 const SURFACES = [
   { id: "tahoe", label: "Tahoe" },
-  { id: "aurora", label: "Aurora" },
   { id: "fluted", label: "Fluted" },
-  { id: "dusk", label: "Dusk" },
-  { id: "graphite", label: "Graphite" },
-  { id: "video", label: "Video" },
+  { id: "white", label: "White" },
+  { id: "graphite", label: "Dark Gray" },
 ] as const;
 
 type Surface = (typeof SURFACES)[number]["id"];
 
+/* Three action buttons glyphs (Heart, Share, Three-dots) */
+const HeartIcon = ({ filled = false }: { filled?: boolean }) => (
+  <svg
+    viewBox="0 0 24 24"
+    width={17}
+    height={17}
+    fill={filled ? "#ff375f" : "none"}
+    stroke={filled ? "#ff375f" : "currentColor"}
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M12 20s-7-4.6-7-9.4A4 4 0 0 1 12 7a4 4 0 0 1 7 3.6C19 15.4 12 20 12 20Z" />
+  </svg>
+);
+
+const ShareIcon = () => (
+  <svg
+    viewBox="0 0 24 24"
+    width={17}
+    height={17}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M12 15V4m0 0 4 4m-4-4L8 8M5 14v5h14v-5" />
+  </svg>
+);
+
+const MoreIcon = () => (
+  <svg viewBox="0 0 24 24" width={17} height={17} fill="currentColor" aria-hidden="true">
+    <circle cx="12" cy="5" r="1.8" />
+    <circle cx="12" cy="12" r="1.8" />
+    <circle cx="12" cy="19" r="1.8" />
+  </svg>
+);
+
+/* Exact same tabs as the website navigation tabs */
+const WEBSITE_TABS: TabBarItem[] = [
+  { value: "overview", label: "Overview", icon: <SnowflakeIcon width={14} height={14} /> },
+  { value: "components", label: "Components", icon: <GridIcon width={14} height={14} /> },
+  { value: "blocks", label: "Blocks", icon: <LayersIcon width={14} height={14} /> },
+  { value: "report", label: "Build report", icon: <CodeIcon width={14} height={14} /> },
+];
+
+const CODE_EXAMPLE = `import { Glass, Button } from "glacia";
+
+export function LiquidHero() {
+  return (
+    <Glass refraction={0.8} specular={0.9}>
+      <Button variant="glass">Liquid Glass</Button>
+    </Glass>
+  );
+}`;
+
+const CHART_DATA = [
+  { label: "Mon", value: 38 },
+  { label: "Tue", value: 65 },
+  { label: "Wed", value: 48 },
+  { label: "Thu", value: 89 },
+  { label: "Fri", value: 74 },
+  { label: "Sat", value: 92 },
+  { label: "Sun", value: 85 },
+];
+
 export function MaterialLab() {
   const [surface, setSurface] = useState<Surface>("tahoe");
+  const [activeTab, setActiveTab] = useState("overview");
+  const [sliderVal, setSliderVal] = useState(65);
+  const [switchA, setSwitchA] = useState(true);
+  const [switchB, setSwitchB] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
 
   return (
     <div className="lab-frame">
+      <Toaster position="bottom-right" />
+
+      {/* Surface switcher bar */}
       <div className="lab-bar">
         <span className="lab-bar-label">
           <SparkIcon width={13} height={13} />
-          <span>Material lab</span>
+          <span>Material hub</span>
         </span>
         <div className="surface-chips" role="tablist" aria-label="Backdrop surface">
           {SURFACES.map((item) => (
@@ -42,151 +145,263 @@ export function MaterialLab() {
         </div>
       </div>
 
-      <div
-        className={`lab-stage surface-${surface}`}
-        data-glacia-backdrop="true"
-        data-glisse-backdrop="true"
-      >
-        {surface === "video" ? (
-          <video
-            className="lab-stage-video"
-            autoPlay
-            loop
-            muted
-            playsInline
-            poster="/wallpapers/flow-poster.jpg"
-            aria-hidden="true"
-          >
-            <source src="/wallpapers/flow-loop.mp4" type="video/mp4" />
-          </video>
-        ) : null}
+      {/* Live Stage with refraction backdrop */}
+      <div className={`lab-stage surface-${surface}`} data-glacia-backdrop="true">
         <div className="lab-orb lab-orb-a" aria-hidden="true" />
         <div className="lab-orb lab-orb-b" aria-hidden="true" />
-        <div className="lab-grid" aria-hidden="true" />
+        <div className="lab-glow" aria-hidden="true" />
 
-        <div className="lab-widgets">
-          <div className="gl-glass lab-card lab-player">
-            <div className="lab-album" aria-hidden="true">
-              <SnowflakeIcon width={24} height={24} />
+        <div className="lab-board">
+          {/* Row 1 — Website Tabs, Search Button, 3 Side-by-Side Action Buttons, Primary & Secondary Buttons */}
+          <div className="lab-row-top">
+            <div className="lab-tabs-wrap">
+              <TabBar
+                items={WEBSITE_TABS}
+                value={activeTab}
+                onValueChange={(val) => {
+                  setActiveTab(val);
+                  toast.info(`Switched to ${val} tab`);
+                }}
+                aria-label="Navigation tabs"
+              />
             </div>
-            <div className="lab-player-meta">
-              <span className="lab-overline">Now playing</span>
-              <strong>Liquid Motion</strong>
-              <small>Glacia Sound System</small>
+
+            <Button
+              variant="glass"
+              size="sm"
+              aria-label="Search button"
+              className="lab-round-search"
+              onClick={() => toast.info("Search button activated")}
+            >
+              <SearchIcon width={18} height={18} />
+            </Button>
+
+            <div className="lab-action-triad" role="group" aria-label="Action buttons">
+              <Button
+                variant="glass"
+                size="sm"
+                aria-label="Heart button"
+                onClick={() => {
+                  const next = !liked;
+                  setLiked(next);
+                  toast(next ? "Added to favorites ❤️" : "Removed from favorites");
+                }}
+                className={liked ? "is-liked" : ""}
+              >
+                <HeartIcon filled={liked} />
+              </Button>
+              <Button
+                variant="glass"
+                size="sm"
+                aria-label="Share button"
+                onClick={() => toast.success("Share link copied to clipboard")}
+              >
+                <ShareIcon />
+              </Button>
+              <Button
+                variant="glass"
+                size="sm"
+                aria-label="Three dot button"
+                onClick={() => toast.info("More actions sheet opened")}
+              >
+                <MoreIcon />
+              </Button>
             </div>
-            <div className="lab-player-controls">
-              <button type="button" className="lab-control-button" aria-label="Previous track">
-                <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor" aria-hidden="true">
-                  <path d="M4 3h1.6v10H4zM12.5 3v10L6 8z" />
-                </svg>
-              </button>
-              <button type="button" className="lab-control-button is-play" aria-label="Play">
-                <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor" aria-hidden="true">
-                  <path d="M5 3.4v9.2L12.4 8z" />
-                </svg>
-              </button>
-              <button type="button" className="lab-control-button" aria-label="Next track">
-                <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor" aria-hidden="true">
-                  <path d="M10.4 3H12v10h-1.6zM3.5 3v10L10 8z" />
-                </svg>
-              </button>
+
+            <div className="lab-btn-pair">
+              <Button
+                variant="filled"
+                size="sm"
+                onClick={() => toast.success("Primary button clicked")}
+              >
+                Primary Button
+              </Button>
+              <Button
+                variant="glass"
+                size="sm"
+                onClick={() => toast.info("Secondary button clicked")}
+              >
+                Secondary Button
+              </Button>
             </div>
           </div>
 
-          <div className="gl-glass lab-card lab-mix">
-            <div className="lab-mix-head">
-              <span>Optical mix</span>
-              <span className="lab-live">Live</span>
+          {/* Row 2 — Search, Slider, Switch, Avatars, Kbd */}
+          <div className="lab-row-controls">
+            <div className="lab-search-wrap">
+              <SearchField
+                placeholder="Search components..."
+                aria-label="Search"
+                className="lab-search-input"
+              />
             </div>
-            <div className="lab-row">
-              <span className="lab-row-label">Bend</span>
-              <div className="lab-control">
-                <Slider
-                  defaultValue={45}
-                  min={0}
-                  max={150}
-                  aria-label="Bend strength"
-                  onValueChange={(val) => {
-                    const bend = typeof val === "number" ? val / 100 : 0.45;
-                    document.documentElement.style.setProperty("--gl-glass-bend", String(bend));
-                    resweepGlass();
-                  }}
+
+            <div className="gl-glass lab-slider-card">
+              <div className="lab-slider-meta">
+                <span className="lab-slider-label">Slider</span>
+                <span className="lab-slider-val">{sliderVal}%</span>
+              </div>
+              <Slider
+                value={sliderVal}
+                min={0}
+                max={100}
+                aria-label="Refraction slider"
+                onValueChange={(v) => setSliderVal(typeof v === "number" ? v : 65)}
+              />
+            </div>
+
+            <div className="gl-glass lab-switches-card">
+              <div className="lab-switch-unit">
+                <span className="lab-switch-label">Switch</span>
+                <Switch
+                  checked={switchA}
+                  onCheckedChange={setSwitchA}
+                  aria-label="Primary switch"
+                />
+              </div>
+              <div className="lab-switch-unit">
+                <span className="lab-switch-label">Optics</span>
+                <Switch
+                  checked={switchB}
+                  onCheckedChange={setSwitchB}
+                  aria-label="Secondary switch"
                 />
               </div>
             </div>
-            <div className="lab-row">
-              <span className="lab-row-label">Dispersion</span>
-              <div className="lab-control">
-                <Slider
-                  defaultValue={40}
-                  min={0}
-                  max={150}
-                  aria-label="Dispersion"
-                  onValueChange={(val) => {
-                    const disp = typeof val === "number" ? val / 100 : 0.40;
-                    document.documentElement.style.setProperty("--gl-glass-dispersion", String(disp));
-                    resweepGlass();
-                  }}
-                />
+
+            <div className="gl-glass lab-avatars-card" aria-label="Avatars">
+              <div className="lab-avatars-row">
+                <Avatar className="lab-avatar-item">
+                  <AvatarImage
+                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80"
+                    alt="Sarah Chen"
+                  />
+                  <AvatarFallback>SC</AvatarFallback>
+                </Avatar>
+                <Avatar className="lab-avatar-item">
+                  <AvatarImage
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80"
+                    alt="Alex Rivera"
+                  />
+                  <AvatarFallback>AR</AvatarFallback>
+                </Avatar>
+                <Avatar className="lab-avatar-item">
+                  <AvatarImage
+                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80"
+                    alt="Elena Rostova"
+                  />
+                  <AvatarFallback>ER</AvatarFallback>
+                </Avatar>
+                <Avatar className="lab-avatar-item lab-avatar-count">
+                  <AvatarFallback>+4</AvatarFallback>
+                </Avatar>
               </div>
             </div>
-            <div className="lab-row">
-              <span className="lab-row-label">Frost</span>
-              <div className="lab-control">
-                <Slider
-                  defaultValue={20}
-                  min={0}
-                  max={100}
-                  aria-label="Frost"
-                  onValueChange={(val) => {
-                    const frost = typeof val === "number" ? Math.round((val / 100) * 16) : 3;
-                    document.documentElement.style.setProperty("--gl-blur", `${frost}px`);
-                    resweepGlass();
-                  }}
-                />
-              </div>
-            </div>
-            <div className="lab-row">
-              <span className="lab-row-label">Rim</span>
-              <div className="lab-control">
-                <Slider
-                  defaultValue={13}
-                  min={0}
-                  max={100}
-                  aria-label="Rim shine"
-                  onValueChange={(val) => {
-                    const shine = typeof val === "number" ? val / 100 : 0.13;
-                    document.documentElement.style.setProperty("--gl-rim-shine", String(shine));
-                    resweepGlass();
-                  }}
-                />
+
+            <div className="gl-glass lab-kbd-card" aria-label="Keyboard shortcuts">
+              <span className="lab-kbd-label">Shortcut</span>
+              <div className="lab-kbd-cluster">
+                <Kbd size="md">⌘</Kbd>
+                <Kbd size="md">K</Kbd>
               </div>
             </div>
           </div>
 
-          <div className="gl-glass lab-toolbar">
-            <SegmentedControl
-              defaultValue="day"
-              items={[
-                { value: "day", label: "Day" },
-                { value: "week", label: "Week" },
-                { value: "month", label: "Month" },
-              ]}
-            />
-            <div className="lab-toolbar-actions">
-              <Button size="sm" variant="glass">
-                Share
-              </Button>
-              <Button size="sm" variant="filled">
-                Export
-              </Button>
+          {/* Row 3 — Calendar, Form, Toast, Chart, Code Block */}
+          <div className="lab-row-grid">
+            {/* Calendar Column */}
+            <div className="lab-grid-col-calendar">
+              <Calendar
+                selected={selectedDate}
+                onSelect={(d) => {
+                  setSelectedDate(d);
+                  toast.info(`Selected date: ${d.toLocaleDateString()}`);
+                }}
+              />
+            </div>
+
+            {/* Form & Toast Column */}
+            <div className="lab-grid-col-form">
+              <Form
+                className="gl-glass lab-form-card"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  toast.success("Account settings updated successfully!");
+                }}
+              >
+                <div className="lab-form-head">
+                  <div>
+                    <h4 className="lab-form-title">Apple Account</h4>
+                    <span className="lab-form-desc">Manage passkeys and sync</span>
+                  </div>
+                  <Kbd size="sm">⌘S</Kbd>
+                </div>
+                <div className="lab-form-field">
+                  <Label htmlFor="hub-email">Apple ID</Label>
+                  <Input
+                    id="hub-email"
+                    type="email"
+                    defaultValue="user@apple.com"
+                    placeholder="name@apple.com"
+                  />
+                </div>
+                <div className="lab-form-row">
+                  <Label htmlFor="hub-passkey" className="lab-form-row-label">
+                    Passkey Authentication
+                  </Label>
+                  <Switch id="hub-passkey" defaultChecked />
+                </div>
+                <Button type="submit" variant="filled" size="sm">
+                  Save Changes
+                </Button>
+              </Form>
+
+              <div className="gl-glass lab-toast-card">
+                <span className="lab-toast-icon">
+                  <CheckIcon width={16} height={16} />
+                </span>
+                <div className="lab-toast-copy">
+                  <strong className="lab-toast-title">Liquid Glass Material</strong>
+                  <span className="lab-toast-desc">Hardware refraction ready</span>
+                </div>
+                <Button
+                  variant="glass"
+                  size="sm"
+                  onClick={() => toast.success("Live Sonner notification from Glacia!")}
+                >
+                  Trigger
+                </Button>
+              </div>
+            </div>
+
+            {/* Chart & Code Block Column */}
+            <div className="lab-grid-col-chart">
+              <div className="gl-glass lab-chart-card">
+                <div className="lab-chart-head">
+                  <div>
+                    <span className="lab-chart-eyebrow">Transmission Index</span>
+                    <strong className="lab-chart-title">Dispersion Curve</strong>
+                  </div>
+                  <Kbd size="sm">60 FPS</Kbd>
+                </div>
+                <Chart data={CHART_DATA} type="line" height={130} color="#38bdf8" />
+              </div>
+
+              <div className="lab-code-wrap">
+                <CodeBlock
+                  code={CODE_EXAMPLE}
+                  language="tsx"
+                  filename="LiquidHero.tsx"
+                />
+              </div>
             </div>
           </div>
         </div>
 
-        <span className="lab-stage-caption">Rendered live · no screenshots</span>
+        <span className="lab-stage-caption">Rendered live · every control is a Glacia component</span>
       </div>
 
+      {/* Footer metadata */}
       <div className="lab-meta">
         <div className="lab-meta-item">
           <span>Layer 1</span>
