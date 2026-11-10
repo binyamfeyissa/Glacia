@@ -138,10 +138,7 @@ export default function HomePage() {
         </div>
 
         <div className="hero-inner">
-          <span className="hero-eyebrow">
-            <span className="status-dot" />
-            v0.3.1 · Full 71-Component Catalog Shipped
-          </span>
+
 
           <h1 className="hero-title">
             Liquid glass,
@@ -163,7 +160,7 @@ export default function HomePage() {
               See the material
             </a>
             <a
-              href="https://github.com/open-pluto/glacia"
+              href="https://github.com/binyamfeyissa/Glacia"
               target="_blank"
               rel="noreferrer"
               className="btn btn-quiet"
@@ -184,10 +181,7 @@ export default function HomePage() {
       <section className="section section-spaced ecosystem-section" id="ecosystem" aria-labelledby="ecosystem-heading">
         <div className="section-head">
           <div className="section-head-copy">
-            <p className="eyebrow" id="ecosystem-heading">
-              <span className="eyebrow-dot" />
-              Ecosystem &amp; Platforms
-            </p>
+
             <h2 className="section-title">Built for the platforms and tools you trust.</h2>
             <p className="section-desc">
               Native liquid glass on Apple platforms. Hardware-accelerated displacement on Chromium. Seamless integration across React, React Native, Next.js, and modern toolchains.
@@ -204,10 +198,7 @@ export default function HomePage() {
       <section className="lab-section" id="material">
         <div className="section-head">
           <div className="section-head-copy">
-            <p className="eyebrow">
-              <span className="eyebrow-dot" />
-              The material
-            </p>
+
             <h2 className="section-title">Glass that behaves like glass.</h2>
             <p className="section-desc">
               Move between surfaces and watch the same components hold their legibility, contrast,
@@ -244,10 +235,7 @@ export default function HomePage() {
       <section className="section section-spaced" id="components">
         <div className="section-head">
           <div className="section-head-copy">
-            <p className="eyebrow">
-              <span className="eyebrow-dot" />
-              Components
-            </p>
+
             <h2 className="section-title">Seventy-one primitives. One language.</h2>
             <p className="section-desc">
               Controls, forms, navigation, overlays, data, and AI — each one measured against Apple&apos;s
@@ -488,7 +476,7 @@ export default function HomePage() {
           <div className="cta-links">
             <Link href="/components/button">Read the docs</Link>
             <span>·</span>
-            <a href="https://github.com/open-pluto/glacia" target="_blank" rel="noreferrer">
+            <a href="https://github.com/binyamfeyissa/Glacia" target="_blank" rel="noreferrer">
               View on GitHub
             </a>
             <span>·</span>

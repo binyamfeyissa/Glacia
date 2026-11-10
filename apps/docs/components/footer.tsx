@@ -68,7 +68,7 @@ export function Footer() {
                 @callstack/liquid-glass
               </a>
               <a
-                href="https://github.com/open-pluto/glacia"
+                href="https://github.com/binyamfeyissa/Glacia"
                 target="_blank"
                 rel="noreferrer"
                 className="footer-link"

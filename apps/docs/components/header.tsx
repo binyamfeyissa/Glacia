@@ -120,7 +120,7 @@ export function Header() {
           </button>
           <ThemeToggle />
           <a
-            href="https://github.com/open-pluto/glacia"
+            href="https://github.com/binyamfeyissa/Glacia"
             target="_blank"
             rel="noreferrer"
             className="icon-button"
@@ -155,7 +155,7 @@ export function Header() {
             </Link>
           ))}
           <a
-            href="https://github.com/open-pluto/glacia"
+            href="https://github.com/binyamfeyissa/Glacia"
             target="_blank"
             rel="noreferrer"
             className="mobile-nav-link"
@@ -240,7 +240,7 @@ export function Header() {
           </div>
 
           <div className="search-dialog-foot">
-            <span>71 components · 10 blocks</span>
+            <span>81 components · 10 blocks</span>
             <span>
               <kbd>esc</kbd> to close
             </span>
