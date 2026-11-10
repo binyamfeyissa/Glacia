@@ -108,6 +108,10 @@ export function resweepGlass(): void {
 
 function schedule(): void {
   if (frame) return;
+  if (typeof window === "undefined" || typeof requestAnimationFrame === "undefined") {
+    sweep();
+    return;
+  }
   frame = requestAnimationFrame(() => {
     frame = 0;
     sweep();
