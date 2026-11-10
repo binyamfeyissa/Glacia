@@ -81,7 +81,7 @@ export function GlassDials() {
           title="Tweak Liquid Glass Optics"
         >
           <SparkIcon width={14} height={14} />
-          <span>Glass Optics</span>
+          <span className="glass-dials-trigger-text">Glass Optics</span>
         </button>
       ) : (
         <div className="gl-glass glass-dials-panel">

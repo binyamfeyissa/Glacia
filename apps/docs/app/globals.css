@@ -4019,9 +4019,15 @@ button {
 /* The nav labels are short, so the four items stay one row even on a phone. */
 @media (max-width: 520px) {
   .bottom-tabbar-inner {
-    --gl-tab-width: 76px;
+    --gl-tab-width: 68px;
     width: fit-content;
     max-width: calc(100vw - 20px);
+  }
+}
+
+@media (max-width: 380px) {
+  .bottom-tabbar-inner {
+    --gl-tab-width: 64px;
   }
 }
 
@@ -4066,6 +4072,48 @@ body {
 .glass-dials-trigger:hover {
   transform: translateY(-2px);
   background-color: var(--gl-glass-active);
+}
+
+@media (max-width: 768px) {
+  .glass-dials-widget {
+    bottom: max(24px, calc(env(safe-area-inset-bottom, 14px) + 10px));
+    right: 12px;
+  }
+
+  .glass-dials-trigger {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    justify-content: center;
+    gap: 0;
+    flex-shrink: 0;
+  }
+
+  .glass-dials-trigger .glass-dials-trigger-text,
+  .glass-dials-trigger span {
+    display: none;
+  }
+
+  .glass-dials-trigger svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .glass-dials-panel {
+    width: min(290px, calc(100vw - 24px));
+  }
+}
+
+@media (max-width: 380px) {
+  .glass-dials-widget {
+    right: 8px;
+  }
+
+  .glass-dials-trigger {
+    width: 38px;
+    height: 38px;
+  }
 }
 
 .glass-dials-panel {
