@@ -3,6 +3,7 @@ import { COMPONENTS_DATA } from "../data/components-data";
 import { ComponentThumb } from "../components/component-thumb";
 import { InstallCommand } from "../components/install-command";
 import { MaterialLab } from "../components/material-lab";
+import { StackMarquee } from "../components/stack-marquee";
 import {
   ArrowRightIcon,
   ArrowUpRightIcon,
@@ -155,7 +156,7 @@ export default function HomePage() {
 
           <div className="hero-actions">
             <Link href="/components/button" className="btn btn-primary">
-              Explore 71 components
+              Explore 81 components
               <ArrowRightIcon className="arrow" />
             </Link>
             <a href="#material" className="btn btn-glass">
@@ -176,6 +177,26 @@ export default function HomePage() {
             <InstallCommand />
             <span className="hero-note">TypeScript · Zero dependencies · WAI-ARIA</span>
           </div>
+        </div>
+      </section>
+
+      {/* Ecosystem & Platforms */}
+      <section className="section section-spaced ecosystem-section" id="ecosystem" aria-labelledby="ecosystem-heading">
+        <div className="section-head">
+          <div className="section-head-copy">
+            <p className="eyebrow" id="ecosystem-heading">
+              <span className="eyebrow-dot" />
+              Ecosystem &amp; Platforms
+            </p>
+            <h2 className="section-title">Built for the platforms and tools you trust.</h2>
+            <p className="section-desc">
+              Native liquid glass on Apple platforms. Hardware-accelerated displacement on Chromium. Seamless integration across React, React Native, Next.js, and modern toolchains.
+            </p>
+          </div>
+        </div>
+
+        <div className="ecosystem-card">
+          <StackMarquee />
         </div>
       </section>
 
@@ -272,7 +293,7 @@ export default function HomePage() {
         <div className="section-head">
           <div className="section-head-copy">
             <p className="eyebrow">Full catalog</p>
-            <h2 className="section-title">All 71 components across Waves 1, 2 &amp; 3.</h2>
+            <h2 className="section-title">All 81 components across Waves 1, 2, 3 &amp; 4.</h2>
           </div>
         </div>
 

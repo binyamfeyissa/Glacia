@@ -992,11 +992,11 @@ button {
   --stage: url("/hero/tahoe-1200.jpg") center / cover no-repeat;
 }
 
-.surface-aurora {
+.surface-white {
   --stage:
-    linear-gradient(150deg, rgb(10 21 48 / 0.42) 0%, rgb(10 13 25 / 0.3) 55%, rgb(16 12 28 / 0.38) 100%),
-    radial-gradient(44% 58% at 82% 18%, rgb(130 80 255 / 0.2), transparent 66%),
-    url("/hero/texture.jpg") center / cover no-repeat;
+    radial-gradient(60% 60% at 20% 10%, rgb(210 225 255 / 0.9), transparent 70%),
+    radial-gradient(50% 55% at 85% 80%, rgb(225 235 255 / 0.85), transparent 72%),
+    linear-gradient(160deg, #f4f7fd 0%, #e7edf8 55%, #dde5f3 100%);
 }
 
 .surface-fluted {
@@ -1048,9 +1048,7 @@ button {
 }
 
 .surface-graphite {
-  --stage:
-    linear-gradient(150deg, rgb(20 23 29 / 0.46) 0%, rgb(11 13 17 / 0.54) 60%, rgb(8 9 12 / 0.62) 100%),
-    url("/hero/texture.jpg") center / cover no-repeat;
+  --stage: linear-gradient(160deg, #3a3d44 0%, #2b2e34 55%, #202227 100%);
 }
 
 .lab-grid {
@@ -1146,6 +1144,7 @@ button {
 }
 
 .lab-player-meta strong {
+  color: var(--gl-foreground);
   margin-top: 3px;
   overflow: hidden;
   font-size: 14px;
@@ -1155,7 +1154,7 @@ button {
 }
 
 .lab-player-meta small {
-  color: rgb(235 240 250 / 0.45);
+  color: var(--gl-muted);
   font-size: 11px;
 }
 
@@ -1265,7 +1264,7 @@ button {
   right: 18px;
   bottom: 16px;
   z-index: 2;
-  color: rgb(235 240 250 / 0.3);
+  color: rgb(235 240 250 / 0.55);
   font-family: var(--font-mono);
   font-size: 9px;
   letter-spacing: 0.12em;
@@ -4219,4 +4218,470 @@ body {
   text-align: center;
   border-top: 1px solid var(--gl-separator);
   padding-top: 8px;
+}
+
+/* ==========================================================================
+   Material lab — the reference dashboard board
+   ========================================================================== */
+
+.lab-glow {
+  position: absolute;
+  inset: auto -10% -40% -10%;
+  height: 70%;
+  background: radial-gradient(60% 70% at 50% 100%, rgb(40 190 220 / 0.5), transparent 70%);
+  filter: blur(60px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.lab-board {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1080px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.lab-row-1 {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* The wide five-item pill, styled like the reference's segmented rail. */
+.lab-segmented {
+  --gl-tab-inset: 6px;
+  --gl-thumb-inset: 5px;
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  padding: 6px;
+  border-radius: 26px;
+  position: relative;
+}
+
+.lab-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 4px;
+  border: 0;
+  background: transparent;
+  color: var(--gl-foreground);
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 500;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.lab-tab[data-active="true"] {
+  background: rgb(255 255 255 / 0.1);
+  color: #4cc7ff;
+}
+
+.lab-tab-icon {
+  display: grid;
+  place-items: center;
+  height: 18px;
+  color: currentColor;
+}
+
+.lab-glyph-dot,
+.lab-glyph-tri,
+.lab-glyph-sq {
+  display: block;
+  width: 13px;
+  height: 13px;
+  background: currentColor;
+}
+
+.lab-glyph-dot { border-radius: 50%; }
+.lab-glyph-sq { border-radius: 4px; }
+.lab-glyph-tri {
+  width: 0;
+  height: 0;
+  background: none;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 12px solid currentColor;
+}
+
+.lab-round-button {
+  width: 62px;
+  height: 62px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: var(--gl-foreground);
+  cursor: pointer;
+}
+
+.lab-row-2 {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.lab-search {
+  flex: 0 0 auto;
+  width: 300px;
+}
+
+.lab-slider-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 18px 20px;
+  border-radius: 20px;
+}
+
+.lab-row-3 {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr) 150px 200px;
+  gap: 14px;
+  align-items: stretch;
+}
+
+.lab-battery {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 16px;
+  border-radius: 20px;
+  min-height: 148px;
+}
+
+.lab-battery-value {
+  font-size: 27px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.lab-player {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 20px;
+}
+
+.lab-album {
+  width: 62px;
+  height: 62px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background:
+    linear-gradient(140deg, #ff6a3d 0%, #e0343c 55%, #7d1f4a 100%);
+  color: rgb(255 255 255 / 0.92);
+}
+
+.lab-player-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lab-player-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  color: var(--gl-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.lab-player-progress :where(.gl-slider) {
+  flex: 1;
+}
+
+.lab-airplay {
+  margin-left: auto;
+}
+
+.lab-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+}
+
+.lab-actions-pills {
+  display: flex;
+  gap: 8px;
+}
+
+.lab-actions-round {
+  display: flex;
+  gap: 8px;
+}
+
+.lab-icon-button {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: var(--gl-foreground);
+  cursor: pointer;
+}
+
+.lab-nav-panel {
+  border-radius: 20px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.lab-nav-panel :where(.gl-list) {
+  box-shadow: none;
+  border-radius: 14px;
+}
+
+.lab-nav-divider {
+  height: 0.5px;
+  background: var(--gl-separator);
+  margin: 4px 10px;
+}
+
+.lab-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+}
+
+.lab-nav-row-label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 14px;
+}
+
+.lab-row-4 {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.lab-appearance {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  color: var(--gl-muted);
+}
+
+.lab-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  max-width: 380px;
+}
+
+.lab-toast-icon {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--gl-fill);
+  color: #fff;
+}
+
+.lab-toast-copy {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.lab-toast-action {
+  align-self: flex-start;
+  padding: 5px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--gl-fill);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.lab-toast-close {
+  border: 0;
+  background: transparent;
+  color: var(--gl-muted);
+  cursor: pointer;
+  padding: 2px;
+}
+
+@media (max-width: 1080px) {
+  .lab-row-3 {
+    grid-template-columns: 120px minmax(0, 1fr);
+  }
+  .lab-actions,
+  .lab-nav-panel {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 760px) {
+  .lab-row-1,
+  .lab-row-2 {
+    flex-wrap: wrap;
+  }
+  .lab-search {
+    width: 100%;
+  }
+  .lab-row-3 {
+    grid-template-columns: 1fr;
+  }
+  .lab-actions,
+  .lab-nav-panel {
+    grid-column: auto;
+  }
+  .lab-tab-label {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Stack marquee — infinite logo scroll
+   ========================================================================== */
+
+.marquee {
+  position: relative;
+  overflow: hidden;
+  padding: 22px 0;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.marquee-track {
+  display: flex;
+  align-items: center;
+  gap: 56px;
+  width: max-content;
+  animation: marquee-scroll 34s linear infinite;
+  will-change: transform;
+}
+
+/* One copy of the list is exactly half the track, so sliding -50% lands on
+   an identical frame and the loop never shows a seam. */
+@keyframes marquee-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  transition: color 200ms ease;
+  cursor: default;
+}
+
+.marquee-item:hover {
+  color: var(--fg);
+}
+
+.marquee-mark {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  background: var(--surface-2, rgb(255 255 255 / 0.05));
+  border: 1px solid var(--line, rgb(255 255 255 / 0.1));
+  color: var(--fg);
+  box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.25), inset 0 1px 1px 0 rgba(255, 255, 255, 0.12);
+  transition: all 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.marquee-item:hover .marquee-mark {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #fff;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.4), inset 0 1px 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.ecosystem-section {
+  position: relative;
+  z-index: 2;
+}
+
+.ecosystem-card {
+  position: relative;
+  border-radius: 24px;
+  background: var(--surface-1, rgba(255, 255, 255, 0.025));
+  border: 1px solid var(--line, rgba(255, 255, 255, 0.08));
+  overflow: hidden;
+  box-shadow: 0 12px 36px -12px rgba(0, 0, 0, 0.35), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 12px 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+  .marquee-track {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+    animation: none;
+    transform: none;
+  }
+}
+
+
+/* The White surface is a light page: text inside the glass must be dark, and
+   the caption needs more weight against a pale backdrop. */
+.surface-white .lab-stage-caption {
+  color: rgb(20 30 50 / 0.55);
+}
+
+.surface-white {
+  --gl-foreground: rgb(0 0 0 / 0.88);
+  --gl-muted: rgb(60 60 67 / 0.85);
+  --gl-glass: rgb(255 255 255 / 0.72);
+  --gl-edge: rgb(0 0 0 / 0.1);
+  --gl-separator: rgb(60 60 67 / 0.18);
+  --gl-rim-shine: 0.3;
 }
