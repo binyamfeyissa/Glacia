@@ -9,7 +9,9 @@
     "dev": "pnpm --filter docs dev",
     "test": "pnpm --filter glacia test && pnpm --filter glacia-native test",
     "typecheck": "pnpm -r run typecheck",
-    "registry:build": "node scripts/build-registry.js"
+    "registry:build": "node scripts/build-registry.js",
+    "deploy:cpanel": "python3 scripts/deploy-cpanel.py",
+    "packages:publish": "pnpm --filter glacia-tokens publish --access public --no-git-checks && pnpm --filter glacia publish --access public --no-git-checks && pnpm --filter glacia-native publish --access public --no-git-checks"
   },
   "devDependencies": {
     "typescript": "^5.7.3"
