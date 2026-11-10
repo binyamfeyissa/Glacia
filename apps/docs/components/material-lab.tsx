@@ -17,12 +17,9 @@ import {
   Slider,
   Switch,
   TabBar,
-  Toaster,
-  toast,
   type TabBarItem,
 } from "glacia";
 import {
-  CheckIcon,
   CodeIcon,
   GridIcon,
   LayersIcon,
@@ -120,8 +117,6 @@ export function MaterialLab() {
 
   return (
     <div className="lab-frame">
-      <Toaster position="bottom-right" />
-
       {/* Surface switcher bar */}
       <div className="lab-bar">
         <span className="lab-bar-label">
@@ -152,77 +147,61 @@ export function MaterialLab() {
         <div className="lab-glow" aria-hidden="true" />
 
         <div className="lab-board">
-          {/* Row 1 — Website Tabs, Search Button, 3 Side-by-Side Action Buttons, Primary & Secondary Buttons */}
+          {/* Row 1 — Compact Website Tabs, Search Button, 3 Action Buttons, Primary & Secondary Buttons */}
           <div className="lab-row-top">
             <div className="lab-tabs-wrap">
               <TabBar
                 items={WEBSITE_TABS}
                 value={activeTab}
-                onValueChange={(val) => {
-                  setActiveTab(val);
-                  toast.info(`Switched to ${val} tab`);
-                }}
+                onValueChange={setActiveTab}
                 aria-label="Navigation tabs"
               />
             </div>
 
-            <Button
-              variant="glass"
-              size="sm"
-              aria-label="Search button"
-              className="lab-round-search"
-              onClick={() => toast.info("Search button activated")}
-            >
-              <SearchIcon width={18} height={18} />
-            </Button>
+            <div className="lab-top-actions">
+              <Button
+                variant="glass"
+                size="sm"
+                aria-label="Search button"
+                className="lab-round-search"
+              >
+                <SearchIcon width={18} height={18} />
+              </Button>
 
-            <div className="lab-action-triad" role="group" aria-label="Action buttons">
-              <Button
-                variant="glass"
-                size="sm"
-                aria-label="Heart button"
-                onClick={() => {
-                  const next = !liked;
-                  setLiked(next);
-                  toast(next ? "Added to favorites ❤️" : "Removed from favorites");
-                }}
-                className={liked ? "is-liked" : ""}
-              >
-                <HeartIcon filled={liked} />
-              </Button>
-              <Button
-                variant="glass"
-                size="sm"
-                aria-label="Share button"
-                onClick={() => toast.success("Share link copied to clipboard")}
-              >
-                <ShareIcon />
-              </Button>
-              <Button
-                variant="glass"
-                size="sm"
-                aria-label="Three dot button"
-                onClick={() => toast.info("More actions sheet opened")}
-              >
-                <MoreIcon />
-              </Button>
-            </div>
+              <div className="lab-action-triad" role="group" aria-label="Action buttons">
+                <Button
+                  variant="glass"
+                  size="sm"
+                  aria-label="Heart button"
+                  onClick={() => setLiked(!liked)}
+                  className={liked ? "is-liked" : ""}
+                >
+                  <HeartIcon filled={liked} />
+                </Button>
+                <Button
+                  variant="glass"
+                  size="sm"
+                  aria-label="Share button"
+                >
+                  <ShareIcon />
+                </Button>
+                <Button
+                  variant="glass"
+                  size="sm"
+                  aria-label="Three dot button"
+                >
+                  <MoreIcon />
+                </Button>
+              </div>
 
-            <div className="lab-btn-pair">
-              <Button
-                variant="filled"
-                size="sm"
-                onClick={() => toast.success("Primary button clicked")}
-              >
-                Primary Button
-              </Button>
-              <Button
-                variant="glass"
-                size="sm"
-                onClick={() => toast.info("Secondary button clicked")}
-              >
-                Secondary Button
-              </Button>
+              <div className="lab-btn-pair">
+                <Button variant="filled" size="sm">
+                  Primary Button
+                </Button>
+                <Button variant="glass" size="sm">
+                  Secondary Button
+                </Button>
+              </div>
             </div>
           </div>
 
@@ -307,35 +286,36 @@ export function MaterialLab() {
             </div>
           </div>
 
-          {/* Row 3 — Calendar, Form, Toast, Chart, Code Block */}
+          {/* Row 3 — Calendar, Form, Chart, Code Block */}
           <div className="lab-row-grid">
             {/* Calendar Column */}
             <div className="lab-grid-col-calendar">
-              <Calendar
-                selected={selectedDate}
-                onSelect={(d) => {
-                  setSelectedDate(d);
-                  toast.info(`Selected date: ${d.toLocaleDateString()}`);
-                }}
-              />
+              <div className="gl-glass lab-calendar-shell">
+                <Calendar
+                  selected={selectedDate}
+                  onSelect={setSelectedDate}
+                />
+                <div className="lab-calendar-footer">
+                  <span className="lab-cal-dot" />
+                  <span>Nov 11 · 2:00 PM Design Review</span>
+                </div>
+              </div>
             </div>
 
-            {/* Form & Toast Column */}
+            {/* Form Column */}
             <div className="lab-grid-col-form">
               <Form
                 className="gl-glass lab-form-card"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  toast.success("Account settings updated successfully!");
-                }}
+                onSubmit={(e) => e.preventDefault()}
               >
                 <div className="lab-form-head">
                   <div>
                     <h4 className="lab-form-title">Apple Account</h4>
-                    <span className="lab-form-desc">Manage passkeys and sync</span>
+                    <span className="lab-form-desc">Passkeys &amp; iCloud sync</span>
                   </div>
                   <Kbd size="sm">⌘S</Kbd>
                 </div>
+
                 <div className="lab-form-field">
                   <Label htmlFor="hub-email">Apple ID</Label>
                   <Input
@@ -345,33 +325,34 @@ export function MaterialLab() {
                     placeholder="name@apple.com"
                   />
                 </div>
+
+                <div className="lab-form-field">
+                  <Label htmlFor="hub-key">Passkey Password</Label>
+                  <Input
+                    id="hub-key"
+                    type="password"
+                    defaultValue="••••••••••••"
+                  />
+                </div>
+
                 <div className="lab-form-row">
                   <Label htmlFor="hub-passkey" className="lab-form-row-label">
                     Passkey Authentication
                   </Label>
                   <Switch id="hub-passkey" defaultChecked />
                 </div>
-                <Button type="submit" variant="filled" size="sm">
+
+                <div className="lab-form-row">
+                  <Label htmlFor="hub-keychain" className="lab-form-row-label">
+                    iCloud Keychain Sync
+                  </Label>
+                  <Switch id="hub-keychain" defaultChecked />
+                </div>
+
+                <Button type="submit" variant="filled" size="sm" className="lab-form-btn">
                   Save Changes
                 </Button>
               </Form>
-
-              <div className="gl-glass lab-toast-card">
-                <span className="lab-toast-icon">
-                  <CheckIcon width={16} height={16} />
-                </span>
-                <div className="lab-toast-copy">
-                  <strong className="lab-toast-title">Liquid Glass Material</strong>
-                  <span className="lab-toast-desc">Hardware refraction ready</span>
-                </div>
-                <Button
-                  variant="glass"
-                  size="sm"
-                  onClick={() => toast.success("Live Sonner notification from Glacia!")}
-                >
-                  Trigger
-                </Button>
-              </div>
             </div>
 
             {/* Chart & Code Block Column */}
@@ -384,7 +365,7 @@ export function MaterialLab() {
                   </div>
                   <Kbd size="sm">60 FPS</Kbd>
                 </div>
-                <Chart data={CHART_DATA} type="line" height={130} color="#38bdf8" />
+                <Chart data={CHART_DATA} type="line" height={125} color="#38bdf8" />
               </div>
 
               <div className="lab-code-wrap">
