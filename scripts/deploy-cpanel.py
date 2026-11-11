@@ -2,9 +2,8 @@
 """
 Glacia cPanel FTPS Resilient Direct Deployer
 Uploads static export from apps/docs/out to cPanel web root with:
-- FTPS TLS session resumption support
-- Passive mode IP normalization
-- Directory pre-creation & caching (zero redundant FTP CWD roundtrips)
+- Native FTPS over TLS (PatchedFTP_TLS avoiding unwrap hang)
+- Directory pre-creation & caching
 - Smart incremental file sync (skips files with identical size)
 - Automatic connection recovery & per-file retries
 """
@@ -16,7 +15,7 @@ import socket
 import ssl
 import getpass
 import subprocess
-from ftplib import FTP, FTP_TLS, all_errors
+from ftplib import FTP, FTP_TLS
 
 HOST = os.environ.get("CPANEL_FTP_SERVER", "ftp.plutotechnologies.org")
 USER = os.environ.get("CPANEL_FTP_USERNAME", "glacia@glacia.binyamfeyissa.dev")
@@ -26,30 +25,34 @@ ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 LOCAL_DIR = os.path.abspath(os.path.join(ROOT_DIR, "apps", "docs", "out"))
 REMOTE_DIR = os.environ.get("CPANEL_FTP_DIR", "/")
 BLOCK_SIZE = 65536  # 64 KB buffers for fast transfer
-SOCKET_TIMEOUT = 45  # 45 seconds before timeout
+SOCKET_TIMEOUT = 30  # 30 seconds before timeout
 
 
-class ReusableFTP_TLS(FTP_TLS):
+class PatchedFTP_TLS(FTP_TLS):
     """
-    FTP_TLS subclass that:
-    1. Reuses TLS session from control connection for data connections (required by Pure-FTPd).
-    2. Overrides makepasv to always connect to control host (avoids internal NAT timeout on cPanel).
+    Subclass of FTP_TLS that prevents conn.unwrap() from hanging indefinitely.
+    Pure-FTPd closes TLS data connections without sending a TLS close_notify alert,
+    which causes standard Python ftplib to block forever in unwrap().
     """
-    def ntransfercmd(self, cmd, rest=None):
-        conn, size = super().ntransfercmd(cmd, rest)
-        if self._prot_p:
-            session = getattr(self.sock, "session", None)
-            conn = self.context.wrap_socket(
-                conn,
-                server_hostname=self.host,
-                session=session
-            )
-        return conn, size
-
-    def makepasv(self):
-        host, port = super().makepasv()
-        # Always route data channel through the control host IP/domain to prevent NAT timeout
-        return self.host, port
+    def storbinary(self, cmd, fp, blocksize=BLOCK_SIZE, callback=None, rest=None):
+        self.voidcmd("TYPE I")
+        with self.transfercmd(cmd, rest) as conn:
+            conn.settimeout(SOCKET_TIMEOUT)
+            while True:
+                buf = fp.read(blocksize)
+                if not buf:
+                    break
+                conn.sendall(buf)
+                if callback:
+                    callback(buf)
+            # Safely shutdown SSL layer with short timeout so conn.unwrap() does not hang
+            if hasattr(conn, "unwrap"):
+                try:
+                    conn.settimeout(2.0)
+                    conn.unwrap()
+                except Exception:
+                    pass
+        return self.voidresp()
 
 
 class FTPDeployer:
@@ -80,16 +83,16 @@ class FTPDeployer:
                 ctx = ssl.create_default_context()
                 ctx.check_hostname = False
                 ctx.verify_mode = ssl.CERT_NONE
-                ftp = ReusableFTP_TLS(context=ctx)
+                ftp = PatchedFTP_TLS(context=ctx)
                 ftp.connect(self.host, self.port, timeout=SOCKET_TIMEOUT)
                 ftp.auth()
                 ftp.login(self.user, self.password)
-                ftp.prot_p()
+                ftp.prot_p()  # Secure data transfers
                 ftp.voidcmd("TYPE I")  # Binary mode
                 self.ftp = ftp
                 return self.ftp
             except Exception as e:
-                print(f"⚠️  FTPS connection warning: {e}. Attempting plain FTP...")
+                print(f"⚠️  FTPS connection notice: {e}. Attempting standard FTP...")
                 self.use_tls = False
 
         # Fallback to plain FTP
@@ -133,8 +136,8 @@ class FTPDeployer:
                     ftp.mkd(accumulated)
                     self.created_dirs.add(accumulated)
                 except Exception:
-                    # Might exist already
                     self.created_dirs.add(accumulated)
+        self.current_remote_dir = accumulated
 
     def change_remote_dir(self, remote_dir_path):
         """Change directory only if not already there."""
@@ -142,21 +145,20 @@ class FTPDeployer:
         if self.current_remote_dir == normalized:
             return
         self.ensure_remote_dir(normalized)
-        ftp = self.get_ftp()
-        try:
-            ftp.cwd(normalized)
-            self.current_remote_dir = normalized
-        except Exception:
-            # Force recreate and retry
-            self.ensure_remote_dir(normalized)
-            ftp.cwd(normalized)
-            self.current_remote_dir = normalized
+        if self.current_remote_dir != normalized:
+            ftp = self.get_ftp()
+            try:
+                ftp.cwd(normalized)
+                self.current_remote_dir = normalized
+            except Exception:
+                self.ensure_remote_dir(normalized)
+                ftp.cwd(normalized)
+                self.current_remote_dir = normalized
 
     def get_remote_file_size(self, remote_file_path):
         """Get file size on remote server using SIZE command. Returns -1 if not found."""
         ftp = self.get_ftp()
         try:
-            # Some FTP servers accept full path in SIZE
             return ftp.size(remote_file_path)
         except Exception:
             return -1
@@ -166,7 +168,7 @@ class FTPDeployer:
         local_size = os.path.getsize(local_path)
         remote_full_path = (remote_dir_path.rstrip("/") + "/" + filename).lstrip("/")
 
-        # Check if already uploaded and identical
+        # Check if already uploaded and identical in size
         remote_size = self.get_remote_file_size(remote_full_path)
         if remote_size == local_size:
             return "skipped", local_size
@@ -178,15 +180,13 @@ class FTPDeployer:
                 with open(local_path, "rb") as f:
                     ftp.storbinary(f"STOR {filename}", f, blocksize=BLOCK_SIZE)
                 return "uploaded", local_size
-            except (socket.timeout, TimeoutError, ConnectionResetError, BrokenPipeError,
-                    ssl.SSLError, EOFError, OSError, all_errors) as err:
+            except Exception as err:
                 if attempt == max_retries:
                     raise RuntimeError(f"Failed to upload {filename} after {max_retries} attempts: {err}")
                 wait_sec = attempt * 1.5
-                sys.stdout.write(f"\n   ⚠️  [Attempt {attempt}/{max_retries}] Retry {filename} in {wait_sec:.1f}s ({err})... ")
+                sys.stdout.write(f"\n   ⚠️  [Attempt {attempt}/{max_retries}] Retrying {filename} in {wait_sec:.1f}s ({err})... ")
                 sys.stdout.flush()
                 time.sleep(wait_sec)
-                # Reconnect
                 try:
                     self.get_ftp(force_reconnect=True)
                 except Exception:
@@ -247,7 +247,6 @@ def main():
     total_bytes = 0
     for root, dirs, files in os.walk(LOCAL_DIR):
         for f in sorted(files):
-            # Skip OS junk
             if f in (".DS_Store", "Thumbs.db"):
                 continue
             full_path = os.path.join(root, f)
@@ -296,7 +295,6 @@ def main():
         else:
             skipped_count += 1
 
-        # Formatted progress
         percent = (idx / total_files) * 100
         display_name = rel_path if len(rel_path) <= 35 else "..." + rel_path[-32:]
         stat_tag = "↑" if status == "uploaded" else "="
