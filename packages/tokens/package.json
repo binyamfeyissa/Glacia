@@ -1,6 +1,6 @@
 {
   "name": "glacia-tokens",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Shared design tokens and cross-platform types for Glacia",
   "license": "MIT",
   "type": "module",
