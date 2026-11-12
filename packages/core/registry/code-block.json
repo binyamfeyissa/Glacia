@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "code-block",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/code-block.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — code-block\n// Copied with `npx glacia add code-block`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport * as React from \"react\";\n\nexport interface CodeBlockProps extends React.HTMLAttributes<HTMLDivElement> {\n  code: string;\n  language?: string;\n  filename?: string;\n  showLineNumbers?: boolean;\n}\n\nexport const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(\n  (\n    {\n      code,\n      language = \"typescript\",\n      filename,\n      showLineNumbers = true,\n      className = \"\",\n      ...props\n    },\n    ref\n  ) => {\n    const [copied, setCopied] = React.useState(false);\n\n    const handleCopy = async () => {\n      try {\n        await navigator.clipboard.writeText(code);\n        setCopied(true);\n        setTimeout(() => setCopied(false), 2000);\n      } catch (err) {\n        console.error(\"Failed to copy code\", err);\n      }\n    };\n\n    const lines = code.trim().split(\"\\n\");\n\n    return (\n      <div\n        ref={ref}\n        className={`gl-code-block gl-glass ${className}`}\n        {...props}\n      >\n        <div className=\"gl-code-block-header\">\n          <div className=\"gl-window-controls\" aria-hidden=\"true\">\n            <span className=\"gl-control-dot gl-dot-close\" />\n            <span className=\"gl-control-dot gl-dot-minimize\" />\n            <span className=\"gl-control-dot gl-dot-maximize\" />\n          </div>\n          {filename && <span className=\"gl-code-block-filename\">{filename}</span>}\n          <div className=\"gl-code-block-actions\">\n            {language && <span className=\"gl-code-block-lang\">{language}</span>}\n            <button\n              type=\"button\"\n              onClick={handleCopy}\n              className=\"gl-code-copy-btn gl-glass\"\n              aria-label={copied ? \"Copied\" : \"Copy code\"}\n            >\n              {copied ? (\n                <svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2.5\" strokeLinecap=\"round\" strokeLinejoin=\"round\">\n                  <polyline points=\"20 6 9 17 4 12\" />\n                </svg>\n              ) : (\n                <svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" strokeLinecap=\"round\" strokeLinejoin=\"round\">\n                  <rect x=\"9\" y=\"9\" width=\"13\" height=\"13\" rx=\"2\" ry=\"2\" />\n                  <path d=\"M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\" />\n                </svg>\n              )}\n            </button>\n          </div>\n        </div>\n        <div className=\"gl-code-block-body\">\n          <pre className=\"gl-code-pre\">\n            <code>\n              {lines.map((line, idx) => (\n                <div key={idx} className=\"gl-code-line\">\n                  {showLineNumbers && (\n                    <span className=\"gl-code-line-number\" aria-hidden=\"true\">\n                      {idx + 1}\n                    </span>\n                  )}\n                  <span className=\"gl-code-line-content\">{line || \" \"}</span>\n                </div>\n              ))}\n            </code>\n          </pre>\n        </div>\n      </div>\n    );\n  }\n);\nCodeBlock.displayName = \"CodeBlock\";\n",
+      "type": "registry:ui"
+    }
+  ]
+}

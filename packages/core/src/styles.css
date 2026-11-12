@@ -31,6 +31,20 @@
   --gl-ring: rgb(0 0 0 / 0.4);
   --gl-lens-shine: -1.5;
   --gl-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+
+  /* Control metrics. One scale for every control in the kit so a button, a
+     toggle, a field and a toolbar item all stand the same height. These are
+     geometry only — nothing here touches the glass material. */
+  --gl-control-sm: 28px;
+  --gl-control-md: 34px;
+  --gl-control-lg: 44px;
+  --gl-icon-sm: 14px;
+  --gl-icon-md: 16px;
+  --gl-icon-lg: 20px;
+  --gl-control-pad: 14px; /* horizontal padding of a pill control */
+  --gl-row-list: 44px; /* a list row */
+  --gl-row-menu: 40px; /* a menu row */
+  --gl-overlay-radius: 28px; /* dialogs, sheets, popovers, menus */
 }
 
 :where([data-theme="dark"]) {
@@ -146,14 +160,18 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  height: 40px;
-  padding: 0 16px;
+  gap: 7px;
+  height: var(--gl-control-md);
+  padding: 0 var(--gl-control-pad);
   border: 0;
-  border-radius: 20px;
+  /* A pill: the radius is always half the height, so the ends stay circular
+     at every size, as in the reference kit. */
+  border-radius: 999px;
   color: var(--gl-foreground);
   font: inherit;
   font-size: 14px;
+  line-height: 1;
+  white-space: nowrap;
   cursor: pointer;
   /* A long press keeps pressing, as on iOS, rather than selecting the label. */
   touch-action: manipulation;
@@ -164,19 +182,21 @@
   transition: background-color 200ms ease;
 }
 
+/* The label is inset a little more when an icon leads it, so the optical gap
+   between icon and text matches the trailing padding. */
 .gl-button[data-icon] {
-  padding-left: 12px;
+  padding-left: calc(var(--gl-control-pad) - 4px);
 }
 
 .gl-button[data-icon="only"] {
-  width: 40px;
+  width: var(--gl-control-md);
   padding: 0;
 }
 
 .gl-button > svg {
   flex: none;
-  width: 20px;
-  height: 20px;
+  width: var(--gl-icon-md);
+  height: var(--gl-icon-md);
 }
 
 /* Lights up at once when pressed, as on iOS, and fades on release. */
@@ -584,13 +604,13 @@
 .gl-input {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 9px;
   box-sizing: border-box;
   width: 100%;
   max-width: 360px;
-  height: 40px;
+  height: var(--gl-control-md);
   padding: 0 14px;
-  border-radius: 20px;
+  border-radius: 12px;
   color: var(--gl-foreground);
   transition: background-color 200ms ease;
 }
@@ -609,7 +629,7 @@
   color: inherit;
   background: none;
   font: inherit;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .gl-input input::placeholder {
@@ -992,7 +1012,6 @@
   flex-direction: column;
   padding: 6px;
 }
-
 .gl-menu-card::after {
   content: "";
   position: absolute;
@@ -1012,7 +1031,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  border-radius: 14px;
+  border-radius: 11px;
   background: var(--gl-highlight);
   opacity: 0;
   pointer-events: none;
@@ -1026,22 +1045,25 @@
   z-index: 1;
   display: flex;
   align-items: center;
-  gap: 10px;
-  min-height: 32px;
-  padding: 6px 12px;
+  gap: 11px;
+  min-height: var(--gl-row-menu);
+  padding: 8px 12px;
   border: 0;
-  border-radius: 14px;
+  border-radius: 11px;
   color: inherit;
   background: transparent;
   font: inherit;
+  font-size: 15px;
+  line-height: 1.25;
   text-align: left;
   cursor: pointer;
+  transition: background-color 120ms ease-out;
 }
 
 .gl-menu-item > svg {
   flex: none;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
 }
 
 .gl-menu-item:focus-visible {
@@ -1069,9 +1091,11 @@
   cursor: default;
 }
 
+/* Separators are inset to the label's left edge, stopping short of the
+   panel's own padding, rather than running the full width. */
 .gl-menu-separator {
   flex: none;
-  margin: 7px 11px;
+  margin: 6px 12px;
   border-top: 0.5px solid var(--gl-separator);
 }
 
@@ -1112,27 +1136,37 @@
 
 
 .gl-button[data-size="sm"] {
-  height: 32px;
-  padding: 0 12px;
+  height: var(--gl-control-sm);
+  padding: 0 11px;
   font-size: 13px;
-  border-radius: 16px;
+  gap: 5px;
 }
 
 .gl-button[data-size="sm"][data-icon="only"] {
-  width: 32px;
+  width: var(--gl-control-sm);
   padding: 0;
+}
+
+.gl-button[data-size="sm"] > svg {
+  width: var(--gl-icon-sm);
+  height: var(--gl-icon-sm);
 }
 
 .gl-button[data-size="lg"] {
-  height: 48px;
-  padding: 0 22px;
+  height: var(--gl-control-lg);
+  padding: 0 20px;
   font-size: 16px;
-  border-radius: 24px;
+  gap: 8px;
 }
 
 .gl-button[data-size="lg"][data-icon="only"] {
-  width: 48px;
+  width: var(--gl-control-lg);
   padding: 0;
+}
+
+.gl-button[data-size="lg"] > svg {
+  width: var(--gl-icon-lg);
+  height: var(--gl-icon-lg);
 }
 
 /* Typography (Text) */
@@ -1215,14 +1249,14 @@
   display: block;
   width: 100%;
   box-sizing: border-box;
-  min-height: 80px;
+  min-height: 84px;
   padding: 10px 14px;
   border: 0;
-  border-radius: 14px;
+  border-radius: 12px;
   color: var(--gl-foreground);
   font: inherit;
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 15px;
+  line-height: 1.45;
   resize: vertical;
   outline: none;
   transition: background-color 200ms ease, box-shadow 200ms ease;
@@ -1709,15 +1743,22 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: calc(100% - 32px);
-  max-width: 480px;
-  border-radius: 24px;
-  padding: 24px;
+  max-width: 400px;
+  border-radius: var(--gl-overlay-radius);
+  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 16px;
   z-index: 101;
   box-shadow: 0 20px 50px var(--gl-shadow);
   animation: gl-dialog-scale 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* The alert is narrower than a content dialog and its text is left-aligned,
+   with the actions as pills that hang below the message rather than rows
+   divided by rules. */
+.gl-alert-dialog-content {
+  max-width: 340px;
 }
 
 @keyframes gl-fade-in {
@@ -1749,13 +1790,14 @@
 .gl-dialog-header {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .gl-dialog-title {
   margin: 0;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 600;
+  line-height: 1.3;
   color: var(--gl-foreground);
 }
 
@@ -1763,20 +1805,35 @@
   margin: 0;
   font-size: 14px;
   color: var(--gl-muted);
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
+/* Actions sit in a grid so two pills share one row evenly and a longer set
+   stacks, matching the reference's side-by-side and stacked arrangements. */
 .gl-dialog-footer {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 10px;
-  margin-top: 8px;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.gl-alert-dialog-content .gl-dialog-footer {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 8px;
+}
+
+.gl-alert-dialog-content .gl-dialog-footer > * {
+  width: 100%;
+  height: var(--gl-control-lg);
+  font-size: 16px;
 }
 
 /* Popover */
 .gl-popover-content {
-  border-radius: 18px;
+  border-radius: var(--gl-overlay-radius);
   padding: 16px;
   z-index: 50;
   box-shadow: 0 14px 40px var(--gl-shadow);
@@ -1784,7 +1841,7 @@
 
 /* Dropdown Menu */
 .gl-dropdown-content {
-  border-radius: 16px;
+  border-radius: 20px;
   padding: 6px;
   min-width: 200px;
   z-index: 50;
@@ -1795,10 +1852,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 32px;
+  gap: 12px;
+  min-height: var(--gl-row-menu);
   padding: 0 12px;
-  border-radius: 10px;
-  font-size: 13px;
+  border-radius: 11px;
+  font-size: 14px;
   color: var(--gl-foreground);
   user-select: none;
   cursor: pointer;
@@ -1990,16 +2048,17 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
 .gl-sidebar-menu-button {
   width: 100%;
+  min-height: 32px;
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 12px;
-  border-radius: 10px;
+  padding: 6px 10px;
+  border-radius: 9px;
   border: 0;
   background: transparent;
   color: var(--gl-muted);
@@ -2015,9 +2074,15 @@
   color: var(--gl-foreground);
 }
 
+/* The selected row is a capsule inset inside the sidebar, its corners a pill
+   rather than a hard tint block, as in the reference. */
 .gl-sidebar-menu-button[data-active] {
   background-color: var(--gl-selection);
   color: var(--gl-foreground);
+  font-weight: 500;
+  border-radius: 999px;
+  padding-left: 12px;
+  padding-right: 12px;
 }
 
 /* Scroll Area */
@@ -2399,11 +2464,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  height: 40px;
-  padding: 0 16px;
+  gap: 7px;
+  height: var(--gl-control-md);
+  padding: 0 var(--gl-control-pad);
   border: 0;
-  border-radius: 20px;
+  border-radius: 999px;
   color: var(--gl-foreground);
   font: inherit;
   font-size: 14px;
@@ -2449,17 +2514,16 @@
 }
 
 .gl-toggle[data-size="sm"] {
-  height: 32px;
-  padding: 0 12px;
-  font-size: 12px;
-  border-radius: 16px;
+  height: var(--gl-control-sm);
+  padding: 0 11px;
+  font-size: 13px;
+  gap: 5px;
 }
 
 .gl-toggle[data-size="lg"] {
-  height: 48px;
+  height: var(--gl-control-lg);
   padding: 0 20px;
   font-size: 16px;
-  border-radius: 24px;
 }
 
 /* 3. Input Group */
@@ -2489,11 +2553,11 @@
   align-items: center;
   justify-content: center;
   padding: 0 12px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--gl-muted);
   background: var(--gl-glass);
   border: 1px solid var(--gl-edge);
-  height: 40px;
+  height: var(--gl-control-md);
   user-select: none;
 }
 
@@ -2511,7 +2575,7 @@
 .gl-field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 7px;
   width: 100%;
 }
 
@@ -2519,11 +2583,12 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
 }
 
 .gl-field-label {
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--gl-foreground);
   display: inline-flex;
   align-items: center;
@@ -2804,40 +2869,48 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 48px 24px;
+  padding: 44px 24px;
   border-radius: 24px;
 }
 
+/* A soft tinted disc, as the reference draws it, rather than a squared plate;
+   --gl-empty-tint lets a caller colour it to the feature it belongs to. */
 .gl-empty-icon-plate {
-  width: 64px;
-  height: 64px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid var(--gl-edge);
+  width: 60px;
+  height: 60px;
+  border-radius: 999px;
+  background: var(--gl-empty-tint, var(--gl-highlight));
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 28px;
-  margin-bottom: 16px;
+  font-size: 26px;
+  margin-bottom: 18px;
+}
+
+.gl-empty-icon-plate > svg {
+  width: 26px;
+  height: 26px;
 }
 
 .gl-empty-title {
-  margin: 0 0 6px;
+  margin: 0 0 4px;
   font-size: 17px;
   font-weight: 600;
+  letter-spacing: -0.01em;
   color: var(--gl-foreground);
 }
 
 .gl-empty-description {
-  margin: 0 0 20px;
-  font-size: 13px;
+  margin: 0;
+  font-size: 14px;
   color: var(--gl-muted);
   max-width: 300px;
-  line-height: 1.45;
+  line-height: 1.4;
 }
 
 .gl-empty-action {
   display: inline-flex;
+  margin-top: 18px;
 }
 
 /* 9. Item */
@@ -5554,39 +5627,42 @@
   bottom: max(20px, env(safe-area-inset-bottom, 20px));
   transform: translateX(-50%);
   width: calc(100% - 24px);
-  max-width: 500px;
+  max-width: 400px;
   display: flex;
   flex-direction: column;
   gap: 8px;
   z-index: 201;
 }
 
+/* The sheet is a stack of pill buttons on glass, not a solid sheet of ruled
+   rows: each action is its own capsule with a gap, and cancel is set apart. */
 .gl-action-sheet-menu {
-  border-radius: 14px;
-  overflow: hidden;
-  background: var(--gl-surface);
-  box-shadow: inset 0 0 0 0.5px var(--gl-surface-edge);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .gl-action-sheet-item {
   width: 100%;
-  padding: 16px;
-  background: none;
-  border: none;
-  border-bottom: 0.5px solid var(--gl-separator);
+  min-height: var(--gl-control-lg);
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: var(--gl-glass);
+  box-shadow: inset 0 0 0 0.5px var(--gl-edge);
   color: var(--gl-fill);
   font-size: 17px;
   font-weight: 400;
+  line-height: 1.25;
   text-align: center;
   cursor: pointer;
-}
-
-.gl-action-sheet-item:last-child {
-  border-bottom: none;
+  -webkit-backdrop-filter: blur(var(--gl-blur, calc(3px * var(--gl-glass-frost, 1)))) var(--gl-filter, saturate(1.5));
+  backdrop-filter: blur(var(--gl-blur, calc(3px * var(--gl-glass-frost, 1)))) var(--gl-filter, saturate(1.5));
+  transition: background-color 160ms ease;
 }
 
 .gl-action-sheet-item:active {
-  background: var(--gl-selection);
+  background-color: var(--gl-glass-active);
+  transition-duration: 0s;
 }
 
 .gl-action-sheet-item:disabled {
@@ -5604,8 +5680,9 @@
 
 .gl-action-sheet-cancel {
   width: 100%;
-  padding: 16px;
-  border-radius: 14px;
+  min-height: var(--gl-control-lg);
+  padding: 12px 20px;
+  border-radius: 999px;
   border: none;
   font-size: 17px;
   font-weight: 600;
@@ -5620,41 +5697,36 @@
 
 /* ------------------------------------------------------- Stepper */
 
+/* One capsule split by a hairline, as in the reference: two halves of a
+   single pill rather than two buttons pushed together. */
 .gl-stepper {
   display: inline-flex;
-  align-items: center;
-  border-radius: 10px;
+  align-items: stretch;
+  height: 34px;
+  border-radius: 999px;
   overflow: hidden;
   box-shadow: inset 0 0 0 0.5px var(--gl-edge);
 }
 
 .gl-stepper-btn {
-  width: 40px;
-  height: 40px;
+  width: 46px;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
   border-radius: 0;
   background: var(--gl-glass);
-  color: var(--gl-fill);
-  font-size: 18px;
+  color: var(--gl-foreground);
+  font-size: 17px;
   font-weight: 400;
   cursor: pointer;
-}
-
-.gl-stepper-btn:first-child {
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-}
-
-.gl-stepper-btn:last-child {
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
+  transition: background-color 160ms ease;
 }
 
 .gl-stepper-btn:active {
   background-color: var(--gl-glass-active);
+  transition-duration: 0s;
 }
 
 .gl-stepper-btn:disabled {
@@ -5669,7 +5741,7 @@
 
 .gl-stepper-divider {
   width: 0.5px;
-  height: 20px;
+  align-self: stretch;
   background: var(--gl-separator);
   flex-shrink: 0;
 }
@@ -5724,34 +5796,43 @@
 
 /* ------------------------------------------------------- Toolbar */
 
+/* An even rail of circular buttons; icons are spread rather than bunched,
+   with no rules drawn between them. */
 .gl-toolbar {
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  border-radius: 16px;
-  padding: 4px;
-  gap: 2px;
+  justify-content: space-evenly;
+  gap: 4px;
+  border-radius: 999px;
+  padding: 5px;
   box-shadow:
     inset 0 0 0 0.5px var(--gl-edge),
     0 1px 4px var(--gl-drop);
 }
 
 .gl-toolbar-item {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
-  border-radius: 12px;
+  border-radius: 999px;
   background: transparent;
-  color: var(--gl-muted);
+  color: var(--gl-foreground);
   cursor: pointer;
   font-size: 18px;
+  transition: background-color 160ms ease;
+}
+
+.gl-toolbar-item > svg {
+  width: 19px;
+  height: 19px;
 }
 
 .gl-toolbar-item:active {
   background-color: var(--gl-selection);
+  transition-duration: 0s;
 }
 
 .gl-toolbar-item:disabled {
@@ -6016,16 +6097,17 @@
 /* ------------------------------------------------------- List */
 
 .gl-list {
-  border-radius: 14px;
+  border-radius: 16px;
   overflow: hidden;
   box-shadow: inset 0 0 0 0.5px var(--gl-edge);
 }
 
 .gl-list-header {
-  padding: 8px 16px 4px;
+  padding: 10px 16px 5px;
   font-size: 12px;
   font-weight: 600;
   color: var(--gl-muted);
+  letter-spacing: 0.03em;
   text-transform: uppercase;
 }
 
@@ -6035,22 +6117,41 @@
 }
 
 .gl-list-item {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 16px;
+  min-height: var(--gl-row-list);
+  padding: 10px 16px;
   border: none;
-  border-bottom: 0.5px solid var(--gl-separator);
   background: transparent;
   color: var(--gl-foreground);
   font-size: 15px;
+  line-height: 1.25;
   text-align: left;
   cursor: pointer;
   width: 100%;
+  transition: background-color 140ms ease;
 }
 
-.gl-list-item:last-child {
-  border-bottom: none;
+/* The rule is inset to the text's left edge, so it starts after the leading
+   icon instead of running under it, as list separators do on iOS. */
+.gl-list-item::after {
+  content: "";
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 0;
+  height: 0.5px;
+  background: var(--gl-separator);
+}
+
+.gl-list-item[data-leading]::after {
+  left: 60px;
+}
+
+.gl-list-item:last-child::after {
+  display: none;
 }
 
 .gl-list-item:active {
@@ -6077,12 +6178,28 @@
 
 .gl-list-label {
   flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gl-list-title {
+  color: var(--gl-foreground);
+}
+
+.gl-list-subtitle {
+  font-size: 13px;
+  color: var(--gl-muted);
 }
 
 .gl-list-trailing {
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   color: var(--gl-muted);
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .gl-list-chevron {
@@ -6099,8 +6216,8 @@
 .gl-page-control {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 7px 11px;
+  gap: 10px;
+  padding: 7px 12px;
   border-radius: 999px;
 }
 
@@ -6113,13 +6230,13 @@
 }
 
 .gl-page-dot {
-  width: 7px;
-  height: 7px;
+  width: 9px;
+  height: 9px;
   padding: 0;
   border: none;
   border-radius: 999px;
   background: var(--gl-foreground);
-  opacity: 0.28;
+  opacity: 0.3;
   cursor: pointer;
   transition:
     width 260ms var(--gl-ease),
@@ -6137,8 +6254,9 @@
   background: var(--gl-page-tint, var(--gl-foreground));
 }
 
+/* The active dot is longer than the rest, as iOS draws it. */
 .gl-page-dot-wide {
-  width: 17px;
+  width: 20px;
 }
 
 .gl-list-item-interactive {
@@ -6153,4 +6271,1911 @@
 .gl-list-item-disabled {
   opacity: 0.35;
   cursor: default;
+}
+
+/* ============================================================
+   Chart layer
+   ------------------------------------------------------------
+   The charts in src/charts draw their own SVG in real pixels.
+   These rules style the frame, axis text and tooltip. Axis labels
+   live in HTML (overlaid on the SVG) so they inherit the page font
+   and stay selectable and crisp at any zoom.
+
+   Tokens for the ramp are declared here so a theme can recolour the
+   whole chart layer without touching a component.
+   ============================================================ */
+
+:root {
+  --gl-chart-1: #0088ff;
+  --gl-chart-2: #34c759;
+  --gl-chart-3: #ff9f0a;
+  --gl-chart-4: #ff375f;
+  --gl-chart-5: #bf5af2;
+  --gl-chart-6: #64d2ff;
+  --gl-chart-7: #ffd60a;
+  --gl-chart-grid: rgb(60 60 67 / 0.24);
+  --gl-chart-axis: rgb(60 60 67 / 0.4);
+  --gl-chart-heat-min: rgb(0 136 255 / 0.08);
+  --gl-chart-on-tile: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --gl-chart-grid: rgb(235 235 245 / 0.24);
+    --gl-chart-axis: rgb(235 235 245 / 0.38);
+    --gl-chart-heat-min: rgb(100 210 255 / 0.08);
+  }
+}
+
+.gl-chart-frame {
+  position: relative;
+  width: 100%;
+}
+
+.gl-chart-wrap {
+  position: relative;
+  width: 100%;
+}
+
+/* Axis text: absolutely positioned over the plot, driven by pixel offsets
+   computed in the chart so labels line up with ticks exactly. */
+.gl-chart-axis {
+  position: absolute;
+  pointer-events: none;
+  color: var(--gl-muted);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+
+.gl-chart-axis-y {
+  inset: 0 auto 0 0;
+  width: 44px;
+}
+
+.gl-chart-axis-y > span {
+  position: absolute;
+  right: 6px;
+  transform: translateY(-50%);
+  white-space: nowrap;
+}
+
+.gl-chart-axis-x {
+  inset: 0 0 0 0;
+}
+
+.gl-chart-axis-x > span {
+  position: absolute;
+  bottom: 2px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  max-width: 64px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gl-chart-caption {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--gl-muted);
+}
+
+/* Tooltip is the library's real glass surface, scoped here so it does not
+   collide with the legacy .gl-chart-tooltip used by the older Chart. */
+.gl-chart-wrap .gl-chart-tooltip {
+  position: absolute;
+  top: auto;
+  right: auto;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 96px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  transform: translate(-50%, 0);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
+}
+
+.gl-chart-wrap .gl-chart-tooltip[data-visible] {
+  opacity: 1;
+}
+
+.gl-chart-wrap .gl-chart-tooltip[data-align="left"] {
+  transform: translate(0, 0);
+}
+
+.gl-chart-tooltip-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gl-foreground);
+  margin-bottom: 2px;
+}
+
+.gl-chart-tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1.4;
+}
+
+.gl-chart-tooltip-swatch {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  flex: none;
+}
+
+.gl-chart-tooltip-label {
+  color: var(--gl-muted);
+}
+
+.gl-chart-tooltip-value {
+  margin-left: auto;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--gl-foreground);
+}
+
+/* Legend: shared by radial and polar charts so proportional charts always
+   offer a readable key rather than relying on colour matching alone. */
+.gl-chart-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gl-chart-legend > li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.gl-chart-legend-swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+  flex: none;
+}
+
+.gl-chart-legend-label {
+  color: var(--gl-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gl-chart-legend-value {
+  margin-left: auto;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--gl-foreground);
+}
+
+.gl-chart-radial {
+  position: relative;
+  margin: 0 auto;
+}
+
+/* Radial charts keep a fixed square; the chart centres itself in it. */
+.gl-chart-radial > svg {
+  display: block;
+}
+
+.gl-chart-empty,
+.gl-chart-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  border-radius: 16px;
+  color: var(--gl-muted);
+  font-size: 13px;
+}
+
+.gl-chart-skeleton {
+  width: 100%;
+  height: 120px;
+  border-radius: 16px;
+  background: linear-gradient(
+    90deg,
+    var(--gl-chart-heat-min) 0%,
+    rgb(0 136 255 / 0.16) 50%,
+    var(--gl-chart-heat-min) 100%
+  );
+  background-size: 200% 100%;
+  animation: gl-chart-shimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes gl-chart-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gl-chart-skeleton {
+    animation: none;
+  }
+}
+
+/* Heatmap */
+.gl-chart-heatmap {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.gl-chart-heatmap-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: none;
+}
+
+.gl-chart-heatmap-row-label {
+  font-size: 10px;
+  color: var(--gl-muted);
+  text-align: right;
+  max-width: 72px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gl-chart-heatmap-columns {
+  display: flex;
+  gap: 3px;
+  margin: 6px 0 0;
+  padding-left: 80px;
+  font-size: 10px;
+  color: var(--gl-muted);
+}
+
+.gl-chart-heatmap-columns > span {
+  flex: 1;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Radar axis labels */
+.gl-chart-axis-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 11px;
+  color: var(--gl-muted);
+}
+
+/* Funnel */
+.gl-chart-funnel {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gl-chart-funnel-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.gl-chart-funnel-label {
+  color: var(--gl-foreground);
+  font-weight: 500;
+}
+
+.gl-chart-funnel-value {
+  color: var(--gl-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.gl-chart-funnel-track {
+  width: 100%;
+  border-radius: 10px;
+  background: var(--gl-chart-heat-min);
+  overflow: hidden;
+}
+
+.gl-chart-funnel-bar {
+  height: 100%;
+  border-radius: 10px;
+  transition:
+    width 220ms ease,
+    opacity 140ms ease;
+}
+
+.gl-chart-funnel-rates {
+  display: flex;
+  gap: 10px;
+  margin-top: 3px;
+  font-size: 10px;
+  color: var(--gl-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Pyramid */
+.gl-chart-pyramid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Each level is a full-width row; the band inside it is what narrows, so the
+   width percentage is measured against the whole chart, not the band itself. */
+.gl-chart-pyramid-level {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.gl-chart-pyramid-band {
+  height: 100%;
+  margin: 0 auto;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: opacity 140ms ease;
+  overflow: hidden;
+}
+
+.gl-chart-pyramid-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gl-chart-on-tile);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gl-chart-pyramid-value {
+  font-size: 10px;
+  color: var(--gl-chart-on-tile);
+  opacity: 0.75;
+  font-variant-numeric: tabular-nums;
+}
+
+/* SVG text in treemap, sankey and bump charts */
+.gl-chart-treemap-label {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.gl-chart-treemap-value {
+  font-size: 10px;
+}
+
+.gl-chart-sankey-label,
+.gl-chart-bump-label {
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.gl-chart-sankey-label {
+  dominant-baseline: middle;
+}
+
+/* Live line */
+.gl-chart-live-value {
+  position: absolute;
+  top: 0;
+  left: 44px;
+  font-size: 18px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.gl-chart-live-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 4px 10px;
+  border: 1px solid var(--gl-surface-edge);
+  border-radius: 999px;
+  background: var(--gl-surface);
+  color: var(--gl-muted);
+  font: inherit;
+  font-size: 10px;
+  cursor: pointer;
+  transition:
+    color 140ms ease,
+    border-color 140ms ease;
+}
+
+.gl-chart-live-toggle:hover:not(:disabled) {
+  color: var(--gl-foreground);
+  border-color: var(--gl-foreground);
+}
+
+.gl-chart-live-toggle:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.gl-chart-live-toggle:focus-visible {
+  outline: 2px solid var(--gl-chart-1);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   Blocks: Boarding Pass, Wallet, Activity, Smart Home
+   ------------------------------------------------------------
+   Each block composes existing Glacia primitives and the shared
+   control tokens. No new material is introduced: surfaces are the
+   Glass primitive, and geometry follows the control scale.
+   ============================================================ */
+
+/* ---- Boarding pass ---- */
+
+.gl-boarding-pass {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 18px minmax(140px, 0.34fr);
+  align-items: stretch;
+  padding: 0;
+  border-radius: var(--gl-overlay-radius, 28px);
+  overflow: hidden;
+  max-width: 620px;
+}
+
+.gl-boarding-pass-main {
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+}
+
+.gl-boarding-pass-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.gl-boarding-pass-airline {
+  display: block;
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.gl-boarding-pass-flight {
+  display: block;
+  font-size: 11px;
+  color: var(--gl-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.gl-boarding-pass-route {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.gl-boarding-pass-endpoint {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.gl-boarding-pass-endpoint-end {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.gl-boarding-pass-code {
+  font-size: 30px;
+  font-weight: 680;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.gl-boarding-pass-city {
+  font-size: 11px;
+  color: var(--gl-muted);
+}
+
+.gl-boarding-pass-time {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  margin-top: 2px;
+}
+
+.gl-boarding-pass-path {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 24px;
+  color: var(--gl-muted);
+}
+
+.gl-boarding-pass-line {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--gl-surface-edge) 18%,
+    var(--gl-surface-edge) 82%,
+    transparent 100%
+  );
+}
+
+.gl-boarding-pass-duration {
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.gl-boarding-pass-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  gap: 12px 16px;
+  margin: 0;
+}
+
+.gl-boarding-pass-details dt {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gl-muted);
+  margin-bottom: 2px;
+}
+
+.gl-boarding-pass-details dd {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 550;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Perforation seam with punched notches at each end. */
+.gl-boarding-pass-seam {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 0;
+}
+
+.gl-boarding-pass-perf {
+  width: 1px;
+  height: 100%;
+  background-image: linear-gradient(
+    to bottom,
+    var(--gl-surface-edge) 0 4px,
+    transparent 4px 8px
+  );
+  background-size: 1px 8px;
+}
+
+.gl-boarding-pass-notch {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--gl-backdrop, #05060a);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.gl-boarding-pass-notch-top {
+  top: -8px;
+}
+
+.gl-boarding-pass-notch-bottom {
+  bottom: -8px;
+}
+
+.gl-boarding-pass-stub {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 20px 18px;
+  align-items: flex-start;
+  background: rgb(128 128 140 / 0.08);
+  min-width: 0;
+}
+
+.gl-boarding-pass-stub-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gl-muted);
+}
+
+.gl-boarding-pass-stub-seat {
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.gl-boarding-pass-barcode {
+  display: flex;
+  align-items: stretch;
+  gap: 1px;
+  height: 44px;
+  margin-top: auto;
+  padding-top: 14px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.gl-boarding-pass-barcode > span {
+  background: var(--gl-foreground);
+  opacity: 0.85;
+  height: 100%;
+  border-radius: 0.5px;
+}
+
+.gl-boarding-pass-barcode-value {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--gl-muted);
+  font-variant-numeric: tabular-nums;
+  margin-top: 5px;
+}
+
+/* ---- Wallet ---- */
+
+.gl-wallet-block {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.gl-wallet-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Slots overlap so several cards fit without a tall stack; the active card
+   is lifted and fully visible, the rest show a readable edge. */
+.gl-wallet-card-slot {
+  margin-top: -64px;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gl-wallet-card-slot:first-child {
+  margin-top: 0;
+}
+
+.gl-wallet-card-slot[data-active] {
+  transform: translateY(-6px);
+}
+
+.gl-wallet-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  min-height: 178px;
+  padding: 18px;
+  border: 0;
+  border-radius: 20px;
+  text-align: left;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.24) inset,
+    0 14px 30px rgb(0 0 0 / 0.28);
+  transition: box-shadow 200ms ease;
+}
+
+.gl-wallet-card:focus-visible {
+  outline: 2px solid var(--gl-foreground);
+  outline-offset: 3px;
+}
+
+.gl-wallet-card-slot[data-active] .gl-wallet-card {
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.3) inset,
+    0 20px 40px rgb(0 0 0 / 0.36);
+}
+
+.gl-wallet-card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.gl-wallet-card-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.gl-wallet-card-brand {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.8;
+}
+
+.gl-wallet-card-balance {
+  font-size: 28px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.gl-wallet-card-number {
+  margin-top: auto;
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.92;
+}
+
+.gl-wallet-card-foot {
+  display: flex;
+  gap: 22px;
+}
+
+.gl-wallet-card-label {
+  display: block;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.65;
+}
+
+.gl-wallet-card-value {
+  display: block;
+  font-size: 11px;
+  font-weight: 550;
+}
+
+.gl-wallet-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.gl-wallet-activity {
+  border-radius: 20px;
+  padding: 4px 0 6px;
+}
+
+.gl-wallet-activity-head {
+  padding: 12px 16px 6px;
+}
+
+.gl-wallet-activity-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gl-muted);
+}
+
+.gl-wallet-activity-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gl-wallet-activity-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 16px;
+}
+
+/* Inset separator, matching the List component's convention. */
+.gl-wallet-activity-row + .gl-wallet-activity-row {
+  box-shadow: inset 0 1px 0 var(--gl-surface-edge);
+}
+
+.gl-wallet-activity-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.gl-wallet-activity-merchant {
+  font-size: 13px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gl-wallet-activity-meta {
+  font-size: 10px;
+  color: var(--gl-muted);
+}
+
+.gl-wallet-activity-amount {
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.gl-wallet-activity-amount[data-debit] {
+  color: var(--gl-foreground);
+}
+
+/* ---- Activity feed ---- */
+
+.gl-activity-block {
+  border-radius: var(--gl-overlay-radius, 28px);
+  padding: 20px 22px;
+  width: 100%;
+  max-width: 560px;
+}
+
+.gl-activity-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.gl-activity-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.gl-activity-summary {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: var(--gl-muted);
+}
+
+.gl-activity-empty {
+  margin: 0;
+  padding: 18px 0;
+  font-size: 12px;
+  color: var(--gl-muted);
+}
+
+.gl-activity-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gl-activity-day {
+  margin: 0 0 6px;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--gl-muted);
+}
+
+.gl-activity-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gl-activity-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 12px 26px minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 10px;
+  padding: 7px 0;
+}
+
+/* Continuous rail connecting markers down a day's entries. */
+.gl-activity-rail {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding-top: 5px;
+  align-self: stretch;
+}
+
+.gl-activity-rail::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: -14px;
+  width: 1px;
+  background: var(--gl-surface-edge);
+}
+
+.gl-activity-row:last-child .gl-activity-rail::before {
+  bottom: 50%;
+}
+
+.gl-activity-marker {
+  position: relative;
+  z-index: 1;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2.5px var(--gl-surface, transparent);
+}
+
+.gl-activity-avatar {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgb(128 128 140 / 0.16);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--gl-foreground);
+}
+
+.gl-activity-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.gl-activity-line strong {
+  font-weight: 600;
+}
+
+.gl-activity-detail {
+  font-size: 11px;
+  color: var(--gl-muted);
+}
+
+.gl-activity-time {
+  font-size: 10px;
+  color: var(--gl-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  padding-top: 2px;
+}
+
+/* ---- Smart home ---- */
+
+.gl-smarthome {
+  border-radius: var(--gl-overlay-radius, 28px);
+  padding: 20px 22px;
+  width: 100%;
+  max-width: 520px;
+}
+
+.gl-smarthome-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.gl-smarthome-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.gl-smarthome-sub {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: var(--gl-muted);
+}
+
+.gl-smarthome-temp {
+  font-size: 26px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.gl-smarthome-rooms {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  margin-bottom: 14px;
+  scrollbar-width: none;
+}
+
+.gl-smarthome-rooms::-webkit-scrollbar {
+  display: none;
+}
+
+.gl-smarthome-room {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex: none;
+  padding: 5px 11px;
+  border: 1px solid var(--gl-surface-edge);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--gl-muted);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  transition:
+    color 140ms ease,
+    border-color 140ms ease,
+    background-color 140ms ease;
+}
+
+.gl-smarthome-room[data-selected] {
+  color: var(--gl-foreground);
+  border-color: transparent;
+  background: rgb(128 128 140 / 0.18);
+}
+
+.gl-smarthome-room:focus-visible {
+  outline: 2px solid var(--gl-foreground);
+  outline-offset: 2px;
+}
+
+.gl-smarthome-room-count {
+  font-size: 9px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--gl-chart-1, #0088ff);
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+
+.gl-smarthome-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gl-smarthome-empty {
+  margin: 0;
+  padding: 16px 0;
+  font-size: 12px;
+  color: var(--gl-muted);
+}
+
+.gl-smarthome-device {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 11px;
+  border-radius: 14px;
+  background: rgb(128 128 140 / 0.08);
+  border: 1px solid transparent;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease;
+}
+
+.gl-smarthome-device[data-on] {
+  background: color-mix(in srgb, var(--gl-chart-3, #ff9f0a) 12%, transparent);
+  border-color: color-mix(in srgb, var(--gl-chart-3, #ff9f0a) 32%, transparent);
+}
+
+.gl-smarthome-device-glyph {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 9px;
+  background: rgb(128 128 140 / 0.16);
+  font-size: 13px;
+  color: var(--gl-foreground);
+}
+
+.gl-smarthome-device[data-on] .gl-smarthome-device-glyph {
+  background: color-mix(in srgb, var(--gl-chart-3, #ff9f0a) 26%, transparent);
+}
+
+.gl-smarthome-device-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  flex: 1;
+}
+
+.gl-smarthome-device-name {
+  font-size: 12.5px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gl-smarthome-device-status {
+  font-size: 10px;
+  color: var(--gl-muted);
+}
+
+.gl-smarthome-toggle {
+  position: relative;
+  flex: none;
+  width: 40px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(128 128 140 / 0.32);
+  cursor: pointer;
+  transition: background-color 180ms ease;
+}
+
+.gl-smarthome-toggle[aria-checked="true"] {
+  background: var(--gl-chart-2, #34c759);
+}
+
+.gl-smarthome-toggle > span {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gl-smarthome-toggle[aria-checked="true"] > span {
+  transform: translateX(16px);
+}
+
+.gl-smarthome-toggle:focus-visible {
+  outline: 2px solid var(--gl-foreground);
+  outline-offset: 2px;
+}
+
+@media (max-width: 560px) {
+  .gl-boarding-pass {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .gl-boarding-pass-seam {
+    display: none;
+  }
+
+  /* On a narrow screen the stub becomes a footer strip; the perforation is
+     drawn as a horizontal rule instead of a vertical one. */
+  .gl-boarding-pass-stub {
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    border-top: 1px dashed var(--gl-surface-edge);
+    padding: 14px 18px;
+  }
+
+  .gl-boarding-pass-stub-seat {
+    font-size: 24px;
+    margin-bottom: 0;
+  }
+
+  .gl-boarding-pass-barcode {
+    margin-top: 0;
+    height: 30px;
+    padding-top: 0;
+    max-width: 120px;
+  }
+
+  .gl-boarding-pass-barcode-value {
+    display: none;
+  }
+
+  .gl-boarding-pass-code {
+    font-size: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gl-wallet-card-slot,
+  .gl-smarthome-toggle,
+  .gl-smarthome-toggle > span {
+    transition: none;
+  }
+}
+
+/* ============================================================
+   AI components
+   ------------------------------------------------------------
+   Surfaces reuse the Glass primitive. The animated pieces below
+   (shimmer, thinking orb, soundwave) are decorative only; every one
+   carries a text equivalent for assistive technology, and all motion
+   respects prefers-reduced-motion.
+   ============================================================ */
+
+/* Visually hidden but available to screen readers. */
+.gl-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- Shimmer ---- */
+
+.gl-shimmer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  padding: 2px 0;
+}
+
+.gl-shimmer-line {
+  height: 11px;
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    rgb(128 128 140 / 0.14) 0%,
+    rgb(128 128 140 / 0.28) 50%,
+    rgb(128 128 140 / 0.14) 100%
+  );
+  background-size: 200% 100%;
+  animation: gl-shimmer-sweep 1.5s ease-in-out infinite;
+}
+
+@keyframes gl-shimmer-sweep {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ---- Thinking orb ---- */
+
+.gl-thinking-orb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+.gl-thinking-orb-canvas {
+  position: relative;
+  display: inline-block;
+}
+
+.gl-thinking-orb-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  border-top-color: var(--gl-chart-1, #0088ff);
+  border-right-color: var(--gl-chart-5, #bf5af2);
+  animation: gl-thinking-spin 900ms linear infinite;
+}
+
+.gl-thinking-orb-core {
+  position: absolute;
+  inset: 26%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 34% 30%,
+    var(--gl-chart-1, #0088ff),
+    var(--gl-chart-5, #bf5af2) 78%
+  );
+  animation: gl-thinking-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes gl-thinking-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes gl-thinking-pulse {
+  0%,
+  100% {
+    transform: scale(0.88);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.gl-thinking-orb[data-paused] .gl-thinking-orb-ring,
+.gl-thinking-orb[data-paused] .gl-thinking-orb-core {
+  animation-play-state: paused;
+}
+
+/* ---- Plan ---- */
+
+.gl-plan {
+  width: 100%;
+  max-width: 480px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid var(--gl-surface-edge);
+  background: rgb(128 128 140 / 0.06);
+}
+
+.gl-plan-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.gl-plan-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gl-muted);
+}
+
+.gl-plan-count {
+  font-size: 11px;
+  color: var(--gl-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.gl-plan-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gl-plan-step {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 9px;
+  font-size: 12.5px;
+}
+
+.gl-plan-marker {
+  display: grid;
+  place-items: center;
+  width: 15px;
+  height: 15px;
+  margin-top: 1px;
+  border-radius: 50%;
+  border: 1.5px solid var(--gl-surface-edge);
+  font-size: 9px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.gl-plan-step[data-status="done"] .gl-plan-marker {
+  background: var(--gl-chart-2, #34c759);
+  border-color: transparent;
+}
+
+.gl-plan-step[data-status="failed"] .gl-plan-marker {
+  background: var(--gl-chart-4, #ff375f);
+  border-color: transparent;
+}
+
+.gl-plan-step[data-status="running"] .gl-plan-marker {
+  border-color: var(--gl-chart-1, #0088ff);
+  border-right-color: transparent;
+  animation: gl-thinking-spin 900ms linear infinite;
+}
+
+.gl-plan-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.gl-plan-step-title {
+  font-weight: 500;
+}
+
+.gl-plan-step[data-status="pending"] .gl-plan-step-title {
+  color: var(--gl-muted);
+}
+
+.gl-plan-step-detail {
+  font-size: 11px;
+  color: var(--gl-muted);
+}
+
+.gl-plan-status {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--gl-muted);
+  padding-top: 2px;
+}
+
+/* ---- Sources ---- */
+
+.gl-sources {
+  width: 100%;
+  max-width: 480px;
+}
+
+.gl-sources-title {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gl-muted);
+  margin-bottom: 7px;
+}
+
+.gl-sources-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gl-sources-item {
+  display: flex;
+  gap: 9px;
+  padding: 7px 9px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 140ms ease;
+}
+
+.gl-sources-item:hover {
+  background: rgb(128 128 140 / 0.1);
+}
+
+.gl-sources-item:focus-visible {
+  outline: 2px solid var(--gl-foreground);
+  outline-offset: 1px;
+}
+
+.gl-sources-index {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  border-radius: 5px;
+  background: rgb(128 128 140 / 0.18);
+  font-size: 9px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.gl-sources-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.gl-sources-name {
+  font-size: 12px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gl-sources-snippet {
+  font-size: 11px;
+  color: var(--gl-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.gl-sources-domain {
+  font-size: 10px;
+  color: var(--gl-muted);
+}
+
+/* ---- Response ---- */
+
+.gl-response {
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.gl-response-text {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.gl-response-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -0.15em;
+  background: var(--gl-foreground);
+  animation: gl-response-blink 1s steps(2, start) infinite;
+}
+
+@keyframes gl-response-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ---- Soundwave ---- */
+
+.gl-soundwave {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+}
+
+.gl-soundwave-bar {
+  flex: 1 1 0;
+  min-width: 2px;
+  height: 100%;
+  border-radius: 999px;
+  background: currentColor;
+  transform-origin: center;
+  transform: scaleY(0.18);
+  animation: gl-soundwave-idle 1.3s ease-in-out infinite;
+}
+
+.gl-soundwave[data-active] .gl-soundwave-bar {
+  animation-name: gl-soundwave-live;
+}
+
+@keyframes gl-soundwave-idle {
+  0%,
+  100% {
+    transform: scaleY(0.16);
+  }
+  50% {
+    transform: scaleY(0.34);
+  }
+}
+
+@keyframes gl-soundwave-live {
+  0%,
+  100% {
+    transform: scaleY(0.22);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+/* ---- Task ---- */
+
+.gl-task {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gl-task-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.gl-task-label {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gl-task-value {
+  color: var(--gl-muted);
+  font-variant-numeric: tabular-nums;
+  flex: none;
+}
+
+.gl-task-track {
+  position: relative;
+  height: 6px;
+  border-radius: 999px;
+  background: rgb(128 128 140 / 0.18);
+  overflow: hidden;
+}
+
+.gl-task-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--gl-chart-1, #0088ff);
+  transition: width 240ms ease;
+}
+
+.gl-task[data-status="done"] .gl-task-fill {
+  background: var(--gl-chart-2, #34c759);
+}
+
+.gl-task[data-status="failed"] .gl-task-fill {
+  background: var(--gl-chart-4, #ff375f);
+}
+
+.gl-task-fill[data-indeterminate] {
+  width: 40%;
+  animation: gl-task-slide 1.3s ease-in-out infinite;
+}
+
+@keyframes gl-task-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+.gl-task-detail {
+  font-size: 11px;
+  color: var(--gl-muted);
+}
+
+/* ---- Panelside ---- */
+
+.gl-panelside {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 220px;
+  padding: 12px 10px;
+  border-right: 1px solid var(--gl-surface-edge);
+}
+
+.gl-panelside-title {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--gl-muted);
+  padding: 0 8px;
+}
+
+.gl-panelside-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.gl-panelside-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--gl-muted);
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 140ms ease,
+    color 140ms ease;
+}
+
+.gl-panelside-item:hover {
+  color: var(--gl-foreground);
+  background: rgb(128 128 140 / 0.1);
+}
+
+.gl-panelside-item[data-active] {
+  color: var(--gl-foreground);
+  background: rgb(0 136 255 / 0.16);
+  font-weight: 550;
+}
+
+.gl-panelside-item:focus-visible {
+  outline: 2px solid var(--gl-foreground);
+  outline-offset: -2px;
+}
+
+.gl-panelside-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gl-panelside-count {
+  flex: none;
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+}
+
+.gl-panelside-footer {
+  margin-top: auto;
+  padding: 8px;
+}
+
+/* ---- AI input ---- */
+
+.gl-ai-input {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.gl-ai-input-hint {
+  font-size: 11px;
+  color: var(--gl-muted);
+  padding-left: 2px;
+}
+
+.gl-ai-input-field {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 8px 8px 8px 12px;
+  border: 1px solid var(--gl-surface-edge);
+  border-radius: 18px;
+  background: var(--gl-surface);
+  transition: border-color 160ms ease;
+}
+
+.gl-ai-input-field:focus-within {
+  border-color: color-mix(in srgb, var(--gl-foreground) 32%, transparent);
+}
+
+.gl-ai-input-leading {
+  display: flex;
+  align-items: center;
+  color: var(--gl-muted);
+}
+
+.gl-ai-input-field textarea {
+  flex: 1;
+  min-width: 0;
+  max-height: 200px;
+  padding: 3px 0;
+  border: 0;
+  background: transparent;
+  color: var(--gl-foreground);
+  font: inherit;
+  font-size: 13.5px;
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+}
+
+.gl-ai-input-field textarea::placeholder {
+  color: var(--gl-muted);
+}
+
+.gl-ai-input-send {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: var(--gl-control-md, 34px);
+  height: var(--gl-control-md, 34px);
+  border: 0;
+  border-radius: 50%;
+  background: var(--gl-foreground);
+  color: var(--gl-surface);
+  font: inherit;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    opacity 140ms ease,
+    transform 140ms ease;
+}
+
+.gl-ai-input-send:disabled {
+  opacity: 0.32;
+  cursor: default;
+}
+
+.gl-ai-input-send:not(:disabled):active {
+  transform: scale(0.94);
+}
+
+.gl-ai-input-send:focus-visible {
+  outline: 2px solid var(--gl-chart-1, #0088ff);
+  outline-offset: 2px;
+}
+
+/* ---- Image generation ---- */
+
+.gl-image-generation {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+}
+
+.gl-image-generation-tile {
+  margin: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgb(128 128 140 / 0.1);
+}
+
+.gl-image-generation-tile img {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+}
+
+.gl-image-generation-tile figcaption {
+  padding: 7px 9px;
+  font-size: 10.5px;
+  line-height: 1.4;
+  color: var(--gl-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.gl-image-generation-pending {
+  display: grid;
+  place-items: center;
+  padding: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gl-shimmer-line,
+  .gl-thinking-orb-ring,
+  .gl-thinking-orb-core,
+  .gl-plan-step[data-status="running"] .gl-plan-marker,
+  .gl-soundwave-bar,
+  .gl-task-fill[data-indeterminate],
+  .gl-response-caret {
+    animation: none !important;
+  }
 }

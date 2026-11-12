@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "accordion",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/accordion.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — accordion\n// Copied with `npx glacia add accordion`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ComponentPropsWithoutRef,\n  type ElementRef,\n} from \"react\";\nimport { Accordion as RadixAccordion } from \"radix-ui\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport const Accordion = RadixAccordion.Root;\n\nexport const AccordionItem = forwardRef<\n  ElementRef<typeof RadixAccordion.Item>,\n  ComponentPropsWithoutRef<typeof RadixAccordion.Item>\n>(function AccordionItem({ className, ...props }, ref) {\n  return (\n    <RadixAccordion.Item\n      ref={ref}\n      className={cx(\"gl-glass gl-accordion-item\", className)}\n      {...props}\n    />\n  );\n});\n\nexport const AccordionTrigger = forwardRef<\n  ElementRef<typeof RadixAccordion.Trigger>,\n  ComponentPropsWithoutRef<typeof RadixAccordion.Trigger>\n>(function AccordionTrigger({ className, children, ...props }, ref) {\n  return (\n    <RadixAccordion.Header className=\"gl-accordion-header\">\n      <RadixAccordion.Trigger\n        ref={ref}\n        className={cx(\"gl-accordion-trigger\", className)}\n        {...props}\n      >\n        {children}\n        <svg\n          viewBox=\"0 0 16 16\"\n          fill=\"none\"\n          stroke=\"currentColor\"\n          strokeWidth=\"2\"\n          className=\"gl-accordion-chevron\"\n        >\n          <path d=\"M4 6l4 4 4-4\" />\n        </svg>\n      </RadixAccordion.Trigger>\n    </RadixAccordion.Header>\n  );\n});\n\nexport const AccordionContent = forwardRef<\n  ElementRef<typeof RadixAccordion.Content>,\n  ComponentPropsWithoutRef<typeof RadixAccordion.Content>\n>(function AccordionContent({ className, children, ...props }, ref) {\n  return (\n    <RadixAccordion.Content\n      ref={ref}\n      className={cx(\"gl-accordion-content\", className)}\n      {...props}\n    >\n      <div className=\"gl-accordion-body\">{children}</div>\n    </RadixAccordion.Content>\n  );\n});\n",
+      "type": "registry:ui"
+    }
+  ]
+}

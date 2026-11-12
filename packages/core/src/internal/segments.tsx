@@ -481,7 +481,11 @@ export function Segments({
       style={{ ...style, "--gl-index": Math.max(selected, 0), "--gl-tabs": items.length } as CSSProperties}
       {...props}
     >
-      <span ref={glassRef} className="gl-glass gl-tab-bar-glass" aria-hidden />
+      {/* The refraction engine writes data-rim and data-refracting onto this
+          node after hydration: they describe measured geometry, so they cannot
+          be rendered on the server. Declaring them here keeps React from
+          reading its own writes as a hydration mismatch. */}
+      <span ref={glassRef} className="gl-glass gl-tab-bar-glass" aria-hidden suppressHydrationWarning />
       {segmented && <span ref={thumbRef} className="gl-segmented-thumb" aria-hidden />}
       <span ref={labelsRef} className="gl-tab-labels" role="none">
         {items.map((item, index) =>
@@ -528,7 +532,7 @@ export function Segments({
           ))}
         </span>
       </span>
-      <span ref={lensRef} className="gl-glass gl-tab-lens" aria-hidden />
+      <span ref={lensRef} className="gl-glass gl-tab-lens" aria-hidden suppressHydrationWarning />
     </div>
   );
 }

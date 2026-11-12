@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "search-field",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/search-field.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — search-field\n// Copied with `npx glacia add search-field`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport { forwardRef, type ForwardRefExoticComponent, type RefAttributes } from \"react\";\n\nimport { Input, type InputProps } from \"glacia\";\n\nexport type SearchFieldProps = Omit<InputProps, \"type\">;\n\nconst magnifier = (\n  <svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" strokeWidth={1.5} strokeLinecap=\"round\" aria-hidden>\n    <circle cx=\"7\" cy=\"7\" r=\"4.75\" />\n    <path d=\"m10.5 10.5 3.25 3.25\" />\n  </svg>\n);\n\n/** An `Input` for searching: a magnifier icon, a \"Search\" placeholder and a clear button. */\nexport const SearchField: ForwardRefExoticComponent<SearchFieldProps & RefAttributes<HTMLInputElement>> = /* @__PURE__ */ forwardRef<\n  HTMLInputElement,\n  SearchFieldProps\n>(function SearchField({ icon = magnifier, placeholder = \"Search\", ...props }, ref) {\n  return <Input ref={ref} type=\"search\" icon={icon} placeholder={placeholder} {...props} />;\n});\n",
+      "type": "registry:ui"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "glass",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/glass.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — glass\n// Copied with `npx glacia add glass`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  useImperativeHandle,\n  useRef,\n  type ForwardRefExoticComponent,\n  type HTMLAttributes,\n  type RefAttributes,\n} from \"react\";\n\nimport { cx } from \"glacia/internal/cx\";\nimport { useRefraction } from \"glacia/internal/refraction\";\nimport type { GlassSurface } from \"glacia/internal/glass-surface\";\n\nexport interface GlassProps extends HTMLAttributes<HTMLDivElement> {\n  /**\n   * The physical surface this glass is: `panel`, `control`, `field`,\n   * `overlay`, `hint` or `rail`. It selects which lens profile is fitted, so a\n   * tooltip stays a thin pane and a dialog reads as a thick slab.\n   */\n  surface?: GlassSurface;\n  /** Turn the bend off, leaving flat frosted glass. */\n  flat?: boolean;\n}\n\n/**\n * The glass primitive: bends whatever is behind it, whether that is a marked\n * element it can follow or the live page backdrop.\n */\nexport const Glass: ForwardRefExoticComponent<GlassProps & RefAttributes<HTMLDivElement>> =\n  /* @__PURE__ */ forwardRef<HTMLDivElement, GlassProps>(function Glass(\n    { className, surface = \"panel\", flat = false, ...props },\n    forwardedRef,\n  ) {\n    const ref = useRef<HTMLDivElement>(null);\n    useImperativeHandle(forwardedRef, () => ref.current!);\n    useRefraction(ref);\n    return (\n      <div\n        ref={ref}\n        className={cx(\"gl-glass\", flat && \"gl-glass-flat\", className)}\n        data-surface={surface}\n        {...props}\n      />\n    );\n  });\n",
+      "type": "registry:ui"
+    }
+  ]
+}

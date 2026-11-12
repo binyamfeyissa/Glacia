@@ -86,7 +86,7 @@ export const Calendar: ForwardRefExoticComponent<
     }
 
     return (
-      <div ref={forwardedRef} className={cx("gl-glass gl-calendar", className)}>
+      <div ref={forwardedRef} className={cx("gl-glass gl-calendar", className)} suppressHydrationWarning>
         {/* Calendar Header */}
         <div className="gl-calendar-header">
           <button

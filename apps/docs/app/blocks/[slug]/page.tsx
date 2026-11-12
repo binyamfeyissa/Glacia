@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BLOCKS } from "../../../data/blocks-data";
 import type { Metadata } from "next";
 import {
   AdminDashboard,
@@ -12,139 +13,16 @@ import {
   LandingBlock,
   ForgotPasswordBlock,
   ErrorPageBlock,
+  BoardingPassBlock,
+  WalletBlock,
+  ActivityBlock,
+  SmartHomeBlock,
 } from "glacia";
 import { CodeBlock } from "../../../components/code-block";
 import { ArrowRightIcon, SparkIcon } from "../../../components/icons";
 
 const BACKDROP = "/hero/tahoe-dark.jpg";
 
-const BLOCKS = [
-  {
-    slug: "dashboard",
-    title: "Admin dashboard",
-    description:
-      "A complete administration screen with a floating glass sidebar, live KPI cards, revenue flow, and an orders table. Built from Sidebar, Card, Badge, Button, and Table.",
-    componentsUsed: ["Sidebar", "Card", "Badge", "Button", "Table"],
-    code: `import { AdminDashboard } from "glacia";
-
-export default function DashboardRoute() {
-  return <AdminDashboard />;
-}`,
-  },
-  {
-    slug: "login",
-    title: "Login page",
-    description:
-      "A production-ready authentication screen with a centered glass card, email and password fields, OAuth providers, and remember-me. Also available in a split layout.",
-    componentsUsed: ["Card", "Input", "Button", "Label", "Checkbox", "Separator"],
-    code: `import { LoginPage } from "glacia";
-
-export default function LoginRoute() {
-  return (
-    <LoginPage
-      layout="centered"
-      onSubmit={() => console.log("Login submitted")}
-    />
-  );
-}`,
-  },
-  {
-    slug: "settings",
-    title: "System settings",
-    description:
-      "An authentic Apple macOS/iPadOS Preferences window with a categorized glass sidebar, appearance options, haptics, and volume controls.",
-    componentsUsed: ["Sidebar", "Card", "Item", "Switch", "Slider", "SegmentedControl", "Button", "Avatar", "Separator"],
-    code: `import { SettingsBlock } from "glacia";
-
-export default function SettingsRoute() {
-  return <SettingsBlock image={BACKDROP} />;
-}`,
-  },
-  {
-    slug: "profile",
-    title: "User profile",
-    description:
-      "Apple ID contact card profile with an avatar hero, linked Apple devices, verification badge, and contact action buttons.",
-    componentsUsed: ["Card", "Item", "Avatar", "Badge", "Button", "Separator"],
-    code: `import { ProfileBlock } from "glacia";
-
-export default function ProfileRoute() {
-  return <ProfileBlock image={BACKDROP} />;
-}`,
-  },
-  {
-    slug: "signup",
-    title: "Account registration",
-    description:
-      "Apple onboarding account creation screen with real-time animated password strength meter, passkey option, and terms agreement.",
-    componentsUsed: ["Card", "Input", "Button", "Label", "Checkbox", "Separator"],
-    code: `import { SignupBlock } from "glacia";
-
-export default function SignupRoute() {
-  return <SignupBlock image={BACKDROP} />;
-}`,
-  },
-  {
-    slug: "calendar-page",
-    title: "Calendar application",
-    description:
-      "A complete Apple macOS Calendar app with left sidebar mini-picker, iCloud account categories, upcoming agenda, and 7-column month grid with interactive event pills.",
-    componentsUsed: ["Calendar", "SegmentedControl", "Glass", "Button", "Badge"],
-    code: `import { CalendarPageBlock } from "glacia";
-
-export default function CalendarRoute() {
-  return <CalendarPageBlock image={BACKDROP} />;
-}`,
-  },
-  {
-    slug: "pricing",
-    title: "Pricing & tiers",
-    description:
-      "Apple-style subscription tier comparison with annual billing discount toggle, featured refractive Pro card, and feature checklists.",
-    componentsUsed: ["Glass", "Button", "Switch", "Badge"],
-    code: `import { PricingBlock } from "glacia";
-
-export default function PricingRoute() {
-  return <PricingBlock image={BACKDROP} />;
-}`,
-  },
-  {
-    slug: "landing",
-    title: "Product launch landing",
-    description:
-      "Apple keynote marketing page with floating glass pill navigation, glowing gradient headline, 3-column feature cards, and metrics banner.",
-    componentsUsed: ["Glass", "Button", "Badge"],
-    code: `import { LandingBlock } from "glacia";
-
-export default function LandingRoute() {
-  return <LandingBlock image={BACKDROP} />;
-}`,
-  },
-  {
-    slug: "forgot-password",
-    title: "Account recovery & OTP",
-    description:
-      "Apple ID password recovery with trusted email entry, 6-digit InputOTP code verification, resend countdown, and passkey support.",
-    componentsUsed: ["InputOTP", "Input", "Label", "Button", "Glass"],
-    code: `import { ForgotPasswordBlock } from "glacia";
-
-export default function ForgotPasswordRoute() {
-  return <ForgotPasswordBlock image={BACKDROP} />;
-}`,
-  },
-  {
-    slug: "error-page",
-    title: "Error & 404 screen",
-    description:
-      "Apple system error screen with floating glass status card, glowing 404 frosted typography, and recovery action buttons.",
-    componentsUsed: ["Glass", "Button", "Badge"],
-    code: `import { ErrorPageBlock } from "glacia";
-
-export default function ErrorRoute() {
-  return <ErrorPageBlock code="404" />;
-}`,
-  },
-];
 
 export async function generateStaticParams() {
   return BLOCKS.map((block) => ({ slug: block.slug }));
@@ -257,6 +135,94 @@ export default async function BlockPage({ params }: { params: Promise<{ slug: st
             {slug === "landing" && <LandingBlock image={BACKDROP} />}
             {slug === "forgot-password" && <ForgotPasswordBlock image={BACKDROP} />}
             {slug === "error-page" && <ErrorPageBlock code="404" />}
+            {slug === "boarding-pass" && (
+              <BoardingPassBlock
+                passenger="A. Rivera"
+                date="12 Nov"
+                seat="14A"
+                boardingGroup="2"
+                boardingTime="11:05"
+                barcodeValue="GA208-14A-SFO"
+                flight={{
+                  airline: "Glacia Air",
+                  flightNumber: "GA 208",
+                  from: "SFO",
+                  fromCity: "San Francisco",
+                  to: "NRT",
+                  toCity: "Tokyo",
+                  departure: "11:40",
+                  arrival: "15:25 +1",
+                  duration: "11h 05m",
+                  terminal: "2",
+                  gate: "B14",
+                }}
+              />
+            )}
+            {slug === "wallet" && (
+              <WalletBlock
+                cards={[
+                  {
+                    id: "primary",
+                    name: "Glacia Card",
+                    number: "•••• •••• •••• 4821",
+                    holder: "A. Rivera",
+                    expiry: "09/28",
+                    brand: "Visa",
+                    balance: "$4,280.50",
+                  },
+                  {
+                    id: "travel",
+                    name: "Travel Card",
+                    number: "•••• •••• •••• 9133",
+                    holder: "A. Rivera",
+                    expiry: "03/27",
+                    brand: "Mastercard",
+                    gradient: ["#ff9f0a", "#ff375f"],
+                  },
+                  {
+                    id: "studio",
+                    name: "Studio",
+                    number: "•••• •••• •••• 2207",
+                    holder: "Glacia Studio",
+                    expiry: "11/29",
+                    brand: "Amex",
+                    gradient: ["#34c759", "#0a84ff"],
+                  },
+                ]}
+                transactions={[
+                  { id: "t1", merchant: "Blue Bottle", amount: "-$8.40", date: "Today", category: "Coffee", debit: true },
+                  { id: "t2", merchant: "Figma", amount: "-$15.00", date: "Yesterday", category: "Software", debit: true },
+                  { id: "t3", merchant: "Payout", amount: "+$1,240.00", date: "Nov 10", category: "Income" },
+                ]}
+              />
+            )}
+            {slug === "activity" && (
+              <ActivityBlock
+                title="Activity"
+                summary="Everything that happened this week"
+                entries={[
+                  { id: "a1", actor: "Mina", action: "approved the production deploy", time: "09:42", day: "Today", tone: "positive", initials: "MI" },
+                  { id: "a2", actor: "Dev", action: "opened a pull request", detail: "Refraction: cache the displacement map", time: "09:15", day: "Today", tone: "neutral", initials: "DV" },
+                  { id: "a3", actor: "CI", action: "flagged a failing test", detail: "lens.test.tsx — 1 failure", time: "08:58", day: "Today", tone: "warning", initials: "CI" },
+                  { id: "a4", actor: "Ana", action: "merged the tokens branch", time: "17:20", day: "Yesterday", tone: "positive", initials: "AN" },
+                  { id: "a5", actor: "CI", action: "failed to build the docs site", time: "16:04", day: "Yesterday", tone: "danger", initials: "CI" },
+                ]}
+              />
+            )}
+            {slug === "smart-home" && (
+              <SmartHomeBlock
+                temperature="21°"
+                devices={[
+                  { id: "l1", name: "Ceiling lights", room: "Living room", kind: "light", on: true },
+                  { id: "c1", name: "Thermostat", room: "Living room", kind: "climate", on: true, status: "21° · Heating" },
+                  { id: "b1", name: "Blinds", room: "Living room", kind: "blind", on: false, status: "Closed" },
+                  { id: "k1", name: "Front door", room: "Entry", kind: "lock", on: false, status: "Locked" },
+                  { id: "c2", name: "Doorbell", room: "Entry", kind: "camera", status: "Streaming" },
+                  { id: "s1", name: "Kitchen speaker", room: "Kitchen", kind: "speaker", on: false, status: "Idle" },
+                  { id: "l2", name: "Under-cabinet", room: "Kitchen", kind: "light", on: true },
+                ]}
+              />
+            )}
           </div>
         </div>
       </div>

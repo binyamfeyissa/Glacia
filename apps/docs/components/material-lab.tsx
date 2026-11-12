@@ -24,9 +24,11 @@ import {
   GridIcon,
   LayersIcon,
   SearchIcon,
-  SnowflakeIcon,
   SparkIcon,
+  HomeIcon,
+  TemplateIcon,
 } from "./icons";
+import { GlaciaMark } from "./glacia-mark";
 
 const SURFACES = [
   { id: "tahoe", label: "Tahoe" },
@@ -80,9 +82,10 @@ const MoreIcon = () => (
 
 /* Exact same tabs as the website navigation tabs */
 const WEBSITE_TABS: TabBarItem[] = [
-  { value: "overview", label: "Overview", icon: <SnowflakeIcon width={14} height={14} /> },
+  { value: "overview", label: "Overview", icon: <HomeIcon width={14} height={14} /> },
   { value: "components", label: "Components", icon: <GridIcon width={14} height={14} /> },
   { value: "blocks", label: "Blocks", icon: <LayersIcon width={14} height={14} /> },
+  { value: "templates", label: "Templates", icon: <TemplateIcon width={14} height={14} /> },
   { value: "report", label: "Build report", icon: <CodeIcon width={14} height={14} /> },
 ];
 
@@ -112,8 +115,11 @@ export function MaterialLab() {
   const [sliderVal, setSliderVal] = useState(65);
   const [switchA, setSwitchA] = useState(true);
   const [switchB, setSwitchB] = useState(false);
+  const [passkeyActive, setPasskeyActive] = useState(true);
   const [liked, setLiked] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    new Date(2026, 10, 11)
+  );
 
   return (
     <div className="lab-frame">
@@ -195,10 +201,10 @@ export function MaterialLab() {
               </div>
 
               <div className="lab-btn-pair">
-                <Button variant="filled" size="sm">
+                <Button variant="filled" size="sm" className="lab-primary-pill">
                   Primary Button
                 </Button>
-                <Button variant="glass" size="sm">
+                <Button variant="glass" size="sm" className="lab-secondary-pill">
                   Secondary Button
                 </Button>
               </div>
@@ -215,7 +221,7 @@ export function MaterialLab() {
               />
             </div>
 
-            <div className="gl-glass lab-slider-card">
+            <div className="gl-glass lab-slider-card" suppressHydrationWarning>
               <div className="lab-slider-meta">
                 <span className="lab-slider-label">Slider</span>
                 <span className="lab-slider-val">{sliderVal}%</span>
@@ -229,7 +235,7 @@ export function MaterialLab() {
               />
             </div>
 
-            <div className="gl-glass lab-switches-card">
+            <div className="gl-glass lab-switches-card" suppressHydrationWarning>
               <div className="lab-switch-unit">
                 <span className="lab-switch-label">Switch</span>
                 <Switch
@@ -248,27 +254,18 @@ export function MaterialLab() {
               </div>
             </div>
 
-            <div className="gl-glass lab-avatars-card" aria-label="Avatars">
+            <div className="gl-glass lab-avatars-card" aria-label="Avatars" suppressHydrationWarning>
               <div className="lab-avatars-row">
                 <Avatar className="lab-avatar-item">
-                  <AvatarImage
-                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80"
-                    alt="Sarah Chen"
-                  />
+                  <AvatarImage src="/avatars/avatar-1.jpg" alt="Sarah Chen" />
                   <AvatarFallback>SC</AvatarFallback>
                 </Avatar>
                 <Avatar className="lab-avatar-item">
-                  <AvatarImage
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80"
-                    alt="Alex Rivera"
-                  />
+                  <AvatarImage src="/avatars/avatar-2.jpg" alt="Alex Rivera" />
                   <AvatarFallback>AR</AvatarFallback>
                 </Avatar>
                 <Avatar className="lab-avatar-item">
-                  <AvatarImage
-                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80"
-                    alt="Elena Rostova"
-                  />
+                  <AvatarImage src="/avatars/avatar-3.jpg" alt="Elena Rostova" />
                   <AvatarFallback>ER</AvatarFallback>
                 </Avatar>
                 <Avatar className="lab-avatar-item lab-avatar-count">
@@ -277,7 +274,7 @@ export function MaterialLab() {
               </div>
             </div>
 
-            <div className="gl-glass lab-kbd-card" aria-label="Keyboard shortcuts">
+            <div className="gl-glass lab-kbd-card" aria-label="Keyboard shortcuts" suppressHydrationWarning>
               <span className="lab-kbd-label">Shortcut</span>
               <div className="lab-kbd-cluster">
                 <Kbd size="md">⌘</Kbd>
@@ -290,15 +287,11 @@ export function MaterialLab() {
           <div className="lab-row-grid">
             {/* Calendar Column */}
             <div className="lab-grid-col-calendar">
-              <div className="gl-glass lab-calendar-shell">
+              <div className="gl-glass lab-calendar-shell" suppressHydrationWarning>
                 <Calendar
                   selected={selectedDate}
                   onSelect={setSelectedDate}
                 />
-                <div className="lab-calendar-footer">
-                  <span className="lab-cal-dot" />
-                  <span>Nov 11 · 2:00 PM Design Review</span>
-                </div>
               </div>
             </div>
 
@@ -306,47 +299,39 @@ export function MaterialLab() {
             <div className="lab-grid-col-form">
               <Form
                 className="gl-glass lab-form-card"
+                  suppressHydrationWarning
                 onSubmit={(e) => e.preventDefault()}
               >
                 <div className="lab-form-head">
                   <div>
                     <h4 className="lab-form-title">Apple Account</h4>
-                    <span className="lab-form-desc">Passkeys &amp; iCloud sync</span>
+                    <span className="lab-form-desc">Manage passkeys and sync</span>
                   </div>
                   <Kbd size="sm">⌘S</Kbd>
                 </div>
 
-                <div className="lab-form-field">
-                  <Label htmlFor="hub-email">Apple ID</Label>
-                  <Input
-                    id="hub-email"
-                    type="email"
-                    defaultValue="user@apple.com"
-                    placeholder="name@apple.com"
-                  />
-                </div>
+                <div className="lab-form-body">
+                  <div className="lab-form-field">
+                    <Label htmlFor="hub-email">Apple ID</Label>
+                    <Input
+                      id="hub-email"
+                      type="email"
+                      defaultValue="user@apple.com"
+                      placeholder="user@apple.com"
+                    />
+                  </div>
 
-                <div className="lab-form-field">
-                  <Label htmlFor="hub-key">Passkey Password</Label>
-                  <Input
-                    id="hub-key"
-                    type="password"
-                    defaultValue="••••••••••••"
-                  />
-                </div>
-
-                <div className="lab-form-row">
-                  <Label htmlFor="hub-passkey" className="lab-form-row-label">
-                    Passkey Authentication
-                  </Label>
-                  <Switch id="hub-passkey" defaultChecked />
-                </div>
-
-                <div className="lab-form-row">
-                  <Label htmlFor="hub-keychain" className="lab-form-row-label">
-                    iCloud Keychain Sync
-                  </Label>
-                  <Switch id="hub-keychain" defaultChecked />
+                  <div className="lab-form-row">
+                    <Label htmlFor="hub-passkey" className="lab-form-row-label">
+                      Passkey Authentication
+                    </Label>
+                    <Switch
+                      id="hub-passkey"
+                      checked={passkeyActive}
+                      onCheckedChange={setPasskeyActive}
+                      aria-label="Passkey Authentication"
+                    />
+                  </div>
                 </div>
 
                 <Button type="submit" variant="filled" size="sm" className="lab-form-btn">
@@ -357,7 +342,7 @@ export function MaterialLab() {
 
             {/* Chart & Code Block Column */}
             <div className="lab-grid-col-chart">
-              <div className="gl-glass lab-chart-card">
+              <div className="gl-glass lab-chart-card" suppressHydrationWarning>
                 <div className="lab-chart-head">
                   <div>
                     <span className="lab-chart-eyebrow">Transmission Index</span>

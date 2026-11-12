@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toast",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/toast.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — toast\n// Copied with `npx glacia add toast`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ElementRef,\n  type ComponentPropsWithoutRef,\n  type ReactElement,\n} from \"react\";\nimport { Toast as ToastPrimitive } from \"radix-ui\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport const ToastProvider = ToastPrimitive.Provider;\n\nexport const ToastViewport = forwardRef<\n  ElementRef<typeof ToastPrimitive.Viewport>,\n  ComponentPropsWithoutRef<typeof ToastPrimitive.Viewport>\n>(function ToastViewport({ className, ...props }, ref) {\n  return (\n    <ToastPrimitive.Viewport\n      ref={ref}\n      className={cx(\"gl-toast-viewport\", className)}\n      {...props}\n    />\n  );\n});\n\nexport interface ToastProps\n  extends ComponentPropsWithoutRef<typeof ToastPrimitive.Root> {\n  variant?: \"default\" | \"destructive\" | \"success\";\n}\n\nexport const Toast = forwardRef<\n  ElementRef<typeof ToastPrimitive.Root>,\n  ToastProps\n>(function Toast({ className, variant = \"default\", children, ...props }, ref) {\n  return (\n    <ToastPrimitive.Root\n      ref={ref}\n      data-variant={variant}\n      className={cx(\"gl-glass gl-toast-hud\", className)}\n      {...props}\n    >\n      {children}\n    </ToastPrimitive.Root>\n  );\n});\n\nexport const ToastAction = forwardRef<\n  ElementRef<typeof ToastPrimitive.Action>,\n  ComponentPropsWithoutRef<typeof ToastPrimitive.Action>\n>(function ToastAction({ className, ...props }, ref) {\n  return (\n    <ToastPrimitive.Action\n      ref={ref}\n      className={cx(\"gl-toast-action\", className)}\n      {...props}\n    />\n  );\n});\n\nexport const ToastClose = forwardRef<\n  ElementRef<typeof ToastPrimitive.Close>,\n  ComponentPropsWithoutRef<typeof ToastPrimitive.Close>\n>(function ToastClose({ className, ...props }, ref) {\n  return (\n    <ToastPrimitive.Close\n      ref={ref}\n      className={cx(\"gl-toast-close\", className)}\n      aria-label=\"Close\"\n      {...props}\n    >\n      <svg width=\"12\" height=\"12\" viewBox=\"0 0 12 12\" fill=\"none\">\n        <path d=\"M3 3L9 9M9 3L3 9\" stroke=\"currentColor\" strokeWidth=\"1.5\" strokeLinecap=\"round\" strokeLinejoin=\"round\"/>\n      </svg>\n    </ToastPrimitive.Close>\n  );\n});\n\nexport const ToastTitle = forwardRef<\n  ElementRef<typeof ToastPrimitive.Title>,\n  ComponentPropsWithoutRef<typeof ToastPrimitive.Title>\n>(function ToastTitle({ className, ...props }, ref) {\n  return (\n    <ToastPrimitive.Title\n      ref={ref}\n      className={cx(\"gl-toast-title\", className)}\n      {...props}\n    />\n  );\n});\n\nexport const ToastDescription = forwardRef<\n  ElementRef<typeof ToastPrimitive.Description>,\n  ComponentPropsWithoutRef<typeof ToastPrimitive.Description>\n>(function ToastDescription({ className, ...props }, ref) {\n  return (\n    <ToastPrimitive.Description\n      ref={ref}\n      className={cx(\"gl-toast-description\", className)}\n      {...props}\n    />\n  );\n});\n",
+      "type": "registry:ui"
+    }
+  ]
+}

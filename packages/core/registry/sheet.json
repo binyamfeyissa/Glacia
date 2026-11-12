@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "sheet",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/sheet.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — sheet\n// Copied with `npx glacia add sheet`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ElementRef,\n  type ComponentPropsWithoutRef,\n  type HTMLAttributes,\n} from \"react\";\nimport { Dialog as DialogPrimitive } from \"radix-ui\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport const Sheet = DialogPrimitive.Root;\nexport const SheetTrigger = DialogPrimitive.Trigger;\nexport const SheetClose = DialogPrimitive.Close;\nexport const SheetPortal = DialogPrimitive.Portal;\n\nexport const SheetOverlay = forwardRef<\n  ElementRef<typeof DialogPrimitive.Overlay>,\n  ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>\n>(function SheetOverlay({ className, ...props }, ref) {\n  return (\n    <DialogPrimitive.Overlay\n      ref={ref}\n      className={cx(\"gl-sheet-overlay\", className)}\n      {...props}\n    />\n  );\n});\n\nexport interface SheetContentProps\n  extends ComponentPropsWithoutRef<typeof DialogPrimitive.Content> {\n  /** Side from which the sheet enters: 'right' (default), 'left', 'top', or 'bottom'. */\n  side?: \"top\" | \"bottom\" | \"left\" | \"right\";\n}\n\nexport const SheetContent = forwardRef<\n  ElementRef<typeof DialogPrimitive.Content>,\n  SheetContentProps\n>(function SheetContent(\n  { side = \"right\", className, children, ...props },\n  ref\n) {\n  return (\n    <DialogPrimitive.Portal>\n      <SheetOverlay />\n      <DialogPrimitive.Content\n        ref={ref}\n        data-side={side}\n        className={cx(\"gl-glass gl-sheet-content\", className)}\n        {...props}\n      >\n        {children}\n        <DialogPrimitive.Close className=\"gl-sheet-close\" aria-label=\"Close\">\n          <svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\" fill=\"none\">\n            <path d=\"M3.5 3.5L10.5 10.5M10.5 3.5L3.5 10.5\" stroke=\"currentColor\" strokeWidth=\"1.5\" strokeLinecap=\"round\" strokeLinejoin=\"round\"/>\n          </svg>\n        </DialogPrimitive.Close>\n      </DialogPrimitive.Content>\n    </DialogPrimitive.Portal>\n  );\n});\n\nexport const SheetHeader = ({\n  className,\n  ...props\n}: HTMLAttributes<HTMLDivElement>) => (\n  <div className={cx(\"gl-sheet-header\", className)} {...props} />\n);\n\nexport const SheetFooter = ({\n  className,\n  ...props\n}: HTMLAttributes<HTMLDivElement>) => (\n  <div className={cx(\"gl-sheet-footer\", className)} {...props} />\n);\n\nexport const SheetTitle = forwardRef<\n  ElementRef<typeof DialogPrimitive.Title>,\n  ComponentPropsWithoutRef<typeof DialogPrimitive.Title>\n>(function SheetTitle({ className, ...props }, ref) {\n  return (\n    <DialogPrimitive.Title\n      ref={ref}\n      className={cx(\"gl-sheet-title\", className)}\n      {...props}\n    />\n  );\n});\n\nexport const SheetDescription = forwardRef<\n  ElementRef<typeof DialogPrimitive.Description>,\n  ComponentPropsWithoutRef<typeof DialogPrimitive.Description>\n>(function SheetDescription({ className, ...props }, ref) {\n  return (\n    <DialogPrimitive.Description\n      ref={ref}\n      className={cx(\"gl-sheet-description\", className)}\n      {...props}\n    />\n  );\n});\n",
+      "type": "registry:ui"
+    }
+  ]
+}

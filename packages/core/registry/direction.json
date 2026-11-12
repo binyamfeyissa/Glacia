@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "direction",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/direction.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — direction\n// Copied with `npx glacia add direction`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport * as React from \"react\";\nimport { Direction as RadixDirection } from \"radix-ui\";\n\nexport type DirectionType = \"ltr\" | \"rtl\";\n\ninterface DirectionContextValue {\n  dir: DirectionType;\n  isRTL: boolean;\n}\n\nconst DirectionContext = React.createContext<DirectionContextValue>({\n  dir: \"ltr\",\n  isRTL: false,\n});\n\nexport interface DirectionProviderProps {\n  dir: DirectionType;\n  children: React.ReactNode;\n}\n\nexport function DirectionProvider({ dir, children }: DirectionProviderProps) {\n  const isRTL = dir === \"rtl\";\n\n  return (\n    <RadixDirection.Provider dir={dir}>\n      <DirectionContext.Provider value={{ dir, isRTL }}>\n        <div dir={dir} className=\"gl-direction-root\">\n          {children}\n        </div>\n      </DirectionContext.Provider>\n    </RadixDirection.Provider>\n  );\n}\n\nexport function useDirection(): DirectionContextValue {\n  return React.useContext(DirectionContext);\n}\n\nexport interface DirectionProps {\n  dir: DirectionType;\n  children: React.ReactNode;\n}\n\nexport function Direction({ dir, children }: DirectionProps) {\n  return <DirectionProvider dir={dir}>{children}</DirectionProvider>;\n}\n",
+      "type": "registry:ui"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "mirror-area-chart",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/mirror-area-chart.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — mirror-area-chart\n// Copied with `npx glacia add mirror-area-chart`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\n\"use client\";\n\nimport { LineChart, type LineSeries } from \"glacia\";\nimport { ChartEmpty } from \"glacia\";\nimport type { Value } from \"glacia\";\n\nexport interface AreaChartProps {\n  labels: string[];\n  series: LineSeries[];\n  height?: number;\n  smooth?: boolean;\n  format?: (value: Value) => string;\n  palette?: readonly string[];\n  className?: string;\n  ariaLabel?: string;\n}\n\n/**\n * A continuous series with its area filled.\n *\n * This is the LineChart drawing filled instead of stroked — the same scales,\n * axis ticks and tooltip — so the two stay consistent when used side by side.\n */\nexport function AreaChart({ area: _unused, ...props }: AreaChartProps & { area?: boolean }) {\n  void _unused;\n  return <LineChart {...props} area />;\n}\n\nexport interface MirrorAreaSeries {\n  name: string;\n  /** Positive values drawn upward. */\n  above: Value[];\n  /** Positive values drawn downward. */\n  below: Value[];\n}\n\nexport interface MirrorAreaChartProps {\n  labels: string[];\n  series: MirrorAreaSeries;\n  height?: number;\n  aboveColor?: string;\n  belowColor?: string;\n  format?: (value: Value) => string;\n  className?: string;\n  ariaLabel?: string;\n}\n\n/**\n * Two series mirrored across a shared centre line — the shape used to compare\n * opposing flows, such as inflow against outflow at each point in time.\n *\n * Implemented by rendering an above series and a below series whose values are\n * negated, so one axis covers both directions honestly rather than stacking\n * two separate charts that could be scaled differently.\n */\nexport function MirrorAreaChart({\n  labels,\n  series,\n  height = 220,\n  aboveColor,\n  belowColor,\n  format,\n  className,\n  ariaLabel,\n}: MirrorAreaChartProps) {\n  if (labels.length === 0) {\n    return <ChartEmpty label=\"No series to display\" />;\n  }\n\n  return (\n    <LineChart\n      className={className}\n      labels={labels}\n      height={height}\n      area\n      smooth\n      dots={false}\n      format={format}\n      ariaLabel={ariaLabel ?? `Mirrored area chart: ${series.name}`}\n      series={[\n        { name: `${series.name} (above)`, values: series.above, color: aboveColor ?? \"var(--gl-chart-1, #0088ff)\" },\n        {\n          name: `${series.name} (below)`,\n          values: series.below.map((v) => -Math.abs(v)),\n          color: belowColor ?? \"var(--gl-chart-4, #ff375f)\",\n        },\n      ]}\n    />\n  );\n}\n",
+      "type": "registry:ui"
+    }
+  ]
+}

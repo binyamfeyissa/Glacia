@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button-group",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/button-group.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — button-group\n// Copied with `npx glacia add button-group`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type HTMLAttributes,\n  type ForwardRefExoticComponent,\n  type RefAttributes,\n} from \"react\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport interface ButtonGroupProps extends HTMLAttributes<HTMLDivElement> {\n  /** Orientation of buttons in the group. Defaults to 'horizontal'. */\n  orientation?: \"horizontal\" | \"vertical\";\n  /** Size for all buttons in the group: 'sm' (32px), 'md' (40px, default), 'lg' (48px). */\n  size?: \"sm\" | \"md\" | \"lg\";\n  /** Variant style for the group container. Defaults to 'segmented'. */\n  variant?: \"segmented\" | \"attached\" | \"ghost\";\n}\n\nexport const ButtonGroup: ForwardRefExoticComponent<\n  ButtonGroupProps & RefAttributes<HTMLDivElement>\n> = /* @__PURE__ */ forwardRef<HTMLDivElement, ButtonGroupProps>(\n  function ButtonGroup(\n    {\n      orientation = \"horizontal\",\n      size = \"md\",\n      variant = \"segmented\",\n      className,\n      children,\n      ...props\n    },\n    ref\n  ) {\n    return (\n      <div\n        ref={ref}\n        role=\"group\"\n        className={cx(\"gl-button-group\", variant === \"segmented\" && \"gl-glass\", className)}\n        data-orientation={orientation}\n        data-size={size}\n        data-variant={variant}\n        {...props}\n      >\n        {children}\n      </div>\n    );\n  }\n);\n",
+      "type": "registry:ui"
+    }
+  ]
+}

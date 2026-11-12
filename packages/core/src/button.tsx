@@ -49,6 +49,9 @@ export const Button: ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLB
       data-destructive={destructive ? "" : undefined}
       data-tint={tint ? "" : undefined}
       style={tint ? ({ ...style, "--gl-tint": tint } as CSSProperties) : style}
+      // The refraction engine writes data-rim and data-refracting from measured
+      // geometry after hydration; those writes are intentional.
+      suppressHydrationWarning
       {...props}
     >
       {icon}

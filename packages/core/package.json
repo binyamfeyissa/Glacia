@@ -50,7 +50,8 @@
   },
   "files": [
     "dist",
-    "bin"
+    "bin",
+    "registry"
   ],
   "scripts": {
     "build": "tsdown",
@@ -64,7 +65,7 @@
     "react-dom": ">=18"
   },
   "dependencies": {
-    "glacia-tokens": "workspace:*",
+    "glacia-tokens": "^0.3.3",
     "radix-ui": "^1.8.1"
   },
   "devDependencies": {

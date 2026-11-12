@@ -1,5 +1,6 @@
 import { fitBackdropLens, type LensOptions } from "./lens";
 import { paintRim, refractsBackdrop } from "./refraction";
+import { isHydrating, onceHydrated } from "./hydration";
 
 /**
  * Gives every piece of glass on the page the live backdrop lens.
@@ -8,6 +9,20 @@ import { paintRim, refractsBackdrop } from "./refraction";
  * buys a blur. This watches the document and fits the real displacement map
  * to each element that carries the class, so any glass — ours, or a surface a
  * user composes themselves — bends what is behind it rather than sitting flat.
+ *
+ * Attribute ownership: this engine writes data-rim, data-refracting and the
+ * --gl-rim / --gl-filter custom properties onto those elements directly. They
+ * describe measured pixel geometry, so no server render can know them, and
+ * React therefore cannot own them. Two consequences:
+ *
+ *   - writes wait for `onceHydrated` (see ./hydration) so they never land
+ *     mid-hydration;
+ *   - React's dev overlay still reports a mismatch for these attributes when it
+ *     re-renders a node the engine has written to. That report is expected here
+ *     and does not appear in a production build.
+ *
+ * If you need a glass element React fully owns, render the attributes yourself
+ * and do not let the sweep touch it.
  *
  * Each element's own classes choose its physics (see SURFACES below), so a
  * tooltip stays a thin pane and a dialog reads as a thick slab without the
@@ -102,11 +117,17 @@ function sweep(): void {
 }
 
 export function resweepGlass(): void {
+  if (isHydrating()) return; // the queued sweep will do this work
   fitted = new WeakMap();
   sweep();
 }
 
 function schedule(): void {
+  if (isHydrating()) {
+    // Coalesced: everything queued here runs in one sweep once we are hydrated.
+    onceHydrated(sweep);
+    return;
+  }
   if (frame) return;
   if (typeof window === "undefined" || typeof requestAnimationFrame === "undefined") {
     sweep();

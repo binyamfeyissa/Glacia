@@ -814,6 +814,346 @@
       ]
     },
     {
+      "name": "line-chart",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "bar-chart",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "area-chart",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "mirror-area-chart",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "ring-chart",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "pie-chart",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "scatter-chart",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "bubble-chart",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "funnel-chart",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "heatmap-chart",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "radar-chart",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "waterfall-chart",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "candlestick-chart",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "treemap-chart",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "sankey-chart",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "bump-chart",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "hex-chart",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "polar-area-chart",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "pyramid-chart",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "live-line-chart",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "plot-chart",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "plan",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "sources",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "response",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "task",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "soundwave",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "thinking-orb",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "panelside",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "ai-input",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "image-generation",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "boarding-pass",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "wallet",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "activity",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "smart-home",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
       "name": "base",
       "type": "registry:style",
@@ -911,7 +1251,41 @@
         "/r/stepper.json",
         "/r/time-picker.json",
         "/r/toolbar.json",
-        "/r/widget.json"
+        "/r/widget.json",
+        "/r/line-chart.json",
+        "/r/bar-chart.json",
+        "/r/area-chart.json",
+        "/r/mirror-area-chart.json",
+        "/r/ring-chart.json",
+        "/r/pie-chart.json",
+        "/r/scatter-chart.json",
+        "/r/bubble-chart.json",
+        "/r/funnel-chart.json",
+        "/r/heatmap-chart.json",
+        "/r/radar-chart.json",
+        "/r/waterfall-chart.json",
+        "/r/candlestick-chart.json",
+        "/r/treemap-chart.json",
+        "/r/sankey-chart.json",
+        "/r/bump-chart.json",
+        "/r/hex-chart.json",
+        "/r/polar-area-chart.json",
+        "/r/pyramid-chart.json",
+        "/r/live-line-chart.json",
+        "/r/plot-chart.json",
+        "/r/plan.json",
+        "/r/sources.json",
+        "/r/response.json",
+        "/r/task.json",
+        "/r/soundwave.json",
+        "/r/thinking-orb.json",
+        "/r/panelside.json",
+        "/r/ai-input.json",
+        "/r/image-generation.json",
+        "/r/boarding-pass.json",
+        "/r/wallet.json",
+        "/r/activity.json",
+        "/r/smart-home.json"
       ],
       "files": []
     }

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "dialog",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/dialog.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — dialog\n// Copied with `npx glacia add dialog`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ComponentPropsWithoutRef,\n  type ElementRef,\n  type HTMLAttributes,\n} from \"react\";\nimport { Dialog as RadixDialog } from \"radix-ui\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport const Dialog = RadixDialog.Root;\nexport const DialogTrigger = RadixDialog.Trigger;\nexport const DialogPortal = RadixDialog.Portal;\nexport const DialogClose = RadixDialog.Close;\n\nexport const DialogOverlay = forwardRef<\n  ElementRef<typeof RadixDialog.Overlay>,\n  ComponentPropsWithoutRef<typeof RadixDialog.Overlay>\n>(function DialogOverlay({ className, ...props }, ref) {\n  return (\n    <RadixDialog.Overlay\n      ref={ref}\n      className={cx(\"gl-dialog-overlay\", className)}\n      {...props}\n    />\n  );\n});\n\nexport const DialogContent = forwardRef<\n  ElementRef<typeof RadixDialog.Content>,\n  ComponentPropsWithoutRef<typeof RadixDialog.Content>\n>(function DialogContent({ className, children, ...props }, ref) {\n  return (\n    <DialogPortal>\n      <DialogOverlay />\n      <RadixDialog.Content\n        ref={ref}\n        className={cx(\"gl-glass gl-dialog-content\", className)}\n        {...props}\n      >\n        {children}\n        <RadixDialog.Close className=\"gl-dialog-close\" aria-label=\"Close\">\n          <svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\">\n            <line x1=\"4\" y1=\"4\" x2=\"12\" y2=\"12\" />\n            <line x1=\"12\" y1=\"4\" x2=\"4\" y2=\"12\" />\n          </svg>\n        </RadixDialog.Close>\n      </RadixDialog.Content>\n    </DialogPortal>\n  );\n});\n\nexport const DialogHeader = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(\n  function DialogHeader({ className, ...props }, ref) {\n    return <div ref={ref} className={cx(\"gl-dialog-header\", className)} {...props} />;\n  },\n);\n\nexport const DialogTitle = forwardRef<\n  ElementRef<typeof RadixDialog.Title>,\n  ComponentPropsWithoutRef<typeof RadixDialog.Title>\n>(function DialogTitle({ className, ...props }, ref) {\n  return <RadixDialog.Title ref={ref} className={cx(\"gl-dialog-title\", className)} {...props} />;\n});\n\nexport const DialogDescription = forwardRef<\n  ElementRef<typeof RadixDialog.Description>,\n  ComponentPropsWithoutRef<typeof RadixDialog.Description>\n>(function DialogDescription({ className, ...props }, ref) {\n  return (\n    <RadixDialog.Description ref={ref} className={cx(\"gl-dialog-description\", className)} {...props} />\n  );\n});\n\nexport const DialogFooter = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(\n  function DialogFooter({ className, ...props }, ref) {\n    return <div ref={ref} className={cx(\"gl-dialog-footer\", className)} {...props} />;\n  },\n);\n",
+      "type": "registry:ui"
+    }
+  ]
+}

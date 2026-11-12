@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "label",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/label.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — label\n// Copied with `npx glacia add label`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ComponentPropsWithoutRef,\n  type ElementRef,\n} from \"react\";\nimport { Label as RadixLabel } from \"radix-ui\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport interface LabelProps extends ComponentPropsWithoutRef<typeof RadixLabel.Root> {}\n\nexport const Label = forwardRef<\n  ElementRef<typeof RadixLabel.Root>,\n  LabelProps\n>(function Label({ className, ...props }, ref) {\n  return (\n    <RadixLabel.Root\n      ref={ref}\n      className={cx(\"gl-label\", className)}\n      {...props}\n    />\n  );\n});\n",
+      "type": "registry:ui"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "checkbox",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/checkbox.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — checkbox\n// Copied with `npx glacia add checkbox`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ComponentPropsWithoutRef,\n  type ElementRef,\n} from \"react\";\nimport { Checkbox as RadixCheckbox } from \"radix-ui\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport const Checkbox = forwardRef<\n  ElementRef<typeof RadixCheckbox.Root>,\n  ComponentPropsWithoutRef<typeof RadixCheckbox.Root>\n>(function Checkbox({ className, ...props }, ref) {\n  return (\n    <RadixCheckbox.Root\n      ref={ref}\n      className={cx(\"gl-glass gl-checkbox\", className)}\n      {...props}\n    >\n      <RadixCheckbox.Indicator className=\"gl-checkbox-indicator\">\n        <svg\n          viewBox=\"0 0 16 16\"\n          fill=\"none\"\n          stroke=\"currentColor\"\n          strokeWidth=\"2.5\"\n          strokeLinecap=\"round\"\n          strokeLinejoin=\"round\"\n          className=\"gl-checkbox-icon\"\n        >\n          <polyline points=\"3.5 8.5 6.5 11.5 12.5 5\" />\n        </svg>\n      </RadixCheckbox.Indicator>\n    </RadixCheckbox.Root>\n  );\n});\n",
+      "type": "registry:ui"
+    }
+  ]
+}

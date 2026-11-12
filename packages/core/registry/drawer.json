@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "drawer",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/drawer.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — drawer\n// Copied with `npx glacia add drawer`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ElementRef,\n  type ComponentPropsWithoutRef,\n  type HTMLAttributes,\n} from \"react\";\nimport { Dialog as DialogPrimitive } from \"radix-ui\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport const Drawer = DialogPrimitive.Root;\nexport const DrawerTrigger = DialogPrimitive.Trigger;\nexport const DrawerPortal = DialogPrimitive.Portal;\nexport const DrawerClose = DialogPrimitive.Close;\n\nexport const DrawerOverlay = forwardRef<\n  ElementRef<typeof DialogPrimitive.Overlay>,\n  ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>\n>(function DrawerOverlay({ className, ...props }, ref) {\n  return (\n    <DialogPrimitive.Overlay\n      ref={ref}\n      className={cx(\"gl-drawer-overlay\", className)}\n      {...props}\n    />\n  );\n});\n\nexport const DrawerContent = forwardRef<\n  ElementRef<typeof DialogPrimitive.Content>,\n  ComponentPropsWithoutRef<typeof DialogPrimitive.Content>\n>(function DrawerContent({ className, children, ...props }, ref) {\n  return (\n    <DialogPrimitive.Portal>\n      <DrawerOverlay />\n      <DialogPrimitive.Content\n        ref={ref}\n        className={cx(\"gl-glass gl-drawer-content\", className)}\n        {...props}\n      >\n        <div className=\"gl-drawer-handle\" aria-hidden=\"true\" />\n        {children}\n      </DialogPrimitive.Content>\n    </DialogPrimitive.Portal>\n  );\n});\n\nexport const DrawerHeader = ({\n  className,\n  ...props\n}: HTMLAttributes<HTMLDivElement>) => (\n  <div className={cx(\"gl-drawer-header\", className)} {...props} />\n);\n\nexport const DrawerFooter = ({\n  className,\n  ...props\n}: HTMLAttributes<HTMLDivElement>) => (\n  <div className={cx(\"gl-drawer-footer\", className)} {...props} />\n);\n\nexport const DrawerTitle = forwardRef<\n  ElementRef<typeof DialogPrimitive.Title>,\n  ComponentPropsWithoutRef<typeof DialogPrimitive.Title>\n>(function DrawerTitle({ className, ...props }, ref) {\n  return (\n    <DialogPrimitive.Title\n      ref={ref}\n      className={cx(\"gl-drawer-title\", className)}\n      {...props}\n    />\n  );\n});\n\nexport const DrawerDescription = forwardRef<\n  ElementRef<typeof DialogPrimitive.Description>,\n  ComponentPropsWithoutRef<typeof DialogPrimitive.Description>\n>(function DrawerDescription({ className, ...props }, ref) {\n  return (\n    <DialogPrimitive.Description\n      ref={ref}\n      className={cx(\"gl-drawer-description\", className)}\n      {...props}\n    />\n  );\n});\n",
+      "type": "registry:ui"
+    }
+  ]
+}

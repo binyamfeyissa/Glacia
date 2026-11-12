@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "context-menu",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/context-menu.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — context-menu\n// Copied with `npx glacia add context-menu`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ElementRef,\n  type ComponentPropsWithoutRef,\n  type HTMLAttributes,\n} from \"react\";\nimport { ContextMenu as ContextMenuPrimitive } from \"radix-ui\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport const ContextMenu = ContextMenuPrimitive.Root;\nexport const ContextMenuTrigger = ContextMenuPrimitive.Trigger;\nexport const ContextMenuGroup = ContextMenuPrimitive.Group;\nexport const ContextMenuPortal = ContextMenuPrimitive.Portal;\nexport const ContextMenuSub = ContextMenuPrimitive.Sub;\nexport const ContextMenuRadioGroup = ContextMenuPrimitive.RadioGroup;\n\nexport const ContextMenuContent = forwardRef<\n  ElementRef<typeof ContextMenuPrimitive.Content>,\n  ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Content>\n>(function ContextMenuContent({ className, children, ...props }, ref) {\n  return (\n    <ContextMenuPrimitive.Portal>\n      <ContextMenuPrimitive.Content\n        ref={ref}\n        className={cx(\"gl-glass gl-context-menu-content\", className)}\n        {...props}\n      >\n        {children}\n      </ContextMenuPrimitive.Content>\n    </ContextMenuPrimitive.Portal>\n  );\n});\n\nexport const ContextMenuItem = forwardRef<\n  ElementRef<typeof ContextMenuPrimitive.Item>,\n  ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Item> & {\n    destructive?: boolean;\n    inset?: boolean;\n  }\n>(function ContextMenuItem(\n  { className, destructive, inset, children, ...props },\n  ref\n) {\n  return (\n    <ContextMenuPrimitive.Item\n      ref={ref}\n      data-destructive={destructive ? \"\" : undefined}\n      data-inset={inset ? \"\" : undefined}\n      className={cx(\"gl-context-menu-item\", className)}\n      {...props}\n    >\n      {children}\n    </ContextMenuPrimitive.Item>\n  );\n});\n\nexport const ContextMenuSeparator = forwardRef<\n  ElementRef<typeof ContextMenuPrimitive.Separator>,\n  ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Separator>\n>(function ContextMenuSeparator({ className, ...props }, ref) {\n  return (\n    <ContextMenuPrimitive.Separator\n      ref={ref}\n      className={cx(\"gl-context-menu-separator\", className)}\n      {...props}\n    />\n  );\n});\n\nexport const ContextMenuShortcut = ({\n  className,\n  ...props\n}: HTMLAttributes<HTMLSpanElement>) => {\n  return (\n    <span\n      className={cx(\"gl-context-menu-shortcut\", className)}\n      {...props}\n    />\n  );\n};\n",
+      "type": "registry:ui"
+    }
+  ]
+}

@@ -23,6 +23,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
     <div
       ref={ref}
       className={cx("gl-glass gl-card", className)}
+      suppressHydrationWarning
       data-variant={variant === "glass" ? undefined : variant}
       {...props}
     />

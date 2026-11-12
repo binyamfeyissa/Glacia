@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "aspect-ratio",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/aspect-ratio.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — aspect-ratio\n// Copied with `npx glacia add aspect-ratio`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport * as React from \"react\";\nimport { AspectRatio as RadixAspectRatio } from \"radix-ui\";\n\nexport interface AspectRatioProps\n  extends React.ComponentPropsWithoutRef<typeof RadixAspectRatio.Root> {\n  glassBorder?: boolean;\n  variant?: \"glass\" | \"plain\";\n}\n\nexport const AspectRatio = React.forwardRef<\n  React.ElementRef<typeof RadixAspectRatio.Root>,\n  AspectRatioProps\n>(({ className = \"\", ratio = 16 / 9, glassBorder = false, variant = \"glass\", children, ...props }, ref) => {\n  return (\n    <RadixAspectRatio.Root\n      ref={ref}\n      ratio={ratio}\n      className={`gl-aspect-ratio ${(glassBorder || variant === \"glass\") ? \"gl-glass\" : \"\"} ${className}`}\n      {...props}\n    >\n      {children}\n    </RadixAspectRatio.Root>\n  );\n});\nAspectRatio.displayName = \"AspectRatio\";\n",
+      "type": "registry:ui"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "avatar",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/avatar.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — avatar\n// Copied with `npx glacia add avatar`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ComponentPropsWithoutRef,\n  type ElementRef,\n} from \"react\";\nimport { Avatar as RadixAvatar } from \"radix-ui\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport const Avatar = forwardRef<\n  ElementRef<typeof RadixAvatar.Root>,\n  ComponentPropsWithoutRef<typeof RadixAvatar.Root>\n>(function Avatar({ className, ...props }, ref) {\n  return (\n    <RadixAvatar.Root\n      ref={ref}\n      className={cx(\"gl-glass gl-avatar\", className)}\n      {...props}\n    />\n  );\n});\n\nexport const AvatarImage = forwardRef<\n  ElementRef<typeof RadixAvatar.Image>,\n  ComponentPropsWithoutRef<typeof RadixAvatar.Image>\n>(function AvatarImage({ className, ...props }, ref) {\n  return (\n    <RadixAvatar.Image\n      ref={ref}\n      className={cx(\"gl-avatar-image\", className)}\n      {...props}\n    />\n  );\n});\n\nexport const AvatarFallback = forwardRef<\n  ElementRef<typeof RadixAvatar.Fallback>,\n  ComponentPropsWithoutRef<typeof RadixAvatar.Fallback>\n>(function AvatarFallback({ className, ...props }, ref) {\n  return (\n    <RadixAvatar.Fallback\n      ref={ref}\n      className={cx(\"gl-avatar-fallback\", className)}\n      {...props}\n    />\n  );\n});\n",
+      "type": "registry:ui"
+    }
+  ]
+}

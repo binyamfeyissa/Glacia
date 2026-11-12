@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "popover",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/popover.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — popover\n// Copied with `npx glacia add popover`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ComponentPropsWithoutRef,\n  type ElementRef,\n} from \"react\";\nimport { Popover as RadixPopover } from \"radix-ui\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport const Popover = RadixPopover.Root;\nexport const PopoverTrigger = RadixPopover.Trigger;\nexport const PopoverAnchor = RadixPopover.Anchor;\n\nexport const PopoverContent = forwardRef<\n  ElementRef<typeof RadixPopover.Content>,\n  ComponentPropsWithoutRef<typeof RadixPopover.Content>\n>(function PopoverContent(\n  { className, align = \"center\", sideOffset = 6, children, ...props },\n  ref,\n) {\n  return (\n    <RadixPopover.Portal>\n      <RadixPopover.Content\n        ref={ref}\n        align={align}\n        sideOffset={sideOffset}\n        className={cx(\"gl-glass gl-popover-content\", className)}\n        {...props}\n      >\n        {children}\n      </RadixPopover.Content>\n    </RadixPopover.Portal>\n  );\n});\n",
+      "type": "registry:ui"
+    }
+  ]
+}

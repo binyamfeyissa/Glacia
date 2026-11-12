@@ -37,6 +37,7 @@ export const Input: ForwardRefExoticComponent<InputProps & RefAttributes<HTMLInp
     <div
       ref={rootRef}
       className={cx("gl-glass gl-input", className)}
+      suppressHydrationWarning
       data-error={error ? "" : undefined}
       style={style}
       onPointerDown={(event) => {

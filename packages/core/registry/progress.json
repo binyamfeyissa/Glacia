@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "progress",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/progress.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — progress\n// Copied with `npx glacia add progress`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ComponentPropsWithoutRef,\n  type ElementRef,\n} from \"react\";\nimport { Progress as RadixProgress } from \"radix-ui\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport const Progress = forwardRef<\n  ElementRef<typeof RadixProgress.Root>,\n  ComponentPropsWithoutRef<typeof RadixProgress.Root>\n>(function Progress({ className, value, ...props }, ref) {\n  return (\n    <RadixProgress.Root\n      ref={ref}\n      className={cx(\"gl-glass gl-progress\", className)}\n      {...props}\n    >\n      <RadixProgress.Indicator\n        className=\"gl-progress-indicator\"\n        style={{ transform: `translateX(-${100 - (value || 0)}%)` }}\n      />\n    </RadixProgress.Root>\n  );\n});\n",
+      "type": "registry:ui"
+    }
+  ]
+}

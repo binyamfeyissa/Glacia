@@ -9,7 +9,7 @@ export interface ComponentMeta {
   slug: string;
   name: string;
   description: string;
-  category: "Buttons & Actions" | "Text & Forms" | "Showing Things" | "Navigation & Layout" | "Popups & Menus" | "Chat & AI";
+  category: "Buttons & Actions" | "Text & Forms" | "Showing Things" | "Navigation & Layout" | "Popups & Menus" | "Chat & AI" | "Charts";
   appleStatus: "Apple-faithful" | "Glacia extension";
   nativeStatus: "Yes" | "Web only" | "Web first";
   wave: 1 | 2 | 3 | 4;
@@ -74,7 +74,7 @@ export default function ButtonDemo() {
     description: "Typographic styles and heading hierarchy designed for crystal clarity across light and dark glass.",
     category: "Text & Forms",
     appleStatus: "Apple-faithful",
-    nativeStatus: "Yes",
+    nativeStatus: "Web only",
     wave: 1,
     props: [
       { name: "variant", type: "'h1' | 'h2' | 'h3' | 'h4' | 'p' | 'lead' | 'large' | 'small' | 'muted' | 'code' | 'blockquote'", default: "'p'", description: "Typography scale variant." },
@@ -98,7 +98,7 @@ export default function TextDemo() {
     description: "Refractive text field with clear button, focus ring illumination, and accessible states.",
     category: "Text & Forms",
     appleStatus: "Glacia extension",
-    nativeStatus: "Web first",
+    nativeStatus: "Yes",
     wave: 1,
     props: [
       { name: "value", type: "string", description: "Controlled input value." },
@@ -119,7 +119,7 @@ export default function InputDemo() {
     description: "Multiline expandable text entry surface housed in a responsive liquid glass container.",
     category: "Text & Forms",
     appleStatus: "Glacia extension",
-    nativeStatus: "Web first",
+    nativeStatus: "Yes",
     wave: 1,
     props: [
       { name: "error", type: "boolean", default: "false", description: "Displays error highlight." },
@@ -137,7 +137,7 @@ export default function TextareaDemo() {
     description: "Accessible caption label with proper click-targeting for associated input controls.",
     category: "Text & Forms",
     appleStatus: "Apple-faithful",
-    nativeStatus: "Web first",
+    nativeStatus: "Yes",
     wave: 1,
     props: [
       { name: "htmlFor", type: "string", description: "ID of the target input element." },
@@ -189,7 +189,7 @@ export default function CardDemo() {
     description: "Compact glass pill status indicator with multiple semantic tint variants.",
     category: "Showing Things",
     appleStatus: "Apple-faithful",
-    nativeStatus: "Yes",
+    nativeStatus: "Web only",
     wave: 1,
     props: [
       { name: "variant", type: "'default' | 'secondary' | 'destructive' | 'outline'", default: "'default'", description: "Color and border appearance." },
@@ -212,7 +212,7 @@ export default function BadgeDemo() {
     description: "Circular user portrait with liquid glass border and fallback monogram.",
     category: "Showing Things",
     appleStatus: "Apple-faithful",
-    nativeStatus: "Yes",
+    nativeStatus: "Web only",
     wave: 1,
     props: [
       { name: "src", type: "string", description: "Image source URL." },
@@ -281,7 +281,7 @@ export default function SkeletonDemo() {
     description: "Smooth rotating activity indicator ring for indeterminate loading states.",
     category: "Showing Things",
     appleStatus: "Apple-faithful",
-    nativeStatus: "Yes",
+    nativeStatus: "Web only",
     wave: 1,
     props: [
       { name: "size", type: "'sm' | 'md' | 'lg'", default: "'md'", description: "Size preset." },
@@ -298,7 +298,7 @@ export default function SpinnerDemo() {
     description: "Determinate meter displaying percentage completion along a frosted glass track.",
     category: "Showing Things",
     appleStatus: "Apple-faithful",
-    nativeStatus: "Yes",
+    nativeStatus: "Web only",
     wave: 1,
     props: [
       { name: "value", type: "number", description: "Progress percentage between 0 and 100." },
@@ -371,7 +371,7 @@ export default function SearchFieldDemo() {
     description: "Glass selection square that illuminates with accent fill and checkmark icon.",
     category: "Text & Forms",
     appleStatus: "Glacia extension",
-    nativeStatus: "Web first",
+    nativeStatus: "Yes",
     wave: 1,
     props: [
       { name: "checked", type: "boolean", description: "Controlled check status." },
@@ -393,7 +393,7 @@ export default function CheckboxDemo() {
     description: "Single-choice selection list featuring liquid glass circular indicator buttons.",
     category: "Text & Forms",
     appleStatus: "Glacia extension",
-    nativeStatus: "Web first",
+    nativeStatus: "Yes",
     wave: 1,
     props: [
       { name: "defaultValue", type: "string", description: "Initial selected option value." },
@@ -421,7 +421,7 @@ export default function RadioGroupDemo() {
     description: "Picker control triggering a floating glass sheet menu with checkmark indicators.",
     category: "Text & Forms",
     appleStatus: "Apple-faithful",
-    nativeStatus: "Web first",
+    nativeStatus: "Yes",
     wave: 1,
     props: [
       { name: "defaultValue", type: "string", description: "Initially selected item." },
@@ -558,7 +558,7 @@ export default function AccordionDemo() {
     description: "Modal window with blur backdrop scrim, focus trapping, and centered glass dialog card.",
     category: "Popups & Menus",
     appleStatus: "Apple-faithful",
-    nativeStatus: "Web first",
+    nativeStatus: "Yes",
     wave: 1,
     props: [
       { name: "open", type: "boolean", description: "Controlled modal open state." },
@@ -591,7 +591,7 @@ export default function DialogDemo() {
     description: "Confirmation popup asking 'Are you sure?' with prominent confirm and cancel actions.",
     category: "Popups & Menus",
     appleStatus: "Apple-faithful",
-    nativeStatus: "Web first",
+    nativeStatus: "Yes",
     wave: 1,
     props: [],
     codeSnippet: `import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel, Button } from "glacia";
@@ -729,7 +729,7 @@ export default function TooltipDemo() {
     description: "Bottom notification toast system presenting sleek floating glass messages.",
     category: "Popups & Menus",
     appleStatus: "Apple-faithful",
-    nativeStatus: "Yes",
+    nativeStatus: "Web only",
     wave: 1,
     props: [
       { name: "position", type: "string", default: "'bottom-right'", description: "Screen corner or edge position." },
@@ -756,7 +756,7 @@ export default function SonnerDemo() {
     description: "Tabular data presentation with translucent rows and subtle hover highlights.",
     category: "Navigation & Layout",
     appleStatus: "Glacia extension",
-    nativeStatus: "Web first",
+    nativeStatus: "Yes",
     wave: 1,
     props: [],
     codeSnippet: `import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "glacia";
@@ -816,7 +816,7 @@ export default function SidebarDemo() {
     description: "Scrollable viewport featuring a custom floating glass pill scrollbar thumb.",
     category: "Navigation & Layout",
     appleStatus: "Apple-faithful",
-    nativeStatus: "Web first",
+    nativeStatus: "Yes",
     wave: 1,
     props: [],
     codeSnippet: `import { ScrollArea } from "glacia";
@@ -917,7 +917,7 @@ export default function InputGroupDemo() {
     description: "Form field container bundling label, control slot, description, and Apple system red error text.",
     category: "Text & Forms",
     appleStatus: "Apple-faithful",
-    nativeStatus: "Web first",
+    nativeStatus: "Yes",
     wave: 2,
     props: [
       { name: "label", type: "ReactNode", description: "Primary label text." },
@@ -1369,7 +1369,7 @@ export default function DataTableDemo() {
     description: "Semantic native select dropdown styled with Glacia glass, custom glass chevron, and mobile OS picker support.",
     category: "Text & Forms",
     appleStatus: "Apple-faithful",
-    nativeStatus: "Yes",
+    nativeStatus: "Web only",
     wave: 2,
     props: [
       { name: "sizeVariant", type: "'sm' | 'md' | 'lg'", default: "'md'", description: "Size of select wrapper." }
@@ -1848,7 +1848,7 @@ export default function DirectionDemo() {
     description: "An iOS action sheet: options slide up from the bottom in glass, with a Cancel button below.",
     category: "Popups & Menus",
     appleStatus: "Apple-faithful",
-    nativeStatus: "Web first",
+    nativeStatus: "Yes",
     wave: 4,
     props: [
       { name: "items", type: "ActionSheetItem[]", description: "The options. Each has label, onPress, and optional destructive / disabled." },
@@ -2093,5 +2093,651 @@ export default function WidgetDemo() {
     </Widget>
   );
 }`
-  }
+  },
+  {
+    slug: "line-chart",
+    name: "Line Chart",
+    description: "A continuous series over ordered categories, drawn in real pixels so strokes stay 2px and labels stay legible at any width.",
+    category: "Charts",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 3,
+    props: [
+      { name: "labels", type: "string[]", description: "One label per data point along the x axis." },
+      { name: "series", type: "LineSeries[]", description: "Series to draw. Each has a name, values and optional colour." },
+      { name: "height", type: "number", default: "220", description: "Height of the plot in pixels." },
+      { name: "area", type: "boolean", default: "false", description: "Fill beneath each line with a soft gradient." },
+      { name: "smooth", type: "boolean", default: "true", description: "Curve the line through the points. Off draws straight segments." },
+      { name: "dots", type: "boolean", default: "false", description: "Always show a dot at each point. Hover always shows them." },
+      { name: "format", type: "(value: number) => string", description: "Formats axis ticks and tooltip values." },
+    ],
+    codeSnippet: `import { LineChart } from "glacia";
+
+<LineChart
+  labels={["Jan", "Feb", "Mar", "Apr"]}
+  series={[{ name: "Revenue", values: [42, 58, 51, 74] }]}
+/>`,
+  },
+  {
+    slug: "area-chart",
+    name: "Area Chart",
+    description: "A continuous series with its area filled. Same scales, ticks and tooltip as Line Chart, so the two align when used together.",
+    category: "Charts",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 3,
+    props: [
+      { name: "labels", type: "string[]", description: "One label per data point." },
+      { name: "series", type: "LineSeries[]", description: "The series to fill." },
+      { name: "height", type: "number", default: "220", description: "Height of the plot in pixels." },
+      { name: "smooth", type: "boolean", default: "true", description: "Curve the line through the points." },
+      { name: "format", type: "(value: number) => string", description: "Formats axis ticks and tooltip values." },
+    ],
+    codeSnippet: `import { AreaChart } from "glacia";
+
+<AreaChart
+  labels={["Jan", "Feb", "Mar", "Apr"]}
+  series={[{ name: "Revenue", values: [42, 58, 51, 74] }]}
+/>`,
+  },
+  {
+    slug: "mirror-area-chart",
+    name: "Mirror Area Chart",
+    description: "Two series mirrored across a shared centre line, for comparing opposing flows such as inflow against outflow.",
+    category: "Charts",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 3,
+    props: [
+      { name: "labels", type: "string[]", description: "One label per data point." },
+      { name: "series", type: "MirrorAreaSeries", description: "An above series and a below series sharing one axis." },
+      { name: "height", type: "number", default: "220", description: "Height of the plot in pixels." },
+      { name: "aboveColor", type: "string", description: "Colour for the upward series." },
+      { name: "belowColor", type: "string", description: "Colour for the downward series." },
+    ],
+    codeSnippet: `import { MirrorAreaChart } from "glacia";
+
+<MirrorAreaChart
+  labels={["Mon", "Tue", "Wed"]}
+  series={{ name: "Traffic", above: [32, 48, 41], below: [18, 24, 30] }}
+/>`,
+  },
+  {
+    slug: "bar-chart",
+    name: "Bar Chart",
+    description: "Values compared across categories, as grouped or stacked bars.",
+    category: "Charts",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 3,
+    props: [
+      { name: "labels", type: "string[]", description: "One label per category." },
+      { name: "series", type: "BarSeries[]", description: "One series per set of bars." },
+      { name: "height", type: "number", default: "220", description: "Height of the plot in pixels." },
+      { name: "stacked", type: "boolean", default: "false", description: "Stack series on top of each other instead of grouping." },
+      { name: "radius", type: "number", default: "5", description: "Corner radius of each bar." },
+      { name: "format", type: "(value: number) => string", description: "Formats axis ticks and tooltip values." },
+    ],
+    codeSnippet: `import { BarChart } from "glacia";
+
+<BarChart
+  labels={["Jan", "Feb", "Mar"]}
+  series={[{ name: "Spend", values: [42, 58, 51] }]}
+/>`,
+  },
+  {
+    slug: "pie-chart",
+    name: "Pie Chart",
+    description: "Proportional slices around a circle, with a legend so slices never have to be matched to colours by eye.",
+    category: "Charts",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 3,
+    props: [
+      { name: "data", type: "Slice[]", description: "Slices with a label, value and optional colour." },
+      { name: "size", type: "number", default: "200", description: "Diameter in pixels." },
+      { name: "format", type: "(value: number) => string", description: "Formats values in the legend and tooltip." },
+    ],
+    codeSnippet: `import { PieChart } from "glacia";
+
+<PieChart
+  data={[
+    { label: "Direct", value: 38 },
+    { label: "Search", value: 27 },
+    { label: "Social", value: 20 },
+  ]}
+/>`,
+  },
+  {
+    slug: "ring-chart",
+    name: "Ring Chart",
+    description: "Proportional slices drawn as a ring. The same geometry as Pie Chart with a hole, so slices place identically.",
+    category: "Charts",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 3,
+    props: [
+      { name: "data", type: "Slice[]", description: "Slices with a label, value and optional colour." },
+      { name: "size", type: "number", default: "200", description: "Diameter in pixels." },
+      { name: "thickness", type: "number", default: "22", description: "Ring thickness. Larger leaves a bigger hole." },
+      { name: "format", type: "(value: number) => string", description: "Formats values in the legend and tooltip." },
+    ],
+    codeSnippet: `import { RingChart } from "glacia";
+
+<RingChart
+  size={180}
+  thickness={26}
+  data={[{ label: "Direct", value: 38 }, { label: "Search", value: 27 }]}
+/>`,
+  },
+  {
+    slug: "radar-chart",
+    name: "Radar Chart",
+    description: "Several axes around a circle with each series as a closed shape, for comparing profiles across many dimensions.",
+    category: "Charts",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 3,
+    props: [
+      { name: "axes", type: "string[]", description: "Axis names. At least three are required." },
+      { name: "series", type: "RadarSeries[]", description: "Series with one value per axis." },
+      { name: "size", type: "number", default: "240", description: "Diameter in pixels." },
+      { name: "rings", type: "number", default: "4", description: "Number of concentric reference rings." },
+      { name: "max", type: "number", description: "Fixed maximum. Defaults to the largest value." },
+    ],
+    codeSnippet: `import { RadarChart } from "glacia";
+
+<RadarChart
+  axes={["Speed", "Quality", "Cost", "Support"]}
+  series={[{ name: "Current", values: [78, 84, 66, 72] }]}
+/>`,
+  },
+  {
+    slug: "scatter-chart",
+    name: "Scatter Chart",
+    description: "Two numeric axes, for showing correlation between two measured values.",
+    category: "Charts",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 3,
+    props: [
+      { name: "series", type: "ScatterSeries[]", description: "Series of x/y points with optional labels." },
+      { name: "height", type: "number", default: "240", description: "Height of the plot in pixels." },
+      { name: "radius", type: "number", default: "4", description: "Radius of each dot." },
+      { name: "formatX", type: "(value: number) => string", description: "Formats the x axis and x tooltip values." },
+      { name: "formatY", type: "(value: number) => string", description: "Formats the y axis and y tooltip values." },
+    ],
+    codeSnippet: `import { ScatterChart } from "glacia";
+
+<ScatterChart
+  series={[{ name: "Plans", points: [{ x: 12, y: 30 }, { x: 28, y: 52 }] }]}
+/>`,
+  },
+  {
+    slug: "bubble-chart",
+    name: "Bubble Chart",
+    description: "A scatter chart whose marks are sized by a third value.",
+    category: "Charts",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 3,
+    props: [
+      { name: "series", type: "ScatterSeries[]", description: "Series of points. Each point may carry a `size`." },
+      { name: "height", type: "number", default: "240", description: "Height of the plot in pixels." },
+      { name: "formatX", type: "(value: number) => string", description: "Formats the x axis values." },
+      { name: "formatY", type: "(value: number) => string", description: "Formats the y axis values." },
+    ],
+    codeSnippet: `import { BubbleChart } from "glacia";
+
+<BubbleChart
+  series={[{ name: "Plans", points: [{ x: 12, y: 30, size: 40 }, { x: 28, y: 52, size: 90 }] }]}
+/>`,
+  },
+  {
+    slug: "heatmap-chart",
+    name: "Heatmap Chart",
+    description: "Intensity across a grid of rows and columns, shaded by value with the exact number available on hover.",
+    category: "Charts",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 3,
+    props: [
+      { name: "rows", type: "string[]", description: "Row labels, top to bottom." },
+      { name: "columns", type: "string[]", description: "Column labels, left to right." },
+      { name: "cells", type: "HeatmapCell[]", description: "Cells addressed by row and column index." },
+      { name: "cellSize", type: "number", default: "26", description: "Size of each cell in pixels." },
+      { name: "gap", type: "number", default: "3", description: "Gap between cells." },
+      { name: "format", type: "(value: number) => string", description: "Formats the value in the tooltip." },
+    ],
+    codeSnippet: `import { HeatmapChart } from "glacia";
+
+<HeatmapChart
+  rows={["Mon", "Tue"]}
+  columns={["9a", "1p", "5p"]}
+  cells={[{ x: 0, y: 0, value: 20 }, { x: 1, y: 0, value: 48 }]}
+/>`,
+  },
+  {
+    slug: "hex-chart",
+    name: "Hex Chart",
+    description: "A tessellated grid of hexagons shaded by value, where neighbours touch on all six sides.",
+    category: "Charts",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 3,
+    props: [
+      { name: "points", type: "HexPoint[]", description: "Points placed on a hex grid by column and row." },
+      { name: "radius", type: "number", default: "14", description: "Hexagon radius in pixels." },
+      { name: "format", type: "(value: number) => string", description: "Formats the value in the tooltip." },
+    ],
+    codeSnippet: `import { HexChart } from "glacia";
+
+<HexChart
+  points={[{ q: 0, r: 0, value: 30 }, { q: 1, r: 0, value: 52 }]}
+/>`,
+  },
+  {
+    slug: "funnel-chart",
+    name: "Funnel Chart",
+    description: "A sequence of stages where each narrows the one before it, showing share of entry and step conversion.",
+    category: "Charts",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 3,
+    props: [
+      { name: "stages", type: "FunnelStage[]", description: "Stages in order, widest first." },
+      { name: "stageHeight", type: "number", default: "44", description: "Height of each stage bar in pixels." },
+      { name: "baseline", type: "number", description: "Value the first stage is measured against. Defaults to the first stage." },
+      { name: "format", type: "(value: number) => string", description: "Formats stage values." },
+    ],
+    codeSnippet: `import { FunnelChart } from "glacia";
+
+<FunnelChart
+  stages={[
+    { label: "Visited", value: 12400 },
+    { label: "Signed up", value: 4210 },
+    { label: "Paid", value: 640 },
+  ]}
+/>`,
+  },
+  {
+    slug: "waterfall-chart",
+    name: "Waterfall Chart",
+    description: "How a starting value moves to an ending one through a series of changes, with the running balance visible at every step.",
+    category: "Charts",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 3,
+    props: [
+      { name: "steps", type: "WaterfallStep[]", description: "Steps with a positive or negative value, or marked as a total." },
+      { name: "height", type: "number", default: "240", description: "Height of the plot in pixels." },
+      { name: "increaseColor", type: "string", description: "Colour for positive changes." },
+      { name: "decreaseColor", type: "string", description: "Colour for negative changes." },
+      { name: "totalColor", type: "string", description: "Colour for total bars." },
+    ],
+    codeSnippet: `import { WaterfallChart } from "glacia";
+
+<WaterfallChart
+  steps={[
+    { label: "Start", total: true },
+    { label: "New", value: 480 },
+    { label: "Churn", value: -160 },
+    { label: "End", total: true },
+  ]}
+/>`,
+  },
+  {
+    slug: "candlestick-chart",
+    name: "Candlestick Chart",
+    description: "Open, high, low and close for each period, with wicks showing the full range.",
+    category: "Charts",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 3,
+    props: [
+      { name: "candles", type: "Candle[]", description: "Candles in chronological order." },
+      { name: "height", type: "number", default: "260", description: "Height of the plot in pixels." },
+      { name: "upColor", type: "string", description: "Colour when close is above open." },
+      { name: "downColor", type: "string", description: "Colour when close is below open." },
+    ],
+    codeSnippet: `import { CandlestickChart } from "glacia";
+
+<CandlestickChart
+  candles={[{ label: "Mon", open: 100, high: 112, low: 96, close: 108 }]}
+/>`,
+  },
+  {
+    slug: "treemap-chart",
+    name: "Treemap Chart",
+    description: "Hierarchical composition as area-proportional tiles, laid out so tiles stay close to square.",
+    category: "Charts",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 3,
+    props: [
+      { name: "items", type: "TreemapItem[]", description: "Items with a label and value. Area is proportional to value." },
+      { name: "height", type: "number", default: "240", description: "Height of the plot in pixels." },
+      { name: "gap", type: "number", default: "4", description: "Gap between tiles." },
+      { name: "format", type: "(value: number) => string", description: "Formats tile values and the tooltip." },
+    ],
+    codeSnippet: `import { TreemapChart } from "glacia";
+
+<TreemapChart
+  items={[
+    { label: "Web", value: 4200 },
+    { label: "iOS", value: 3100 },
+    { label: "Android", value: 2800 },
+  ]}
+/>`,
+  },
+  {
+    slug: "sankey-chart",
+    name: "Sankey Chart",
+    description: "Flow between a source and a target, with node heights proportional to the flow through them.",
+    category: "Charts",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 3,
+    props: [
+      { name: "nodes", type: "SankeyNode[]", description: "Nodes with an id and optional label." },
+      { name: "links", type: "SankeyLink[]", description: "Links between node ids with a value." },
+      { name: "height", type: "number", default: "260", description: "Height of the diagram in pixels." },
+      { name: "nodeWidth", type: "number", default: "12", description: "Width of a node bar." },
+    ],
+    codeSnippet: `import { SankeyChart } from "glacia";
+
+<SankeyChart
+  nodes={[{ id: "a", label: "Direct" }, { id: "b", label: "Signup" }]}
+  links={[{ source: "a", target: "b", value: 40 }]}
+/>`,
+  },
+  {
+    slug: "bump-chart",
+    name: "Bump Chart",
+    description: "Position over time, where rank is what matters rather than magnitude. Crossings are the signal.",
+    category: "Charts",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 3,
+    props: [
+      { name: "labels", type: "string[]", description: "One label per period." },
+      { name: "series", type: "BumpSeries[]", description: "Series with a rank per period. 1 is the top." },
+      { name: "height", type: "number", default: "240", description: "Height of the plot in pixels." },
+      { name: "format", type: "(value: number) => string", description: "Formats rank labels." },
+    ],
+    codeSnippet: `import { BumpChart } from "glacia";
+
+<BumpChart
+  labels={["W1", "W2", "W3"]}
+  series={[
+    { name: "Alpha", ranks: [1, 2, 2] },
+    { name: "Beta", ranks: [2, 1, 3] },
+  ]}
+/>`,
+  },
+  {
+    slug: "polar-area-chart",
+    name: "Polar Area Chart",
+    description: "Equal-angle segments whose radius encodes the value, so magnitude is not forced into a share of a whole.",
+    category: "Charts",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 3,
+    props: [
+      { name: "segments", type: "PolarSegment[]", description: "Segments with a label and value." },
+      { name: "size", type: "number", default: "240", description: "Diameter in pixels." },
+      { name: "max", type: "number", description: "Value mapped to the full radius. Defaults to the largest segment." },
+    ],
+    codeSnippet: `import { PolarAreaChart } from "glacia";
+
+<PolarAreaChart
+  segments={[{ label: "North", value: 62 }, { label: "East", value: 48 }]}
+/>`,
+  },
+  {
+    slug: "pyramid-chart",
+    name: "Pyramid Chart",
+    description: "Stacked centred bands where width encodes magnitude, widest at the base.",
+    category: "Charts",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 3,
+    props: [
+      { name: "levels", type: "PyramidLevel[]", description: "Levels in order, apex first." },
+      { name: "levelHeight", type: "number", default: "40", description: "Height of each level band." },
+      { name: "format", type: "(value: number) => string", description: "Formats level values." },
+    ],
+    codeSnippet: `import { PyramidChart } from "glacia";
+
+<PyramidChart
+  levels={[
+    { label: "Awareness", value: 100 },
+    { label: "Interest", value: 72 },
+    { label: "Convert", value: 24 },
+  ]}
+/>`,
+  },
+  {
+    slug: "live-line-chart",
+    name: "Live Line Chart",
+    description: "A line that keeps sampling on a real timer, with a sliding window and a pause control.",
+    category: "Charts",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 3,
+    props: [
+      { name: "initialValues", type: "number[]", description: "Starting samples, oldest first." },
+      { name: "window", type: "number", default: "40", description: "How many samples to keep in view." },
+      { name: "interval", type: "number", default: "900", description: "Sample interval in milliseconds." },
+      { name: "sample", type: "(previous: number, index: number) => number", description: "Produces the next sample." },
+      { name: "values", type: "number[]", description: "Plot external values instead of generating them." },
+      { name: "height", type: "number", default: "180", description: "Height of the plot in pixels." },
+    ],
+    codeSnippet: `import { LiveLineChart } from "glacia";
+
+<LiveLineChart window={40} interval={900} />`,
+  },
+  {
+    slug: "plot-chart",
+    name: "Plot Chart",
+    description: "A bare plotting surface where you supply the mark renderer and get pixel-accurate positions inside a real axis system.",
+    category: "Charts",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 3,
+    props: [
+      { name: "marks", type: "PlotMark[]", description: "Marks with a category and value." },
+      { name: "categories", type: "string[]", description: "Category order. Defaults to first-seen order." },
+      { name: "height", type: "number", default: "220", description: "Height of the plot in pixels." },
+      { name: "renderMark", type: "(mark, geometry) => ReactNode", description: "Draws each mark at its computed position." },
+    ],
+    codeSnippet: `import { PlotChart } from "glacia";
+
+<PlotChart
+  marks={[{ category: "Mon", value: 32 }, { category: "Tue", value: 58 }]}
+  renderMark={(_m, { x, y }) => <circle cx={x} cy={y} r={5} fill="var(--gl-chart-1)" />}
+/>`,
+  },
+  {
+    slug: "shimmer",
+    name: "Shimmer",
+    description: "A shimmering placeholder that occupies the same number of lines the final text will need, so the layout does not jump when content arrives.",
+    category: "Chat & AI",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web only",
+    wave: 4,
+    props: [
+      { name: "lines", type: "number", default: "3", description: "How many placeholder lines to draw." },
+      { name: "label", type: "string", default: "Loading content", description: "Announced to assistive technology." },
+    ],
+    codeSnippet: `import { Shimmer } from "glacia";
+
+<Shimmer lines={3} />`,
+  },
+  {
+    slug: "thinking-orb",
+    name: "Thinking Orb",
+    description: "A small animated indicator that a model is working. Decorative motion is hidden from assistive technology and replaced by a live label.",
+    category: "Chat & AI",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 4,
+    props: [
+      { name: "label", type: "string", default: "Thinking", description: "What the model is doing, announced once." },
+      { name: "size", type: "number", default: "22", description: "Diameter in pixels." },
+      { name: "paused", type: "boolean", default: "false", description: "Stop the animation without unmounting." },
+    ],
+    codeSnippet: `import { ThinkingOrb } from "glacia";
+
+<ThinkingOrb label="Thinking" />`,
+  },
+  {
+    slug: "plan",
+    name: "Plan",
+    description: "An ordered list of steps a model intends to take, each stating its own status so a running plan is legible while incomplete.",
+    category: "Chat & AI",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 4,
+    props: [
+      { name: "title", type: "string", default: "Plan", description: "Heading above the steps." },
+      { name: "steps", type: "PlanStep[]", description: "Steps with an id, title, optional detail and status." },
+    ],
+    codeSnippet: `import { Plan } from "glacia";
+
+<Plan
+  steps={[
+    { id: "1", title: "Read the files", status: "done" },
+    { id: "2", title: "Write the patch", status: "running" },
+  ]}
+/>`,
+  },
+  {
+    slug: "sources",
+    name: "Sources",
+    description: "Citations behind an answer, numbered and linked, so a claim can be traced to its origin.",
+    category: "Chat & AI",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 4,
+    props: [
+      { name: "sources", type: "Source[]", description: "Sources with a title, url, optional snippet and domain." },
+      { name: "title", type: "string", default: "Sources", description: "Heading above the list." },
+    ],
+    codeSnippet: `import { Sources } from "glacia";
+
+<Sources
+  sources={[{ id: "s1", title: "React docs", url: "https://react.dev", domain: "react.dev" }]}
+/>`,
+  },
+  {
+    slug: "response",
+    name: "Response",
+    description: "Reveals a streamed answer progressively, with a caret while the stream is live and a status announcement when it completes.",
+    category: "Chat & AI",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 4,
+    props: [
+      { name: "text", type: "string", description: "The full response text." },
+      { name: "revealed", type: "number", description: "How many characters to show. Omit to show all." },
+      { name: "streaming", type: "boolean", description: "Force the streaming state." },
+    ],
+    codeSnippet: `import { Response } from "glacia";
+
+<Response text="The answer is 42." revealed={12} />`,
+  },
+  {
+    slug: "soundwave",
+    name: "Soundwave",
+    description: "An animated waveform that can be driven by real audio levels, or idle gently when no level is supplied.",
+    category: "Chat & AI",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 4,
+    props: [
+      { name: "levels", type: "number[]", description: "Per-bar levels from 0 to 1. Omit for idle motion." },
+      { name: "bars", type: "number", default: "28", description: "Number of bars when levels are not supplied." },
+      { name: "active", type: "boolean", default: "true", description: "Animate or hold still." },
+      { name: "height", type: "number", default: "40", description: "Height in pixels." },
+    ],
+    codeSnippet: `import { Soundwave } from "glacia";
+
+<Soundwave levels={[0.2, 0.6, 0.9, 0.4, 0.7]} />`,
+  },
+  {
+    slug: "task",
+    name: "Task",
+    description: "Progress for a long-running background task, supporting both determinate and indeterminate states.",
+    category: "Chat & AI",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 4,
+    props: [
+      { name: "task", type: "TaskProgress", description: "Progress from 0 to 1, a label, detail and status." },
+    ],
+    codeSnippet: `import { Task } from "glacia";
+
+<Task task={{ label: "Indexing", progress: 0.42 }} />`,
+  },
+  {
+    slug: "panelside",
+    name: "Panelside",
+    description: "A side rail for an AI workspace: conversations, saved prompts or tasks, with counts and a footer slot.",
+    category: "Chat & AI",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 4,
+    props: [
+      { name: "items", type: "AIPanelNavItem[]", description: "Items with an id, label and optional count." },
+      { name: "activeId", type: "string", description: "Controlled selection." },
+      { name: "onSelect", type: "(id: string) => void", description: "Called when an item is chosen." },
+      { name: "title", type: "string", default: "Workspace", description: "Rail heading." },
+    ],
+    codeSnippet: `import { Panelside } from "glacia";
+
+<Panelside
+  items={[{ id: "a", label: "Conversations", count: 4 }, { id: "b", label: "Prompts" }]}
+/>`,
+  },
+  {
+    slug: "ai-input",
+    name: "AI Input",
+    description: "The prompt composer. Grows with its content, submits on Enter, inserts newlines on Shift+Enter, and blocks empty or busy submissions.",
+    category: "Chat & AI",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 4,
+    props: [
+      { name: "value", type: "string", description: "Controlled value." },
+      { name: "onValueChange", type: "(value: string) => void", description: "Called as the user types." },
+      { name: "onSubmit", type: "(value: string) => void", description: "Called with the trimmed prompt." },
+      { name: "busy", type: "boolean", default: "false", description: "Disables submission while a request is in flight." },
+      { name: "hint", type: "ReactNode", description: "Shown above the field, e.g. the active model." },
+    ],
+    codeSnippet: `import { AIInput } from "glacia";
+
+<AIInput onSubmit={(prompt) => send(prompt)} hint="Model: Glacia 1" />`,
+  },
+  {
+    slug: "image-generation",
+    name: "Image Generation",
+    description: "A grid of generated images with a reserved placeholder tile while generation is running, so the grid does not reflow when images land.",
+    category: "Chat & AI",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Yes",
+    wave: 4,
+    props: [
+      { name: "images", type: "GeneratedImage[]", description: "Images with a src, alt, optional prompt and ratio." },
+      { name: "generating", type: "boolean", default: "false", description: "Show a pending tile." },
+      { name: "ratio", type: "number", default: "1", description: "Default aspect ratio as width over height." },
+      { name: "columns", type: "number", default: "2", description: "Grid columns." },
+    ],
+    codeSnippet: `import { ImageGeneration } from "glacia";
+
+<ImageGeneration
+  generating
+  images={[{ id: "1", src: "/shot.png", alt: "A glass surface" }]}
+/>`,
+  },
 ];

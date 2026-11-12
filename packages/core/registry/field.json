@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "field",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/field.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — field\n// Copied with `npx glacia add field`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  useId,\n  type HTMLAttributes,\n  type ReactNode,\n  type ForwardRefExoticComponent,\n  type RefAttributes,\n} from \"react\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport interface FieldProps extends HTMLAttributes<HTMLDivElement> {\n  /** Text or element for the field's label. */\n  label?: ReactNode;\n  /** Marks the field as required, showing a subtle Apple red dot or asterisk. */\n  required?: boolean;\n  /** Optional secondary description / helper note beneath the input. */\n  description?: ReactNode;\n  /** Error message to display when validation fails. */\n  error?: ReactNode;\n  /** Layout direction: 'vertical' (stacked, default) or 'horizontal' (Mac preferences style). */\n  orientation?: \"vertical\" | \"horizontal\";\n  /** HTML id of the input control this field labels. Auto-generated if omitted. */\n  htmlFor?: string;\n}\n\nexport const Field: ForwardRefExoticComponent<\n  FieldProps & RefAttributes<HTMLDivElement>\n> = /* @__PURE__ */ forwardRef<HTMLDivElement, FieldProps>(\n  function Field(\n    {\n      label,\n      required,\n      description,\n      error,\n      orientation = \"vertical\",\n      htmlFor,\n      className,\n      children,\n      ...props\n    },\n    ref\n  ) {\n    const fallbackId = useId();\n    const id = htmlFor || fallbackId;\n    const hasError = Boolean(error);\n\n    return (\n      <div\n        ref={ref}\n        className={cx(\"gl-field\", className)}\n        data-orientation={orientation}\n        data-invalid={hasError ? \"\" : undefined}\n        {...props}\n      >\n        {label && (\n          <label htmlFor={id} className=\"gl-field-label\">\n            <span>{label}</span>\n            {required && <span className=\"gl-field-required\" aria-hidden=\"true\">*</span>}\n          </label>\n        )}\n        <div className=\"gl-field-control\">{children}</div>\n        {description && !hasError && (\n          <p className=\"gl-field-description\">{description}</p>\n        )}\n        {hasError && (\n          <p role=\"alert\" className=\"gl-field-error\">\n            {error}\n          </p>\n        )}\n      </div>\n    );\n  }\n);\n",
+      "type": "registry:ui"
+    }
+  ]
+}

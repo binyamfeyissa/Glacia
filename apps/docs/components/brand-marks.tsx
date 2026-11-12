@@ -122,15 +122,11 @@ export function TypeScriptMark({ size = 24, className }: MarkProps) {
 
 
 export const STACK = [
-  { id: "apple", label: "Apple", Mark: AppleMark },
-  { id: "chrome", label: "Google Chrome", Mark: ChromeMark },
+  { id: "chrome", label: "Chrome", Mark: ChromeMark },
   { id: "safari", label: "Safari", Mark: SafariMark },
+  { id: "firefox", label: "Firefox", Mark: FirefoxMark },
   { id: "react", label: "React", Mark: ReactMark },
-  { id: "nextjs", label: "Next.js", Mark: NextjsMark },
   { id: "react-native", label: "React Native", Mark: ReactNativeMark },
   { id: "expo", label: "Expo", Mark: ExpoMark },
   { id: "android", label: "Android", Mark: AndroidMark },
-  { id: "firefox", label: "Firefox", Mark: FirefoxMark },
-  { id: "typescript", label: "TypeScript", Mark: TypeScriptMark },
-
 ] as const;

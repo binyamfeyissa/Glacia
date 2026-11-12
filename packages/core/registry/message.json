@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "message",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/message.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — message\n// Copied with `npx glacia add message`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport * as React from \"react\";\n\nexport interface MessageProps extends React.HTMLAttributes<HTMLDivElement> {\n  role?: \"user\" | \"assistant\" | \"system\";\n}\n\nexport const Message = React.forwardRef<HTMLDivElement, MessageProps>(\n  ({ role = \"user\", className = \"\", children, ...props }, ref) => {\n    return (\n      <div\n        ref={ref}\n        className={`gl-message gl-message-${role} ${className}`}\n        {...props}\n      >\n        {children}\n      </div>\n    );\n  }\n);\nMessage.displayName = \"Message\";\n\nexport interface MessageBubbleProps extends React.HTMLAttributes<HTMLDivElement> {\n  variant?: \"glass\" | \"solid\" | \"gradient\";\n}\n\nexport const MessageBubble = React.forwardRef<HTMLDivElement, MessageBubbleProps>(\n  ({ variant = \"glass\", className = \"\", children, ...props }, ref) => {\n    return (\n      <div\n        ref={ref}\n        className={`gl-message-bubble gl-message-bubble-${variant} ${className}`}\n        {...props}\n      >\n        {children}\n      </div>\n    );\n  }\n);\nMessageBubble.displayName = \"MessageBubble\";\n\nexport interface MessageAvatarProps extends React.HTMLAttributes<HTMLDivElement> {\n  src?: string;\n  fallback?: React.ReactNode;\n}\n\nexport const MessageAvatar = React.forwardRef<HTMLDivElement, MessageAvatarProps>(\n  ({ src, fallback, className = \"\", ...props }, ref) => {\n    return (\n      <div ref={ref} className={`gl-message-avatar gl-glass ${className}`} {...props}>\n        {src ? (\n          <img src={src} alt=\"Avatar\" className=\"gl-message-avatar-img\" />\n        ) : (\n          <span className=\"gl-message-avatar-fallback\">{fallback || \"AI\"}</span>\n        )}\n      </div>\n    );\n  }\n);\nMessageAvatar.displayName = \"MessageAvatar\";\n\nexport interface MessageContentProps extends React.HTMLAttributes<HTMLDivElement> {}\n\nexport const MessageContent = React.forwardRef<HTMLDivElement, MessageContentProps>(\n  ({ className = \"\", children, ...props }, ref) => {\n    return (\n      <div ref={ref} className={`gl-message-content ${className}`} {...props}>\n        {children}\n      </div>\n    );\n  }\n);\nMessageContent.displayName = \"MessageContent\";\n\nexport interface MessageTimestampProps extends React.HTMLAttributes<HTMLSpanElement> {}\n\nexport const MessageTimestamp = React.forwardRef<HTMLSpanElement, MessageTimestampProps>(\n  ({ className = \"\", children, ...props }, ref) => {\n    return (\n      <span ref={ref} className={`gl-message-timestamp ${className}`} {...props}>\n        {children}\n      </span>\n    );\n  }\n);\nMessageTimestamp.displayName = \"MessageTimestamp\";\n\nexport interface MessageStatusProps extends React.HTMLAttributes<HTMLSpanElement> {\n  status?: \"sent\" | \"delivered\" | \"read\";\n}\n\nexport const MessageStatus = React.forwardRef<HTMLSpanElement, MessageStatusProps>(\n  ({ status = \"read\", className = \"\", children, ...props }, ref) => {\n    return (\n      <span ref={ref} className={`gl-message-status ${className}`} {...props}>\n        {children || (status === \"read\" ? \"Read\" : status === \"delivered\" ? \"Delivered\" : \"Sent\")}\n      </span>\n    );\n  }\n);\nMessageStatus.displayName = \"MessageStatus\";\n",
+      "type": "registry:ui"
+    }
+  ]
+}

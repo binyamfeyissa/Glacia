@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toolbar",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/toolbar.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — toolbar\n// Copied with `npx glacia add toolbar`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ForwardRefExoticComponent,\n  type HTMLAttributes,\n  type ReactNode,\n  type RefAttributes,\n} from \"react\";\n\nimport { cx } from \"glacia/internal/cx\";\n\nexport interface ToolbarItem {\n  /** Icon to display. */\n  icon: ReactNode;\n  /** Accessible label. */\n  label: string;\n  /** Called on press. */\n  onPress?: () => void;\n  /** Whether the item is currently active / selected. */\n  active?: boolean;\n  /** Disable the item. */\n  disabled?: boolean;\n}\n\nexport interface ToolbarProps extends HTMLAttributes<HTMLDivElement> {\n  /** Items shown in the toolbar. */\n  items: ToolbarItem[];\n  /** Accessible name for the toolbar. */\n  \"aria-label\": string;\n}\n\n/**\n * A Liquid Glass toolbar — sits at the bottom of a view above the tab bar.\n *\n * Each item is a glass button with an icon. Tapping one calls its `onPress`.\n */\nexport const Toolbar: ForwardRefExoticComponent<ToolbarProps & RefAttributes<HTMLDivElement>> = forwardRef<\n  HTMLDivElement,\n  ToolbarProps\n>(function Toolbar({ items, className, ...props }, forwardedRef) {\n  return (\n    <div\n      ref={forwardedRef}\n      role=\"toolbar\"\n      className={cx(\"gl-glass gl-toolbar\", className)}\n      {...props}\n    >\n      {items.map((item, index) => (\n        <button\n          key={index}\n          type=\"button\"\n          className={cx(\"gl-toolbar-item\", item.active && \"gl-toolbar-item-active\")}\n          onClick={item.onPress}\n          disabled={item.disabled}\n          aria-label={item.label}\n        >\n          {item.icon}\n        </button>\n      ))}\n    </div>\n  );\n});",
+      "type": "registry:ui"
+    }
+  ]
+}

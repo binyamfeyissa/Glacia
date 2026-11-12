@@ -39,6 +39,10 @@ export const Glass: ForwardRefExoticComponent<GlassProps & RefAttributes<HTMLDiv
         ref={ref}
         className={cx("gl-glass", flat && "gl-glass-flat", className)}
         data-surface={surface}
+        // The refraction engine writes data-rim and data-refracting onto this
+        // node from measured geometry, which no server render can know. Those
+        // writes are intentional, not a hydration bug.
+        suppressHydrationWarning
         {...props}
       />
     );

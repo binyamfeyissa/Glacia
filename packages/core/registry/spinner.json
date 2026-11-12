@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "spinner",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/spinner.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — spinner\n// Copied with `npx glacia add spinner`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type HTMLAttributes,\n} from \"react\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport interface SpinnerProps extends HTMLAttributes<HTMLDivElement> {\n  size?: \"sm\" | \"md\" | \"lg\";\n}\n\nexport const Spinner = forwardRef<HTMLDivElement, SpinnerProps>(function Spinner(\n  { className, size = \"md\", ...props },\n  ref,\n) {\n  return (\n    <div\n      ref={ref}\n      role=\"status\"\n      aria-label=\"Loading\"\n      className={cx(\"gl-spinner\", className)}\n      data-size={size}\n      {...props}\n    >\n      <span className=\"gl-spinner-ring\" />\n    </div>\n  );\n});\n",
+      "type": "registry:ui"
+    }
+  ]
+}

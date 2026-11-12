@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skeleton",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/skeleton.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — skeleton\n// Copied with `npx glacia add skeleton`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type HTMLAttributes,\n} from \"react\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport interface SkeletonProps extends HTMLAttributes<HTMLDivElement> {}\n\nexport const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(function Skeleton(\n  { className, ...props },\n  ref,\n) {\n  return (\n    <div\n      ref={ref}\n      className={cx(\"gl-glass gl-skeleton\", className)}\n      {...props}\n    />\n  );\n});\n",
+      "type": "registry:ui"
+    }
+  ]
+}

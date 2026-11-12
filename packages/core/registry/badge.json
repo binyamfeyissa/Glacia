@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "badge",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/badge.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — badge\n// Copied with `npx glacia add badge`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type HTMLAttributes,\n} from \"react\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport interface BadgeProps extends HTMLAttributes<HTMLDivElement> {\n  variant?: \"default\" | \"secondary\" | \"destructive\" | \"outline\";\n}\n\nexport const Badge = forwardRef<HTMLDivElement, BadgeProps>(function Badge(\n  { className, variant = \"default\", ...props },\n  ref,\n) {\n  return (\n    <div\n      ref={ref}\n      className={cx(\"gl-glass gl-badge\", className)}\n      data-variant={variant}\n      {...props}\n    />\n  );\n});\n",
+      "type": "registry:ui"
+    }
+  ]
+}

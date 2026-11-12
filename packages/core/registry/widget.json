@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "widget",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/widget.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — widget\n// Copied with `npx glacia add widget`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ForwardRefExoticComponent,\n  type HTMLAttributes,\n  type ReactNode,\n  type RefAttributes,\n} from \"react\";\n\nimport { cx } from \"glacia/internal/cx\";\n\nexport interface WidgetProps extends HTMLAttributes<HTMLDivElement> {\n  /** Widget size: 'sm' (2×2 grid units), 'md' (2×4, default), 'lg' (4×4). */\n  size?: \"sm\" | \"md\" | \"lg\";\n  /** Content slotted into the top-left corner. */\n  leading?: ReactNode;\n  /** Content slotted into the top-right corner. */\n  trailing?: ReactNode;\n}\n\n/**\n * A Liquid Glass widget card — the kind shown on an iOS Home Screen.\n *\n * Sits with other widgets in a grid and bends whatever wallpaper or page\n * content sits behind it.\n */\nexport const Widget: ForwardRefExoticComponent<WidgetProps & RefAttributes<HTMLDivElement>> = forwardRef<\n  HTMLDivElement,\n  WidgetProps\n>(function Widget(\n  { size = \"md\", leading, trailing, className, children, ...props },\n  forwardedRef,\n) {\n  return (\n    <div\n      ref={forwardedRef}\n      className={cx(\"gl-glass gl-widget\", `gl-widget-${size}`, className)}\n      {...props}\n    >\n      {(leading || trailing) && (\n        <div className=\"gl-widget-header\">\n          <span className=\"gl-widget-leading\">{leading}</span>\n          <span className=\"gl-widget-trailing\">{trailing}</span>\n        </div>\n      )}\n      <div className=\"gl-widget-body\">{children}</div>\n    </div>\n  );\n});",
+      "type": "registry:ui"
+    }
+  ]
+}

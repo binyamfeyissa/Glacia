@@ -211,6 +211,8 @@ import {
   TraceDetails,
   DirectionProvider,
 } from "glacia";
+import { ChartDemo, CHART_SLUGS } from "./chart-demos";
+import { AIDemo, AI_SLUGS } from "./ai-demos";
 
 function QuestionnaireDemo() {
   const [choice, setChoice] = useState<"glass" | "blur">("glass");
@@ -1394,6 +1396,16 @@ export function ComponentDemo({ slug }: { slug: string }) {
       );
 
     default:
+      // Charts have their own demo module: each needs a real dataset, not a
+      // generic placeholder, so they are dispatched there rather than here.
+      if (CHART_SLUGS.includes(slug)) {
+        return <ChartDemo slug={slug} />;
+      }
+      // AI components need working state (streams, toggles, timers), so they
+      // have their own demo module too.
+      if (AI_SLUGS.includes(slug)) {
+        return <AIDemo slug={slug} />;
+      }
       return <div>Component Demo</div>;
   }
 }

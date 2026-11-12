@@ -40,6 +40,8 @@ export const List: ForwardRefExoticComponent<ListProps & RefAttributes<HTMLDivEl
 export interface ListItemProps extends Omit<HTMLAttributes<HTMLDivElement>, "onClick"> {
   leading?: ReactNode;
   trailing?: ReactNode;
+  /** A second, muted line under the label, as in a Mail or Settings row. */
+  subtitle?: ReactNode;
   /** If true, a chevron is shown as the trailing accessory. */
   chevron?: boolean;
   /** If true, the row is marked as selected. */
@@ -53,7 +55,7 @@ export const ListItem: ForwardRefExoticComponent<ListItemProps & RefAttributes<H
   HTMLDivElement,
   ListItemProps
 >(function ListItem(
-  { leading, trailing, chevron, selected, disabled, onPress, className, children, ...props },
+  { leading, trailing, subtitle, chevron, selected, disabled, onPress, className, children, ...props },
   forwardedRef,
 ) {
   // Always a div: a row may or may not be interactive, and mixing the two
@@ -74,6 +76,7 @@ export const ListItem: ForwardRefExoticComponent<ListItemProps & RefAttributes<H
       tabIndex={interactive ? 0 : undefined}
       aria-disabled={disabled ? true : undefined}
       aria-pressed={selected ? true : undefined}
+      data-leading={leading ? "" : undefined}
       onClick={interactive ? onPress : undefined}
       onKeyDown={handleKeyDown}
       className={cx(
@@ -86,7 +89,10 @@ export const ListItem: ForwardRefExoticComponent<ListItemProps & RefAttributes<H
       {...props}
     >
       {leading && <span className="gl-list-leading">{leading}</span>}
-      <span className="gl-list-label">{children}</span>
+      <span className="gl-list-label">
+        <span className="gl-list-title">{children}</span>
+        {subtitle != null && <span className="gl-list-subtitle">{subtitle}</span>}
+      </span>
       {chevron && !trailing && <span className="gl-list-chevron" aria-hidden />}
       {trailing && <span className="gl-list-trailing">{trailing}</span>}
     </div>

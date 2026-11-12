@@ -174,6 +174,13 @@ export {
 } from "./combobox";
 export { Calendar, type CalendarProps } from "./calendar";
 export { Chart, type ChartDataPoint, type ChartProps } from "./chart";
+// The chart layer: one shared set of scales, a frame and a glass tooltip,
+// with each chart shaped to its own data.
+export * from "./charts";
+// AI interface pieces, built on the same primitives as the rest of Glacia.
+export * from "./ai";
+// Hooks shared by components and available to applications.
+export * from "./hooks";
 export { Empty, type EmptyProps } from "./empty";
 export { Item, type ItemProps } from "./item";
 export {
@@ -431,3 +438,24 @@ export { PricingBlock } from "./blocks/pricing-block";
 export { LandingBlock } from "./blocks/landing-block";
 export { ForgotPasswordBlock } from "./blocks/forgot-password-block";
 export { ErrorPageBlock, type ErrorPageBlockProps } from "./blocks/error-page-block";
+// App-shape blocks: each composes existing primitives rather than introducing
+// new material.
+export {
+  BoardingPassBlock,
+  type BoardingPassProps,
+  type BoardingPassFlight,
+} from "./blocks/boarding-pass-block";
+export {
+  WalletBlock,
+  type WalletBlockProps,
+  type WalletCard,
+  type WalletTransaction,
+} from "./blocks/wallet-block";
+export { ActivityBlock, type ActivityBlockProps, type ActivityEntry } from "./blocks/activity-block";
+export {
+  SmartHomeBlock,
+  type SmartHomeBlockProps,
+  type SmartHomeDevice,
+  type SmartHomeRoom,
+  type DeviceKind,
+} from "./blocks/smart-home-block";

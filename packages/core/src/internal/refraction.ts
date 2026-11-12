@@ -2,6 +2,7 @@ import { useEffect, useRef, type RefObject } from "react";
 
 import { createLens, distance, fitBackdropLens, shapeOf, type Lens, type LensOptions, type Shape } from "./lens";
 import { container, svg } from "./svg";
+import { onceHydrated } from "./hydration";
 
 // Glass bends what's behind it with the same lens as the switch, slider and
 // tab bar (see lens.ts), shaped as Aave's free-moving lens, the first demo in
@@ -307,22 +308,28 @@ export function useRefraction(ref: RefObject<HTMLElement | null>, selection = fa
       return refitting(element, () => fitSelection(element, bendsBackdrop && refractsBackdrop()), properties).stop;
     }
     const source = findBackdrop(element);
-    const fitting = source
-      ? bend(element, source)
-      : refitting(
-          element,
-          () => {
-            paintRim(element);
-            if (refractsBackdrop()) fitBackdropLens(element, GLASS);
-          },
-          ["--gl-filter", "--gl-rim"],
-        );
-    refit.current = fitting.refit;
+    // The first fit must wait for hydration: it writes attributes React owns.
+    let fitting: { refit: () => void; stop: () => void } | null = null;
+    const start = () => {
+      if (!element.isConnected) return;
+      fitting = source
+        ? bend(element, source)
+        : refitting(
+            element,
+            () => {
+              paintRim(element);
+              if (refractsBackdrop()) fitBackdropLens(element, GLASS);
+            },
+            ["--gl-filter", "--gl-rim"],
+          );
+      refit.current = fitting.refit;
+    };
+    onceHydrated(start);
     const stopWatching = onThemeChange(() => paintRim(element));
     return () => {
       refit.current = null;
       stopWatching();
-      fitting.stop();
+      fitting?.stop();
       element.removeAttribute("data-rim");
     };
   }, [ref, selection, bendsBackdrop]);

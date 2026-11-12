@@ -33,6 +33,26 @@ export function SnowflakeIcon(props: IconProps) {
   );
 }
 
+export function HomeIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <path d="M3 10.5L12 3l9 7.5" />
+      <path d="M5.5 9v11a1.5 1.5 0 001.5 1.5h10a1.5 1.5 0 001.5-1.5V9" />
+      <path d="M10 21.5v-6a2 2 0 012-2v0a2 2 0 012 2v6" />
+    </Base>
+  );
+}
+
+export function TemplateIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <rect x="3" y="3" width="18" height="18" rx="2.5" />
+      <path d="M3 9h18" />
+      <path d="M9 21V9" />
+    </Base>
+  );
+}
+
 export function SearchIcon(props: IconProps) {
   return (
     <Base {...props}>

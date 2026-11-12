@@ -17,8 +17,47 @@ const registryDir = path.resolve("registry/new-york");
 const docsPublicRDir = path.resolve("apps/docs/public/r");
 
 // Component name -> source file stem. Most match; the rest are listed here.
+// Charts, AI primitives and blocks live in subdirectories, so their stems
+// carry the folder; everything else resolves to a flat file.
 const FILE_OVERRIDES = {
   "admin-dashboard": "blocks/admin-dashboard",
+  // Charts
+  "line-chart": "charts/line-chart",
+  "bar-chart": "charts/bar-chart",
+  "area-chart": "charts/area-chart",
+  "mirror-area-chart": "charts/area-chart",
+  "ring-chart": "charts/radial-chart",
+  "pie-chart": "charts/radial-chart",
+  "scatter-chart": "charts/scatter-chart",
+  "bubble-chart": "charts/scatter-chart",
+  "funnel-chart": "charts/funnel-chart",
+  "heatmap-chart": "charts/heatmap-chart",
+  "radar-chart": "charts/radar-chart",
+  "waterfall-chart": "charts/waterfall-chart",
+  "candlestick-chart": "charts/candlestick-chart",
+  "treemap-chart": "charts/treemap-chart",
+  "sankey-chart": "charts/sankey-chart",
+  "bump-chart": "charts/bump-chart",
+  "hex-chart": "charts/bump-chart",
+  "polar-area-chart": "charts/polar-chart",
+  "pyramid-chart": "charts/polar-chart",
+  "live-line-chart": "charts/live-line-chart",
+  "plot-chart": "charts/plot-chart",
+  // AI
+  "plan": "ai/ai-primitives",
+  "sources": "ai/ai-primitives",
+  "response": "ai/ai-primitives",
+  "task": "ai/ai-primitives",
+  "soundwave": "ai/ai-primitives",
+  "thinking-orb": "ai/ai-primitives",
+  "panelside": "ai/ai-primitives",
+  "ai-input": "ai/ai-primitives",
+  "image-generation": "ai/ai-primitives",
+  // Blocks
+  "boarding-pass": "blocks/boarding-pass-block",
+  "wallet": "blocks/wallet-block",
+  "activity": "blocks/activity-block",
+  "smart-home": "blocks/smart-home-block",
 };
 
 const COMPONENTS = [
@@ -41,6 +80,17 @@ const COMPONENTS = [
   // Wave 4 — Figma-aligned iOS/ipadOS components
   "action-sheet", "activity-view", "color-picker", "list", "page-control",
   "popup-button", "stepper", "time-picker", "toolbar", "widget",
+  // Wave 5 — Charts
+  "line-chart", "bar-chart", "area-chart", "mirror-area-chart", "ring-chart",
+  "pie-chart", "scatter-chart", "bubble-chart", "funnel-chart", "heatmap-chart",
+  "radar-chart", "waterfall-chart", "candlestick-chart", "treemap-chart",
+  "sankey-chart", "bump-chart", "hex-chart", "polar-area-chart",
+  "pyramid-chart", "live-line-chart", "plot-chart",
+  // Wave 5 — AI conversation primitives
+  "plan", "sources", "response", "task", "soundwave", "thinking-orb",
+  "panelside", "ai-input", "image-generation",
+  // Wave 5 — Composed blocks
+  "boarding-pass", "wallet", "activity", "smart-home",
 ];
 
 /**
@@ -58,7 +108,9 @@ function sourceFor(name) {
   }
   let code = fs.readFileSync(file, "utf-8");
 
-  code = code.replace(/from "\.\/internal\/([a-z0-9-]+)"/g, 'from "glacia/internal/$1"');
+  code = code.replace(/from "(\.\.?\/)+internal\/([a-z0-9-]+)"/g, 'from "glacia/internal/$2"');
+  // Sub-directory siblings (charts/scales, ai helpers) are not shipped per item.
+  code = code.replace(/from "\.\/(scales|chart-frame|chart-tooltip|use-chart-width)"/g, 'from "glacia"');
   // Cross-component imports resolve from the package entry point.
   code = code.replace(/from "\.\.?\/([a-z0-9-]+)(\.tsx)?"/g, (match, imported) => {
     if (imported === "internal") return match; // already handled above

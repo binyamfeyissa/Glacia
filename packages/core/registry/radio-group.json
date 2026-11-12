@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "radio-group",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/radio-group.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — radio-group\n// Copied with `npx glacia add radio-group`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ComponentPropsWithoutRef,\n  type ElementRef,\n} from \"react\";\nimport { RadioGroup as RadixRadioGroup } from \"radix-ui\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport const RadioGroup = forwardRef<\n  ElementRef<typeof RadixRadioGroup.Root>,\n  ComponentPropsWithoutRef<typeof RadixRadioGroup.Root>\n>(function RadioGroup({ className, ...props }, ref) {\n  return (\n    <RadixRadioGroup.Root\n      ref={ref}\n      className={cx(\"gl-radio-group\", className)}\n      {...props}\n    />\n  );\n});\n\nexport const RadioGroupItem = forwardRef<\n  ElementRef<typeof RadixRadioGroup.Item>,\n  ComponentPropsWithoutRef<typeof RadixRadioGroup.Item>\n>(function RadioGroupItem({ className, ...props }, ref) {\n  return (\n    <RadixRadioGroup.Item\n      ref={ref}\n      className={cx(\"gl-glass gl-radio-item\", className)}\n      {...props}\n    >\n      <RadixRadioGroup.Indicator className=\"gl-radio-indicator\">\n        <span className=\"gl-radio-dot\" />\n      </RadixRadioGroup.Indicator>\n    </RadixRadioGroup.Item>\n  );\n});\n",
+      "type": "registry:ui"
+    }
+  ]
+}

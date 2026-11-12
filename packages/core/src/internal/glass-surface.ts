@@ -2,6 +2,7 @@ import { useEffect, useRef, type RefObject } from "react";
 
 import { refractsBackdrop } from "./refraction";
 import { fitBackdropLens, type LensOptions } from "./lens";
+import { onceHydrated } from "./hydration";
 
 /**
  * How each kind of glass behaves physically.
@@ -129,7 +130,8 @@ export function useGlass(ref: RefObject<HTMLElement | null>, options: UseGlassOp
       if (refractsBackdrop()) fitBackdropLens(element, SURFACES[surface]);
     };
 
-    apply();
+    // Deferred: the first fit writes data-refracting, which React owns.
+    onceHydrated(apply);
 
     // Re-fit when the element changes size or its corner radius changes with
     // a state (a button that rounds up when held, say).

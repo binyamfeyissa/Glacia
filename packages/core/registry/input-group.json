@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-group",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/input-group.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — input-group\n// Copied with `npx glacia add input-group`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type HTMLAttributes,\n  type ForwardRefExoticComponent,\n  type RefAttributes,\n  type ReactNode,\n} from \"react\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport interface InputGroupProps extends HTMLAttributes<HTMLDivElement> {\n  /** Size for the input group: 'sm' (32px), 'md' (40px, default), 'lg' (48px). */\n  size?: \"sm\" | \"md\" | \"lg\";\n  /** Optional disabled state propagated to children. */\n  disabled?: boolean;\n}\n\nexport const InputGroup: ForwardRefExoticComponent<\n  InputGroupProps & RefAttributes<HTMLDivElement>\n> = /* @__PURE__ */ forwardRef<HTMLDivElement, InputGroupProps>(\n  function InputGroup({ size = \"md\", disabled, className, children, ...props }, ref) {\n    return (\n      <div\n        ref={ref}\n        className={cx(\"gl-input-group\", className)}\n        data-size={size}\n        data-disabled={disabled ? \"\" : undefined}\n        {...props}\n      >\n        {children}\n      </div>\n    );\n  }\n);\n\nexport interface InputGroupAddonProps extends HTMLAttributes<HTMLDivElement> {\n  /** Alignment side: 'leading' (prefix) or 'trailing' (suffix). */\n  align?: \"leading\" | \"trailing\";\n  /** Clickable interactive addon (e.g. icon button). */\n  interactive?: boolean;\n}\n\nexport const InputGroupAddon: ForwardRefExoticComponent<\n  InputGroupAddonProps & RefAttributes<HTMLDivElement>\n> = /* @__PURE__ */ forwardRef<HTMLDivElement, InputGroupAddonProps>(\n  function InputGroupAddon(\n    { align = \"leading\", interactive, className, children, ...props },\n    ref\n  ) {\n    return (\n      <div\n        ref={ref}\n        className={cx(\"gl-input-group-addon\", className)}\n        data-align={align}\n        data-interactive={interactive ? \"\" : undefined}\n        {...props}\n      >\n        {children}\n      </div>\n    );\n  }\n);\n",
+      "type": "registry:ui"
+    }
+  ]
+}

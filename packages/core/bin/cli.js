@@ -2,86 +2,146 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import http from "node:http";
 import https from "node:https";
 
 const VERSION = "0.3.1";
 
 const ALL_COMPONENTS = [
-  "glass",
-  "button",
-  "text",
-  "input",
-  "textarea",
-  "label",
-  "card",
-  "badge",
-  "avatar",
-  "separator",
-  "skeleton",
-  "spinner",
-  "progress",
-  "switch",
-  "slider",
-  "search-field",
-  "checkbox",
-  "radio-group",
-  "select",
-  "tabs",
-  "segmented-control",
-  "tab-bar",
   "accordion",
-  "dialog",
+  "action-sheet",
+  "activity",
+  "activity-view",
+  "ai-input",
   "alert-dialog",
-  "popover",
-  "dropdown-menu",
-  "menu",
-  "tooltip",
-  "sonner",
-  "table",
-  "sidebar",
-  "scroll-area",
-  // Wave 2
+  "area-chart",
+  "aspect-ratio",
+  "attachment",
+  "avatar",
+  "badge",
+  "bar-chart",
+  "boarding-pass",
+  "breadcrumb",
+  "bubble",
+  "bubble-chart",
+  "bump-chart",
+  "button",
   "button-group",
-  "toggle",
-  "input-group",
+  "calendar",
+  "candlestick-chart",
+  "card",
+  "carousel",
+  "chart",
+  "checkbox",
+  "code-block",
+  "collapsible",
+  "color-picker",
+  "combobox",
+  "command",
+  "context-menu",
+  "data-table",
+  "dialog",
+  "direction",
+  "drawer",
+  "dropdown-menu",
+  "empty",
   "field",
   "form",
-  "combobox",
-  "calendar",
-  "chart",
-  "empty",
-  "item",
+  "funnel-chart",
+  "glass",
+  "heatmap-chart",
+  "hex-chart",
   "hover-card",
-  "context-menu",
-  "drawer",
-  "sheet",
-  "toast",
-  "breadcrumb",
-  "navigation-menu",
-  "pagination",
-  "collapsible",
-  "data-table",
-  "native-select",
-  // Wave 3
-  "toggle-group",
+  "image-generation",
+  "input",
+  "input-group",
   "input-otp",
-  "command",
-  "carousel",
-  "aspect-ratio",
+  "item",
   "kbd",
-  "code-block",
+  "label",
+  "line-chart",
+  "list",
+  "live-line-chart",
   "marker",
+  "menu",
   "menubar",
-  "resizable",
   "message",
-  "bubble",
   "message-scroller",
-  "attachment",
+  "mirror-area-chart",
+  "native-select",
+  "navigation-menu",
+  "page-control",
+  "pagination",
+  "panelside",
+  "pie-chart",
+  "plan",
+  "plot-chart",
+  "polar-area-chart",
+  "popover",
+  "popup-button",
+  "progress",
+  "pyramid-chart",
   "questionnaire",
+  "radar-chart",
+  "radio-group",
+  "resizable",
+  "response",
+  "ring-chart",
+  "sankey-chart",
+  "scatter-chart",
+  "scroll-area",
+  "search-field",
+  "segmented-control",
+  "select",
+  "separator",
+  "sheet",
+  "sidebar",
+  "skeleton",
+  "slider",
+  "smart-home",
+  "sonner",
+  "soundwave",
+  "sources",
+  "spinner",
+  "stepper",
+  "switch",
+  "tab-bar",
+  "table",
+  "tabs",
+  "task",
+  "text",
+  "textarea",
+  "thinking-orb",
+  "time-picker",
+  "toast",
+  "toggle",
+  "toggle-group",
+  "toolbar",
+  "tooltip",
   "trace",
-  "direction",
+  "treemap-chart",
+  "wallet",
+  "waterfall-chart",
+  "widget",
 ];
+
+/** Levenshtein distance, used to suggest a close component name. */
+function levenshtein(a, b) {
+  const rows = [];
+  for (let i = 0; i <= a.length; i++) rows.push([i]);
+  for (let j = 0; j <= b.length; j++) rows[0][j] = j;
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      rows[i][j] = Math.min(
+        rows[i - 1][j] + 1,
+        rows[i][j - 1] + 1,
+        rows[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1),
+      );
+    }
+  }
+  return rows[a.length][b.length];
+}
 
 function printHelp() {
   console.log(`
@@ -129,8 +189,13 @@ function fetchJson(url) {
 }
 
 function getLocalComponent(name) {
-  // Check local monorepo registry if present
+  // Resolve the registry that ships inside this package first, so `npx glacia
+  // add` works offline and does not depend on a running docs host.
+  const here = path.dirname(fileURLToPath(import.meta.url));
   const possiblePaths = [
+    path.resolve(here, `registry/${name}.json`),
+    path.resolve(here, `../registry/${name}.json`),
+    // Monorepo checkouts keep the registry at the repo root.
     path.resolve(process.cwd(), `registry/new-york/${name}.json`),
     path.resolve(process.cwd(), `../../registry/new-york/${name}.json`),
     path.resolve(process.cwd(), `apps/docs/public/r/${name}.json`),
@@ -148,6 +213,23 @@ function getLocalComponent(name) {
 
 async function addComponent(name, targetDir) {
   const normName = name.toLowerCase().trim();
+
+  // Reject unknown names before any network work: a typo should say so, not
+  // surface a connection error from the registry host.
+  if (normName !== "all" && !ALL_COMPONENTS.includes(normName)) {
+    const close = ALL_COMPONENTS.filter(
+      (candidate) =>
+        candidate.includes(normName) ||
+        normName.includes(candidate) ||
+        levenshtein(candidate, normName) <= 2,
+    ).slice(0, 5);
+    throw new Error(
+      `Unknown component "${name}".\n` +
+        (close.length ? `Did you mean: ${close.join(", ")}?\n` : "") +
+        `Run \`npx glacia list\` to see all ${ALL_COMPONENTS.length} components.`,
+    );
+  }
+
   let registryItem = getLocalComponent(normName);
 
   if (!registryItem) {

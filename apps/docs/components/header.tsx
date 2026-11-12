@@ -11,22 +11,27 @@ import {
   SearchField,
   NavigationTabs,
 } from "glacia";
-import { COMPONENTS_DATA } from "../data/components-data";
+import { BLOCKS } from "../data/blocks-data";
+import { platformFromPathname, type Platform } from "../data/platforms";
 import { ThemeToggle } from "./theme-toggle";
+import { PlatformSwitcher } from "./platform-switcher";
+import { buildSearchIndex, useSearch, SearchResults } from "./search-index";
 import {
   ArrowUpRightIcon,
   CloseIcon,
   GithubIcon,
   MenuIcon,
   SearchIcon,
-  SnowflakeIcon,
   GridIcon,
   LayersIcon,
   CodeIcon,
+  HomeIcon,
+  TemplateIcon,
 } from "./icons";
+import { GlaciaMark } from "./glacia-mark";
 
 const NAV = [
-  { id: "overview", href: "/", label: "Overview", icon: <SnowflakeIcon width={14} height={14} /> },
+  { id: "overview", href: "/", label: "Overview", icon: <HomeIcon width={14} height={14} /> },
   {
     id: "components",
     href: "/components/button",
@@ -40,6 +45,13 @@ const NAV = [
     label: "Blocks",
     match: "/blocks",
     icon: <LayersIcon width={14} height={14} />,
+  },
+  {
+    id: "templates",
+    href: "/templates",
+    label: "Templates",
+    match: "/templates",
+    icon: <TemplateIcon width={14} height={14} />,
   },
   {
     id: "build-report",
@@ -76,16 +88,14 @@ export function Header() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  const results = useMemo(() => {
-    const value = query.trim().toLowerCase();
-    if (!value) return [];
-    return COMPONENTS_DATA.filter(
-      (component) =>
-        component.name.toLowerCase().includes(value) ||
-        component.description.toLowerCase().includes(value) ||
-        component.category.toLowerCase().includes(value),
-    ).slice(0, 8);
-  }, [query]);
+  // The index covers both platform editions plus the shared blocks, so a
+  // search from either manual can reach everything.
+  const searchIndex = useMemo(
+    () => buildSearchIndex(BLOCKS.map((b) => ({ slug: b.slug, title: b.title, description: b.description }))),
+    [],
+  );
+  const activePlatform: Platform = platformFromPathname(pathname) ?? "web";
+  const results = useSearch(searchIndex, query, activePlatform);
 
   const isActive = (item: (typeof NAV)[number]) => {
     if (item.href === "/") return pathname === "/";
@@ -100,14 +110,19 @@ export function Header() {
       <div className="header-inner">
         <div className="header-left">
           <Link href="/" className="brand" aria-label="Glacia home">
-            <span className="brand-mark">
-              <SnowflakeIcon width={17} height={17} />
-            </span>
+            <img
+              src="/glacia-logo.png"
+              alt="Glacia"
+              className="brand-mark-img"
+              width={28}
+              height={28}
+            />
             <span className="brand-name">Glacia</span>
           </Link>
         </div>
 
         <div className="header-actions">
+          <PlatformSwitcher className="header-platform-switch" />
           <button
             type="button"
             className="search-trigger"
@@ -191,28 +206,9 @@ export function Header() {
           <div className="search-dialog-body">
             {query.trim() ? (
               results.length > 0 ? (
-                <div className="search-results">
-                  {results.map((component) => (
-                    <Link
-                      key={component.slug}
-                      href={`/components/${component.slug}`}
-                      className="search-result"
-                      onClick={() => {
-                        setSearchOpen(false);
-                        setQuery("");
-                      }}
-                    >
-                      <span className="search-result-mark">{component.name.slice(0, 1)}</span>
-                      <span className="search-result-copy">
-                        <span className="search-result-name">{component.name}</span>
-                        <span className="search-result-desc">{component.description}</span>
-                      </span>
-                      <span className="search-result-cat">{component.category}</span>
-                    </Link>
-                  ))}
-                </div>
+                <SearchResults hits={results} />
               ) : (
-                <p className="search-empty">No components match “{query}”.</p>
+                <p className="search-empty">No matches for “{query}”.</p>
               )
             ) : (
               <div className="search-suggestions">
@@ -220,16 +216,16 @@ export function Header() {
                 <div className="search-suggestion-grid">
                   {["button", "card", "dialog", "tab-bar", "segmented-control", "table"].map(
                     (slug) => {
-                      const component = COMPONENTS_DATA.find((c) => c.slug === slug);
+                      const component = searchIndex.find((c) => c.kind === "component" && c.key.includes(`:${slug}`) && c.scope.startsWith(activePlatform === "web" ? "Web" : "Mobile"));
                       if (!component) return null;
                       return (
                         <Link
                           key={slug}
-                          href={`/components/${slug}`}
+                          href={`/platform/${activePlatform}/components/${slug}`}
                           className="search-suggestion"
                           onClick={() => setSearchOpen(false)}
                         >
-                          {component.name}
+                          {component.title}
                         </Link>
                       );
                     },

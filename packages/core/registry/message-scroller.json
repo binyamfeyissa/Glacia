@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "message-scroller",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/message-scroller.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — message-scroller\n// Copied with `npx glacia add message-scroller`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport * as React from \"react\";\n\nexport interface MessageScrollerProps extends React.HTMLAttributes<HTMLDivElement> {\n  autoScroll?: boolean;\n}\n\nexport const MessageScroller = React.forwardRef<HTMLDivElement, MessageScrollerProps>(\n  ({ autoScroll = true, className = \"\", children, ...props }, ref) => {\n    const internalRef = React.useRef<HTMLDivElement>(null);\n    const bottomRef = React.useRef<HTMLDivElement>(null);\n    const [showScrollBottom, setShowScrollBottom] = React.useState(false);\n\n    const scrollToBottom = (smooth = true) => {\n      if (typeof bottomRef.current?.scrollIntoView === \"function\") {\n        bottomRef.current.scrollIntoView({ behavior: smooth ? \"smooth\" : \"auto\" });\n      }\n    };\n\n    React.useEffect(() => {\n      if (autoScroll) {\n        scrollToBottom(false);\n      }\n    }, [children, autoScroll]);\n\n    const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {\n      const el = e.currentTarget;\n      const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;\n      setShowScrollBottom(distanceFromBottom > 120);\n    };\n\n    return (\n      <div\n        ref={(node) => {\n          (internalRef as React.MutableRefObject<HTMLDivElement | null>).current = node;\n          if (typeof ref === \"function\") ref(node);\n          else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;\n        }}\n        onScroll={handleScroll}\n        className={`gl-message-scroller ${className}`}\n        {...props}\n      >\n        <div className=\"gl-message-scroller-inner\">{children}</div>\n        <div ref={bottomRef} className=\"gl-message-scroller-bottom-anchor\" aria-hidden=\"true\" />\n        {showScrollBottom && (\n          <button\n            type=\"button\"\n            onClick={() => scrollToBottom(true)}\n            className=\"gl-scroll-bottom-btn gl-glass\"\n            aria-label=\"Scroll to bottom\"\n          >\n            <svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2.5\" strokeLinecap=\"round\" strokeLinejoin=\"round\">\n              <polyline points=\"6 9 12 15 18 9\" />\n            </svg>\n          </button>\n        )}\n      </div>\n    );\n  }\n);\nMessageScroller.displayName = \"MessageScroller\";\n\nexport interface MessageDateDividerProps extends React.HTMLAttributes<HTMLDivElement> {}\n\nexport const MessageDateDivider = React.forwardRef<HTMLDivElement, MessageDateDividerProps>(\n  ({ className = \"\", children, ...props }, ref) => {\n    return (\n      <div ref={ref} className={`gl-message-date-divider-wrap ${className}`} {...props}>\n        <span className=\"gl-message-date-divider gl-glass\">{children}</span>\n      </div>\n    );\n  }\n);\nMessageDateDivider.displayName = \"MessageDateDivider\";\n",
+      "type": "registry:ui"
+    }
+  ]
+}

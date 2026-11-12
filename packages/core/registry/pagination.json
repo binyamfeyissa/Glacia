@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pagination",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/pagination.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — pagination\n// Copied with `npx glacia add pagination`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ComponentProps,\n  type ReactNode,\n} from \"react\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport const Pagination = ({\n  className,\n  ...props\n}: ComponentProps<\"nav\">) => (\n  <nav\n    role=\"navigation\"\n    aria-label=\"pagination\"\n    className={cx(\"gl-pagination\", className)}\n    {...props}\n  />\n);\n\nexport const PaginationContent = forwardRef<\n  HTMLUListElement,\n  ComponentProps<\"ul\">\n>(function PaginationContent({ className, ...props }, ref) {\n  return (\n    <ul\n      ref={ref}\n      className={cx(\"gl-pagination-content\", className)}\n      {...props}\n    />\n  );\n});\n\nexport const PaginationItem = forwardRef<\n  HTMLLIElement,\n  ComponentProps<\"li\">\n>(function PaginationItem({ className, ...props }, ref) {\n  return <li ref={ref} className={cx(\"gl-pagination-item\", className)} {...props} />;\n});\n\nexport interface PaginationLinkProps extends ComponentProps<\"a\"> {\n  isActive?: boolean;\n  size?: \"sm\" | \"md\" | \"lg\";\n}\n\nexport const PaginationLink = ({\n  className,\n  isActive,\n  size = \"md\",\n  ...props\n}: PaginationLinkProps) => (\n  <a\n    aria-current={isActive ? \"page\" : undefined}\n    data-active={isActive ? \"\" : undefined}\n    data-size={size}\n    className={cx(\"gl-glass gl-pagination-link\", className)}\n    {...props}\n  />\n);\n\nexport const PaginationPrevious = ({\n  className,\n  children = \"Previous\",\n  ...props\n}: PaginationLinkProps & { children?: ReactNode }) => (\n  <PaginationLink\n    aria-label=\"Go to previous page\"\n    size=\"md\"\n    className={cx(\"gl-pagination-prev\", className)}\n    {...props}\n  >\n    <svg width=\"12\" height=\"12\" viewBox=\"0 0 12 12\" fill=\"none\">\n      <path d=\"M7.5 2.5L4 6L7.5 9.5\" stroke=\"currentColor\" strokeWidth=\"1.5\" strokeLinecap=\"round\" strokeLinejoin=\"round\"/>\n    </svg>\n    <span>{children}</span>\n  </PaginationLink>\n);\n\nexport const PaginationNext = ({\n  className,\n  children = \"Next\",\n  ...props\n}: PaginationLinkProps & { children?: ReactNode }) => (\n  <PaginationLink\n    aria-label=\"Go to next page\"\n    size=\"md\"\n    className={cx(\"gl-pagination-next\", className)}\n    {...props}\n  >\n    <span>{children}</span>\n    <svg width=\"12\" height=\"12\" viewBox=\"0 0 12 12\" fill=\"none\">\n      <path d=\"M4.5 2.5L8 6L4.5 9.5\" stroke=\"currentColor\" strokeWidth=\"1.5\" strokeLinecap=\"round\" strokeLinejoin=\"round\"/>\n    </svg>\n  </PaginationLink>\n);\n\nexport const PaginationEllipsis = ({\n  className,\n  ...props\n}: ComponentProps<\"span\">) => (\n  <span\n    aria-hidden=\"true\"\n    className={cx(\"gl-pagination-ellipsis\", className)}\n    {...props}\n  >\n    <svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\" fill=\"none\">\n      <circle cx=\"3\" cy=\"7\" r=\"1.25\" fill=\"currentColor\" />\n      <circle cx=\"7\" cy=\"7\" r=\"1.25\" fill=\"currentColor\" />\n      <circle cx=\"11\" cy=\"7\" r=\"1.25\" fill=\"currentColor\" />\n    </svg>\n    <span className=\"sr-only\">More pages</span>\n  </span>\n);\n",
+      "type": "registry:ui"
+    }
+  ]
+}

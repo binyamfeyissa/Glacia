@@ -12,11 +12,24 @@ export const metadata: Metadata = {
   description:
     "A React and React Native component library built on the real optics of Apple's Liquid Glass: refraction, specular rim light, and depth across every platform.",
   metadataBase: new URL("https://glacia.dev"),
+  // Icons resolve from app/icon.png, app/apple-icon.png and app/favicon.ico,
+  // but the Open Graph fields are declared explicitly so shared links carry
+  // the real mark rather than a bare title.
+  icons: {
+    icon: [
+      { url: "/icon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: ["/favicon.ico"],
+  },
   openGraph: {
     title: "Glacia — Liquid Glass for React & React Native",
     description:
       "Real optical refraction, specular highlights, and native iOS 26 glass from one unified API.",
     type: "website",
+    images: [{ url: "/glacia-icon-512.png", width: 512, height: 512, alt: "Glacia" }],
   },
 };
 

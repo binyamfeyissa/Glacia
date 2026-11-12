@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SnowflakeIcon } from "./icons";
+import { GlaciaMark } from "./glacia-mark";
 
 const COLUMNS = [
   {
@@ -7,6 +7,7 @@ const COLUMNS = [
     links: [
       { label: "Components", href: "/components/button" },
       { label: "Blocks", href: "/blocks/dashboard" },
+      { label: "Templates", href: "/templates" },
       { label: "Build report", href: "/build-report" },
     ],
   },
@@ -45,7 +46,13 @@ export function Footer() {
           <div className="footer-brand">
             <Link href="/" className="brand">
               <span className="brand-mark">
-                <SnowflakeIcon width={17} height={17} />
+                <img
+                  src="/glacia-logo.png"
+                  alt="Glacia"
+                  className="brand-mark-img"
+                  width={22}
+                  height={22}
+                />
               </span>
               <span className="brand-name">Glacia</span>
             </Link>

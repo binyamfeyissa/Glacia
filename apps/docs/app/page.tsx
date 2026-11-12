@@ -140,10 +140,11 @@ export default function HomePage() {
         <div className="hero-inner">
 
 
-          <h1 className="hero-title">
-            Liquid glass,
+          <h1 className="hero-title hero-title-glass">
+            <span className="hero-word">Liquid</span>{" "}
+            <span className="hero-word">glass,</span>
             <br />
-            <span className="grad">engineered.</span>
+            <span className="hero-word hero-word-accent">engineered.</span>
           </h1>
 
           <p className="hero-sub">
@@ -172,9 +173,13 @@ export default function HomePage() {
 
           <div className="hero-install" id="install">
             <InstallCommand />
-            <span className="hero-note">
-              Web package · React Native package · Design tokens
-            </span>
+            <p className="hero-note">
+              <span>Web · Design tokens</span>
+              <a className="hero-note-link" href="#packages">
+                Building for React Native or Expo?
+                <span aria-hidden="true">→</span>
+              </a>
+            </p>
           </div>
         </div>
       </section>
@@ -183,7 +188,6 @@ export default function HomePage() {
       <section className="section section-spaced ecosystem-section" id="ecosystem" aria-labelledby="ecosystem-heading">
         <div className="section-head">
           <div className="section-head-copy">
-
             <h2 className="section-title">Built for the platforms and tools you trust.</h2>
             <p className="section-desc">
               Native liquid glass on Apple platforms. Hardware-accelerated displacement on Chromium. Seamless integration across React, React Native, Next.js, and modern toolchains.
@@ -463,7 +467,7 @@ export default function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="section section-spaced">
+      <section className="section section-spaced" id="packages">
         <div className="cta">
           <p className="eyebrow">
             <span className="eyebrow-dot" />

@@ -1,7 +1,7 @@
 {
   "name": "glacia-native",
   "version": "0.3.3",
-  "description": "Liquid Glass UI components for React Native — real iOS 26 glass, with a clean fallback on Android and older iOS.",
+  "description": "Liquid Glass UI components for React Native \u2014 real iOS 26 glass, with a clean fallback on Android and older iOS.",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -26,9 +26,10 @@
     "test": "vitest run"
   },
   "peerDependencies": {
+    "@callstack/liquid-glass": ">=0.7.0",
     "react": ">=18",
     "react-native": ">=0.80",
-    "@callstack/liquid-glass": ">=0.7.0"
+    "react-native-svg": ">=13"
   },
   "dependencies": {
     "glacia-tokens": "workspace:*"
@@ -38,7 +39,13 @@
     "@types/react": "^19.3.0",
     "jsdom": "^29.1.1",
     "react": "^19.3.1",
+    "react-native-svg": "^15.16.1",
     "typescript": "^5.7.3",
     "vitest": "^3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react-native-svg": {
+      "optional": true
+    }
   }
 }

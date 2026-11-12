@@ -23,8 +23,8 @@ export function PricingBlock({ image }: PricingBlockProps) {
       buttonText: "Start Free",
       buttonVariant: "glass" as const,
       features: [
-        "All 70 Liquid Glass web components",
-        "7 React Native native components",
+        "All 113 Liquid Glass web components",
+        "11 React Native components, charts included",
         "Chromium SVG optical refraction layer",
         "Community Discord access",
         "MIT open-source license",
@@ -41,7 +41,7 @@ export function PricingBlock({ image }: PricingBlockProps) {
       badge: "Most Popular",
       features: [
         "Everything in Community",
-        "10 Pre-composed production Blocks",
+        "14 Pre-composed production Blocks",
         "Custom SVG refraction displacement maps",
         "Figma design kit with Apple tokens",
         "Direct engineer Slack & GitHub priority",

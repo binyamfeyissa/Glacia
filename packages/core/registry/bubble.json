@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "bubble",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/bubble.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — bubble\n// Copied with `npx glacia add bubble`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ForwardRefExoticComponent,\n  type HTMLAttributes,\n  type RefAttributes,\n} from \"react\";\n\nimport { cx } from \"glacia/internal/cx\";\n\nexport type BubbleSide = \"user\" | \"assistant\" | \"system\";\n\nexport interface BubbleProps extends HTMLAttributes<HTMLDivElement> {\n  /** Who the bubble belongs to. Decides the side it sits on and its fill. */\n  side?: BubbleSide;\n  /** The material. `glass` is the default Liquid Glass bubble. */\n  variant?: \"glass\" | \"solid\" | \"gradient\";\n  /** Where the pointed corner sits, so a run of bubbles reads as one stack. */\n  tail?: \"none\" | \"start\" | \"end\";\n  /** Grows the bubble to the wrap width, for long or quoted text. */\n  full?: boolean;\n  /** Timestamp shown under the bubble. */\n  time?: string;\n}\n\n/**\n * A single chat bubble: the message surface on its own, without the row,\n * avatar or timestamp machinery of `Message`.\n */\nexport const Bubble: ForwardRefExoticComponent<BubbleProps & RefAttributes<HTMLDivElement>> =\n  /* @__PURE__ */ forwardRef<HTMLDivElement, BubbleProps>(function Bubble(\n    { side = \"assistant\", variant = \"glass\", tail = \"end\", full = false, time, className, children, ...props },\n    ref,\n  ) {\n    return (\n      <div\n        ref={ref}\n        className={cx(\n          \"gl-bubble\",\n          `gl-bubble-${side}`,\n          `gl-bubble-${variant}`,\n          tail !== \"none\" && `gl-bubble-tail-${tail}`,\n          full && \"gl-bubble-full\",\n          className,\n        )}\n        data-side={side}\n        {...props}\n      >\n        <div\n          className={cx(\"gl-bubble-body\", variant === \"glass\" && \"gl-glass\")}\n          data-surface=\"hint\"\n        >\n          {children}\n        </div>\n        {time ? <span className=\"gl-bubble-time\">{time}</span> : null}\n      </div>\n    );\n  });\n\nBubble.displayName = \"Bubble\";\n\nexport interface BubbleGroupProps extends HTMLAttributes<HTMLDivElement> {\n  side?: BubbleSide;\n}\n\n/** Stacks several bubbles from the same sender so they share one edge. */\nexport const BubbleGroup: ForwardRefExoticComponent<BubbleGroupProps & RefAttributes<HTMLDivElement>> =\n  /* @__PURE__ */ forwardRef<HTMLDivElement, BubbleGroupProps>(function BubbleGroup(\n    { side = \"assistant\", className, children, ...props },\n    ref,\n  ) {\n    return (\n      <div ref={ref} className={cx(\"gl-bubble-group\", `gl-bubble-group-${side}`, className)} {...props}>\n        {children}\n      </div>\n    );\n  });\n\nBubbleGroup.displayName = \"BubbleGroup\";\n",
+      "type": "registry:ui"
+    }
+  ]
+}

@@ -23,6 +23,8 @@ export const colors = {
     edge: "rgba(0, 0, 0, 0.08)",
     fill: "#0088FF",
     destructive: "#FF3B30",
+    // Chart axis and grid lines: low-contrast, so they never compete with data.
+    axis: "#3C3C43",
   },
   dark: {
     foreground: "#FFFFFF",
@@ -32,5 +34,6 @@ export const colors = {
     edge: "rgba(255, 255, 255, 0.08)",
     fill: "#0091FF",
     destructive: "#FF4245",
+    axis: "#EBEBF5",
   },
 };

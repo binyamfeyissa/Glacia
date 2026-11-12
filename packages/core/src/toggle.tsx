@@ -73,6 +73,7 @@ export const Toggle: ForwardRefExoticComponent<
         data-variant={variant}
         data-size={size}
         className={cx("gl-glass gl-toggle", className)}
+        suppressHydrationWarning
         onClick={handleClick}
         {...props}
       >
