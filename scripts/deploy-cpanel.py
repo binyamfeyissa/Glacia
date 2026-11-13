@@ -25,15 +25,28 @@ ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 LOCAL_DIR = os.path.abspath(os.path.join(ROOT_DIR, "apps", "docs", "out"))
 REMOTE_DIR = os.environ.get("CPANEL_FTP_DIR", "/")
 BLOCK_SIZE = 65536  # 64 KB buffers for fast transfer
-SOCKET_TIMEOUT = 30  # 30 seconds before timeout
+SOCKET_TIMEOUT = 60  # 60 seconds before timeout
+
+
+class PatchedFTP(FTP):
+    """Subclass of FTP that overrides makepasv to connect to control host (avoids internal NAT timeout)."""
+    def makepasv(self):
+        host, port = super().makepasv()
+        return self.host, port
 
 
 class PatchedFTP_TLS(FTP_TLS):
     """
-    Subclass of FTP_TLS that prevents conn.unwrap() from hanging indefinitely.
+    Subclass of FTP_TLS that:
+    1. Overrides makepasv to always connect to control host (avoids internal NAT timeout on cPanel).
+    2. Prevents conn.unwrap() from hanging indefinitely.
     Pure-FTPd closes TLS data connections without sending a TLS close_notify alert,
     which causes standard Python ftplib to block forever in unwrap().
     """
+    def makepasv(self):
+        host, port = super().makepasv()
+        return self.host, port
+
     def storbinary(self, cmd, fp, blocksize=BLOCK_SIZE, callback=None, rest=None):
         self.voidcmd("TYPE I")
         with self.transfercmd(cmd, rest) as conn:
@@ -45,10 +58,9 @@ class PatchedFTP_TLS(FTP_TLS):
                 conn.sendall(buf)
                 if callback:
                     callback(buf)
-            # Safely shutdown SSL layer with short timeout so conn.unwrap() does not hang
             if hasattr(conn, "unwrap"):
                 try:
-                    conn.settimeout(2.0)
+                    conn.settimeout(0.5)
                     conn.unwrap()
                 except Exception:
                     pass
@@ -79,25 +91,29 @@ class FTPDeployer:
             self.ftp = None
 
         if self.use_tls:
-            try:
-                ctx = ssl.create_default_context()
-                ctx.check_hostname = False
-                ctx.verify_mode = ssl.CERT_NONE
-                ftp = PatchedFTP_TLS(context=ctx)
-                ftp.connect(self.host, self.port, timeout=SOCKET_TIMEOUT)
-                ftp.auth()
-                ftp.login(self.user, self.password)
-                ftp.prot_p()  # Secure data transfers
-                ftp.voidcmd("TYPE I")  # Binary mode
-                self.ftp = ftp
-                return self.ftp
-            except Exception as e:
-                print(f"⚠️  FTPS connection notice: {e}. Attempting standard FTP...")
-                self.use_tls = False
+            for attempt in range(2):
+                try:
+                    ctx = ssl.create_default_context()
+                    ctx.check_hostname = False
+                    ctx.verify_mode = ssl.CERT_NONE
+                    ftp = PatchedFTP_TLS(context=ctx)
+                    ftp.connect(self.host, self.port, timeout=SOCKET_TIMEOUT)
+                    ftp.auth()
+                    ftp.login(self.user, self.password)
+                    ftp.prot_p()  # Secure data transfers
+                    ftp.voidcmd("TYPE I")  # Binary mode
+                    self.ftp = ftp
+                    return self.ftp
+                except Exception as e:
+                    if attempt == 0:
+                        time.sleep(2)
+                        continue
+                    print(f"⚠️  FTPS connection notice: {e}. Attempting standard FTP...")
+                    self.use_tls = False
 
         # Fallback to plain FTP
         try:
-            ftp = FTP()
+            ftp = PatchedFTP()
             ftp.connect(self.host, self.port, timeout=SOCKET_TIMEOUT)
             ftp.login(self.user, self.password)
             ftp.voidcmd("TYPE I")
@@ -163,10 +179,11 @@ class FTPDeployer:
         except Exception:
             return -1
 
-    def upload_file(self, local_path, remote_dir_path, filename, max_retries=4):
+    def upload_file(self, local_path, remote_dir_path, filename, max_retries=6):
         """Upload a single file with resume/skip check and automatic retries."""
         local_size = os.path.getsize(local_path)
-        remote_full_path = (remote_dir_path.rstrip("/") + "/" + filename).lstrip("/")
+        rel_dir = remote_dir_path.strip("/")
+        remote_full_path = "/" + (rel_dir + "/" + filename if rel_dir else filename)
 
         # Check if already uploaded and identical in size
         remote_size = self.get_remote_file_size(remote_full_path)
@@ -183,9 +200,16 @@ class FTPDeployer:
             except Exception as err:
                 if attempt == max_retries:
                     raise RuntimeError(f"Failed to upload {filename} after {max_retries} attempts: {err}")
-                wait_sec = attempt * 1.5
+                wait_sec = attempt * 3.0
                 sys.stdout.write(f"\n   ⚠️  [Attempt {attempt}/{max_retries}] Retrying {filename} in {wait_sec:.1f}s ({err})... ")
                 sys.stdout.flush()
+                # Ensure socket is cleanly closed before waiting so Pure-FTPd frees the session slot
+                if self.ftp:
+                    try:
+                        self.ftp.close()
+                    except Exception:
+                        pass
+                    self.ftp = None
                 time.sleep(wait_sec)
                 try:
                     self.get_ftp(force_reconnect=True)

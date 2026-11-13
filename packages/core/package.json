@@ -1,6 +1,6 @@
 {
   "name": "glacia",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Liquid Glass UI components for React — real refraction on the web, with its own copy command (npx glacia add) and a React Native companion.",
   "license": "MIT",
   "type": "module",
@@ -65,7 +65,7 @@
     "react-dom": ">=18"
   },
   "dependencies": {
-    "glacia-tokens": "^0.3.3",
+    "glacia-tokens": "workspace:*",
     "radix-ui": "^1.8.1"
   },
   "devDependencies": {

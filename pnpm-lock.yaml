@@ -210,8 +210,8 @@ importers:
   packages/core:
     dependencies:
       glacia-tokens:
-        specifier: ^0.3.3
-        version: 0.3.3
+        specifier: workspace:*
+        version: link:../tokens
       radix-ui:
         specifier: ^1.8.1
         version: 1.8.1(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -2356,9 +2356,6 @@ packages:
   get-tsconfig@5.0.0-beta.6:
     resolution: {integrity: sha512-X6fBC0pmImC70gvX2zm56go9hx0MyoGVdG0tUCkg/D+Xnh5TJsOZ7iDbOdI3PvmtrDxnu1YdDufpK2QJX1Meqw==}
     engines: {node: '>=20.20.0'}
-
-  glacia-tokens@0.3.3:
-    resolution: {integrity: sha512-/6a8uY7/BgGxBs6Bco3eZeqNSfI6+PxvmUwsyPtz8aT1kW4cXkGzwYcMtVdKvTWMWyYRVZEEnPAZNBD2tzo3LA==}
 
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
@@ -5198,8 +5195,6 @@ snapshots:
   get-tsconfig@5.0.0-beta.6:
     dependencies:
       resolve-pkg-maps: 1.0.0
-
-  glacia-tokens@0.3.3: {}
 
   graceful-fs@4.2.11: {}
 

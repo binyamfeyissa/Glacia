@@ -90,6 +90,7 @@ function signature(element: HTMLElement): string {
 }
 
 function sweep(): void {
+  if (typeof document === "undefined") return;
   document.querySelectorAll<HTMLElement>(".gl-glass").forEach((element) => {
     // Opted out: `flat`, or explicitly not refracting.
     if (element.dataset.flat === "" || element.dataset.refracting === "off") {
