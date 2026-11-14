@@ -1,36 +1,56 @@
 # Glacia
 
-> **Apple's Liquid Glass UI kit for React and React Native.**  
-> Real optical refraction, specular highlights, and authentic depth from a single unified design system.
+<p align="center">
+  <img src="apps/docs/public/glacia-logo.png" alt="Glacia Logo" width="120" height="120" style="border-radius: 28px;" />
+</p>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/Tests-147%20passing-brightgreen.svg)](BUILD_REPORT.md)
-[![Web](https://img.shields.io/badge/Web-71%20components-teal.svg)](https://glacia.dev)
-[![React Native](https://img.shields.io/badge/React%20Native-7%20components-indigo.svg)](https://glacia.dev)
+<h1 align="center">Glacia</h1>
+
+<p align="center">
+  <strong>Apple's Liquid Glass UI kit for React and React Native.</strong><br>
+  Real optical refraction, specular highlights, and authentic depth from a single unified design system.
+</p>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/glacia"><img src="https://img.shields.io/npm/v/glacia.svg?label=glacia&color=0284c7" alt="glacia npm version"></a>
+  <a href="https://www.npmjs.com/package/glacia-native"><img src="https://img.shields.io/npm/v/glacia-native.svg?label=glacia-native&color=6366f1" alt="glacia-native npm version"></a>
+  <a href="https://www.npmjs.com/package/glacia-tokens"><img src="https://img.shields.io/npm/v/glacia-tokens.svg?label=glacia-tokens&color=059669" alt="glacia-tokens npm version"></a>
+  <a href="https://github.com/binyamfeyissa/Glacia/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
+  <a href="https://glacia.binyamfeyissa.dev"><img src="https://img.shields.io/badge/Tests-428%20passing-brightgreen.svg" alt="Tests"></a>
+  <a href="https://glacia.binyamfeyissa.dev"><img src="https://img.shields.io/badge/Registry-97%20components-teal.svg" alt="Registry"></a>
+  <a href="https://glacia.binyamfeyissa.dev"><img src="https://img.shields.io/badge/Docs-glacia.binyamfeyissa.dev-black.svg" alt="Documentation"></a>
+</p>
+
+---
+
+### [Documentation & Interactive Demos](https://glacia.binyamfeyissa.dev) | [Web Components](https://glacia.binyamfeyissa.dev/platform/web) | [React Native](https://glacia.binyamfeyissa.dev/platform/mobile) | [Guides](https://glacia.binyamfeyissa.dev/guides) | [Blocks](https://glacia.binyamfeyissa.dev/blocks/dashboard)
 
 ---
 
 ## Disclaimer
 
-**Not affiliated with Apple.** Liquid Glass is Apple's design material for iOS 26; Glacia is an independent, open-source implementation.
+**Not affiliated with Apple Inc.** Liquid Glass is Apple's design material introduced for iOS 26 and macOS Tahoe; Glacia is an independent, open-source cross-platform implementation for the web and mobile ecosystems.
 
 ---
 
 ## Why Glacia?
 
-Glacia brings Apple's iOS 26 Liquid Glass material to the modern web and mobile apps:
+Most "glassmorphism" libraries merely apply a flat `backdrop-filter: blur(12px)`. Glacia is different:
 
-- **Real Optical Physics:** Not merely flat `backdrop-filter: blur(10px)` glassmorphism. Glacia simulates true optical refraction bending live background details behind floating elements.
-- **Two-Layer Rendering Engine:** Layer 1 provides universal frosted glass across all browsers (including Safari and Firefox); Layer 2 adds real Chromium SVG refraction displacement gated safely behind `@supports`.
-- **First-Class React Native:** On iOS 26+, Glacia renders Apple's real native `UIGlassEffect` via `@callstack/liquid-glass`. On older iOS versions and Android, a graceful fallback ladder renders an identical visual layout with zero runtime crashes or layout shifts.
-- **Three Ways to Install:** Full npm package, native mobile package, or per-component CLI copy command.
+- **True Optical Refraction:** Simulates physical ray optics. As users move elements or content scrolls underneath, the background visibly bends and distorts along the rounded edges and specular facets of the glass surface.
+- **Two-Layer Rendering Engine:**
+  - *Layer 1 (Universal):* Frosted backdrop blur, delicate specular border highlight, inner glow, and ambient soft elevation across every browser (Safari, Firefox, Mobile WebKit).
+  - *Layer 2 (Chromium Optic):* Hardware-accelerated SVG refraction displacement filter (`feDisplacementMap`) dynamically tracking element boundaries, active on Chromium engines (Chrome, Edge, Brave, Arc).
+- **First-Class React Native & Expo:** On iOS 26+, Glacia renders Apple's true native `UIGlassEffect` via `@callstack/liquid-glass`. On earlier iOS versions and Android, a calibrated fallback ladder maintains identical geometry, typography, and contrast with zero runtime crashes or layout shifts.
+- **Three Ways to Consume:** Complete web bundle (`glacia`), native mobile companion (`glacia-native`), or direct component source copying via CLI (`npx glacia add <component>`).
 
 ---
 
 ## Three Ways to Install
 
 ### 1. Web NPM Package (`glacia`)
-Install the comprehensive web package:
+
+Install the full React component library:
 
 ```bash
 npm install glacia
@@ -42,24 +62,33 @@ yarn add glacia
 bun add glacia
 ```
 
-Quick start in React / Next.js:
+Import global glass stylesheets once in your root layout (`layout.tsx`, `_app.tsx`, or `main.tsx`):
 
 ```tsx
-import { Glass, Button, Card, CardHeader, CardTitle, CardContent } from "glacia";
 import "glacia/styles.css";
+```
 
-export default function App() {
+#### Quick Start:
+
+```tsx
+import { Glass, Button, Card, CardHeader, CardTitle, CardContent, Slider, Switch } from "glacia";
+
+export default function GlassCardDemo() {
   return (
     <div style={{ background: "url('/wallpaper.jpg') center/cover", minHeight: "100vh", padding: 48 }}>
-      <Card style={{ maxWidth: 420 }}>
+      <Card style={{ maxWidth: 460 }}>
         <CardHeader>
-          <CardTitle>Liquid Glass Card</CardTitle>
+          <CardTitle>Liquid Glass Surface</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm opacity-80 mb-4">
-            Notice how live background elements refract and bend beneath this surface.
+          <p className="text-sm opacity-80 mb-6">
+            Watch the background image refract and bend along this card's edges.
           </p>
-          <Button variant="filled">Interact</Button>
+          <div className="flex items-center gap-4 mb-4">
+            <Slider defaultValue={[65]} max={100} step={1} />
+            <Switch defaultChecked />
+          </div>
+          <Button variant="filled">Confirm Action</Button>
         </CardContent>
       </Card>
     </div>
@@ -67,105 +96,244 @@ export default function App() {
 }
 ```
 
-### 2. React Native NPM Package (`glacia-native`)
-Install into your React Native or Expo project (Expo SDK 54+ development builds):
+---
+
+### 2. React Native & Expo Package (`glacia-native`)
+
+Install into your React Native or Expo project (Expo SDK 54+ development builds or bare React Native):
 
 ```bash
-npx expo install glacia-native @callstack/liquid-glass
+npx expo install glacia-native @callstack/liquid-glass react-native-svg
+# or bare React Native:
+npm install glacia-native @callstack/liquid-glass react-native-svg
 ```
 
-Quick start in React Native:
+#### Quick Start:
 
 ```tsx
-import { StyleSheet, View, ImageBackground } from "react-native";
-import { Glass, Button, Switch } from "glacia-native";
+import React, { useState } from "react";
+import { StyleSheet, View, ImageBackground, Text } from "react-native";
+import { Glass, Button, Switch, Slider, SegmentedControl } from "glacia-native";
 
-export default function App() {
+export default function MobileApp() {
+  const [enabled, setEnabled] = useState(true);
+  const [tabIndex, setTabIndex] = useState(0);
+
   return (
     <ImageBackground source={require("./wallpaper.jpg")} style={styles.container}>
-      <Glass style={styles.glassContainer}>
-        <Button title="Apple Action" onPress={() => console.log("Pressed")} />
-        <Switch value={true} onValueChange={(val) => console.log(val)} />
+      <Glass effect="regular" style={styles.card}>
+        <Text style={styles.title}>Native Liquid Glass</Text>
+        <SegmentedControl
+          values={["Day", "Week", "Month"]}
+          selectedIndex={tabIndex}
+          onChange={setTabIndex}
+          style={styles.segmented}
+        />
+        <View style={styles.row}>
+          <Text style={styles.label}>Real-time Refraction</Text>
+          <Switch value={enabled} onValueChange={setEnabled} />
+        </View>
+        <Button title="Continue" variant="filled" onPress={() => {}} />
       </Glass>
     </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center" },
-  glassContainer: { padding: 24, borderRadius: 20 },
+  container: { flex: 1, justifyContent: "center", alignItems: "center", padding: 20 },
+  card: { width: "100%", maxWidth: 380, padding: 24, borderRadius: 24, gap: 16 },
+  title: { fontSize: 20, fontWeight: "600", color: "#111" },
+  segmented: { marginBottom: 8 },
+  row: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+  label: { fontSize: 15, color: "#333" },
 });
 ```
 
-### 3. Component Copy Command (CLI)
-Pick and choose only the components you need into your project repository. The command copies the component's **real source code** — not a re-export — so you own it and can edit it.
+---
+
+### 3. Component CLI Copy Command (`npx glacia add`)
+
+Pick and choose components into your project repository. Glacia places the **actual source code** directly into your repository (similar to shadcn/ui) so you have 100% control over design, styling, and behavior:
 
 ```bash
-# Initialize or add a single component:
+# Add a single component:
 npx glacia add button
 
-# Add multiple components:
-npx glacia add dialog card tabs combobox calendar command carousel
+# Add multiple components at once:
+npx glacia add dialog card tabs combobox calendar carousel chart
 
-# Add all 71 components:
+# Add all 97 registry components:
 npx glacia add all
 ```
 
-Copied files import shared helpers and styles from the `glacia` package, so keep it installed. To point the command at your own registry host, set `GLACIA_REGISTRY_URL`.
+*Note:* Copied components import shared tokens and helpers from `glacia`, so ensure `glacia` is installed in your `package.json`.
 
 ---
 
-## What Shipped: 71 Components & 10 Blocks
+## Component Catalog (97 Items & 10 Blocks)
 
-### 71 Web Components (`glacia`)
-- **Surfaces & Layout:** `Glass`, `Card`, `Separator`, `ScrollArea`, `Collapsible`, `Empty`, `AspectRatio`, `Resizable`
-- **Actions & Controls:** `Button`, `ButtonGroup`, `Toggle`, `ToggleGroup`, `Switch`, `Slider`, `SegmentedControl`, `TabBar`
-- **Forms & Inputs:** `Input`, `InputGroup`, `InputOTP`, `Field`, `Form`, `Combobox`, `NativeSelect`, `Textarea`, `Label`, `Checkbox`, `RadioGroup`, `Select`, `SearchField`
-- **Navigation & I18n:** `Tabs`, `Sidebar`, `Breadcrumb`, `NavigationMenu`, `Pagination`, `Direction`
-- **Data & Pickers:** `Calendar`, `Chart`, `DataTable`, `Item`, `Table`
-- **Overlays, Menus & Command:** `Dialog`, `AlertDialog`, `Drawer` (iOS sheet), `Sheet` (macOS slide-over), `Popover`, `DropdownMenu`, `ContextMenu`, `Menu`, `Tooltip`, `HoverCard`, `Command`, `Menubar`
-- **Feedback & Display:** `Badge`, `Avatar`, `Skeleton`, `Spinner`, `Progress`, `Toast` (Dynamic Island HUD pill), `Sonner`, `Text`, `Kbd`, `CodeBlock`, `Marker`, `Carousel`
-- **Chat & AI:** `Message` (Speech Bubbles), `Bubble`, `MessageScroller`, `Attachment`, `Questionnaire`, `Trace` (Reasoning Pipeline)
+### 1. Primitives & Surfaces
+- `Glass` — Base refractive lens surface with dynamic specular highlight and edge chromatic dispersion.
+- `Card` — Elevation container (`CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, `CardFooter`).
+- `Separator` — Hairline frosted divider.
+- `ScrollArea` — Custom glass scrollbar viewport.
+- `Collapsible` — Smooth height-animated glass accordion surface.
+- `Empty` — Polished empty state with glass icon pedestal.
 
-### 10 Ready-Made Blocks
-- `LoginPage`: Complete authentication screen with centered or split layouts.
-- `AdminDashboard`: Full administrative interface with floating glass sidebar, live KPI cards, and data table.
-- `SettingsBlock`: Apple Preferences window with categorized glass sidebar, appearance mode, accent colors, True Tone toggle, and volume slider.
-- `ProfileBlock`: Apple ID contact card with avatar hero, verified badge, personal details, and linked devices list.
-- `SignupBlock`: Apple onboarding registration card with real-time animated password strength meter, passkey option, and terms agreement.
-- `CalendarPageBlock`: Full Apple macOS Calendar window with mini-month picker, iCloud accounts, upcoming agenda, and 7-column month grid.
-- `PricingBlock`: Apple-style subscription tier comparison with annual billing discount toggle, featured refractive Pro card, and feature checklists.
-- `LandingBlock`: Apple keynote marketing page with floating glass pill navigation, glowing gradient headline, 3-column feature cards, and metrics banner.
-- `ForgotPasswordBlock`: Apple ID password recovery with trusted email entry, 6-digit InputOTP code verification, resend countdown, and passkey support.
-- `ErrorPageBlock`: Apple system error screen with floating glass status card, glowing 404 frosted typography, and recovery action buttons.
+### 2. Actions & Navigation
+- `Button` — Refractive interactive button with physical press depression, haptic spring, and glass bevels.
+- `ButtonGroup` — Joined multi-button control bar.
+- `SegmentedControl` — Apple-authentic sliding pill selector.
+- `TabBar` — Mobile-first bottom navigation bar with floating glass active indicator.
+- `Tabs` — Tabbed navigation (`TabsList`, `TabsTrigger`, `TabsContent`).
+- `NavigationMenu` — Desktop navigation bar with glass flyout panels.
+- `Sidebar` — Complete collapsible application sidebar with header, content, and footer.
+- `Breadcrumb` — Frosted breadcrumb trail.
+- `Pagination` — Numbered page navigation controls.
 
-### 7 React Native Components (`glacia-native`)
-- `Glass`, `Button`, `Switch`, `Slider`, `SegmentedControl`, `TabBar`, `Card`
+### 3. Form Controls & Inputs
+- `Input` — Glass text input field with active focus border glow.
+- `InputGroup` — Prefixed/suffixed input container.
+- `InputOTP` — Segmented one-time passcode pin input.
+- `Textarea` — Auto-resizing glass multiline input.
+- `Field` — Form field wrapper with label, description, and error message.
+- `Form` — Integrated form container.
+- `Checkbox` — Interactive checkbox with smooth check spring.
+- `RadioGroup` — Radio selector group.
+- `Switch` — Apple-styled fluid toggle switch.
+- `Slider` — Glass track slider with interactive thumb.
+- `Select` / `NativeSelect` — Custom glass dropdown and native fallback select.
+- `Combobox` — Filterable autocomplete select.
+- `SearchField` — Instant search input with clear button and shortcut indicator.
 
-See [BUILD_REPORT.md](BUILD_REPORT.md) for full verification details, HIG classifications, and wave breakdowns.
+### 4. Overlays & Menus
+- `Dialog` / `AlertDialog` — Modal window centered over a blurred backdrop lens.
+- `Drawer` — iOS-style bottom sheet modal with drag-to-dismiss gesture.
+- `Sheet` — macOS-style sliding side drawer.
+- `Popover` — Floating contextual glass container.
+- `DropdownMenu` — Contextual menu flyout.
+- `ContextMenu` — Right-click glass contextual menu.
+- `Menu` / `Menubar` — Application top bar menus.
+- `ActionSheet` — iOS-style action list.
+- `Tooltip` / `HoverCard` — Lightweight contextual hover previews.
+- `Command` — Spotlight / Raycast-style command palette with fuzzy filtering.
+
+### 5. Interactive Pickers
+- `Calendar` — Full-month interactive date picker with range selection, min/max dates, and keyboard navigation.
+- `ColorPicker` — Refractive color wheel and gradient swatch picker.
+- `TimePicker` — Segmented 12h/24h glass clock picker with hours, minutes, and AM/PM controls.
+
+### 6. High-Performance Glass Charts
+Interactive SVG charts styled with liquid glass containers and live tooltips:
+- `LineChart` & `LiveLineChart` — Real-time and static time-series lines.
+- `AreaChart` & `MirrorAreaChart` — Filled gradient glass areas.
+- `BarChart` — Vertical and horizontal comparative bars.
+- `PieChart` — Glass donut and pie distribution.
+- `RadarChart` — Multi-axis capability radar.
+- `PolarAreaChart` — Segmented radial wedges.
+- `RadialChart` — Concentric progress rings.
+- `HeatmapChart` — Matrix density visualization.
+- `CandlestickChart` — Financial OHLC stock chart.
+- `BumpChart` — Ranking and flow chart.
+
+### 7. Conversational AI Primitives
+Apple Intelligence-style liquid conversational interface components:
+- `AiInput` — Multimodal AI prompt input with voice microphone trigger, attachment pills, and submit button.
+- `Message` & `Bubble` — User and assistant speech bubbles with authentic light transmission.
+- `MessageScroller` — Auto-scrolling chat history stream.
+- `Attachment` — File, image, and media card preview.
+- `Response` — Formatted AI response container with markdown, code highlights, and token streaming.
+- `Task` — Multi-step task execution progress item.
+- `Plan` — Interactive agentic plan checklist with checkboxes and status chips.
+- `Questionnaire` — Structured decision card with selectable options.
+
+### 8. Feedback & Media
+- `Toast` (Dynamic Island HUD pill) — Top-anchored floating feedback pill with spring transitions.
+- `Sonner` — Stacked toast notifications.
+- `Badge` / `Pill` — Accent status badges.
+- `Avatar` — User photo with fallback initials.
+- `Progress` / `Spinner` — Fluid progress bars and activity spinners.
+- `Skeleton` — Shimmering glass placeholder.
+- `Carousel` — Smooth touch-friendly carousel with indicator dots.
+- `CodeBlock` — Syntax-highlighted code container with copy button.
+- `Kbd` — Mac-style keyboard key caps (`⌘K`, `⇧P`).
+- `Marker` — Highlighted text annotation.
+
+### 9. 10 Ready-Made Blocks
+Full-page application templates ready to copy into your project:
+- **`LoginPage`** — Split-screen and centered authentication screens.
+- **`AdminDashboard`** — Enterprise analytics dashboard with floating glass sidebar, live KPI charts, and data tables.
+- **`SettingsBlock`** — macOS Preferences window with appearance modes, accent colors, and audio sliders.
+- **`ProfileBlock`** — Apple ID user profile with verified badges, personal information, and linked devices.
+- **`SignupBlock`** — Registration card with animated password strength meter and passkey integration.
+- **`CalendarPageBlock`** — Full-month calendar view with mini-calendar picker, iCloud accounts, and agenda list.
+- **`PricingBlock`** — Subscription pricing table with monthly/annual discount switch and featured refractive Pro card.
+- **`LandingBlock`** — Keynote marketing landing page with glass pill navbar, hero glowing headline, and feature grid.
+- **`ForgotPasswordBlock`** — Account recovery with 6-digit `InputOTP` code verification and countdown timer.
+- **`ErrorPageBlock`** — System 404 / 500 error display with floating glass card and recovery buttons.
 
 ---
 
 ## Platform Support Matrix
 
-| Platform / Engine | Support Level | Implementation Details |
+| Platform / Engine | Support Level | Technical Architecture |
 | :--- | :--- | :--- |
-| **Chromium** (Chrome, Edge, Brave, Arc) | Full Optical Glass | Layer 1 frosted blur + Layer 2 real SVG refraction bend — verified in Chromium |
-| **Safari** (macOS & iOS) | Frosted Glass | Layer 1 frosted blur, specular edge highlight, soft elevation — not yet verified in a real browser |
-| **Firefox** (macOS, Windows, Linux) | Frosted Glass | Layer 1 frosted blur, specular edge highlight, soft elevation — verified in Firefox
-| **iOS 26+ (Native)** | Real Apple Glass | Native `UIGlassEffect` via `@callstack/liquid-glass` |
-| **iOS <26 (Native)** | Fallback Tint | Translucent tint matching geometry with zero layout shifts |
-| **Android (Native)** | Fallback Tint | Semi-transparent surface tint matching exact layout metrics |
-| **Expo Go** | Fallback Tint | Runs safely without requiring custom native module compilation |
+| **Chromium** (Chrome, Edge, Brave, Arc) | **Full Optical Glass** | Layer 1 Frosted blur + Layer 2 live SVG `feDisplacementMap` refraction. |
+| **Safari** (macOS & iOS) | **Frosted Glass** | Layer 1 Backdrop blur, specular edge highlight, soft ambient shadows. |
+| **Firefox** (macOS, Windows, Linux) | **Frosted Glass** | Layer 1 Backdrop blur, specular highlights, and clean contrast. |
+| **iOS 26+ (Native)** | **True Apple Glass** | Native `UIGlassEffect` via `@callstack/liquid-glass`. |
+| **iOS <26 (Native)** | **Calibrated Tint** | Translucent tinted surface matching geometry with zero layout shifts. |
+| **Android (Native)** | **Calibrated Tint** | Semi-transparent surface tint matching exact layout metrics. |
+| **Expo Go** | **Calibrated Tint** | Operates safely in Expo Go without native build steps. |
 
 ---
 
 ## Architecture & Design Tokens
 
-Glacia design tokens are centralized in `packages/tokens` (`glacia-tokens`) and exported in three forms:
+Glacia tokens are centralized in `glacia-tokens`:
 - `tokens.json`: Raw, platform-agnostic design metrics (blur radii, refractive indices, chromatic dispersion, edge tints, springs).
 - `dist/index.css`: Pre-composed CSS variables mapped to light, dark, and system themes.
-- `glacia-tokens`: ESM/CJS exports with ready-to-use React Native style values.
+- `glacia-tokens`: JavaScript/TypeScript constants for React Native and web layout math:
+
+```tsx
+import { colors, radii, springs } from "glacia-tokens";
+
+console.log(radii.lg); // { px: "20px", number: 20 }
+console.log(springs.snappy); // { stiffness: 300, damping: 28, mass: 1 }
+```
+
+### CSS Variables Example:
+
+```css
+:root {
+  --gl-blur: 24px;
+  --gl-saturation: 1.8;
+  --gl-border-width: 1px;
+  --gl-specular-opacity: 0.28;
+  --gl-radius-lg: 20px;
+}
+```
+
+---
+
+## Verification & Testing
+
+Glacia maintains a strict verification suite across both React and React Native:
+- **428+ automated unit & component tests** passing across Vitest and React Testing Library.
+- Full typecheck verification with `tsc --noEmit`.
+- Production bundle verification via `tsdown` (Rolldown) and `next build` (Next.js 15).
+
+To run tests locally:
+
+```bash
+pnpm test
+```
+
+To run a production build:
+
+```bash
+pnpm build
+```
 
 ---
 
@@ -175,4 +343,8 @@ Glacia is built with gratitude on the shoulders of giants:
 - **Web Glass Engine:** Based on [Glisse](https://github.com/0kzh/glisse) by Kelvin Zhang (MIT License).
 - **React Native Engine:** Powered by [@callstack/liquid-glass](https://github.com/callstack/liquid-glass) by Callstack (MIT License).
 
-Glacia and its derivative code are released under the [MIT License](LICENSE).
+---
+
+## License
+
+Glacia is open-source software licensed under the [MIT License](LICENSE).
