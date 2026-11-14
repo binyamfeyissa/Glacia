@@ -6,6 +6,7 @@ import { PlatformPage } from "../../../components/platform-page";
 import { docSections } from "../../../data/doc-nav";
 import { NATIVE_COMPONENTS, webComponentCount } from "../../../data/platform-components";
 import { PLATFORMS, PLATFORM_ORDER, isPlatform, platformHref } from "../../../data/platforms";
+import { pageMetadata } from "../../../lib/seo";
 
 export function generateStaticParams() {
   return PLATFORM_ORDER.map((platform) => ({ platform }));
@@ -19,10 +20,11 @@ export async function generateMetadata({
   const { platform } = await params;
   if (!isPlatform(platform)) return { title: "Not found" };
   const meta = PLATFORMS[platform];
-  return {
+  return pageMetadata({
     title: `${meta.label} documentation`,
     description: `${meta.label} documentation for Glacia — the ${meta.pkg} package.`,
-  };
+    path: `/platform/${platform}`,
+  });
 }
 
 export default async function PlatformIndex({ params }: { params: Promise<{ platform: string }> }) {

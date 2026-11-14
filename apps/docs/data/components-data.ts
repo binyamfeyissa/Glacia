@@ -1364,29 +1364,6 @@ export default function DataTableDemo() {
 }`
   },
   {
-    slug: "native-select",
-    name: "Native Select",
-    description: "Semantic native select dropdown styled with Glacia glass, custom glass chevron, and mobile OS picker support.",
-    category: "Text & Forms",
-    appleStatus: "Apple-faithful",
-    nativeStatus: "Web only",
-    wave: 2,
-    props: [
-      { name: "sizeVariant", type: "'sm' | 'md' | 'lg'", default: "'md'", description: "Size of select wrapper." }
-    ],
-    codeSnippet: `import { NativeSelect } from "glacia";
-
-export default function NativeSelectDemo() {
-  return (
-    <NativeSelect defaultValue="auto">
-      <option value="auto">Automatic (System HIG)</option>
-      <option value="light">Always Light Mode</option>
-      <option value="dark">Always Dark Mode</option>
-    </NativeSelect>
-  );
-}`
-  },
-  {
     slug: "toggle-group",
     name: "Toggle Group",
     description: "Apple segmented toolbar or filter bar for toggling one or multiple active states with haptic spring feedback.",
@@ -1504,28 +1481,6 @@ export default function CarouselDemo() {
 }`
   },
   {
-    slug: "aspect-ratio",
-    name: "Aspect Ratio",
-    description: "Apple TV & Photos media container maintaining exact dimensional ratios (16:9, 4:3, 1:1) with optional specular glass frame.",
-    category: "Showing Things",
-    appleStatus: "Apple-faithful",
-    nativeStatus: "Web first",
-    wave: 3,
-    props: [
-      { name: "ratio", type: "number", default: "16 / 9", description: "Aspect ratio width / height." },
-      { name: "glassBorder", type: "boolean", default: "false", description: "Applies liquid glass squircle border." }
-    ],
-    codeSnippet: `import { AspectRatio } from "glacia";
-
-export default function AspectRatioDemo() {
-  return (
-    <AspectRatio ratio={16 / 9} glassBorder className="overflow-hidden">
-      <img src="/wallpaper.jpg" alt="Wallpaper" className="w-full h-full object-cover" />
-    </AspectRatio>
-  );
-}`
-  },
-  {
     slug: "kbd",
     name: "Kbd",
     description: "macOS physical keycap badge with micro-bevel depth, top highlight hairline, and SF monospaced glyphs.",
@@ -1630,29 +1585,6 @@ export default function MenubarDemo() {
         </MenubarContent>
       </MenubarMenu>
     </Menubar>
-  );
-}`
-  },
-  {
-    slug: "resizable",
-    name: "Resizable",
-    description: "macOS NSSplitView multi-panel layout divider with draggable liquid glass hairline handle and grip bar.",
-    category: "Navigation & Layout",
-    appleStatus: "Apple-faithful",
-    nativeStatus: "Web only",
-    wave: 3,
-    props: [
-      { name: "direction", type: "'horizontal' | 'vertical'", default: "'horizontal'", description: "Layout split orientation." }
-    ],
-    codeSnippet: `import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "glacia";
-
-export default function ResizableDemo() {
-  return (
-    <ResizablePanelGroup direction="horizontal" className="min-h-[200px]">
-      <ResizablePanel defaultSize={25} order={0}>Sidebar</ResizablePanel>
-      <ResizableHandle withHandle />
-      <ResizablePanel defaultSize={75} order={1}>Editor</ResizablePanel>
-    </ResizablePanelGroup>
   );
 }`
   },
@@ -1794,30 +1726,6 @@ export default function QuestionnaireDemo() {
 }`
   },
   {
-    slug: "trace",
-    name: "Trace",
-    description: "Apple Intelligence / Siri execution reasoning tree with status badges, latencies, and expandable payload inspection.",
-    category: "Chat & AI",
-    appleStatus: "Apple-faithful",
-    nativeStatus: "Web only",
-    wave: 3,
-    props: [
-      { name: "title", type: "ReactNode", default: "'Reasoning Trace'", description: "Header caption." }
-    ],
-    codeSnippet: `import { Trace, TraceStep, TraceDetails } from "glacia";
-
-export default function TraceDemo() {
-  return (
-    <Trace title="Apple Intelligence Reasoning">
-      <TraceStep title="Querying Semantic Index" status="completed" duration="82ms" />
-      <TraceStep title="Synthesizing Fluid Answer" status="running">
-        <TraceDetails>Streaming tokens through local neural engine...</TraceDetails>
-      </TraceStep>
-    </Trace>
-  );
-}`
-  },
-  {
     slug: "direction",
     name: "Direction",
     description: "Right-to-Left (RTL) internationalization context provider supporting Arabic, Hebrew, and bidirectional layouts.",
@@ -1870,32 +1778,6 @@ export default function ActionSheetDemo() {
     >
       <button>Show Options</button>
     </ActionSheet>
-  );
-}`
-  },
-  {
-    slug: "activity-view",
-    name: "Activity View",
-    description: "An iOS activity card: a ring, chart or metric in glass, for widgets and dashboards.",
-    category: "Showing Things",
-    appleStatus: "Apple-faithful",
-    nativeStatus: "Web first",
-    wave: 4,
-    props: [
-      { name: "title", type: "string", description: "Small caption above the value." },
-      { name: "subtitle", type: "string", description: "The large value or figure." },
-      { name: "visual", type: "ReactNode", description: "A ring, chart or icon." },
-      { name: "size", type: "'compact' | 'full'", default: "'full'", description: "Compact lays it out in a row." }
-    ],
-    codeSnippet: `import { ActivityView } from "glacia";
-
-export default function ActivityViewDemo() {
-  return (
-    <ActivityView
-      title="Steps"
-      subtitle="8,412"
-      visual={<div className="gl-activity-ring" style={{ width: 64, height: 64, borderRadius: "50%", border: "6px solid #34c759" }} />}
-    />
   );
 }`
   },
@@ -2209,28 +2091,6 @@ export default function WidgetDemo() {
 />`,
   },
   {
-    slug: "ring-chart",
-    name: "Ring Chart",
-    description: "Proportional slices drawn as a ring. The same geometry as Pie Chart with a hole, so slices place identically.",
-    category: "Charts",
-    appleStatus: "Glacia extension",
-    nativeStatus: "Yes",
-    wave: 3,
-    props: [
-      { name: "data", type: "Slice[]", description: "Slices with a label, value and optional colour." },
-      { name: "size", type: "number", default: "200", description: "Diameter in pixels." },
-      { name: "thickness", type: "number", default: "22", description: "Ring thickness. Larger leaves a bigger hole." },
-      { name: "format", type: "(value: number) => string", description: "Formats values in the legend and tooltip." },
-    ],
-    codeSnippet: `import { RingChart } from "glacia";
-
-<RingChart
-  size={180}
-  thickness={26}
-  data={[{ label: "Direct", value: 38 }, { label: "Search", value: 27 }]}
-/>`,
-  },
-  {
     slug: "radar-chart",
     name: "Radar Chart",
     description: "Several axes around a circle with each series as a closed shape, for comparing profiles across many dimensions.",
@@ -2250,47 +2110,6 @@ export default function WidgetDemo() {
 <RadarChart
   axes={["Speed", "Quality", "Cost", "Support"]}
   series={[{ name: "Current", values: [78, 84, 66, 72] }]}
-/>`,
-  },
-  {
-    slug: "scatter-chart",
-    name: "Scatter Chart",
-    description: "Two numeric axes, for showing correlation between two measured values.",
-    category: "Charts",
-    appleStatus: "Glacia extension",
-    nativeStatus: "Yes",
-    wave: 3,
-    props: [
-      { name: "series", type: "ScatterSeries[]", description: "Series of x/y points with optional labels." },
-      { name: "height", type: "number", default: "240", description: "Height of the plot in pixels." },
-      { name: "radius", type: "number", default: "4", description: "Radius of each dot." },
-      { name: "formatX", type: "(value: number) => string", description: "Formats the x axis and x tooltip values." },
-      { name: "formatY", type: "(value: number) => string", description: "Formats the y axis and y tooltip values." },
-    ],
-    codeSnippet: `import { ScatterChart } from "glacia";
-
-<ScatterChart
-  series={[{ name: "Plans", points: [{ x: 12, y: 30 }, { x: 28, y: 52 }] }]}
-/>`,
-  },
-  {
-    slug: "bubble-chart",
-    name: "Bubble Chart",
-    description: "A scatter chart whose marks are sized by a third value.",
-    category: "Charts",
-    appleStatus: "Glacia extension",
-    nativeStatus: "Yes",
-    wave: 3,
-    props: [
-      { name: "series", type: "ScatterSeries[]", description: "Series of points. Each point may carry a `size`." },
-      { name: "height", type: "number", default: "240", description: "Height of the plot in pixels." },
-      { name: "formatX", type: "(value: number) => string", description: "Formats the x axis values." },
-      { name: "formatY", type: "(value: number) => string", description: "Formats the y axis values." },
-    ],
-    codeSnippet: `import { BubbleChart } from "glacia";
-
-<BubbleChart
-  series={[{ name: "Plans", points: [{ x: 12, y: 30, size: 40 }, { x: 28, y: 52, size: 90 }] }]}
 />`,
   },
   {
@@ -2407,51 +2226,6 @@ export default function WidgetDemo() {
 />`,
   },
   {
-    slug: "treemap-chart",
-    name: "Treemap Chart",
-    description: "Hierarchical composition as area-proportional tiles, laid out so tiles stay close to square.",
-    category: "Charts",
-    appleStatus: "Glacia extension",
-    nativeStatus: "Yes",
-    wave: 3,
-    props: [
-      { name: "items", type: "TreemapItem[]", description: "Items with a label and value. Area is proportional to value." },
-      { name: "height", type: "number", default: "240", description: "Height of the plot in pixels." },
-      { name: "gap", type: "number", default: "4", description: "Gap between tiles." },
-      { name: "format", type: "(value: number) => string", description: "Formats tile values and the tooltip." },
-    ],
-    codeSnippet: `import { TreemapChart } from "glacia";
-
-<TreemapChart
-  items={[
-    { label: "Web", value: 4200 },
-    { label: "iOS", value: 3100 },
-    { label: "Android", value: 2800 },
-  ]}
-/>`,
-  },
-  {
-    slug: "sankey-chart",
-    name: "Sankey Chart",
-    description: "Flow between a source and a target, with node heights proportional to the flow through them.",
-    category: "Charts",
-    appleStatus: "Glacia extension",
-    nativeStatus: "Yes",
-    wave: 3,
-    props: [
-      { name: "nodes", type: "SankeyNode[]", description: "Nodes with an id and optional label." },
-      { name: "links", type: "SankeyLink[]", description: "Links between node ids with a value." },
-      { name: "height", type: "number", default: "260", description: "Height of the diagram in pixels." },
-      { name: "nodeWidth", type: "number", default: "12", description: "Width of a node bar." },
-    ],
-    codeSnippet: `import { SankeyChart } from "glacia";
-
-<SankeyChart
-  nodes={[{ id: "a", label: "Direct" }, { id: "b", label: "Signup" }]}
-  links={[{ source: "a", target: "b", value: 40 }]}
-/>`,
-  },
-  {
     slug: "bump-chart",
     name: "Bump Chart",
     description: "Position over time, where rank is what matters rather than magnitude. Crossings are the signal.",
@@ -2492,29 +2266,6 @@ export default function WidgetDemo() {
 
 <PolarAreaChart
   segments={[{ label: "North", value: 62 }, { label: "East", value: 48 }]}
-/>`,
-  },
-  {
-    slug: "pyramid-chart",
-    name: "Pyramid Chart",
-    description: "Stacked centred bands where width encodes magnitude, widest at the base.",
-    category: "Charts",
-    appleStatus: "Glacia extension",
-    nativeStatus: "Yes",
-    wave: 3,
-    props: [
-      { name: "levels", type: "PyramidLevel[]", description: "Levels in order, apex first." },
-      { name: "levelHeight", type: "number", default: "40", description: "Height of each level band." },
-      { name: "format", type: "(value: number) => string", description: "Formats level values." },
-    ],
-    codeSnippet: `import { PyramidChart } from "glacia";
-
-<PyramidChart
-  levels={[
-    { label: "Awareness", value: 100 },
-    { label: "Interest", value: 72 },
-    { label: "Convert", value: 24 },
-  ]}
 />`,
   },
   {
@@ -2575,23 +2326,6 @@ export default function WidgetDemo() {
 <Shimmer lines={3} />`,
   },
   {
-    slug: "thinking-orb",
-    name: "Thinking Orb",
-    description: "A small animated indicator that a model is working. Decorative motion is hidden from assistive technology and replaced by a live label.",
-    category: "Chat & AI",
-    appleStatus: "Glacia extension",
-    nativeStatus: "Yes",
-    wave: 4,
-    props: [
-      { name: "label", type: "string", default: "Thinking", description: "What the model is doing, announced once." },
-      { name: "size", type: "number", default: "22", description: "Diameter in pixels." },
-      { name: "paused", type: "boolean", default: "false", description: "Stop the animation without unmounting." },
-    ],
-    codeSnippet: `import { ThinkingOrb } from "glacia";
-
-<ThinkingOrb label="Thinking" />`,
-  },
-  {
     slug: "plan",
     name: "Plan",
     description: "An ordered list of steps a model intends to take, each stating its own status so a running plan is legible while incomplete.",
@@ -2613,24 +2347,6 @@ export default function WidgetDemo() {
 />`,
   },
   {
-    slug: "sources",
-    name: "Sources",
-    description: "Citations behind an answer, numbered and linked, so a claim can be traced to its origin.",
-    category: "Chat & AI",
-    appleStatus: "Glacia extension",
-    nativeStatus: "Yes",
-    wave: 4,
-    props: [
-      { name: "sources", type: "Source[]", description: "Sources with a title, url, optional snippet and domain." },
-      { name: "title", type: "string", default: "Sources", description: "Heading above the list." },
-    ],
-    codeSnippet: `import { Sources } from "glacia";
-
-<Sources
-  sources={[{ id: "s1", title: "React docs", url: "https://react.dev", domain: "react.dev" }]}
-/>`,
-  },
-  {
     slug: "response",
     name: "Response",
     description: "Reveals a streamed answer progressively, with a caret while the stream is live and a status announcement when it completes.",
@@ -2646,39 +2362,6 @@ export default function WidgetDemo() {
     codeSnippet: `import { Response } from "glacia";
 
 <Response text="The answer is 42." revealed={12} />`,
-  },
-  {
-    slug: "soundwave",
-    name: "Soundwave",
-    description: "An animated waveform that can be driven by real audio levels, or idle gently when no level is supplied.",
-    category: "Chat & AI",
-    appleStatus: "Glacia extension",
-    nativeStatus: "Yes",
-    wave: 4,
-    props: [
-      { name: "levels", type: "number[]", description: "Per-bar levels from 0 to 1. Omit for idle motion." },
-      { name: "bars", type: "number", default: "28", description: "Number of bars when levels are not supplied." },
-      { name: "active", type: "boolean", default: "true", description: "Animate or hold still." },
-      { name: "height", type: "number", default: "40", description: "Height in pixels." },
-    ],
-    codeSnippet: `import { Soundwave } from "glacia";
-
-<Soundwave levels={[0.2, 0.6, 0.9, 0.4, 0.7]} />`,
-  },
-  {
-    slug: "task",
-    name: "Task",
-    description: "Progress for a long-running background task, supporting both determinate and indeterminate states.",
-    category: "Chat & AI",
-    appleStatus: "Glacia extension",
-    nativeStatus: "Yes",
-    wave: 4,
-    props: [
-      { name: "task", type: "TaskProgress", description: "Progress from 0 to 1, a label, detail and status." },
-    ],
-    codeSnippet: `import { Task } from "glacia";
-
-<Task task={{ label: "Indexing", progress: 0.42 }} />`,
   },
   {
     slug: "panelside",
@@ -2718,26 +2401,5 @@ export default function WidgetDemo() {
     codeSnippet: `import { AIInput } from "glacia";
 
 <AIInput onSubmit={(prompt) => send(prompt)} hint="Model: Glacia 1" />`,
-  },
-  {
-    slug: "image-generation",
-    name: "Image Generation",
-    description: "A grid of generated images with a reserved placeholder tile while generation is running, so the grid does not reflow when images land.",
-    category: "Chat & AI",
-    appleStatus: "Glacia extension",
-    nativeStatus: "Yes",
-    wave: 4,
-    props: [
-      { name: "images", type: "GeneratedImage[]", description: "Images with a src, alt, optional prompt and ratio." },
-      { name: "generating", type: "boolean", default: "false", description: "Show a pending tile." },
-      { name: "ratio", type: "number", default: "1", description: "Default aspect ratio as width over height." },
-      { name: "columns", type: "number", default: "2", description: "Grid columns." },
-    ],
-    codeSnippet: `import { ImageGeneration } from "glacia";
-
-<ImageGeneration
-  generating
-  images={[{ id: "1", src: "/shot.png", alt: "A glass surface" }]}
-/>`,
   },
 ];

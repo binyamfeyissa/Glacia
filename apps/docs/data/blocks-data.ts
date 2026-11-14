@@ -158,35 +158,6 @@ export default function FlightRoute() {
 }`,
   },
   {
-    slug: "wallet",
-    title: "Wallet",
-    description:
-      "A stack of overlapping payment cards where the selected card lifts into view, above a recent-activity ledger with inset separators. Cards are buttons, so the whole block is keyboard operable.",
-    componentsUsed: ["Glass", "Button", "Card"],
-    code: `import { WalletBlock } from "glacia";
-
-export default function WalletRoute() {
-  return (
-    <WalletBlock
-      cards={[
-        {
-          id: "primary",
-          name: "Glacia Card",
-          number: "•••• •••• •••• 4821",
-          holder: "A. Rivera",
-          expiry: "09/28",
-          brand: "Visa",
-          balance: "$4,280.50",
-        },
-      ]}
-      transactions={[
-        { id: "t1", merchant: "Blue Bottle", amount: "-$8.40", date: "Today", debit: true },
-      ]}
-    />
-  );
-}`,
-  },
-  {
     slug: "activity",
     title: "Activity feed",
     description:
@@ -209,27 +180,6 @@ export default function ActivityRoute() {
           tone: "positive",
           initials: "MI",
         },
-      ]}
-    />
-  );
-}`,
-  },
-  {
-    slug: "smart-home",
-    title: "Smart home",
-    description:
-      "Rooms as a filterable strip over a device list with working toggles. State is owned by the block unless the caller supplies handlers, so it works both standalone and under external control.",
-    componentsUsed: ["Glass", "Badge"],
-    code: `import { SmartHomeBlock } from "glacia";
-
-export default function HomeRoute() {
-  return (
-    <SmartHomeBlock
-      temperature="21°"
-      devices={[
-        { id: "l1", name: "Ceiling lights", room: "Living room", kind: "light", on: true },
-        { id: "c1", name: "Thermostat", room: "Living room", kind: "climate", on: true, status: "21°" },
-        { id: "k1", name: "Front door", room: "Entry", kind: "lock", on: false, status: "Locked" },
       ]}
     />
   );

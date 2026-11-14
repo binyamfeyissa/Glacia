@@ -1,5 +1,7 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, expect, test, vi } from "vitest";
+import { afterEach, describe, expect, it, test, vi } from "vitest";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 
 import { SegmentedControl, TabBar } from "../src";
 
@@ -89,4 +91,33 @@ test("held, the thumb lifts with the lens, and the tint's labels stay in line th
   });
   expect(control.hasAttribute("data-lifted")).toBe(false);
   expect(thumb.style.transform).toBe("translateX(84px) scale(1, 1)");
+});
+
+describe("Segmented control layout", () => {
+  const css = readFileSync(resolve(__dirname, "../src/styles.css"), "utf-8");
+
+  it("lets segments share the track instead of a fixed width", () => {
+    // A fixed 84px per segment gave a short label the same width as a long one.
+    const block = css.slice(
+      css.indexOf("\n.gl-segmented > .gl-tab {"),
+      css.indexOf("}", css.indexOf("\n.gl-segmented > .gl-tab {")),
+    );
+    expect(block).toContain("flex: 1 1 0");
+    expect(block).toContain("min-width: 0");
+  });
+
+  it("is a capsule and can shrink inside a narrow container", () => {
+    const block = css.slice(
+      css.indexOf("\n.gl-segmented {"),
+      css.indexOf("}", css.indexOf("\n.gl-segmented {")),
+    );
+    expect(block).toContain("border-radius: var(--gl-pill)");
+    expect(block).toContain("max-width: 100%");
+  });
+
+  it("ellipsises a label too long for its segment", () => {
+    expect(css).toMatch(
+      /\.gl-segmented > \.gl-tab[\s\S]{0,200}text-overflow: ellipsis/,
+    );
+  });
 });

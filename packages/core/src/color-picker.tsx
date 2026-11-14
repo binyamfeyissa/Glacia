@@ -2,12 +2,27 @@ import {
   forwardRef,
   useCallback,
   useRef,
+  useState,
   type ForwardRefExoticComponent,
   type HTMLAttributes,
   type RefAttributes,
 } from "react";
 
 import { cx } from "./internal/cx";
+
+// The EyeDropper API ships in Chromium browsers but is not in TypeScript's DOM
+// lib yet, so the shape is declared here rather than cast away at the call.
+interface EyeDropperResult {
+  sRGBHex: string;
+}
+interface EyeDropperInstance {
+  open: () => Promise<EyeDropperResult>;
+}
+declare global {
+  interface Window {
+    EyeDropper?: new () => EyeDropperInstance;
+  }
+}
 
 /** The 10×7 grid of palette colours. */
 const SWATCHES = [
@@ -30,6 +45,8 @@ export interface ColorPickerProps extends Omit<HTMLAttributes<HTMLDivElement>, "
   value?: string;
   /** Called with a hex string when the user picks a colour. */
   onChange?: (colour: string) => void;
+  /** Hide the eyedropper for environments that cannot support it. */
+  hideEyedropper?: boolean;
 }
 
 /**
@@ -37,7 +54,7 @@ export interface ColorPickerProps extends Omit<HTMLAttributes<HTMLDivElement>, "
  */
 export const ColorPicker: ForwardRefExoticComponent<ColorPickerProps & RefAttributes<HTMLDivElement>> =
   forwardRef<HTMLDivElement, ColorPickerProps>(function ColorPicker(
-    { value, onChange, className, ...props },
+    { value, onChange, className, hideEyedropper, ...props },
     forwardedRef,
   ) {
     const current = hexToH(value ?? "", "#007AFF");
@@ -62,7 +79,10 @@ export const ColorPicker: ForwardRefExoticComponent<ColorPickerProps & RefAttrib
             }),
           )}
         </div>
-        <HexInput value={current} onChange={onChange} />
+        <div className="gl-color-picker-foot">
+          <HexInput value={current} onChange={onChange} />
+          {!hideEyedropper && <EyedropperButton onPick={(colour) => onChange?.(colour)} />}
+        </div>
       </div>
     );
   });
@@ -93,5 +113,50 @@ function HexInput({
         aria-label="Hex colour"
       />
     </div>
+  );
+}
+/**
+ * A pen that samples a colour from anywhere on the screen.
+ *
+ * Uses the browser's EyeDropper where it exists (Chromium). Where it does not,
+ * the button is simply not offered, because a fake eyedropper that cannot
+ * sample would be worse than none.
+ */
+function EyedropperButton({ onPick }: { onPick: (colour: string) => void }) {
+  const supported = typeof window !== "undefined" && typeof window.EyeDropper === "function";
+  const [picking, setPicking] = useState(false);
+
+  if (!supported) return null;
+
+  const sample = async () => {
+    if (picking) return;
+    setPicking(true);
+    try {
+      const result = await new window.EyeDropper!().open();
+      if (result?.sRGBHex) onPick(result.sRGBHex.toUpperCase());
+    } catch {
+      // The user cancelled, or the browser refused while the tab was hidden.
+      // Cancelling is not an error, so nothing is reported.
+    } finally {
+      setPicking(false);
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      className="gl-color-eyedropper"
+      onClick={sample}
+      aria-label="Pick a colour from the screen"
+      aria-busy={picking || undefined}
+      title="Eyedropper"
+    >
+      {/* A pen with a drop beneath it: sampling, not drawing. */}
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+        <path d="M10.6 2.4a1.4 1.4 0 0 1 2 0l1 1a1.4 1.4 0 0 1 0 2l-1.3 1.3-3-3 1.3-1.3Z" />
+        <path d="M9.3 3.7 13 7.4 7.8 12.6l-3.2.8a.5.5 0 0 1-.6-.6l.8-3.2L9.3 3.7Z" />
+        <path d="M4.2 11.2 2 13.3" strokeLinecap="round" />
+      </svg>
+    </button>
   );
 }

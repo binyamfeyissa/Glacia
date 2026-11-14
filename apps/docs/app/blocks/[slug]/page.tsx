@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BLOCKS } from "../../../data/blocks-data";
+import { pageMetadata } from "../../../lib/seo";
 import type { Metadata } from "next";
 import {
   AdminDashboard,
@@ -14,9 +15,7 @@ import {
   ForgotPasswordBlock,
   ErrorPageBlock,
   BoardingPassBlock,
-  WalletBlock,
   ActivityBlock,
-  SmartHomeBlock,
 } from "glacia";
 import { CodeBlock } from "../../../components/code-block";
 import { ArrowRightIcon, SparkIcon } from "../../../components/icons";
@@ -36,7 +35,11 @@ export async function generateMetadata({
   const { slug } = await params;
   const block = BLOCKS.find((item) => item.slug === slug);
   if (!block) return { title: "Block not found" };
-  return { title: block.title, description: block.description };
+  return pageMetadata({
+    title: `${block.title} — React template`,
+    description: block.description,
+    path: `/blocks/${block.slug}`,
+  });
 }
 
 export default async function BlockPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -158,44 +161,6 @@ export default async function BlockPage({ params }: { params: Promise<{ slug: st
                 }}
               />
             )}
-            {slug === "wallet" && (
-              <WalletBlock
-                cards={[
-                  {
-                    id: "primary",
-                    name: "Glacia Card",
-                    number: "•••• •••• •••• 4821",
-                    holder: "A. Rivera",
-                    expiry: "09/28",
-                    brand: "Visa",
-                    balance: "$4,280.50",
-                  },
-                  {
-                    id: "travel",
-                    name: "Travel Card",
-                    number: "•••• •••• •••• 9133",
-                    holder: "A. Rivera",
-                    expiry: "03/27",
-                    brand: "Mastercard",
-                    gradient: ["#ff9f0a", "#ff375f"],
-                  },
-                  {
-                    id: "studio",
-                    name: "Studio",
-                    number: "•••• •••• •••• 2207",
-                    holder: "Glacia Studio",
-                    expiry: "11/29",
-                    brand: "Amex",
-                    gradient: ["#34c759", "#0a84ff"],
-                  },
-                ]}
-                transactions={[
-                  { id: "t1", merchant: "Blue Bottle", amount: "-$8.40", date: "Today", category: "Coffee", debit: true },
-                  { id: "t2", merchant: "Figma", amount: "-$15.00", date: "Yesterday", category: "Software", debit: true },
-                  { id: "t3", merchant: "Payout", amount: "+$1,240.00", date: "Nov 10", category: "Income" },
-                ]}
-              />
-            )}
             {slug === "activity" && (
               <ActivityBlock
                 title="Activity"
@@ -206,20 +171,6 @@ export default async function BlockPage({ params }: { params: Promise<{ slug: st
                   { id: "a3", actor: "CI", action: "flagged a failing test", detail: "lens.test.tsx — 1 failure", time: "08:58", day: "Today", tone: "warning", initials: "CI" },
                   { id: "a4", actor: "Ana", action: "merged the tokens branch", time: "17:20", day: "Yesterday", tone: "positive", initials: "AN" },
                   { id: "a5", actor: "CI", action: "failed to build the docs site", time: "16:04", day: "Yesterday", tone: "danger", initials: "CI" },
-                ]}
-              />
-            )}
-            {slug === "smart-home" && (
-              <SmartHomeBlock
-                temperature="21°"
-                devices={[
-                  { id: "l1", name: "Ceiling lights", room: "Living room", kind: "light", on: true },
-                  { id: "c1", name: "Thermostat", room: "Living room", kind: "climate", on: true, status: "21° · Heating" },
-                  { id: "b1", name: "Blinds", room: "Living room", kind: "blind", on: false, status: "Closed" },
-                  { id: "k1", name: "Front door", room: "Entry", kind: "lock", on: false, status: "Locked" },
-                  { id: "c2", name: "Doorbell", room: "Entry", kind: "camera", status: "Streaming" },
-                  { id: "s1", name: "Kitchen speaker", room: "Kitchen", kind: "speaker", on: false, status: "Idle" },
-                  { id: "l2", name: "Under-cabinet", room: "Kitchen", kind: "light", on: true },
                 ]}
               />
             )}

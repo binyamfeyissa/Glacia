@@ -9,6 +9,8 @@ import { CopyBlock } from "../../../../../components/copy-block";
 import { COMPONENTS_DATA } from "../../../../../data/components-data";
 import { NATIVE_COMPONENTS } from "../../../../../data/platform-components";
 import { PLATFORMS, PLATFORM_ORDER, isPlatform } from "../../../../../data/platforms";
+import { pageMetadata } from "../../../../../lib/seo";
+import { BreadcrumbStructuredData } from "../../../../../components/structured-data";
 
 export function generateStaticParams() {
   return PLATFORM_ORDER.flatMap((platform) =>
@@ -26,15 +28,25 @@ export async function generateMetadata({
   const { platform, slug } = await params;
   if (!isPlatform(platform)) return { title: "Not found" };
 
+  const path = `/platform/${platform}/components/${slug}`;
+
   if (platform === "web") {
     const component = COMPONENTS_DATA.find((c) => c.slug === slug);
     if (!component) return { title: "Not found" };
-    return { title: component.name, description: component.description };
+    return pageMetadata({
+      title: `${component.name} — React Liquid Glass component`,
+      description: component.description,
+      path,
+    });
   }
 
   const component = NATIVE_COMPONENTS.find((c) => c.slug === slug);
   if (!component) return { title: "Not found" };
-  return { title: component.name, description: component.description };
+  return pageMetadata({
+    title: `${component.name} — React Native Liquid Glass component`,
+    description: component.description,
+    path,
+  });
 }
 
 export default async function PlatformComponentPage({
@@ -62,6 +74,14 @@ export default async function PlatformComponentPage({
         kicker={`${component.category} · ${meta.pkg}`}
         description={component.description}
       >
+        <BreadcrumbStructuredData
+          items={[
+            { name: "Home", path: "/" },
+            { name: "Web", path: "/platform/web" },
+            { name: "Components", path: "/platform/web/components" },
+            { name: component.name, path: `/platform/web/components/${component.slug}` },
+          ]}
+        />
         <ComponentPreview name={component.name} slug={component.slug} code={component.codeSnippet}>
           <ComponentDemo slug={component.slug} />
         </ComponentPreview>
@@ -178,6 +198,14 @@ export default async function PlatformComponentPage({
       kicker={`${component.category} · ${meta.pkg}`}
       description={component.description}
     >
+      <BreadcrumbStructuredData
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Mobile", path: "/platform/mobile" },
+          { name: "Components", path: "/platform/mobile/components" },
+          { name: component.name, path: `/platform/mobile/components/${component.slug}` },
+        ]}
+      />
       <ComponentPreview name={component.name} slug={component.slug} code={component.codeSnippet}>
         <NativeDemo slug={component.slug} />
       </ComponentPreview>

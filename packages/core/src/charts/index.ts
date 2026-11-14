@@ -35,23 +35,13 @@ export {
   type MirrorAreaSeries,
 } from "./area-chart";
 
-export { PieChart, RingChart, type PieChartProps, type RingChartProps, type Slice } from "./radial-chart";
-export {
-  ScatterChart,
-  BubbleChart,
-  type ScatterChartProps,
-  type BubbleChartProps,
-  type ScatterPoint,
-  type ScatterSeries,
-} from "./scatter-chart";
+export { PieChart, type PieChartProps, type Slice } from "./radial-chart";
 export { HeatmapChart, type HeatmapChartProps, type HeatmapCell } from "./heatmap-chart";
 export { RadarChart, type RadarChartProps, type RadarSeries } from "./radar-chart";
 export { FunnelChart, type FunnelChartProps, type FunnelStage } from "./funnel-chart";
 export { WaterfallChart, type WaterfallChartProps, type WaterfallStep } from "./waterfall-chart";
 export { CandlestickChart, type CandlestickChartProps, type Candle } from "./candlestick-chart";
-export { TreemapChart, type TreemapChartProps, type TreemapItem } from "./treemap-chart";
-export { SankeyChart, type SankeyChartProps, type SankeyNode, type SankeyLink } from "./sankey-chart";
 export { BumpChart, HexChart, type BumpChartProps, type BumpSeries, type HexChartProps, type HexPoint } from "./bump-chart";
-export { PolarAreaChart, PyramidChart, type PolarAreaChartProps, type PolarSegment, type PyramidChartProps, type PyramidLevel } from "./polar-chart";
+export { PolarAreaChart, type PolarAreaChartProps, type PolarSegment } from "./polar-chart";
 export { LiveLineChart, type LiveLineChartProps } from "./live-line-chart";
 export { PlotChart, type PlotChartProps, type PlotMark } from "./plot-chart";

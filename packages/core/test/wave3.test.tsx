@@ -15,7 +15,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  AspectRatio,
   Kbd,
   CodeBlock,
   Marker,
@@ -23,9 +22,6 @@ import {
   Menubar,
   MenubarMenu,
   MenubarTrigger,
-  ResizablePanelGroup,
-  ResizablePanel,
-  ResizableHandle,
   Message,
   MessageBubble,
   MessageAvatar,
@@ -36,8 +32,6 @@ import {
   Questionnaire,
   QuestionnaireStep,
   QuestionnaireOption,
-  Trace,
-  TraceStep,
   DirectionProvider,
   useDirection,
   CalendarPageBlock,
@@ -119,16 +113,6 @@ describe("Wave 3 Components & Blocks", () => {
     expect(slides.length).toBe(2);
   });
 
-  it("renders AspectRatio with ratio prop", () => {
-    const { container } = render(
-      <AspectRatio ratio={16 / 9} glassBorder>
-        <div>Video Player</div>
-      </AspectRatio>
-    );
-    const ar = container.querySelector(".gl-aspect-ratio");
-    expect(ar).not.toBeNull();
-  });
-
   it("renders Kbd with modifiers", () => {
     const { container } = render(<Kbd size="md">⌘K</Kbd>);
     const kbd = container.querySelector(".gl-kbd");
@@ -172,19 +156,6 @@ describe("Wave 3 Components & Blocks", () => {
     const triggers = container.querySelectorAll(".gl-menubar-trigger");
     expect(triggers.length).toBe(2);
     expect(triggers[0]?.textContent).toBe("File");
-  });
-
-  it("renders Resizable panels and handle", () => {
-    const { container } = render(
-      <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel defaultSize={30} order={0}>Left</ResizablePanel>
-        <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={70} order={1}>Right</ResizablePanel>
-      </ResizablePanelGroup>
-    );
-    expect(container.querySelector(".gl-resizable-group")).not.toBeNull();
-    expect(container.querySelector(".gl-resizable-handle")).not.toBeNull();
-    expect(container.querySelectorAll(".gl-resizable-panel").length).toBe(2);
   });
 
   it("renders Message and speech bubble", () => {
@@ -244,19 +215,6 @@ describe("Wave 3 Components & Blocks", () => {
     const options = container.querySelectorAll(".gl-questionnaire-option");
     expect(options.length).toBe(2);
     expect(options[0]?.getAttribute("aria-checked")).toBe("true");
-  });
-
-  it("renders Trace with steps and timing", () => {
-    const { container } = render(
-      <Trace title="Reasoning Engine">
-        <TraceStep title="Knowledge Lookup" status="completed" duration="120ms" />
-        <TraceStep title="Synthesizing Reply" status="running" />
-      </Trace>
-    );
-    expect(container.querySelector(".gl-trace-title")?.textContent).toBe("Reasoning Engine");
-    const steps = container.querySelectorAll(".gl-trace-step");
-    expect(steps.length).toBe(2);
-    expect(container.querySelector(".gl-trace-duration")?.textContent).toBe("120ms");
   });
 
   it("renders DirectionProvider and detects RTL", () => {

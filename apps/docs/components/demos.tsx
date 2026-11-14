@@ -147,7 +147,6 @@ import {
   CollapsibleTrigger,
   CollapsibleContent,
   DataTable,
-  NativeSelect,
   ToggleGroup,
   ToggleGroupItem,
   InputOTP,
@@ -167,7 +166,6 @@ import {
   CarouselPrevious,
   CarouselNext,
   CarouselDots,
-  AspectRatio,
   Kbd,
   CodeBlock,
   Marker,
@@ -179,9 +177,6 @@ import {
   MenubarItem,
   MenubarSeparator,
   MenubarShortcut,
-  ResizablePanelGroup,
-  ResizablePanel,
-  ResizableHandle,
   Message,
   MessageBubble,
   MessageAvatar,
@@ -195,9 +190,7 @@ import {
   Questionnaire,
   QuestionnaireStep,
   QuestionnaireOption,
-  Trace,
   ActionSheet,
-  ActivityView,
   ColorPicker,
   List,
   ListItem,
@@ -207,8 +200,6 @@ import {
   TimePicker,
   Toolbar,
   Widget,
-  TraceStep,
-  TraceDetails,
   DirectionProvider,
 } from "glacia";
 import { ChartDemo, CHART_SLUGS } from "./chart-demos";
@@ -1036,16 +1027,6 @@ export function ComponentDemo({ slug }: { slug: string }) {
         </div>
       );
 
-    case "native-select":
-      return (
-        <div className="w-full max-w-xs">
-          <NativeSelect defaultValue="auto">
-            <option value="auto">Automatic (System HIG)</option>
-            <option value="light">Always Light Mode</option>
-            <option value="dark">Always Dark Mode</option>
-          </NativeSelect>
-        </div>
-      );
 
     case "toggle-group":
       return (
@@ -1123,17 +1104,6 @@ export function ComponentDemo({ slug }: { slug: string }) {
         </div>
       );
 
-    case "aspect-ratio":
-      return (
-        <div className="w-full max-w-sm">
-          <AspectRatio ratio={16 / 9} glassBorder className="overflow-hidden bg-black/40 flex items-center justify-center">
-            <div className="text-center p-4">
-              <span className="text-3xl block mb-1">▶</span>
-              <span className="text-xs font-semibold uppercase tracking-wider opacity-80">16:9 Liquid Retina</span>
-            </div>
-          </AspectRatio>
-        </div>
-      );
 
     case "kbd":
       return (
@@ -1197,20 +1167,6 @@ export function ComponentDemo({ slug }: { slug: string }) {
         </div>
       );
 
-    case "resizable":
-      return (
-        <div className="w-full max-w-md h-40">
-          <ResizablePanelGroup direction="horizontal">
-            <ResizablePanel defaultSize={35} order={0} className="gl-glass flex items-center justify-center text-xs font-semibold">
-              Navigator
-            </ResizablePanel>
-            <ResizableHandle withHandle />
-            <ResizablePanel defaultSize={65} order={1} className="gl-glass flex items-center justify-center text-xs font-semibold">
-              Canvas Editor
-            </ResizablePanel>
-          </ResizablePanelGroup>
-        </div>
-      );
 
     case "bubble":
       return (
@@ -1272,20 +1228,6 @@ export function ComponentDemo({ slug }: { slug: string }) {
     case "questionnaire":
       return <QuestionnaireDemo />;
 
-    case "trace":
-      return (
-        <div className="w-full max-w-sm">
-          <Trace title="Apple Intelligence Pipeline">
-            <TraceStep title="Vector Embeddings" status="completed" duration="42ms" />
-            <TraceStep title="Optical Shader Synthesis" status="completed" duration="88ms" />
-            <TraceStep title="Neural Engine Generation" status="running" defaultExpanded>
-              <TraceDetails>
-                Streaming tokens at 120 tok/sec with local Apple Silicon neural engine.
-              </TraceDetails>
-            </TraceStep>
-          </Trace>
-        </div>
-      );
 
     case "direction":
       return (
@@ -1302,32 +1244,6 @@ export function ComponentDemo({ slug }: { slug: string }) {
     case "action-sheet":
       return <ActionSheetDemo />;
 
-    case "activity-view":
-      return (
-        <div className="flex flex-wrap gap-3 items-stretch">
-          <ActivityView
-            title="Steps"
-            subtitle="8,412"
-            visual={
-              <div
-                style={{
-                  width: 64,
-                  height: 64,
-                  borderRadius: "50%",
-                  border: "6px solid #34c759",
-                  borderTopColor: "rgba(52,199,89,0.25)",
-                }}
-              />
-            }
-          />
-          <ActivityView
-            title="Heart Rate"
-            subtitle="62 bpm"
-            size="compact"
-            visual={<span style={{ fontSize: 22 }}>❤️</span>}
-          />
-        </div>
-      );
 
     case "color-picker":
       return <ColorPickerDemo />;

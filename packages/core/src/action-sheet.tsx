@@ -81,7 +81,7 @@ export function ActionSheet({
                 role="menuitem"
                 type="button"
                 className={cx(
-                  "gl-action-sheet-item",
+                  "gl-action-sheet-item gl-glass",
                   item.destructive && "gl-action-sheet-item-destructive",
                 )}
                 disabled={item.disabled}

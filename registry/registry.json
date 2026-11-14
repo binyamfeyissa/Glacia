@@ -534,16 +534,6 @@
       ]
     },
     {
-      "name": "native-select",
-      "type": "registry:ui",
-      "dependencies": [
-        "glacia@^0.3.1"
-      ],
-      "registryDependencies": [
-        "/r/glass.json"
-      ]
-    },
-    {
       "name": "toggle-group",
       "type": "registry:ui",
       "dependencies": [
@@ -584,16 +574,6 @@
       ]
     },
     {
-      "name": "aspect-ratio",
-      "type": "registry:ui",
-      "dependencies": [
-        "glacia@^0.3.1"
-      ],
-      "registryDependencies": [
-        "/r/glass.json"
-      ]
-    },
-    {
       "name": "kbd",
       "type": "registry:ui",
       "dependencies": [
@@ -625,16 +605,6 @@
     },
     {
       "name": "menubar",
-      "type": "registry:ui",
-      "dependencies": [
-        "glacia@^0.3.1"
-      ],
-      "registryDependencies": [
-        "/r/glass.json"
-      ]
-    },
-    {
-      "name": "resizable",
       "type": "registry:ui",
       "dependencies": [
         "glacia@^0.3.1"
@@ -694,16 +664,6 @@
       ]
     },
     {
-      "name": "trace",
-      "type": "registry:ui",
-      "dependencies": [
-        "glacia@^0.3.1"
-      ],
-      "registryDependencies": [
-        "/r/glass.json"
-      ]
-    },
-    {
       "name": "direction",
       "type": "registry:ui",
       "dependencies": [
@@ -715,16 +675,6 @@
     },
     {
       "name": "action-sheet",
-      "type": "registry:ui",
-      "dependencies": [
-        "glacia@^0.3.1"
-      ],
-      "registryDependencies": [
-        "/r/glass.json"
-      ]
-    },
-    {
-      "name": "activity-view",
       "type": "registry:ui",
       "dependencies": [
         "glacia@^0.3.1"
@@ -854,37 +804,7 @@
       ]
     },
     {
-      "name": "ring-chart",
-      "type": "registry:ui",
-      "dependencies": [
-        "glacia@^0.3.1"
-      ],
-      "registryDependencies": [
-        "/r/glass.json"
-      ]
-    },
-    {
       "name": "pie-chart",
-      "type": "registry:ui",
-      "dependencies": [
-        "glacia@^0.3.1"
-      ],
-      "registryDependencies": [
-        "/r/glass.json"
-      ]
-    },
-    {
-      "name": "scatter-chart",
-      "type": "registry:ui",
-      "dependencies": [
-        "glacia@^0.3.1"
-      ],
-      "registryDependencies": [
-        "/r/glass.json"
-      ]
-    },
-    {
-      "name": "bubble-chart",
       "type": "registry:ui",
       "dependencies": [
         "glacia@^0.3.1"
@@ -944,36 +864,6 @@
       ]
     },
     {
-      "name": "treemap-chart",
-      "type": "registry:ui",
-      "dependencies": [
-        "glacia@^0.3.1"
-      ],
-      "registryDependencies": [
-        "/r/glass.json"
-      ]
-    },
-    {
-      "name": "sankey-chart",
-      "type": "registry:ui",
-      "dependencies": [
-        "glacia@^0.3.1"
-      ],
-      "registryDependencies": [
-        "/r/glass.json"
-      ]
-    },
-    {
-      "name": "bump-chart",
-      "type": "registry:ui",
-      "dependencies": [
-        "glacia@^0.3.1"
-      ],
-      "registryDependencies": [
-        "/r/glass.json"
-      ]
-    },
-    {
       "name": "hex-chart",
       "type": "registry:ui",
       "dependencies": [
@@ -994,7 +884,17 @@
       ]
     },
     {
-      "name": "pyramid-chart",
+      "name": "plot-chart",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "bump-chart",
       "type": "registry:ui",
       "dependencies": [
         "glacia@^0.3.1"
@@ -1014,16 +914,6 @@
       ]
     },
     {
-      "name": "plot-chart",
-      "type": "registry:ui",
-      "dependencies": [
-        "glacia@^0.3.1"
-      ],
-      "registryDependencies": [
-        "/r/glass.json"
-      ]
-    },
-    {
       "name": "plan",
       "type": "registry:ui",
       "dependencies": [
@@ -1034,47 +924,7 @@
       ]
     },
     {
-      "name": "sources",
-      "type": "registry:ui",
-      "dependencies": [
-        "glacia@^0.3.1"
-      ],
-      "registryDependencies": [
-        "/r/glass.json"
-      ]
-    },
-    {
       "name": "response",
-      "type": "registry:ui",
-      "dependencies": [
-        "glacia@^0.3.1"
-      ],
-      "registryDependencies": [
-        "/r/glass.json"
-      ]
-    },
-    {
-      "name": "task",
-      "type": "registry:ui",
-      "dependencies": [
-        "glacia@^0.3.1"
-      ],
-      "registryDependencies": [
-        "/r/glass.json"
-      ]
-    },
-    {
-      "name": "soundwave",
-      "type": "registry:ui",
-      "dependencies": [
-        "glacia@^0.3.1"
-      ],
-      "registryDependencies": [
-        "/r/glass.json"
-      ]
-    },
-    {
-      "name": "thinking-orb",
       "type": "registry:ui",
       "dependencies": [
         "glacia@^0.3.1"
@@ -1104,16 +954,6 @@
       ]
     },
     {
-      "name": "image-generation",
-      "type": "registry:ui",
-      "dependencies": [
-        "glacia@^0.3.1"
-      ],
-      "registryDependencies": [
-        "/r/glass.json"
-      ]
-    },
-    {
       "name": "boarding-pass",
       "type": "registry:ui",
       "dependencies": [
@@ -1124,27 +964,7 @@
       ]
     },
     {
-      "name": "wallet",
-      "type": "registry:ui",
-      "dependencies": [
-        "glacia@^0.3.1"
-      ],
-      "registryDependencies": [
-        "/r/glass.json"
-      ]
-    },
-    {
       "name": "activity",
-      "type": "registry:ui",
-      "dependencies": [
-        "glacia@^0.3.1"
-      ],
-      "registryDependencies": [
-        "/r/glass.json"
-      ]
-    },
-    {
-      "name": "smart-home",
       "type": "registry:ui",
       "dependencies": [
         "glacia@^0.3.1"
@@ -1224,26 +1044,21 @@
         "/r/pagination.json",
         "/r/collapsible.json",
         "/r/data-table.json",
-        "/r/native-select.json",
         "/r/toggle-group.json",
         "/r/input-otp.json",
         "/r/command.json",
         "/r/carousel.json",
-        "/r/aspect-ratio.json",
         "/r/kbd.json",
         "/r/code-block.json",
         "/r/marker.json",
         "/r/menubar.json",
-        "/r/resizable.json",
         "/r/message.json",
         "/r/bubble.json",
         "/r/message-scroller.json",
         "/r/attachment.json",
         "/r/questionnaire.json",
-        "/r/trace.json",
         "/r/direction.json",
         "/r/action-sheet.json",
-        "/r/activity-view.json",
         "/r/color-picker.json",
         "/r/list.json",
         "/r/page-control.json",
@@ -1256,36 +1071,23 @@
         "/r/bar-chart.json",
         "/r/area-chart.json",
         "/r/mirror-area-chart.json",
-        "/r/ring-chart.json",
         "/r/pie-chart.json",
-        "/r/scatter-chart.json",
-        "/r/bubble-chart.json",
         "/r/funnel-chart.json",
         "/r/heatmap-chart.json",
         "/r/radar-chart.json",
         "/r/waterfall-chart.json",
         "/r/candlestick-chart.json",
-        "/r/treemap-chart.json",
-        "/r/sankey-chart.json",
-        "/r/bump-chart.json",
         "/r/hex-chart.json",
         "/r/polar-area-chart.json",
-        "/r/pyramid-chart.json",
-        "/r/live-line-chart.json",
         "/r/plot-chart.json",
+        "/r/bump-chart.json",
+        "/r/live-line-chart.json",
         "/r/plan.json",
-        "/r/sources.json",
         "/r/response.json",
-        "/r/task.json",
-        "/r/soundwave.json",
-        "/r/thinking-orb.json",
         "/r/panelside.json",
         "/r/ai-input.json",
-        "/r/image-generation.json",
         "/r/boarding-pass.json",
-        "/r/wallet.json",
-        "/r/activity.json",
-        "/r/smart-home.json"
+        "/r/activity.json"
       ],
       "files": []
     }

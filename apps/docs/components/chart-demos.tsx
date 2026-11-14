@@ -4,7 +4,6 @@ import {
   AreaChart,
   BarChart,
   BumpChart,
-  BubbleChart,
   CandlestickChart,
   FunnelChart,
   HeatmapChart,
@@ -15,12 +14,7 @@ import {
   PieChart,
   PlotChart,
   PolarAreaChart,
-  PyramidChart,
   RadarChart,
-  RingChart,
-  SankeyChart,
-  ScatterChart,
-  TreemapChart,
   WaterfallChart,
 } from "glacia";
 
@@ -84,18 +78,6 @@ const chartCases: Record<string, () => React.ReactNode> = {
       ]}
     />
   ),
-  "ring-chart": () => (
-    <RingChart
-      size={180}
-      thickness={26}
-      data={[
-        { label: "Direct", value: 38 },
-        { label: "Search", value: 27 },
-        { label: "Social", value: 20 },
-        { label: "Email", value: 15 },
-      ]}
-    />
-  ),
   "radar-chart": () => (
     <RadarChart
       size={220}
@@ -141,38 +123,6 @@ const chartCases: Record<string, () => React.ReactNode> = {
       ]}
     />
   ),
-  "scatter-chart": () => (
-    <ScatterChart
-      height={200}
-      series={[
-        {
-          name: "Plans",
-          points: [
-            { x: 12, y: 30, label: "Starter" },
-            { x: 28, y: 52, label: "Team" },
-            { x: 45, y: 61, label: "Growth" },
-            { x: 63, y: 88, label: "Scale" },
-          ],
-        },
-      ]}
-    />
-  ),
-  "bubble-chart": () => (
-    <BubbleChart
-      height={200}
-      series={[
-        {
-          name: "Plans",
-          points: [
-            { x: 12, y: 30, size: 40, label: "Starter" },
-            { x: 28, y: 52, size: 90, label: "Team" },
-            { x: 45, y: 61, size: 140, label: "Growth" },
-            { x: 63, y: 88, size: 220, label: "Scale" },
-          ],
-        },
-      ]}
-    />
-  ),
   "heatmap-chart": () => (
     <HeatmapChart
       rows={["Mon", "Tue", "Wed", "Thu", "Fri"]}
@@ -196,38 +146,6 @@ const chartCases: Record<string, () => React.ReactNode> = {
       }))}
     />
   ),
-  "treemap-chart": () => (
-    <TreemapChart
-      height={200}
-      items={[
-        { label: "Web", value: 4200 },
-        { label: "iOS", value: 3100 },
-        { label: "Android", value: 2800 },
-        { label: "Desktop", value: 1400 },
-        { label: "API", value: 900 },
-      ]}
-    />
-  ),
-  "sankey-chart": () => (
-    <SankeyChart
-      height={200}
-      nodes={[
-        { id: "direct", label: "Direct" },
-        { id: "search", label: "Search" },
-        { id: "paid", label: "Paid" },
-        { id: "signup", label: "Signup" },
-        { id: "trial", label: "Trial" },
-        { id: "active", label: "Active" },
-      ]}
-      links={[
-        { source: "direct", target: "signup", value: 40 },
-        { source: "search", target: "signup", value: 32 },
-        { source: "paid", target: "trial", value: 26 },
-        { source: "signup", target: "active", value: 46 },
-        { source: "trial", target: "active", value: 18 },
-      ]}
-    />
-  ),
   "bump-chart": () => (
     <BumpChart
       height={200}
@@ -247,16 +165,6 @@ const chartCases: Record<string, () => React.ReactNode> = {
         { label: "East", value: 48 },
         { label: "South", value: 74 },
         { label: "West", value: 39 },
-      ]}
-    />
-  ),
-  "pyramid-chart": () => (
-    <PyramidChart
-      levels={[
-        { label: "Awareness", value: 100 },
-        { label: "Interest", value: 72 },
-        { label: "Consider", value: 48 },
-        { label: "Convert", value: 24 },
       ]}
     />
   ),

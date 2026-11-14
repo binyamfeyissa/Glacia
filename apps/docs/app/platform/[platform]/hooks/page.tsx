@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { DocsSidebar } from "../../../../components/docs-sidebar";
 import { CopyBlock } from "../../../../components/copy-block";
 import { HOOK_COUNT, HOOK_GROUPS, hooksMeta } from "../../../../data/hooks-data";
+import { pageMetadata } from "../../../../lib/seo";
 import { PLATFORMS, isPlatform, platformHref } from "../../../../data/platforms";
 
 export function generateStaticParams() {
@@ -19,7 +20,11 @@ export async function generateMetadata({
   const { platform } = await params;
   if (!isPlatform(platform)) return {};
   const meta = hooksMeta(platform);
-  return { title: `${meta.title} · ${PLATFORMS[platform].label}`, description: meta.description };
+  return pageMetadata({
+    title: `${meta.title} · ${PLATFORMS[platform].label}`,
+    description: meta.description,
+    path: `/platform/${platform}/hooks`,
+  });
 }
 
 /**

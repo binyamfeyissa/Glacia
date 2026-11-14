@@ -275,10 +275,6 @@ export {
   type DataTableColumn,
   type DataTableProps,
 } from "./data-table";
-export {
-  NativeSelect,
-  type NativeSelectProps,
-} from "./native-select";
 
 // 9. Wave 3 Components
 export {
@@ -316,6 +312,7 @@ export {
 } from "./command";
 export {
   Carousel,
+  CarouselViewport,
   CarouselContent,
   CarouselItem,
   CarouselPrevious,
@@ -323,9 +320,9 @@ export {
   CarouselDots,
   useCarousel,
   type CarouselProps,
+  type CarouselViewportProps,
   type CarouselItemProps,
 } from "./carousel";
-export { AspectRatio, type AspectRatioProps } from "./aspect-ratio";
 export { Kbd, type KbdProps } from "./kbd";
 export { CodeBlock, type CodeBlockProps } from "./code-block";
 export { Marker, TextMarker, type MarkerProps, type TextMarkerProps } from "./marker";
@@ -348,14 +345,6 @@ export {
   type MenubarContentProps,
   type MenubarItemProps,
 } from "./menubar";
-export {
-  ResizablePanelGroup,
-  ResizablePanel,
-  ResizableHandle,
-  type ResizablePanelGroupProps,
-  type ResizablePanelProps,
-  type ResizableHandleProps,
-} from "./resizable";
 export {
   Message,
   MessageBubble,
@@ -393,14 +382,6 @@ export {
   type QuestionnaireOptionProps,
 } from "./questionnaire";
 export {
-  Trace,
-  TraceStep,
-  TraceDetails,
-  type TraceProps,
-  type TraceStepProps,
-  type TraceDetailsProps,
-} from "./trace";
-export {
   DirectionProvider,
   Direction,
   useDirection,
@@ -411,7 +392,6 @@ export {
 
 // 9b. Wave 4 — Figma-aligned iOS/ipadOS components
 export { ActionSheet, type ActionSheetItem, type ActionSheetProps } from "./action-sheet";
-export { ActivityView, type ActivityViewProps } from "./activity-view";
 export { ColorPicker, type ColorPickerProps } from "./color-picker";
 export { List, ListItem, type ListProps, type ListItemProps } from "./list";
 export { PopupButton, type PopupButtonProps } from "./popup-button";
@@ -445,17 +425,4 @@ export {
   type BoardingPassProps,
   type BoardingPassFlight,
 } from "./blocks/boarding-pass-block";
-export {
-  WalletBlock,
-  type WalletBlockProps,
-  type WalletCard,
-  type WalletTransaction,
-} from "./blocks/wallet-block";
 export { ActivityBlock, type ActivityBlockProps, type ActivityEntry } from "./blocks/activity-block";
-export {
-  SmartHomeBlock,
-  type SmartHomeBlockProps,
-  type SmartHomeDevice,
-  type SmartHomeRoom,
-  type DeviceKind,
-} from "./blocks/smart-home-block";

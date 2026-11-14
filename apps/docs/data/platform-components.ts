@@ -753,22 +753,6 @@ import { Card, CardHeader, CardTitle, CardContent } from "glacia-native";
     codeSnippet: `import { NativeAIInput } from "glacia-native";\n\n<NativeAIInput value={draft} onChangeText={setDraft} onSubmit={send} />`,
   },
   {
-    slug: "image-generation",
-    name: "Image Generation",
-    description:
-      "A generated image with its prompt and state. While generating, a placeholder with the same aspect ratio holds the space so the layout does not jump when the image arrives.",
-    category: "Chat & AI",
-    glass:
-      "Plain layout and text, no glass surface. Wrap in Glass if you want the material around it.",
-    props: [
-      { name: "image", type: "NativeGeneratedImage", description: "The result, with url, alt and optional dimensions." },
-      { name: "prompt", type: "string", description: "Text shown under the image." },
-      { name: "status", type: "GenerationStatus", default: "queued", description: "Current state." },
-    ],
-    codeSnippet: `import { NativeImageGeneration } from "glacia-native";\n\n<NativeImageGeneration\n  status="done"\n  prompt="A glacier at dusk"\n  image={{ url, alt: "A glacier at dusk" }}\n/>`,
-  },
-
-  {
     slug: "table",
     name: "Table",
     description:

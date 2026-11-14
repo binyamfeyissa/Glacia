@@ -28,7 +28,6 @@ import {
   CollapsibleTrigger,
   CollapsibleContent,
   DataTable,
-  NativeSelect,
   SettingsBlock,
   ProfileBlock,
   SignupBlock,
@@ -128,7 +127,9 @@ describe("Wave 2 Components & Blocks", () => {
       { label: "Wed", value: 40 },
     ];
     const { container } = render(<Chart data={data} type="bar" />);
-    expect(container.querySelector(".gl-chart-card")).not.toBeNull();
+    // The chart draws no card of its own; it sits on the caller's surface.
+    expect(container.querySelector(".gl-chart")).not.toBeNull();
+    expect(container.querySelector(".gl-chart-card")).toBeNull();
     expect(screen.getByText("Mon")).not.toBeNull();
     expect(screen.getByText("Wed")).not.toBeNull();
   });
@@ -224,16 +225,6 @@ describe("Wave 2 Components & Blocks", () => {
     render(<DataTable data={data} columns={columns} />);
     expect(screen.getByText("MacBook Pro")).not.toBeNull();
     expect(screen.getByText("Logic Pro")).not.toBeNull();
-  });
-
-  it("renders NativeSelect with options", () => {
-    render(
-      <NativeSelect aria-label="Region selection" defaultValue="us">
-        <option value="us">United States</option>
-        <option value="uk">United Kingdom</option>
-      </NativeSelect>
-    );
-    expect(screen.getByRole("combobox")).not.toBeNull();
   });
 
   it("renders SettingsBlock with navigation and appearance settings", () => {

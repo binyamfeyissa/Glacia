@@ -11,13 +11,9 @@ import {
 import { useSkeletonHandoff } from "../src/hooks/environment";
 import {
   AIInput,
-  ImageGeneration,
   Plan,
   Response,
   Shimmer,
-  Sources,
-  Task,
-  ThinkingOrb,
 } from "../src/ai/ai-primitives";
 
 describe("useCopyToClipboard", () => {
@@ -142,11 +138,6 @@ describe("AI components", () => {
     expect(screen.getByRole("status", { name: "Loading answer" })).toBeTruthy();
   });
 
-  it("ThinkingOrb gives a text label for screen readers", () => {
-    render(<ThinkingOrb label="Thinking" />);
-    expect(screen.getByRole("status").textContent).toBe("Thinking");
-  });
-
   it("Plan reports each step's status", () => {
     const { container } = render(
       <Plan
@@ -161,20 +152,6 @@ describe("AI components", () => {
     expect(screen.getByText("1/3")).toBeTruthy();
   });
 
-  it("Sources renders nothing when there are no citations", () => {
-    const { container } = render(<Sources sources={[]} />);
-    expect(container.firstChild).toBeNull();
-  });
-
-  it("Sources links out with safe rel attributes", () => {
-    render(
-      <Sources sources={[{ id: "s", title: "Docs", url: "https://example.com", domain: "example.com" }]} />,
-    );
-    const link = screen.getByRole("link");
-    expect(link.getAttribute("href")).toBe("https://example.com");
-    expect(link.getAttribute("rel")).toContain("noopener");
-  });
-
   it("Response reveals only the streamed prefix and reports streaming", () => {
     const { container } = render(<Response text="Hello world" revealed={5} />);
     expect(container.querySelector(".gl-response-text")!.textContent).toBe("Hello");
@@ -184,23 +161,6 @@ describe("AI components", () => {
   it("Response drops the caret when complete", () => {
     const { container } = render(<Response text="Done" revealed={4} />);
     expect(container.querySelector(".gl-response-caret")).toBeNull();
-  });
-
-  it("Task exposes a real progressbar with its value", () => {
-    render(<Task task={{ progress: 0.42, label: "Indexing" }} />);
-    const bar = screen.getByRole("progressbar", { name: "Indexing" });
-    expect(bar.getAttribute("aria-valuenow")).toBe("42");
-  });
-
-  it("Task omits aria-valuenow when progress is unknown", () => {
-    render(<Task task={{ label: "Indexing" }} />);
-    const bar = screen.getByRole("progressbar");
-    expect(bar.getAttribute("aria-valuenow")).toBeNull();
-  });
-
-  it("ImageGeneration reserves a tile while generating", () => {
-    render(<ImageGeneration images={[]} generating ratio={1.5} />);
-    expect(screen.getByRole("status", { name: "Generating image" })).toBeTruthy();
   });
 
   it("AIInput submits on Enter and blocks empty input", () => {

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { cx } from "../internal/cx";
 
@@ -34,40 +34,6 @@ export function Shimmer({
   );
 }
 
-export interface ThinkingOrbProps {
-  /** What the model is doing, announced to assistive technology. */
-  label?: string;
-  size?: number;
-  /** Stop the animation without unmounting the orb. */
-  paused?: boolean;
-  className?: string;
-}
-
-/**
- * A small animated indicator that a model is working.
- *
- * The animation is decorative, so it is hidden from assistive technology and
- * replaced by a live region carrying `label` — a screen reader should hear
- * "Thinking" once, not an endlessly animating element.
- */
-export function ThinkingOrb({ label = "Thinking", size = 22, paused, className }: ThinkingOrbProps) {
-  return (
-    <span className={cx("gl-thinking-orb", className)} data-paused={paused ? "" : undefined}>
-      <span
-        className="gl-thinking-orb-canvas"
-        style={{ width: size, height: size }}
-        aria-hidden
-      >
-        <span className="gl-thinking-orb-ring" />
-        <span className="gl-thinking-orb-core" />
-      </span>
-      <span className="gl-sr-only" role="status">
-        {label}
-      </span>
-    </span>
-  );
-}
-
 /** A single step in a plan, with its own state. */
 export interface PlanStep {
   id: string;
@@ -92,7 +58,7 @@ export function Plan({ title = "Plan", steps, className }: PlanProps) {
   const done = steps.filter((step) => step.status === "done").length;
 
   return (
-    <div className={cx("gl-plan", className)}>
+    <div className={cx("gl-glass gl-plan", className)}>
       <div className="gl-plan-head">
         <span className="gl-plan-title">{title}</span>
         <span className="gl-plan-count">
@@ -111,47 +77,6 @@ export function Plan({ title = "Plan", steps, className }: PlanProps) {
               {step.detail && <span className="gl-plan-step-detail">{step.detail}</span>}
             </span>
             <span className="gl-plan-status">{step.status}</span>
-          </li>
-        ))}
-      </ol>
-    </div>
-  );
-}
-
-export interface Source {
-  id: string;
-  title: string;
-  url: string;
-  /** Short excerpt shown under the title. */
-  snippet?: string;
-  /** Domain, shown as the source's origin. */
-  domain?: string;
-}
-
-export interface SourcesProps {
-  sources: Source[];
-  title?: string;
-  className?: string;
-}
-
-/** Citations behind an answer, so a claim can be traced to its origin. */
-export function Sources({ sources, title = "Sources", className }: SourcesProps) {
-  if (sources.length === 0) return null;
-
-  return (
-    <div className={cx("gl-sources", className)}>
-      <span className="gl-sources-title">{title}</span>
-      <ol className="gl-sources-list">
-        {sources.map((source, index) => (
-          <li key={source.id}>
-            <a className="gl-sources-item" href={source.url} target="_blank" rel="noreferrer noopener">
-              <span className="gl-sources-index">{index + 1}</span>
-              <span className="gl-sources-copy">
-                <span className="gl-sources-name">{source.title}</span>
-                {source.snippet && <span className="gl-sources-snippet">{source.snippet}</span>}
-                {source.domain && <span className="gl-sources-domain">{source.domain}</span>}
-              </span>
-            </a>
           </li>
         ))}
       </ol>
@@ -189,98 +114,6 @@ export function Response({
       <span className="gl-sr-only" role="status">
         {isStreaming ? "Response streaming" : "Response complete"}
       </span>
-    </div>
-  );
-}
-
-/**
- * An animated waveform that responds to audio level.
- *
- * Bars are driven by a `level` per bar rather than random animation, so it can
- * show real microphone amplitude; with no level supplied it falls back to a
- * gentle idle motion.
- */
-export function Soundwave({
-  levels,
-  bars = 28,
-  active = true,
-  height = 40,
-  color,
-  className,
-  label = "Audio level",
-}: {
-  levels?: number[];
-  bars?: number;
-  active?: boolean;
-  height?: number;
-  color?: string;
-  className?: string;
-  label?: string;
-}) {
-  const count = levels?.length || bars;
-
-  return (
-    <div
-      className={cx("gl-soundwave", className)}
-      style={{ height, color }}
-      data-active={active ? "" : undefined}
-      role="img"
-      aria-label={label}
-    >
-      {Array.from({ length: count }, (_, i) => {
-        const level = levels ? levels[i] ?? 0 : null;
-        const scale = level == null ? null : Math.max(0.06, Math.min(1, level));
-        return (
-          <span
-            key={i}
-            className="gl-soundwave-bar"
-            style={
-              scale == null
-                ? { animationDelay: `${(i % 9) * 70}ms` }
-                : { transform: `scaleY(${scale})`, animation: "none" }
-            }
-          />
-        );
-      })}
-    </div>
-  );
-}
-
-/** Progress of a long-running background task. */
-export interface TaskProgress {
-  /** 0–1, or omit for an indeterminate task. */
-  progress?: number;
-  label?: string;
-  detail?: string;
-  status?: "running" | "done" | "failed" | "queued";
-}
-
-export function Task({ task, className }: { task: TaskProgress; className?: string }) {
-  const percent = task.progress == null ? null : Math.round(Math.min(1, Math.max(0, task.progress)) * 100);
-
-  return (
-    <div className={cx("gl-task", className)} data-status={task.status ?? "running"}>
-      <div className="gl-task-head">
-        <span className="gl-task-label">{task.label ?? "Task"}</span>
-        <span className="gl-task-value">{percent == null ? "…" : `${percent}%`}</span>
-      </div>
-
-      <div
-        className="gl-task-track"
-        role="progressbar"
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-valuenow={percent ?? undefined}
-        aria-label={task.label ?? "Task progress"}
-      >
-        <span
-          className="gl-task-fill"
-          data-indeterminate={percent == null ? "" : undefined}
-          style={percent == null ? undefined : { width: `${percent}%` }}
-        />
-      </div>
-
-      {task.detail && <span className="gl-task-detail">{task.detail}</span>}
     </div>
   );
 }
@@ -385,11 +218,18 @@ export function AIInput({
   };
 
   // Grow to fit, up to a cap so a long paste does not push the page around.
+  // The measured height also decides the field's shape: pill while it is one
+  // line, relaxing toward the stacked radius as it becomes a paragraph, since
+  // a full capsule around a tall field bulges at the waist.
+  const [lines, setLines] = useState(1);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     el.style.height = "auto";
-    el.style.height = `${Math.min(el.scrollHeight, 200)}px`;
+    const next = Math.min(el.scrollHeight, 200);
+    el.style.height = `${next}px`;
+    const lineHeight = parseFloat(getComputedStyle(el).lineHeight) || 21;
+    setLines(Math.max(1, Math.round(next / (lineHeight + 6))));
   }, [current]);
 
   const submit = () => {
@@ -403,7 +243,11 @@ export function AIInput({
     <div className={cx("gl-ai-input", className)} data-busy={busy ? "" : undefined}>
       {hint && <div className="gl-ai-input-hint">{hint}</div>}
 
-      <div className="gl-ai-input-field">
+      <div
+        className="gl-ai-input-field"
+        data-grown={lines > 1 ? "" : undefined}
+        style={{ "--gl-ai-input-lines": lines } as React.CSSProperties}
+      >
         {leading && <div className="gl-ai-input-leading">{leading}</div>}
 
         <textarea
@@ -428,69 +272,9 @@ export function AIInput({
           disabled={busy || !current.trim()}
           aria-label={busy ? "Sending" : "Send prompt"}
         >
-          {busy ? <ThinkingOrb size={14} /> : "↑"}
+          {busy ? <span className="gl-ai-input-sending" aria-hidden /> : "↑"}
         </button>
       </div>
-    </div>
-  );
-}
-
-/** One generated image, with the prompt that produced it. */
-export interface GeneratedImage {
-  id: string;
-  src: string;
-  alt: string;
-  prompt?: string;
-  /** Aspect ratio as width / height. */
-  ratio?: number;
-}
-
-/**
- * A grid of generated images with an in-place generation placeholder.
- *
- * While `generating` is true the first tile shows a shimmer at the requested
- * ratio, so the grid does not reflow when the image lands.
- */
-export function ImageGeneration({
-  images,
-  generating,
-  ratio = 1,
-  className,
-  columns = 2,
-}: {
-  images: GeneratedImage[];
-  generating?: boolean;
-  ratio?: number;
-  className?: string;
-  columns?: number;
-}) {
-  return (
-    <div
-      className={cx("gl-image-generation", className)}
-      style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
-    >
-      {generating && (
-        <div
-          className="gl-image-generation-tile gl-image-generation-pending"
-          style={{ aspectRatio: String(ratio) }}
-          role="status"
-          aria-label="Generating image"
-        >
-          <Shimmer lines={2} />
-        </div>
-      )}
-
-      {images.map((image) => (
-        <figure key={image.id} className="gl-image-generation-tile">
-          <img
-            src={image.src}
-            alt={image.alt}
-            loading="lazy"
-            style={{ aspectRatio: String(image.ratio ?? ratio) }}
-          />
-          {image.prompt && <figcaption>{image.prompt}</figcaption>}
-        </figure>
-      ))}
     </div>
   );
 }

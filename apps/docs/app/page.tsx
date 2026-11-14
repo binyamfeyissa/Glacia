@@ -242,7 +242,9 @@ export default function HomePage() {
         <div className="section-head">
           <div className="section-head-copy">
 
-            <h2 className="section-title">Seventy-one primitives. One language.</h2>
+            <h2 className="section-title">
+              {COMPONENTS_DATA.length} primitives. One language.
+            </h2>
             <p className="section-desc">
               Controls, forms, navigation, overlays, data, and AI — each one measured against Apple&apos;s
               Human Interface Guidelines and verified for keyboard and screen-reader use.
@@ -287,7 +289,9 @@ export default function HomePage() {
         <div className="section-head">
           <div className="section-head-copy">
             <p className="eyebrow">Full catalog</p>
-            <h2 className="section-title">All 81 components across Waves 1, 2, 3 &amp; 4.</h2>
+            <h2 className="section-title">
+              All {COMPONENTS_DATA.length} components across Waves 1, 2, 3 &amp; 4.
+            </h2>
           </div>
         </div>
 

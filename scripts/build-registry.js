@@ -14,6 +14,10 @@ const BASE_URL = "/r";
 
 const SRC = path.resolve("packages/core/src");
 const registryDir = path.resolve("registry/new-york");
+// The published package carries its own copy: the CLI looks for
+// `registry/<name>.json` inside the package first, so a stale mirror here would
+// ship an old component even though the built registry is correct.
+const packageRegistryDir = path.resolve("packages/core/registry");
 const docsPublicRDir = path.resolve("apps/docs/public/r");
 
 // Component name -> source file stem. Most match; the rest are listed here.
@@ -26,38 +30,25 @@ const FILE_OVERRIDES = {
   "bar-chart": "charts/bar-chart",
   "area-chart": "charts/area-chart",
   "mirror-area-chart": "charts/area-chart",
-  "ring-chart": "charts/radial-chart",
   "pie-chart": "charts/radial-chart",
-  "scatter-chart": "charts/scatter-chart",
-  "bubble-chart": "charts/scatter-chart",
   "funnel-chart": "charts/funnel-chart",
   "heatmap-chart": "charts/heatmap-chart",
   "radar-chart": "charts/radar-chart",
   "waterfall-chart": "charts/waterfall-chart",
   "candlestick-chart": "charts/candlestick-chart",
-  "treemap-chart": "charts/treemap-chart",
-  "sankey-chart": "charts/sankey-chart",
   "bump-chart": "charts/bump-chart",
   "hex-chart": "charts/bump-chart",
   "polar-area-chart": "charts/polar-chart",
-  "pyramid-chart": "charts/polar-chart",
   "live-line-chart": "charts/live-line-chart",
   "plot-chart": "charts/plot-chart",
   // AI
   "plan": "ai/ai-primitives",
-  "sources": "ai/ai-primitives",
   "response": "ai/ai-primitives",
-  "task": "ai/ai-primitives",
-  "soundwave": "ai/ai-primitives",
-  "thinking-orb": "ai/ai-primitives",
   "panelside": "ai/ai-primitives",
   "ai-input": "ai/ai-primitives",
-  "image-generation": "ai/ai-primitives",
   // Blocks
   "boarding-pass": "blocks/boarding-pass-block",
-  "wallet": "blocks/wallet-block",
   "activity": "blocks/activity-block",
-  "smart-home": "blocks/smart-home-block",
 };
 
 const COMPONENTS = [
@@ -72,25 +63,24 @@ const COMPONENTS = [
   "button-group", "toggle", "input-group", "field", "form", "combobox",
   "calendar", "chart", "empty", "item", "hover-card", "context-menu", "drawer",
   "sheet", "toast", "breadcrumb", "navigation-menu", "pagination",
-  "collapsible", "data-table", "native-select",
+  "collapsible", "data-table",
   // Wave 3
-  "toggle-group", "input-otp", "command", "carousel", "aspect-ratio", "kbd",
-  "code-block", "marker", "menubar", "resizable", "message", "bubble",
-  "message-scroller", "attachment", "questionnaire", "trace", "direction",
+  "toggle-group", "input-otp", "command", "carousel", "kbd",
+  "code-block", "marker", "menubar", "message", "bubble",
+  "message-scroller", "attachment", "questionnaire", "direction",
   // Wave 4 — Figma-aligned iOS/ipadOS components
-  "action-sheet", "activity-view", "color-picker", "list", "page-control",
+  "action-sheet", "color-picker", "list", "page-control",
   "popup-button", "stepper", "time-picker", "toolbar", "widget",
   // Wave 5 — Charts
-  "line-chart", "bar-chart", "area-chart", "mirror-area-chart", "ring-chart",
-  "pie-chart", "scatter-chart", "bubble-chart", "funnel-chart", "heatmap-chart",
-  "radar-chart", "waterfall-chart", "candlestick-chart", "treemap-chart",
-  "sankey-chart", "bump-chart", "hex-chart", "polar-area-chart",
-  "pyramid-chart", "live-line-chart", "plot-chart",
+  "line-chart", "bar-chart", "area-chart", "mirror-area-chart",
+  "pie-chart", "funnel-chart", "heatmap-chart",
+  "radar-chart", "waterfall-chart", "candlestick-chart", "hex-chart", "polar-area-chart", "plot-chart",
+  "bump-chart", "live-line-chart",
   // Wave 5 — AI conversation primitives
-  "plan", "sources", "response", "task", "soundwave", "thinking-orb",
-  "panelside", "ai-input", "image-generation",
+  "plan", "response",
+  "panelside", "ai-input",
   // Wave 5 — Composed blocks
-  "boarding-pass", "wallet", "activity", "smart-home",
+  "boarding-pass", "activity",
 ];
 
 /**
@@ -153,6 +143,9 @@ for (const name of COMPONENTS) {
   const jsonStr = JSON.stringify(item, null, 2);
   fs.writeFileSync(path.join(registryDir, `${name}.json`), jsonStr, "utf-8");
   fs.writeFileSync(path.join(docsPublicRDir, `${name}.json`), jsonStr, "utf-8");
+  if (fs.existsSync(packageRegistryDir)) {
+    fs.writeFileSync(path.join(packageRegistryDir, `${name}.json`), jsonStr, "utf-8");
+  }
   registryIndex.push({
     name,
     type: "registry:ui",

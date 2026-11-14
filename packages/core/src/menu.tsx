@@ -69,13 +69,55 @@ export function Menu({ items, "aria-label": label, icon = ellipsis, align = "end
     const content = contentRef.current!;
     const plate = plateRef.current!;
 
+    // Keep the menu on screen. It opens downward from the trigger by default
+    // and lines up with the trigger's trailing edge, so near the bottom of a
+    // viewport it would run off the page and near the right edge it would be
+    // clipped. Both are measured here, once, when it opens.
+    const place = () => {
+      const rect = trigger.getBoundingClientRect();
+      const menuWidth = card.offsetWidth;
+      const menuHeight = card.offsetHeight;
+      const margin = 8;
+      const viewportHeight = window.innerHeight;
+      const viewportWidth = window.innerWidth;
+
+      // Flip upward when there is more room above than below and the menu does
+      // not fit below. `data-flip` moves the card's anchored edge as well.
+      const spaceBelow = viewportHeight - rect.bottom - margin;
+      const spaceAbove = rect.top - margin;
+      const flip = menuHeight > spaceBelow && spaceAbove > spaceBelow;
+      // `dataset.x = undefined` writes the string "undefined", which would
+      // leave the attribute present. Toggle it explicitly instead.
+      card.toggleAttribute("data-flip", flip);
+
+      // Nudge horizontally so a menu wider than the remaining space still fits.
+      const right = rect.right;
+      const left = rect.left;
+      const overflowingRight = right - menuWidth < margin;
+      const overflowingLeft = left + menuWidth > viewportWidth - margin;
+      let shift = 0;
+      if (right > viewportWidth - margin) shift = viewportWidth - margin - right;
+      if (left + shift < margin) shift = margin - left;
+      if (overflowingLeft && shift < 0) shift = Math.min(0, viewportWidth - margin - (left + menuWidth));
+      card.style.setProperty("--gl-menu-shift", `${Math.round(shift)}px`);
+
+      // The morph needs the settled size, which flipping does not change.
+      return { width: menuWidth, height: menuHeight };
+    };
+
     // As on iOS, the glass grows out of the trigger while the items scale up
     // from its centre and come into focus. Closing runs it back.
+    // Measure where it fits before reading its size, so a flipped menu grows
+    // out of the trigger's *bottom* edge rather than into thin air.
+    const to = place();
     const from = { width: trigger.offsetWidth, height: trigger.offsetHeight };
-    const to = { width: card.offsetWidth, height: card.offsetHeight };
     const radius = parseFloat(getComputedStyle(surface).borderTopLeftRadius);
     const trailing = card.dataset.align !== "start";
-    const origin = { x: trailing ? to.width - from.width / 2 : from.width / 2, y: from.height / 2 };
+    const flipped = card.hasAttribute("data-flip");
+    const origin = {
+      x: trailing ? to.width - from.width / 2 : from.width / 2,
+      y: flipped ? to.height - from.height / 2 : from.height / 2,
+    };
     content.style.transformOrigin = `${origin.x}px ${origin.y}px`;
     glyph.style.width = `${from.width}px`;
     glyph.style.height = `${from.height}px`;
@@ -129,6 +171,7 @@ export function Menu({ items, "aria-label": label, icon = ellipsis, align = "end
     rows()[0]?.focus({ preventScroll: true });
 
     const offset = { scale: 1, x: 0, y: 0 };
+
     const paint = () => {
       card.style.scale = String(offset.scale);
       card.style.translate = `${offset.x}px ${offset.y}px`;

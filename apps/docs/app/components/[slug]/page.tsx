@@ -6,6 +6,7 @@ import { ComponentPreview } from "../../../components/component-preview";
 import { ComponentDemo } from "../../../components/demos";
 import { ComponentThumb } from "../../../components/component-thumb";
 import { ArrowRightIcon, ChevronDownIcon } from "../../../components/icons";
+import { pageMetadata, canonical } from "../../../lib/seo";
 
 const CATEGORY_ORDER = [
   "Buttons & Actions",
@@ -31,8 +32,15 @@ export async function generateMetadata({
   const component = COMPONENTS_DATA.find((item) => item.slug === slug);
   if (!component) return { title: "Component not found" };
   return {
-    title: component.name,
-    description: component.description,
+    ...pageMetadata({
+      title: `${component.name} — React Liquid Glass component`,
+      description: component.description,
+      path: `/components/${component.slug}`,
+    }),
+    // `/components/<slug>` is the site's short link. The platform manual is the
+    // canonical home for the same documentation, so point there rather than
+    // letting two URLs compete for one page.
+    alternates: { canonical: canonical(`/platform/web/components/${component.slug}`) },
   };
 }
 

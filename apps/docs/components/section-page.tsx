@@ -7,6 +7,7 @@ import { COMPONENTS_DATA } from "../data/components-data";
 import { BLOCKS } from "../data/blocks-data";
 import { NATIVE_COMPONENTS, webComponentCount } from "../data/platform-components";
 import { PLATFORMS, PLATFORM_ORDER, isPlatform, platformHref, type Platform } from "../data/platforms";
+import { pageMetadata } from "../lib/seo";
 import { sectionCopy } from "../data/section-copy";
 
 /**
@@ -221,10 +222,13 @@ export function sectionMeta(slug: string) {
     if (!isPlatform(platform)) return { title: "Not found" };
     const copy = sectionCopy(platform, slug);
     if (!copy) return { title: "Not found" };
-    return {
+    // One helper covers every section page on both platforms, so canonical
+    // URLs stay in step with the routes automatically.
+    return pageMetadata({
       title: `${copy.title} · ${PLATFORMS[platform].label}`,
       description: copy.description,
-    };
+      path: `/platform/${platform}/${slug}`,
+    });
   };
 
   const params = (): { platform: Platform }[] =>
