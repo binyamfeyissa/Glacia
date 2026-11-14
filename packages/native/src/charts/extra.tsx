@@ -1,7 +1,8 @@
 import { useState } from "react";
 
 import { colors } from "../internal/tokens";
-import { primitives } from "./primitives";
+import { useIsDark } from "../internal/motion";
+import { primitives } from "../internal/primitives";
 import { NativeLineChart, type NativeLineSeries } from "./LineChart";
 import { formatValue, seriesColor } from "./scales";
 
@@ -40,12 +41,13 @@ export function NativePolarAreaChart({
   segments,
   size = 240,
   max,
-  isDark = false,
+  isDark: isDarkProp,
   palette,
   style,
   onSegmentPress,
 }: NativePolarAreaChartProps) {
   const [active, setActive] = useState<number | null>(null);
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, Pressable, Svg, G, Path, Circle } = primitives();
 
@@ -156,12 +158,13 @@ export function NativePyramidChart({
   levels,
   levelHeight = 34,
   width = 320,
-  isDark = false,
+  isDark: isDarkProp,
   palette,
   style,
   onLevelPress,
 }: NativePyramidChartProps) {
   const [active, setActive] = useState<number | null>(null);
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, Pressable } = primitives();
 

@@ -1,7 +1,9 @@
 import { useEffect, useState, type ReactNode } from "react";
+import type { StyleProp, ViewStyle } from "react-native";
 
 import { colors, radii } from "./internal/tokens";
-import { primitives } from "./charts/primitives";
+import { primitives } from "./internal/primitives";
+import { useIsDark } from "./internal/motion";
 
 export interface NativePlanStep {
   id: string;
@@ -23,7 +25,8 @@ export interface NativePlanProps {
  * Each step carries its own status, so a half-finished plan is legible instead
  * of appearing blank until the whole thing completes.
  */
-export function NativePlan({ title = "Plan", steps, isDark = false, style }: NativePlanProps) {
+export function NativePlan({ title = "Plan", steps, isDark: isDarkProp, style }: NativePlanProps) {
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text } = primitives();
   const done = steps.filter((step) => step.status === "done").length;
@@ -124,10 +127,11 @@ export interface NativeSourcesProps {
 export function NativeSources({
   sources,
   title = "Sources",
-  isDark = false,
+  isDark: isDarkProp,
   style,
   onSourcePress,
 }: NativeSourcesProps) {
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, Pressable } = primitives();
 
@@ -197,9 +201,10 @@ export function NativeResponse({
   text,
   revealed,
   streaming,
-  isDark = false,
+  isDark: isDarkProp,
   style,
 }: NativeResponseProps) {
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text } = primitives();
 
@@ -237,7 +242,8 @@ export interface NativeTaskProps {
 }
 
 /** Progress of a long-running background task. */
-export function NativeTask({ task, isDark = false, style }: NativeTaskProps) {
+export function NativeTask({ task, isDark: isDarkProp, style }: NativeTaskProps) {
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text } = primitives();
 
@@ -251,10 +257,13 @@ export function NativeTask({ task, isDark = false, style }: NativeTaskProps) {
     <View
       accessibilityRole="progressbar"
       accessibilityLabel={task.label ?? "Task progress"}
+      // Without the value, a screen reader only reads the label and never says
+      // how far along the task is.
+      accessibilityValue={percent == null ? undefined : { min: 0, max: 100, now: percent }}
       accessibilityState={{
         disabled: false,
       }}
-      style={style}
+      style={style as StyleProp<ViewStyle>}
     >
       <View
         style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 6 }}
@@ -318,10 +327,11 @@ export function NativeSoundwave({
   active = true,
   height = 40,
   color,
-  isDark = false,
+  isDark: isDarkProp,
   style,
   label = "Audio level",
 }: NativeSoundwaveProps) {
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View } = primitives();
 
@@ -374,9 +384,10 @@ export function NativeThinkingOrb({
   label = "Thinking",
   size = 22,
   paused = false,
-  isDark = false,
+  isDark: isDarkProp,
   style,
 }: NativeThinkingOrbProps) {
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text } = primitives();
   const [tick, setTick] = useState(0);
@@ -435,10 +446,11 @@ export function NativePanelside({
   items,
   value,
   onValueChange,
-  isDark = false,
+  isDark: isDarkProp,
   style,
   title,
 }: NativePanelsideProps) {
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, Pressable } = primitives();
 
@@ -490,7 +502,10 @@ export function NativePanelside({
 }
 
 export interface NativeAIInputProps {
+  /** Controlled text. Omit it and the composer keeps its own. */
   value?: string;
+  /** Starting text for uncontrolled use. */
+  defaultValue?: string;
   onChangeText?: (text: string) => void;
   onSubmit?: () => void;
   placeholder?: string;
@@ -510,24 +525,38 @@ export interface NativeAIInputProps {
  * that prevents empty submissions rather than a validation message afterwards.
  */
 export function NativeAIInput({
-  value = "",
+  value: valueProp,
+  defaultValue,
   onChangeText,
   onSubmit,
   placeholder = "Ask anything",
   disabled = false,
   busy = false,
   sendLabel = "Send",
-  isDark = false,
+  isDark: isDarkProp,
   style,
   footer,
 }: NativeAIInputProps) {
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, TextInput, Pressable } = primitives();
 
+  // Uncontrolled support: the composer owns its text when no `value` is given,
+  // which is what makes typed text appear in plain uncontrolled use.
+  const [internalText, setInternalText] = useState(defaultValue ?? "");
+  const value = valueProp !== undefined ? valueProp : internalText;
+  const handleChangeText = (next: string) => {
+    if (valueProp === undefined) setInternalText(next);
+    onChangeText?.(next);
+  };
+
   const canSend = !disabled && !busy && value.trim().length > 0;
+  // The themed placeholder is drawn as a Text, matching Input: the OS default
+  // placeholder colour ignores the theme.
+  const showPlaceholder = !value && Boolean(placeholder);
 
   return (
-    <View style={style}>
+    <View style={style as StyleProp<ViewStyle>}>
       <View
         style={{
           flexDirection: "row",
@@ -541,24 +570,40 @@ export function NativeAIInput({
           opacity: disabled ? 0.5 : 1,
         }}
       >
-        <TextInput
-          value={value}
-          onChangeText={onChangeText}
-          placeholder={placeholder}
-          editable={!disabled}
-          multiline
-          numberOfLines={3}
-          accessibilityLabel={placeholder}
-          style={{
-            flex: 1,
-            minHeight: 34,
-            maxHeight: 120,
-            paddingHorizontal: 6,
-            paddingVertical: 7,
-            fontSize: 14,
-            color: theme.foreground,
-          }}
-        />
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          {showPlaceholder && (
+            <Text
+              pointerEvents="none"
+              numberOfLines={1}
+              style={{
+                position: "absolute",
+                left: 6,
+                fontSize: 14,
+                color: theme.muted,
+              }}
+            >
+              {placeholder}
+            </Text>
+          )}
+
+          <TextInput
+            value={value}
+            onChangeText={handleChangeText}
+            editable={!disabled}
+            multiline
+            numberOfLines={3}
+            accessibilityLabel={placeholder}
+            accessibilityState={{ disabled }}
+            style={{
+              minHeight: 34,
+              maxHeight: 120,
+              paddingHorizontal: 6,
+              paddingVertical: 7,
+              fontSize: 14,
+              color: theme.foreground,
+            }}
+          />
+        </View>
 
         <Pressable
           accessibilityRole="button"
@@ -611,9 +656,10 @@ export function NativeImageGeneration({
   image,
   prompt,
   status = "queued",
-  isDark = false,
+  isDark: isDarkProp,
   style,
 }: NativeImageGenerationProps) {
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, Image } = primitives();
 

@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
 
 import { colors } from "../internal/tokens";
-import { primitives } from "./primitives";
+import { useIsDark } from "../internal/motion";
+import { primitives } from "../internal/primitives";
 import { bandScale, formatValue, linearScale, niceDomain, seriesColor, ticks } from "./scales";
 
 export interface NativeBarSeries {
@@ -33,12 +34,13 @@ export function NativeBarChart({
   height = 200,
   stacked = false,
   radius = 4,
-  isDark = false,
+  isDark: isDarkProp,
   palette,
   style,
   onBarPress,
 }: NativeBarChartProps) {
   const [active, setActive] = useState<number | null>(null);
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, Pressable, Svg, G, Line, Rect, SvgText } = primitives();
 

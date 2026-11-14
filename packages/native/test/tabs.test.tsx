@@ -21,7 +21,7 @@ describe("Native Tabs", () => {
 
   it("marks the first tab active by default", () => {
     const { container } = render(<Tabs items={ITEMS} />);
-    const tabs = Array.from(container.querySelectorAll("button"));
+    const tabs = Array.from(container.querySelectorAll('[role="tab"]'));
     expect(tabs.map((t) => t.getAttribute("aria-selected"))).toEqual(["true", "false", "false"]);
   });
 
@@ -34,16 +34,19 @@ describe("Native Tabs", () => {
 
   it("follows a controlled value", () => {
     const { container } = render(<Tabs items={ITEMS} activeId="docs" />);
-    const tabs = Array.from(container.querySelectorAll("button"));
+    const tabs = Array.from(container.querySelectorAll('[role="tab"]'));
     expect(tabs.map((t) => t.getAttribute("aria-selected"))).toEqual(["false", "false", "true"]);
   });
 
-  it("uses no browser-only APIs", () => {
-    // The component must run where there is no window/CSS: guard by rendering
-    // with the globals removed.
-    const hasDocument = typeof document !== "undefined";
-    expect(hasDocument).toBe(true);
-    render(<Tabs items={ITEMS} />);
-    expect(screen.getByText("Docs")).toBeTruthy();
+  it("carries tab semantics for screen readers", () => {
+    const { container } = render(<Tabs items={ITEMS} />);
+    const tabs = Array.from(container.querySelectorAll('[role="tab"]'));
+    expect(tabs).toHaveLength(3);
+    // Every tab is named, so a screen reader can announce which is selected.
+    expect(tabs.map((t) => t.getAttribute("aria-label"))).toEqual([
+      "Components",
+      "Blocks",
+      "Docs",
+    ]);
   });
 });

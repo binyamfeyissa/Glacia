@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "Glacia Native Proof",
+    "slug": "glacia-native-proof",
+    "version": "0.4.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": { "supportsTablet": true, "bundleIdentifier": "dev.binyamfeyissa.glaciaproof" },
+    "android": { "package": "dev.binyamfeyissa.glaciaproof" },
+    "web": { "bundler": "metro" }
+  }
+}

@@ -64,7 +64,7 @@ describe("Glacia Native Components", () => {
     expect(checked).toBe(true);
   });
 
-  it("renders Slider with value", () => {
+  it("renders Slider as an adjustable control reporting its value", () => {
     const { container } = render(
       <Slider
         accessibilityLabel="Volume"
@@ -73,8 +73,13 @@ describe("Glacia Native Components", () => {
         defaultValue={75}
       />,
     );
-    const range = container.querySelector('input[type="range"]') as HTMLInputElement;
-    expect(range.value).toBe("75");
+    // There is no HTML range input in React Native; the value lives on the
+    // adjustable element instead.
+    expect(container.querySelector('input[type="range"]')).toBeNull();
+    const slider = container.querySelector('[role="slider"]')!;
+    expect(slider.getAttribute("aria-valuenow")).toBe("75");
+    expect(slider.getAttribute("aria-valuemin")).toBe("0");
+    expect(slider.getAttribute("aria-valuemax")).toBe("100");
   });
 
   it("renders SegmentedControl with options and handles selection", () => {

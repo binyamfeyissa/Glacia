@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react";
+import type { StyleProp, ViewStyle } from "react-native";
 
 import { colors, radii } from "./internal/tokens";
-import { primitives } from "./charts/primitives";
+import { primitives } from "./internal/primitives";
+import { useIsDark } from "./internal/motion";
+import { Glass } from "./Glass";
 import { Button } from "./Button";
 
 export interface DialogProps {
-  /** Controlled visibility. Omit to use `trigger` and uncontrolled state. */
+  /** Controlled visibility. Omit it and the dialog keeps its own state. */
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   title?: string;
@@ -15,16 +18,24 @@ export interface DialogProps {
   /** Tapping the backdrop dismisses. Off for destructive confirmations. */
   dismissOnBackdropPress?: boolean;
   isDark?: boolean;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
+  /** Passed through to the dialog panel so it is testable. */
+  testID?: string;
 }
 
 /**
- * A centred modal surface above a dimmed backdrop.
+ * A centred modal panel above a dimmed backdrop.
+ *
+ * The panel is a glass surface, so it is Apple's real Liquid Glass on iOS 26+
+ * and Glacia's translucent tint elsewhere; the text sits on it with the
+ * theme's foreground colour, so contrast holds either way.
  *
  * React Native has no built-in focus trap, so this component covers what the
  * platform can actually do: `Modal` blocks touches behind it, Android's back
  * button routes to `onOpenChange(false)`, and the heading is marked as such so
  * screen readers announce the dialog as it appears.
+ *
+ * To open a dialog from a button, use `DialogTrigger`.
  */
 export function Dialog({
   open: controlledOpen,
@@ -34,9 +45,11 @@ export function Dialog({
   children,
   footer,
   dismissOnBackdropPress = true,
-  isDark = false,
+  isDark: isDarkProp,
   style,
+  testID,
 }: DialogProps) {
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, Pressable, Modal, getBackHandler } = primitives();
 
@@ -86,34 +99,38 @@ export function Dialog({
         <Pressable
           accessibilityRole="none"
           onPress={() => {}}
-          style={{
-            width: "100%",
-            maxWidth: 380,
-            borderRadius: radii.lg,
-            borderWidth: 1,
-            borderColor: theme.edge,
-            backgroundColor: isDark ? "#1c1c1e" : "#ffffff",
-            padding: 20,
-            gap: 8,
-            ...style,
-          }}
+          style={{ width: "100%", maxWidth: 380 }}
         >
-          {title && (
-            <Text
-              accessibilityRole="heading"
-              style={{ fontSize: 17, fontWeight: "600", color: theme.foreground }}
-            >
-              {title}
-            </Text>
-          )}
+          <Glass
+            effect="regular"
+            isDark={isDark}
+            testID={testID}
+            style={{
+              borderRadius: radii.lg,
+              borderWidth: 1,
+              borderColor: theme.edge,
+              padding: 20,
+              gap: 8,
+              ...(style as ViewStyle),
+            }}
+          >
+            {title && (
+              <Text
+                accessibilityRole="heading"
+                style={{ fontSize: 17, fontWeight: "600", color: theme.foreground }}
+              >
+                {title}
+              </Text>
+            )}
 
-          {description && (
-            <Text style={{ fontSize: 13, color: theme.muted, lineHeight: 18 }}>{description}</Text>
-          )}
+            {description && (
+              <Text style={{ fontSize: 13, color: theme.muted, lineHeight: 18 }}>{description}</Text>
+            )}
 
-          {children}
+            {children}
 
-          {footer && <View style={{ marginTop: 12, gap: 8 }}>{footer}</View>}
+            {footer && <View style={{ marginTop: 12, gap: 8 }}>{footer}</View>}
+          </Glass>
         </Pressable>
       </Pressable>
     </Modal>
@@ -150,6 +167,8 @@ export interface AlertDialogProps {
   onConfirm?: () => void;
   onCancel?: () => void;
   isDark?: boolean;
+  /** Passed through to the dialog panel so it is testable. */
+  testID?: string;
 }
 
 /**
@@ -169,8 +188,10 @@ export function AlertDialog({
   destructive = false,
   onConfirm,
   onCancel,
-  isDark = false,
+  isDark: isDarkProp,
+  testID,
 }: AlertDialogProps) {
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View } = primitives();
   const [uncontrolled, setUncontrolled] = useState(false);
@@ -181,24 +202,31 @@ export function AlertDialog({
     onOpenChange?.(next);
   };
 
+  const cancel = () => {
+    onCancel?.();
+    close(false);
+  };
+
   return (
     <Dialog
       open={open}
-      onOpenChange={close}
+      testID={testID}
+      // Android's back button routes here as a dismissal, and a dismissal of a
+      // confirmation question is a cancellation, so onCancel fires too.
+      onOpenChange={(next) => {
+        if (!next) {
+          cancel();
+          return;
+        }
+        close(true);
+      }}
       title={title}
       description={description}
       dismissOnBackdropPress={false}
       isDark={isDark}
       footer={
         <View style={{ flexDirection: "row", gap: 8, justifyContent: "flex-end" }}>
-          <Button
-            accessibilityLabel={cancelLabel}
-            variant="ghost"
-            onPress={() => {
-              onCancel?.();
-              close(false);
-            }}
-          >
+          <Button accessibilityLabel={cancelLabel} variant="ghost" onPress={cancel}>
             {cancelLabel}
           </Button>
           <Button
@@ -233,6 +261,8 @@ export interface ActionSheetProps {
   options: ActionSheetOption[];
   cancelLabel?: string;
   isDark?: boolean;
+  /** Passed through to the sheet so it is testable. */
+  testID?: string;
 }
 
 /**
@@ -248,10 +278,14 @@ export function ActionSheet({
   message,
   options,
   cancelLabel = "Cancel",
-  isDark = false,
+  isDark: isDarkProp,
+  testID,
 }: ActionSheetProps) {
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
-  const { View, Text, Pressable, Modal, getBackHandler } = primitives();
+  // Android's back button is handled by Modal's onRequestClose, so no
+  // BackHandler subscription is needed here.
+  const { View, Text, Pressable, Modal } = primitives();
   const [uncontrolled, setUncontrolled] = useState(false);
   const open = controlledOpen ?? uncontrolled;
 
@@ -261,7 +295,13 @@ export function ActionSheet({
   };
 
   return (
-    <Modal visible={open} transparent animationType="slide" onRequestClose={close}>
+    <Modal
+      visible={open}
+      transparent
+      animationType="slide"
+      onRequestClose={close}
+      testID={testID}
+    >
       <Pressable
         accessibilityRole="button"
         accessibilityLabel="Dismiss actions"
@@ -273,12 +313,10 @@ export function ActionSheet({
           onPress={() => {}}
           style={{ padding: 10, gap: 8 }}
         >
-          <View
-            style={{
-              borderRadius: radii.lg,
-              overflow: "hidden",
-              backgroundColor: isDark ? "#1c1c1e" : "#ffffff",
-            }}
+          <Glass
+            effect="regular"
+            isDark={isDark}
+            style={{ borderRadius: radii.lg, overflow: "hidden" }}
           >
             {(title || message) && (
               <View style={{ paddingVertical: 12, paddingHorizontal: 16, alignItems: "center" }}>
@@ -321,23 +359,20 @@ export function ActionSheet({
                 </Text>
               </Pressable>
             ))}
-          </View>
+          </Glass>
 
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={cancelLabel}
-            onPress={close}
-            style={{
-              paddingVertical: 14,
-              alignItems: "center",
-              borderRadius: radii.lg,
-              backgroundColor: isDark ? "#1c1c1e" : "#ffffff",
-            }}
-          >
-            <Text style={{ fontSize: 16, fontWeight: "600", color: theme.foreground }}>
-              {cancelLabel}
-            </Text>
-          </Pressable>
+          <Glass effect="regular" isDark={isDark} style={{ borderRadius: radii.lg }}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={cancelLabel}
+              onPress={close}
+              style={{ paddingVertical: 14, alignItems: "center" }}
+            >
+              <Text style={{ fontSize: 16, fontWeight: "600", color: theme.foreground }}>
+                {cancelLabel}
+              </Text>
+            </Pressable>
+          </Glass>
         </Pressable>
       </Pressable>
     </Modal>

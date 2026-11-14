@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
 
 import { colors, radii } from "../internal/tokens";
-import { primitives } from "./primitives";
+import { useIsDark } from "../internal/motion";
+import { primitives } from "../internal/primitives";
 import {
   bandScale,
   formatValue,
@@ -53,12 +54,13 @@ export function NativeLineChart({
   area = false,
   smooth = true,
   showDots = false,
-  isDark = false,
+  isDark: isDarkProp,
   palette,
   style,
   onPointPress,
 }: NativeLineChartProps) {
   const [active, setActive] = useState<number | null>(null);
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, Pressable, Svg, G, Line, Path, Circle, SvgText } = primitives();
 

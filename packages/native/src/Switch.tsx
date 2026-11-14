@@ -1,6 +1,10 @@
-import { useState, forwardRef } from "react";
+import { forwardRef, useState } from "react";
+import type { StyleProp, ViewStyle } from "react-native";
+
 import { Glass } from "./Glass";
 import { colors } from "./internal/tokens";
+import { primitives } from "./internal/primitives";
+import { useIsDark, useSpring } from "./internal/motion";
 
 export interface SwitchProps {
   checked?: boolean;
@@ -8,10 +12,25 @@ export interface SwitchProps {
   onCheckedChange?: (checked: boolean) => void;
   disabled?: boolean;
   accessibilityLabel: string;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
   isDark?: boolean;
+  /** Passed through to the switch track so it is testable. */
+  testID?: string;
 }
 
+const TRACK_WIDTH = 51;
+const TRACK_HEIGHT = 31;
+const THUMB = 27;
+const TRAVEL = TRACK_WIDTH - THUMB - 4;
+
+/**
+ * An on/off switch.
+ *
+ * The track is Glacia's glass; the thumb is one of our own Views, animated on
+ * the springs token. The material changes by platform (Apple's glass on
+ * iOS 26+, Glacia's tint elsewhere) but the control is always ours — React
+ * Native's built-in Switch is never used.
+ */
 export const Switch = forwardRef<any, SwitchProps>(function Switch(
   {
     checked: checkedProp,
@@ -20,61 +39,66 @@ export const Switch = forwardRef<any, SwitchProps>(function Switch(
     disabled = false,
     accessibilityLabel,
     style,
-    isDark = false,
+    isDark: isDarkProp,
+    testID,
     ...props
   },
   ref,
 ) {
+  const isDark = useIsDark(isDarkProp);
+  const themeColors = isDark ? colors.dark : colors.light;
+  const { View, Pressable, Animated } = primitives();
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
   const isChecked = checkedProp !== undefined ? checkedProp : internalChecked;
-  const themeColors = isDark ? colors.dark : colors.light;
+
+  // The thumb's travel is a single number animated on the springs token.
+  const { value: offset, animated } = useSpring(isChecked ? TRAVEL : 0, "snappy");
 
   const toggle = () => {
     if (disabled) return;
     const next = !isChecked;
-    if (checkedProp === undefined) {
-      setInternalChecked(next);
-    }
+    if (checkedProp === undefined) setInternalChecked(next);
     onCheckedChange?.(next);
   };
 
-  const trackStyle = {
-    width: 51,
-    height: 31,
-    borderRadius: 15.5,
+  const trackStyle: ViewStyle = {
+    width: TRACK_WIDTH,
+    height: TRACK_HEIGHT,
+    borderRadius: TRACK_HEIGHT / 2,
     backgroundColor: isChecked ? themeColors.fill : "rgba(120, 120, 128, 0.16)",
     padding: 2,
-    justifyContent: "center" as const,
+    justifyContent: "center",
     opacity: disabled ? 0.38 : 1,
-    transition: "background-color 200ms ease",
-    ...style,
+    ...(style as ViewStyle),
   };
 
-  const thumbStyle = {
-    width: 27,
-    height: 27,
-    borderRadius: 13.5,
+  const thumbStyle: ViewStyle = {
+    width: THUMB,
+    height: THUMB,
+    borderRadius: THUMB / 2,
     backgroundColor: "#FFFFFF",
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
-    transform: isChecked ? "translateX(20px)" : "translateX(0px)",
-    transition: "transform 200ms cubic-bezier(0.25, 0.1, 0.25, 1)",
+    // A hairline edge instead of a drop shadow: RN shadows need per-platform
+    // props, and the edge reads correctly on a translucent track.
+    borderWidth: 0.5,
+    borderColor: "rgba(0, 0, 0, 0.12)",
+    transform: [{ translateX: animated ? offset : isChecked ? TRAVEL : 0 }],
   };
 
   return (
-    <div
+    <Pressable
       ref={ref}
-      role="switch"
-      aria-checked={isChecked}
-      aria-label={accessibilityLabel}
-      aria-disabled={disabled}
-      tabIndex={disabled ? -1 : 0}
-      onClick={toggle}
-      style={{ display: "inline-block", cursor: disabled ? "default" : "pointer" }}
+      testID={testID}
+      accessibilityRole="switch"
+      accessibilityLabel={accessibilityLabel}
+      accessibilityState={{ checked: isChecked, disabled }}
+      disabled={disabled}
+      onPress={toggle}
+      style={{ alignSelf: "flex-start" }}
       {...props}
     >
-      <Glass effect="regular" style={trackStyle}>
-        <div style={thumbStyle} />
+      <Glass effect="regular" isDark={isDark} style={trackStyle}>
+        {animated ? <Animated.View style={thumbStyle} /> : <View style={thumbStyle} />}
       </Glass>
-    </div>
+    </Pressable>
   );
 });

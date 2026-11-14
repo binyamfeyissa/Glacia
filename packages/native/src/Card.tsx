@@ -1,120 +1,141 @@
 import { forwardRef, type ReactNode } from "react";
+import type { StyleProp, TextStyle, ViewStyle } from "react-native";
+
 import { Glass } from "./Glass";
 import { colors, radii } from "./internal/tokens";
+import { primitives } from "./internal/primitives";
+import { useIsDark } from "./internal/motion";
 
 export interface CardProps {
   effect?: "clear" | "regular" | "none";
-  style?: any;
+  style?: StyleProp<ViewStyle>;
   children?: ReactNode;
   isDark?: boolean;
+  /** Passed through to the card's glass so it is testable. */
+  testID?: string;
 }
 
+/**
+ * A content panel on Glacia's glass: Apple's material on iOS 26+, Glacia's
+ * tint elsewhere. The padding, radius and stacking are ours on every platform.
+ */
 export const Card = forwardRef<any, CardProps>(function Card(
-  { effect = "regular", style, children, isDark = false, ...props },
+  { effect = "regular", style, children, isDark: isDarkProp, testID, ...props },
   ref,
 ) {
-  const cardStyle = {
+  const isDark = useIsDark(isDarkProp);
+
+  const cardStyle: ViewStyle = {
     padding: 20,
     borderRadius: radii.lg,
-    display: "flex" as const,
-    flexDirection: "column" as const,
+    flexDirection: "column",
     gap: 12,
-    ...style,
+    ...(style as ViewStyle),
   };
 
   return (
-    <Glass ref={ref} effect={effect} style={cardStyle} {...props}>
+    <Glass ref={ref} effect={effect} isDark={isDark} style={cardStyle} testID={testID} {...props}>
       {children}
     </Glass>
   );
 });
 
-export function CardHeader({ style, children, ...props }: { style?: any; children?: ReactNode }) {
+/** The block holding a card's title and description. */
+export function CardHeader({ style, children, ...props }: { style?: StyleProp<ViewStyle>; children?: ReactNode }) {
+  const { View } = primitives();
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 4, ...style }} {...props}>
+    <View style={{ flexDirection: "column", gap: 4, ...(style as ViewStyle) }} {...props}>
       {children}
-    </div>
+    </View>
   );
 }
 
+/** A card's heading, announced as a heading by screen readers. */
 export function CardTitle({
   style,
   children,
-  isDark = false,
+  isDark: isDarkProp,
   ...props
 }: {
-  style?: any;
+  style?: StyleProp<TextStyle>;
   children?: ReactNode;
   isDark?: boolean;
 }) {
+  const isDark = useIsDark(isDarkProp);
   const themeColors = isDark ? colors.dark : colors.light;
+  const { Text } = primitives();
   return (
-    <h3
+    <Text
+      accessibilityRole="heading"
       style={{
-        margin: 0,
         fontSize: 18,
-        fontWeight: 600,
+        fontWeight: "600",
         color: themeColors.foreground,
-        ...style,
+        ...(style as TextStyle),
       }}
       {...props}
     >
       {children}
-    </h3>
+    </Text>
   );
 }
 
+/** Supporting text under a card's title. */
 export function CardDescription({
   style,
   children,
-  isDark = false,
+  isDark: isDarkProp,
   ...props
 }: {
-  style?: any;
+  style?: StyleProp<TextStyle>;
   children?: ReactNode;
   isDark?: boolean;
 }) {
+  const isDark = useIsDark(isDarkProp);
   const themeColors = isDark ? colors.dark : colors.light;
+  const { Text } = primitives();
   return (
-    <p
+    <Text
       style={{
-        margin: 0,
         fontSize: 13,
         color: themeColors.muted,
-        ...style,
+        ...(style as TextStyle),
       }}
       {...props}
     >
       {children}
-    </p>
+    </Text>
   );
 }
 
-export function CardContent({ style, children, ...props }: { style?: any; children?: ReactNode }) {
+/** The card's body. */
+export function CardContent({ style, children, ...props }: { style?: StyleProp<ViewStyle>; children?: ReactNode }) {
+  const { View } = primitives();
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 8, ...style }} {...props}>
+    <View style={{ flexDirection: "column", gap: 8, ...(style as ViewStyle) }} {...props}>
       {children}
-    </div>
+    </View>
   );
 }
 
 export const CardBody = CardContent;
 
-export function CardFooter({ style, children, ...props }: { style?: any; children?: ReactNode }) {
+/** The card's action row. */
+export function CardFooter({ style, children, ...props }: { style?: StyleProp<ViewStyle>; children?: ReactNode }) {
+  const { View } = primitives();
   return (
-    <div
+    <View
       style={{
-        display: "flex",
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "flex-end",
         gap: 8,
         paddingTop: 8,
-        ...style,
+        ...(style as ViewStyle),
       }}
       {...props}
     >
       {children}
-    </div>
+    </View>
   );
 }

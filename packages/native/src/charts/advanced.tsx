@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
 
 import { colors } from "../internal/tokens";
-import { primitives } from "./primitives";
+import { useIsDark } from "../internal/motion";
+import { primitives } from "../internal/primitives";
 import { formatValue, linearScale, niceDomain, seriesColor, ticks } from "./scales";
 
 export interface NativeCandle {
@@ -34,11 +35,12 @@ export function NativeCandlestickChart({
   candles,
   width = 320,
   height = 200,
-  isDark = false,
+  isDark: isDarkProp,
   style,
   onCandlePress,
 }: NativeCandlestickChartProps) {
   const [active, setActive] = useState<number | null>(null);
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, Svg, G, Line, Rect, SvgText } = primitives();
 
@@ -233,12 +235,13 @@ export function NativeTreemapChart({
   items,
   width = 320,
   height = 200,
-  isDark = false,
+  isDark: isDarkProp,
   palette,
   style,
   onItemPress,
 }: NativeTreemapChartProps) {
   const [active, setActive] = useState<number | null>(null);
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, Pressable } = primitives();
 
@@ -347,10 +350,11 @@ export function NativeSankeyChart({
   links,
   width = 320,
   height = 200,
-  isDark = false,
+  isDark: isDarkProp,
   palette,
   style,
 }: NativeSankeyChartProps) {
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text } = primitives();
 
@@ -460,11 +464,12 @@ export function NativeBumpChart({
   series,
   width = 320,
   height = 200,
-  isDark = false,
+  isDark: isDarkProp,
   palette,
   style,
   onPointPress,
 }: NativeBumpChartProps) {
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, Pressable, Svg, G, Line, Circle, SvgText } = primitives();
 
@@ -577,11 +582,12 @@ export function NativeHexChart({
   radius = 9,
   width = 320,
   height = 200,
-  isDark = false,
+  isDark: isDarkProp,
   style,
   onBinPress,
 }: NativeHexChartProps) {
   const [active, setActive] = useState<number | null>(null);
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, Pressable, Svg, G, Path } = primitives();
 

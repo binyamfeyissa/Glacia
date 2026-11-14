@@ -1,38 +1,44 @@
 import { forwardRef, useState, type ReactNode } from "react";
+import type { StyleProp, TextStyle, ViewStyle } from "react-native";
 
 import { colors, radii } from "./internal/tokens";
-import { primitives } from "./charts/primitives";
+import { primitives } from "./internal/primitives";
+import { useIsDark } from "./internal/motion";
 
 export interface LabelProps {
   children?: ReactNode;
   /** Marks the field required with a visible asterisk. */
   required?: boolean;
   disabled?: boolean;
-  /** Ties the label to the control for screen readers. */
-  htmlFor?: string;
+  /**
+   * The id of the control this label describes. Same meaning and prop name as
+   * React Native's `nativeID`.
+   */
+  nativeID?: string;
   isDark?: boolean;
-  style?: any;
+  style?: StyleProp<TextStyle>;
 }
 
 /** The text above a control. */
 export const Label = forwardRef<any, LabelProps>(function Label(
-  { children, required = false, disabled = false, htmlFor, isDark = false, style },
+  { children, required = false, disabled = false, nativeID, isDark: isDarkProp, style },
   ref,
 ) {
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { Text } = primitives();
 
   return (
     <Text
       ref={ref}
-      nativeID={htmlFor}
+      nativeID={nativeID}
       accessibilityRole="text"
       style={{
         fontSize: 13,
         fontWeight: "600",
         color: disabled ? theme.muted : theme.foreground,
         opacity: disabled ? 0.6 : 1,
-        ...style,
+        ...(style as TextStyle),
       }}
     >
       {children}
@@ -51,7 +57,7 @@ export interface FieldProps {
   disabled?: boolean;
   isDark?: boolean;
   children?: ReactNode;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
 }
 
 /**
@@ -64,16 +70,17 @@ export function Field({
   error,
   required = false,
   disabled = false,
-  isDark = false,
+  isDark: isDarkProp,
   children,
   style,
 }: FieldProps) {
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text } = primitives();
   const message = error ?? description;
 
   return (
-    <View style={{ gap: 6, ...style }}>
+    <View style={{ gap: 6, ...(style as ViewStyle) }}>
       {label && (
         <Label required={required} disabled={disabled} isDark={isDark}>
           {label}
@@ -99,44 +106,63 @@ export function Field({
 
 export interface CheckboxProps {
   checked?: boolean;
+  /** Starting state for uncontrolled use. */
+  defaultChecked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
   label?: string;
   description?: string;
   indeterminate?: boolean;
   disabled?: boolean;
   isDark?: boolean;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
+  /** Passed through to the pressable row so it is testable. */
+  testID?: string;
 }
 
 /** A tick box for a single boolean, with an optional label and description. */
 export function Checkbox({
-  checked = false,
+  checked: checkedProp,
+  defaultChecked = false,
   onCheckedChange,
   label,
   description,
   indeterminate = false,
   disabled = false,
-  isDark = false,
+  isDark: isDarkProp,
   style,
+  testID,
 }: CheckboxProps) {
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, Pressable } = primitives();
+
+  // Controlled when `checked` is given, otherwise the box owns its state.
+  const [internalChecked, setInternalChecked] = useState(defaultChecked);
+  const checked = checkedProp !== undefined ? checkedProp : internalChecked;
+
+  const toggle = () => {
+    if (disabled) return;
+    const next = !checked;
+    if (checkedProp === undefined) setInternalChecked(next);
+    onCheckedChange?.(next);
+  };
 
   const filled = checked || indeterminate;
 
   return (
     <Pressable
+      testID={testID}
       accessibilityRole="checkbox"
       accessibilityState={{ checked, disabled }}
       accessibilityLabel={label}
       disabled={disabled}
-      onPress={() => !disabled && onCheckedChange?.(!checked)}
+      onPress={toggle}
       style={{
         flexDirection: "row",
         alignItems: "flex-start",
         gap: 10,
         opacity: disabled ? 0.45 : 1,
-        ...style,
+        ...(style as ViewStyle),
       }}
     >
       <View
@@ -185,32 +211,54 @@ export interface RadioOption {
 
 export interface RadioGroupProps {
   value?: string;
+  /** Starting selection for uncontrolled use. */
+  defaultValue?: string;
   onValueChange?: (value: string) => void;
   options: RadioOption[];
   /** Lay the options out in a row instead of a column. */
   horizontal?: boolean;
   disabled?: boolean;
   isDark?: boolean;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
+  /** Passed through to the group so it is testable. */
+  testID?: string;
 }
 
 /** One choice from a small, always-visible set. */
 export function RadioGroup({
-  value,
+  value: valueProp,
+  defaultValue,
   onValueChange,
   options,
   horizontal = false,
   disabled = false,
-  isDark = false,
+  isDark: isDarkProp,
   style,
+  testID,
 }: RadioGroupProps) {
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, Pressable } = primitives();
 
+  // Controlled when `value` is given, otherwise the group owns its selection.
+  const [internalValue, setInternalValue] = useState(defaultValue);
+  const value = valueProp !== undefined ? valueProp : internalValue;
+
+  const select = (next: string, isDisabled: boolean | undefined) => {
+    if (isDisabled) return;
+    if (valueProp === undefined) setInternalValue(next);
+    onValueChange?.(next);
+  };
+
   return (
     <View
+      testID={testID}
       accessibilityRole="radiogroup"
-      style={{ gap: horizontal ? 14 : 10, flexDirection: horizontal ? "row" : "column", ...style }}
+      style={{
+        gap: horizontal ? 14 : 10,
+        flexDirection: horizontal ? "row" : "column",
+        ...(style as ViewStyle),
+      }}
     >
       {options.map((option) => {
         const isSelected = option.value === value;
@@ -223,7 +271,7 @@ export function RadioGroup({
             accessibilityState={{ checked: isSelected, disabled: isDisabled }}
             accessibilityLabel={option.label}
             disabled={isDisabled}
-            onPress={() => !isDisabled && onValueChange?.(option.value)}
+            onPress={() => select(option.value, isDisabled)}
             style={{
               flexDirection: "row",
               alignItems: "flex-start",
@@ -263,12 +311,16 @@ export interface SelectOption {
 
 export interface SelectProps {
   value?: string;
+  /** Starting selection for uncontrolled use. */
+  defaultValue?: string;
   onValueChange?: (value: string) => void;
   options: SelectOption[];
   placeholder?: string;
   disabled?: boolean;
   isDark?: boolean;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
+  /** Passed through to the trigger so it is testable. */
+  testID?: string;
 }
 
 /**
@@ -279,23 +331,36 @@ export interface SelectProps {
  * modal. A long list scrolls naturally with the page.
  */
 export function Select({
-  value,
+  value: valueProp,
+  defaultValue,
   onValueChange,
   options,
   placeholder = "Select an option",
   disabled = false,
-  isDark = false,
+  isDark: isDarkProp,
   style,
+  testID,
 }: SelectProps) {
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, Pressable } = primitives();
   const [open, setOpen] = useState(false);
 
+  // Controlled when `value` is given, otherwise the select owns its choice.
+  const [internalValue, setInternalValue] = useState(defaultValue);
+  const value = valueProp !== undefined ? valueProp : internalValue;
+
+  const choose = (next: string) => {
+    if (valueProp === undefined) setInternalValue(next);
+    onValueChange?.(next);
+  };
+
   const selected = options.find((option) => option.value === value);
 
   return (
-    <View style={style}>
+    <View style={style as StyleProp<ViewStyle>}>
       <Pressable
+        testID={testID}
         accessibilityRole="button"
         accessibilityState={{ expanded: open, disabled }}
         accessibilityLabel={selected?.label ?? placeholder}
@@ -340,7 +405,7 @@ export function Select({
                 accessibilityState={{ selected: isSelected }}
                 accessibilityLabel={option.label}
                 onPress={() => {
-                  onValueChange?.(option.value);
+                  choose(option.value);
                   setOpen(false);
                 }}
                 style={{

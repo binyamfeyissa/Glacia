@@ -1,7 +1,8 @@
 import { useState } from "react";
 
 import { colors } from "../internal/tokens";
-import { primitives } from "./primitives";
+import { useIsDark } from "../internal/motion";
+import { primitives } from "../internal/primitives";
 import { formatValue, seriesColor } from "./scales";
 
 export interface NativeRadarSeries {
@@ -46,12 +47,13 @@ export function NativeRadarChart({
   size = 260,
   rings = 4,
   max,
-  isDark = false,
+  isDark: isDarkProp,
   palette,
   style,
   onAxisPress,
 }: NativeRadarChartProps) {
   const [active, setActive] = useState<number | null>(null);
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, Pressable, Svg, G, Line, Polygon, Circle, SvgText } = primitives();
 

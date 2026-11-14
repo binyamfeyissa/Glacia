@@ -1,7 +1,9 @@
-import { forwardRef, type ReactNode } from "react";
+import { forwardRef, useState, type ReactNode } from "react";
+import type { StyleProp, TextStyle, ViewStyle } from "react-native";
 
 import { colors, radii } from "./internal/tokens";
-import { primitives } from "./charts/primitives";
+import { primitives } from "./internal/primitives";
+import { useIsDark } from "./internal/motion";
 
 export interface InputProps {
   value?: string;
@@ -21,10 +23,14 @@ export interface InputProps {
   accessibilityLabel?: string;
   returnKeyType?: "done" | "next" | "go" | "search" | "send";
   onSubmitEditing?: () => void;
+  /** Starting text for uncontrolled use, like React Native's `defaultValue`. */
+  defaultValue?: string;
   prefix?: ReactNode;
   suffix?: ReactNode;
   isDark?: boolean;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
+  /** Passed through to the text field so it is testable. */
+  testID?: string;
   // Standard TextInput props a caller may still want to pass through.
   maxLength?: number;
   editable?: boolean;
@@ -41,6 +47,11 @@ const fontSizes = { sm: 14, md: 15, lg: 16 };
  * The native TextInput has no placeholder styling prop, so the placeholder is
  * drawn as a sibling Text: that keeps its colour tied to the theme instead of
  * the OS default, which changes between iOS versions.
+ *
+ * The field works controlled (`value` + `onChangeText`) or uncontrolled (no
+ * `value` prop). In uncontrolled use it tracks its own text so the themed
+ * placeholder disappears as soon as the user types; without that state the
+ * overlay would sit on top of the typed text until the parent re-rendered.
  */
 export const Input = forwardRef<any, InputProps>(function Input(
   {
@@ -59,10 +70,12 @@ export const Input = forwardRef<any, InputProps>(function Input(
     accessibilityLabel,
     returnKeyType,
     onSubmitEditing,
+    defaultValue,
     prefix,
     suffix,
-    isDark = false,
+    isDark: isDarkProp,
     style,
+    testID,
     maxLength,
     editable,
     onFocus,
@@ -70,20 +83,27 @@ export const Input = forwardRef<any, InputProps>(function Input(
   },
   ref,
 ) {
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, TextInput } = primitives();
 
-  const isEditable = editable !== undefined ? editable : !disabled;
-  const showPlaceholder = !value && placeholder;
+  // Uncontrolled support: with no `value` prop the field owns its text.
+  const [internalText, setInternalText] = useState(defaultValue ?? "");
+  const text = value !== undefined ? value : internalText;
+  const handleChangeText = (next: string) => {
+    if (value === undefined) setInternalText(next);
+    onChangeText?.(next);
+  };
 
-  const fieldStyle: any = {
+  const isEditable = editable !== undefined ? editable : !disabled;
+  const showPlaceholder = !text && Boolean(placeholder);
+
+  const fieldStyle: TextStyle = {
     flex: 1,
     paddingVertical: height_padding(size),
     paddingHorizontal: 0,
     fontSize: fontSizes[size],
     color: theme.foreground,
-    // RN draws its own underline on Android; the border is ours.
-    outlineStyle: "none",
   };
 
   return (
@@ -99,7 +119,7 @@ export const Input = forwardRef<any, InputProps>(function Input(
         backgroundColor: theme.glass,
         paddingHorizontal: 12,
         opacity: disabled ? 0.5 : 1,
-        ...style,
+        ...(style as ViewStyle),
       }}
     >
       {prefix}
@@ -113,8 +133,8 @@ export const Input = forwardRef<any, InputProps>(function Input(
               top: multiline ? 0 : undefined,
               fontSize: fontSizes[size],
               color: theme.muted,
-              pointerEvents: "none",
             }}
+            pointerEvents="none"
             numberOfLines={1}
           >
             {placeholder}
@@ -123,8 +143,9 @@ export const Input = forwardRef<any, InputProps>(function Input(
 
         <TextInput
           ref={ref}
-          value={value}
-          onChangeText={onChangeText}
+          testID={testID}
+          value={text}
+          onChangeText={handleChangeText}
           editable={isEditable}
           secureTextEntry={secureTextEntry}
           keyboardType={keyboardType}

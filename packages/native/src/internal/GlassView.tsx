@@ -1,59 +1,67 @@
 import { forwardRef, type ReactNode } from "react";
-import { FallbackGlassView } from "./fallback";
+import type { StyleProp, ViewStyle } from "react-native";
 
-declare const require: any;
+import { FallbackGlassView } from "./fallback";
+import { defaultRouter } from "./glass-routing";
+import { useIsDark } from "./motion";
 
 export interface NativeGlassProps {
   effect?: "clear" | "regular" | "none";
   tintColor?: string;
   interactive?: boolean;
-  style?: any;
+  /** Passed to whichever surface renders, so tests can find the glass itself. */
+  testID?: string;
+  style?: StyleProp<ViewStyle>;
   children?: ReactNode;
+  /**
+   * Explicit dark override for the fallback tint. When omitted the phone's
+   * colour scheme decides, so developers never thread this prop themselves.
+   */
+  isDark?: boolean;
 }
-
-let LiquidGlassViewComponent: any = null;
-let supported = false;
-
-try {
-  const liquidGlass = require("@callstack/liquid-glass");
-  if (liquidGlass && liquidGlass.LiquidGlassView) {
-    LiquidGlassViewComponent = liquidGlass.LiquidGlassView;
-    supported = Boolean(liquidGlass.isLiquidGlassSupported);
-  }
-} catch {
-  supported = false;
-}
-
-export const isGlassSupported = supported;
 
 /**
- * Platform Glass View:
+ * The installed `@callstack/liquid-glass` module, resolved once at load.
+ * `isLiquidGlassSupported` is true only on iOS 26+; false on older iOS,
+ * Android and Expo Go.
+ */
+const router = defaultRouter();
+
+export const isGlassSupported = router.supported;
+
+/**
+ * Platform Glass View — the single place a glass surface is chosen:
  * - iOS 26+: Real UIGlassEffect via @callstack/liquid-glass
- * - iOS < 26 / Android / Expo Go / Fallback: Smooth translucent tint View with identical layout
+ * - iOS < 26 / Android / Expo Go: translucent tint View with identical layout
  */
 export const GlassView = forwardRef<any, NativeGlassProps>(function GlassView(
   {
     effect = "regular",
     tintColor,
     interactive = false,
+    testID,
     style,
     children,
+    isDark: isDarkProp,
     ...props
   },
   ref,
 ) {
-  if (isGlassSupported && LiquidGlassViewComponent) {
+  const isDark = useIsDark(isDarkProp);
+  if (router.supported && router.LiquidGlassView) {
+    const LiquidGlassView = router.LiquidGlassView;
     return (
-      <LiquidGlassViewComponent
+      <LiquidGlassView
         ref={ref}
         effect={effect}
         tintColor={tintColor}
         interactive={interactive}
+        testID={testID}
         style={style}
         {...props}
       >
         {children}
-      </LiquidGlassViewComponent>
+      </LiquidGlassView>
     );
   }
 
@@ -62,6 +70,8 @@ export const GlassView = forwardRef<any, NativeGlassProps>(function GlassView(
       ref={ref}
       effect={effect}
       tintColor={tintColor}
+      testID={testID}
+      isDark={isDark}
       style={style}
       {...props}
     >

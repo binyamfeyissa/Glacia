@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
 
 import { colors } from "../internal/tokens";
-import { primitives } from "./primitives";
+import { useIsDark } from "../internal/motion";
+import { primitives } from "../internal/primitives";
 import { formatValue, linearScale, niceDomain, ticks } from "./scales";
 
 export interface NativePlotPoint {
@@ -32,6 +33,19 @@ export interface NativePlotChartProps {
 
 const PADDING = { top: 12, right: 12, bottom: 26, left: 44 };
 
+/** Reads the chart as one sentence for a screen reader. */
+function plotSummary(
+  points: NativePlotPoint[],
+  xDomain: [number, number],
+  yDomain: [number, number],
+): string {
+  return (
+    `Plot chart with ${points.length} points. ` +
+    `x from ${formatValue(xDomain[0], { compact: true })} to ${formatValue(xDomain[1], { compact: true })}, ` +
+    `y from ${formatValue(yDomain[0], { compact: true })} to ${formatValue(yDomain[1], { compact: true })}.`
+  );
+}
+
 /**
  * A numeric plot you supply the marks for.
  *
@@ -46,9 +60,10 @@ export function NativePlotChart({
   height = 200,
   xLabel,
   yLabel,
-  isDark = false,
+  isDark: isDarkProp,
   style,
 }: NativePlotChartProps) {
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, Svg, G, Line, Circle, SvgText } = primitives();
 
@@ -86,7 +101,12 @@ export function NativePlotChart({
   const xTicks = ticks(xDomain, 4);
 
   return (
-    <View style={style}>
+    <View
+      style={style}
+      accessible
+      accessibilityRole="image"
+      accessibilityLabel={plotSummary(points, xDomain, yDomain)}
+    >
       <Svg width={width} height={height}>
         {yTicks.map((tick, i) => (
           <Line

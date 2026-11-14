@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
 
 import { colors } from "../internal/tokens";
-import { primitives } from "./primitives";
+import { useIsDark } from "../internal/motion";
+import { primitives } from "../internal/primitives";
 import { formatValue, linearScale, niceDomain, seriesColor, ticks } from "./scales";
 
 export interface NativeScatterPoint {
@@ -46,12 +47,13 @@ export function NativeScatterChart({
   height = 200,
   radius = 4,
   bubble = false,
-  isDark = false,
+  isDark: isDarkProp,
   palette,
   style,
   onPointPress,
 }: NativeScatterChartProps) {
   const [active, setActive] = useState<{ s: number; p: number } | null>(null);
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, Svg, G, Line, Circle, SvgText } = primitives();
 
@@ -103,7 +105,14 @@ export function NativeScatterChart({
   const xTicks = ticks(xDomain, 4);
 
   return (
-    <View style={style}>
+    <View
+      style={style}
+      // One summary for the whole chart: the per-point touch targets below are
+      // the detailed access, this is what is announced on focus.
+      accessible
+      accessibilityRole="image"
+      accessibilityLabel={scatterSummary(series)}
+    >
       <Svg width={width} height={height}>
         {yTicks.map((tick, i) => (
           <Line
@@ -194,6 +203,18 @@ export function NativeScatterChart({
       )}
     </View>
   );
+}
+
+/** Reads the chart as one sentence for a screen reader. */
+function scatterSummary(series: NativeScatterSeries[]): string {
+  const sentences = series.map((entry) => {
+    const ys = entry.points.map((point) => point.y).filter(Number.isFinite);
+    if (ys.length === 0) return `${entry.name}: no points`;
+    const min = formatValue(Math.min(...ys));
+    const max = formatValue(Math.max(...ys));
+    return `${entry.name}: ${entry.points.length} points, y from ${min} to ${max}`;
+  });
+  return `Scatter chart. ${sentences.join(". ")}`;
 }
 
 /** Scatter marks sized by a third value. */

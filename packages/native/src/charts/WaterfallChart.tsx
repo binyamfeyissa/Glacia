@@ -1,7 +1,8 @@
 import { useState } from "react";
 
 import { colors } from "../internal/tokens";
-import { primitives } from "./primitives";
+import { useIsDark } from "../internal/motion";
+import { primitives } from "../internal/primitives";
 import { formatValue } from "./scales";
 
 export interface NativeWaterfallStep {
@@ -33,11 +34,12 @@ export function NativeWaterfallChart({
   steps,
   width = 320,
   height = 200,
-  isDark = false,
+  isDark: isDarkProp,
   style,
   onStepPress,
 }: NativeWaterfallChartProps) {
   const [active, setActive] = useState<number | null>(null);
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, Pressable, Svg, G, Line, Rect, SvgText } = primitives();
 
@@ -90,7 +92,12 @@ export function NativeWaterfallChart({
   const zeroY = y(0);
 
   return (
-    <View style={style}>
+    <View
+      style={style}
+      accessible
+      accessibilityRole="image"
+      accessibilityLabel={waterfallSummary(steps, geometry)}
+    >
       <Svg width={width} height={height}>
         <Line
           x1={plot.x}
@@ -175,6 +182,17 @@ export function NativeWaterfallChart({
       )}
     </View>
   );
+}
+
+/** Reads the chart as one sentence for a screen reader. */
+function waterfallSummary(
+  steps: NativeWaterfallStep[],
+  geometry: { end: number }[],
+): string {
+  const last = geometry[geometry.length - 1];
+  const changes = steps.filter((step) => !step.isTotal).length;
+  const closing = last ? ` Closing value ${formatValue(last.end)}.` : "";
+  return `Waterfall chart. ${steps.length} steps, ${changes} of them changes.${closing}`;
 }
 
 /** Totals are neutral so they do not read as a gain or loss. */

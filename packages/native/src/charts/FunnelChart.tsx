@@ -1,7 +1,8 @@
 import { useState } from "react";
 
 import { colors } from "../internal/tokens";
-import { primitives } from "./primitives";
+import { useIsDark } from "../internal/motion";
+import { primitives } from "../internal/primitives";
 import { formatValue, seriesColor } from "./scales";
 
 export interface NativeFunnelStage {
@@ -35,12 +36,13 @@ export function NativeFunnelChart({
   width = 320,
   stageHeight = 38,
   baseline,
-  isDark = false,
+  isDark: isDarkProp,
   palette,
   style,
   onStagePress,
 }: NativeFunnelChartProps) {
   const [active, setActive] = useState<number | null>(null);
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, Pressable } = primitives();
 

@@ -1,6 +1,10 @@
-import { useState, forwardRef, type ReactNode } from "react";
+import { forwardRef, useState, type ReactNode } from "react";
+import type { StyleProp, ViewStyle } from "react-native";
+
 import { Glass } from "./Glass";
 import { colors, radii } from "./internal/tokens";
+import { primitives } from "./internal/primitives";
+import { useIsDark, useSpring } from "./internal/motion";
 
 export interface TabItem {
   /** Stable identifier for the tab. */
@@ -17,18 +21,20 @@ export interface TabsProps {
   activeId?: string;
   defaultActiveId?: string;
   onTabChange?: (id: string) => void;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
   isDark?: boolean;
+  /** Passed through to the rail so it is testable. */
+  testID?: string;
 }
 
 /**
  * A row of tabs on a glass rail, in the reference implementation's style: the
  * selected tab is a lifted inner pane rather than a flat highlight.
  *
- * Follows the same conventions as the other native components — no browser
- * APIs and no CSS — so it renders on iOS and Android. On iOS 26 the rail is
- * real glass through `@callstack/liquid-glass`; elsewhere it is a translucent
- * tint of the same shape with no layout shift.
+ * Same conventions as every other component here — React Native primitives
+ * only, no browser APIs. The rail is Apple's real glass on iOS 26+ and
+ * Glacia's translucent fallback of the same shape on older iOS and Android, so
+ * the layout never shifts between platforms.
  */
 export const Tabs = forwardRef<any, TabsProps>(function Tabs(
   {
@@ -37,70 +43,117 @@ export const Tabs = forwardRef<any, TabsProps>(function Tabs(
     defaultActiveId,
     onTabChange,
     style,
-    isDark = false,
+    isDark: isDarkProp,
+    testID,
     ...props
   },
   ref,
 ) {
+  const isDark = useIsDark(isDarkProp);
+  const themeColors = isDark ? colors.dark : colors.light;
+  const { View, Text, Pressable, Animated } = primitives();
+
   const [internalId, setInternalId] = useState(defaultActiveId || items[0]?.id || "");
   const activeId = activeProp !== undefined ? activeProp : internalId;
-  const themeColors = isDark ? colors.dark : colors.light;
+
+  const activeIndex = Math.max(
+    0,
+    items.findIndex((tab) => tab.id === activeId),
+  );
+  const { value: slide, animated } = useSpring(activeIndex, "snappy");
 
   const handleSelect = (id: string) => {
     if (activeProp === undefined) setInternalId(id);
     onTabChange?.(id);
   };
 
+  const count = Math.max(items.length, 1);
+  const itemWidth = `${100 / count}%`;
+
+  // The selection is a lens, not a fill: a lifted pane on the rail.
+  const paneStyle = {
+    position: "absolute" as const,
+    top: 4,
+    bottom: 4,
+    left: 4,
+    width: itemWidth,
+    borderRadius: radii.pill,
+    backgroundColor: isDark ? "rgba(255,255,255,0.16)" : "rgba(255,255,255,0.72)",
+    borderWidth: 0.5,
+    borderColor: themeColors.edge,
+  };
+
   return (
     <Glass
       ref={ref}
       effect="regular"
+      isDark={isDark}
       style={{
-        display: "flex",
         flexDirection: "row",
         alignItems: "center",
+        alignSelf: "flex-start",
         gap: 2,
         padding: 4,
         borderRadius: radii.pill,
-        ...style,
+        ...(style as ViewStyle),
       }}
+      testID={testID}
       {...props}
     >
+      {animated ? (
+        <Animated.View
+          pointerEvents="none"
+          style={{
+            ...paneStyle,
+            transform: [
+              {
+                translateX: slide.interpolate({
+                  inputRange: [0, Math.max(count - 1, 1)],
+                  outputRange: ["0%", `${((count - 1) * 100) / count}%`],
+                }),
+              },
+            ],
+          }}
+        />
+      ) : (
+        <View
+          pointerEvents="none"
+          style={{ ...paneStyle, left: `${(activeIndex * 100) / count}%` }}
+        />
+      )}
+
       {items.map((tab) => {
         const isActive = tab.id === activeId;
         return (
-          <button
+          <Pressable
             key={tab.id}
-            type="button"
-            onClick={() => handleSelect(tab.id)}
-            aria-selected={isActive}
-            role="tab"
+            accessibilityRole="tab"
+            accessibilityLabel={tab.label}
+            accessibilityState={{ selected: isActive }}
+            onPress={() => handleSelect(tab.id)}
             style={{
               flex: 1,
-              display: "flex",
+              height: 36,
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "center",
               gap: 6,
-              padding: "8px 12px",
-              border: 0,
+              paddingHorizontal: 12,
               borderRadius: radii.pill,
-              // The selection is a lens, not a fill: a lifted pane on the rail.
-              background: isActive
-                ? isDark
-                  ? "rgba(255,255,255,0.16)"
-                  : "rgba(255,255,255,0.72)"
-                : "transparent",
-              color: isActive ? themeColors.foreground : themeColors.muted,
-              fontSize: 13,
-              fontWeight: isActive ? 600 : 500,
-              cursor: "pointer",
-              whiteSpace: "nowrap",
             }}
           >
-            {tab.icon && <span style={{ fontSize: 14 }}>{tab.icon}</span>}
-            <span>{tab.label}</span>
-          </button>
+            {tab.icon ?? null}
+            <Text
+              numberOfLines={1}
+              style={{
+                fontSize: 13,
+                fontWeight: isActive ? "600" : "500",
+                color: isActive ? themeColors.foreground : themeColors.muted,
+              }}
+            >
+              {tab.label}
+            </Text>
+          </Pressable>
         );
       })}
     </Glass>

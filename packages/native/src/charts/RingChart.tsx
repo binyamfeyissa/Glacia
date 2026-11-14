@@ -1,7 +1,8 @@
 import { useState } from "react";
 
 import { colors } from "../internal/tokens";
-import { primitives } from "./primitives";
+import { useIsDark } from "../internal/motion";
+import { primitives } from "../internal/primitives";
 import { arcPath, formatValue, seriesColor } from "./scales";
 
 export interface NativeRingSlice {
@@ -39,13 +40,14 @@ export function NativeRingChart({
   data,
   size = 180,
   thickness = 22,
-  isDark = false,
+  isDark: isDarkProp,
   palette,
   showLegend = true,
   style,
   onSlicePress,
 }: NativeRingChartProps) {
   const [active, setActive] = useState<number | null>(null);
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, Pressable, Svg, Path } = primitives();
 

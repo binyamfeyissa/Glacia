@@ -1,7 +1,9 @@
 import type { ReactNode } from "react";
+import type { StyleProp, ViewStyle } from "react-native";
 
 import { colors } from "./internal/tokens";
-import { primitives } from "./charts/primitives";
+import { primitives } from "./internal/primitives";
+import { useIsDark } from "./internal/motion";
 
 export interface NativeTableColumn {
   key: string;
@@ -17,6 +19,12 @@ export interface NativeTableColumn {
 export interface NativeTableRow {
   id: string;
   cells: Record<string, ReactNode>;
+  /**
+   * What screen readers announce when the row is pressable. Use it when the
+   * cells hold elements rather than text; without it the primary cell is used
+   * only if it is a string or number.
+   */
+  accessibilityLabel?: string;
 }
 
 export interface NativeTableProps {
@@ -24,11 +32,13 @@ export interface NativeTableProps {
   rows: NativeTableRow[];
   /** Tap handler for a whole row. */
   onRowPress?: (row: NativeTableRow) => void;
-  /** Text direction for right-aligned columns; defaults to left. */
+  /** A caption describing the table's contents, shown above it. */
   caption?: string;
   isDark?: boolean;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
   emptyMessage?: string;
+  /** Passed through to the table root so it is testable. */
+  testID?: string;
 }
 
 /**
@@ -44,16 +54,18 @@ export function NativeTable({
   rows,
   onRowPress,
   caption,
-  isDark = false,
+  isDark: isDarkProp,
   style,
   emptyMessage = "No rows to display",
+  testID,
 }: NativeTableProps) {
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, Pressable } = primitives();
 
   if (rows.length === 0) {
     return (
-      <View style={[{ paddingVertical: 20, alignItems: "center" }, style]}>
+      <View style={[{ paddingVertical: 20, alignItems: "center" }, style as ViewStyle]}>
         <Text style={{ fontSize: 12, color: theme.muted }}>{emptyMessage}</Text>
       </View>
     );
@@ -65,7 +77,7 @@ export function NativeTable({
   const detailColumns = columns.filter((column) => column.key !== primaryKey);
 
   return (
-    <View style={style}>
+    <View style={style as ViewStyle} testID={testID}>
       {caption && (
         <Text style={{ fontSize: 11, color: theme.muted, marginBottom: 8 }}>{caption}</Text>
       )}
@@ -75,7 +87,7 @@ export function NativeTable({
         const wrapperProps = onRowPress
           ? {
               accessibilityRole: "button",
-              accessibilityLabel: String(row.cells[primaryKey ?? ""] ?? ""),
+              accessibilityLabel: rowAccessibilityLabel(row, primaryKey),
               onPress: () => onRowPress(row),
             }
           : { accessibilityRole: "text" };
@@ -136,6 +148,20 @@ export function NativeTable({
   );
 }
 
+/**
+ * What screen readers announce for a pressable row.
+ *
+ * A cell can be any element, and `String(cell)` of an element announces
+ * "[object Object]". So: an explicit row label wins, then a textual primary
+ * cell, then a neutral fallback.
+ */
+function rowAccessibilityLabel(row: NativeTableRow, primaryKey: string | undefined): string {
+  if (row.accessibilityLabel) return row.accessibilityLabel;
+  const primary = primaryKey ? row.cells[primaryKey] : undefined;
+  if (typeof primary === "string" || typeof primary === "number") return String(primary);
+  return "Row";
+}
+
 export interface NativeScrollAreaProps {
   children?: ReactNode;
   /** Fixed height. Without one the area grows with its content. */
@@ -144,7 +170,7 @@ export interface NativeScrollAreaProps {
   bordered?: boolean;
   horizontal?: boolean;
   isDark?: boolean;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
   /** Announced to screen readers. */
   accessibilityLabel?: string;
 }
@@ -161,10 +187,11 @@ export function NativeScrollArea({
   maxHeight,
   bordered = false,
   horizontal = false,
-  isDark = false,
+  isDark: isDarkProp,
   style,
   accessibilityLabel,
 }: NativeScrollAreaProps) {
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, getScrollView } = primitives();
 
@@ -176,17 +203,14 @@ export function NativeScrollArea({
     borderWidth: bordered ? 1 : 0,
     borderColor: theme.edge,
     overflow: "hidden",
-    ...style,
+    ...(style as ViewStyle),
   };
 
   if (!ScrollView) {
     // Off-device there is no ScrollView; render the content in a clipped box so
     // layout still matches instead of dropping children.
     return (
-      <View
-        accessibilityLabel={accessibilityLabel}
-        style={{ ...containerStyle, overflow: "auto" }}
-      >
+      <View accessibilityLabel={accessibilityLabel} style={containerStyle}>
         {children}
       </View>
     );

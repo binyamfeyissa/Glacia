@@ -1,7 +1,8 @@
 import { useState } from "react";
 
 import { colors } from "../internal/tokens";
-import { primitives } from "./primitives";
+import { useIsDark } from "../internal/motion";
+import { primitives } from "../internal/primitives";
 import { formatValue } from "./scales";
 
 export interface NativeHeatmapChartProps {
@@ -46,13 +47,14 @@ export function NativeHeatmapChart({
   columns,
   cellSize = 28,
   cellGap = 3,
-  isDark = false,
+  isDark: isDarkProp,
   minColor = "#e8eef7",
   maxColor = "#0088ff",
   style,
   onCellPress,
 }: NativeHeatmapChartProps) {
   const [active, setActive] = useState<{ r: number; c: number } | null>(null);
+  const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text, Pressable } = primitives();
 
