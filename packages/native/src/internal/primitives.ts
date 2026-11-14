@@ -202,8 +202,10 @@ function resolve(): RNPrimitives {
       if (onMouseUp) domProps.onMouseUp = onMouseUp;
       if (onMouseLeave) domProps.onMouseLeave = onMouseLeave;
 
-      if (onPress) {
+      if (onPress && !disabled) {
         // Any element hosting a press handler needs a DOM click to fire it.
+        // A disabled control gets no handler at all, mirroring React Native's
+        // Pressable, which swallows the press rather than calling it through.
         domProps.onClick = onPress;
         if (
           domProps.role === "button" ||
@@ -240,12 +242,15 @@ function resolve(): RNPrimitives {
 
   /** An image that reads its remote source in the DOM preview. */
   function imageFallback(props: any) {
-    const { source, accessibilityLabel, style } = props ?? {};
+    const { source, accessibilityLabel, style, onError } = props ?? {};
     const { createElement } = require("react");
     return createElement("img", {
       src: source?.uri,
       alt: accessibilityLabel ?? "",
       style: toDomStyle(style),
+      // A broken source must reach the component the same way it does on a
+      // device, or a fallback (initials, placeholder) can never render.
+      onError,
     });
   }
 

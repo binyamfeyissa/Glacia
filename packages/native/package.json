@@ -1,6 +1,6 @@
 {
   "name": "glacia-native",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Liquid Glass UI components for React Native \u2014 real iOS 26 glass, with a clean fallback on Android and older iOS.",
   "license": "MIT",
   "repository": {

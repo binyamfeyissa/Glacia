@@ -18,16 +18,37 @@ export interface NativeGlassProps {
    * colour scheme decides, so developers never thread this prop themselves.
    */
   isDark?: boolean;
+  /**
+   * Any further React Native view prop (accessibility, onLayout, pointer
+   * events, …) is passed straight through to whichever surface renders, so a
+   * component can put its own accessibility contract on the glass itself.
+   */
+  [prop: string]: any;
 }
 
 /**
- * The installed `@callstack/liquid-glass` module, resolved once at load.
- * `isLiquidGlassSupported` is true only on iOS 26+; false on older iOS,
- * Android and Expo Go.
+ * The installed `@callstack/liquid-glass` module's routing decision.
+ *
+ * Resolved lazily and memoised on first use, rather than at module load, so the
+ * decision is taken when a surface first renders. On a device that is the same
+ * answer either way — `isLiquidGlassSupported` is a constant of the installed
+ * build — but it keeps the choice a property of the module rather than of
+ * import order, which is what makes both branches reachable in tests.
  */
-const router = defaultRouter();
+let cachedRouter: ReturnType<typeof defaultRouter> | null = null;
 
-export const isGlassSupported = router.supported;
+function router(): ReturnType<typeof defaultRouter> {
+  if (cachedRouter === null) cachedRouter = defaultRouter();
+  return cachedRouter;
+}
+
+/** Clears the memoised decision. Only tests call this, to drive both branches. */
+export function resetGlassRouter() {
+  cachedRouter = null;
+}
+
+/** Whether this build renders Apple's glass. */
+export const isGlassSupported = defaultRouter().supported;
 
 /**
  * Platform Glass View — the single place a glass surface is chosen:
@@ -48,8 +69,9 @@ export const GlassView = forwardRef<any, NativeGlassProps>(function GlassView(
   ref,
 ) {
   const isDark = useIsDark(isDarkProp);
-  if (router.supported && router.LiquidGlassView) {
-    const LiquidGlassView = router.LiquidGlassView;
+  const decision = router();
+  if (decision.supported && decision.LiquidGlassView) {
+    const LiquidGlassView = decision.LiquidGlassView;
     return (
       <LiquidGlassView
         ref={ref}

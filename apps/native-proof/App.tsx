@@ -75,6 +75,42 @@ import {
   NativeScatterChart,
   NativeTreemapChart,
   NativeWaterfallChart,
+  // Basics (50-56)
+  Text as GlaciaText,
+  Avatar,
+  Badge,
+  Separator,
+  Skeleton,
+  Spinner,
+  Progress,
+  // Feedback and display (57-59, 65)
+  Toast,
+  Banner,
+  List,
+  ListItem,
+  ListSection,
+  Accordion,
+  // Bars, buttons and navigation (60-64, 66-68)
+  SearchBar,
+  Chip,
+  FAB,
+  IconButton,
+  AppBar,
+  Menu,
+  Sheet,
+  Drawer,
+  // Carousel (70-71)
+  Carousel,
+  PageControl,
+  // Forms and pickers (69, 72-78)
+  Stepper,
+  Toggle,
+  ToggleGroup,
+  InputOTP,
+  ButtonGroup,
+  Calendar,
+  DatePicker,
+  TimePicker,
   // Diagnostics
   isGlassSupported,
 } from "glacia-native";
@@ -98,6 +134,17 @@ export default function App() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [generalSheetOpen, setGeneralSheetOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [toastVisible, setToastVisible] = useState(true);
+  const [guestCount, setGuestCount] = useState(2);
+  const [otp, setOtp] = useState("");
+  const [page, setPage] = useState(0);
+  const [datePickerOpen, setDatePickerOpen] = useState(false);
+  const [timePickerOpen, setTimePickerOpen] = useState(false);
+  const [bannerVisible, setBannerVisible] = useState(true);
+  const [date, setDate] = useState(new Date(2025, 0, 15));
+  const [time, setTime] = useState("09:30");
 
   return (
     <ScrollView
@@ -266,6 +313,242 @@ export default function App() {
         <NativeTreemapChart items={[{ label: "a", value: 1 }]} />
         <NativeWaterfallChart steps={[{ label: "a", value: 1 }]} />
       </Section>
+
+
+      {/* ------------------------------------------------------------------
+          The glass proof.
+          Glass that is never seen over content has not been shown to be
+          glass. This section puts the same surfaces over a busy, colourful
+          backdrop so the material is visible for what it is: on iOS 26 the
+          real UIGlassEffect refracts this image; on other platforms Glacia's
+          fallback sits over it with the identical shape.
+          ------------------------------------------------------------------ */}
+      <Section title="Glass over a busy backdrop (the material, visible)">
+        <View
+          style={{
+            borderRadius: 16,
+            overflow: "hidden",
+            height: 260,
+            justifyContent: "center",
+            alignItems: "center",
+            // A deliberately busy, high-contrast gradient built from Views:
+            // no extra image asset, and it defeats a plain white screen.
+            backgroundColor: "#2E1065",
+          }}
+        >
+          <View style={{ position: "absolute", top: -40, left: -20, width: 220, height: 220, borderRadius: 110, backgroundColor: "#F0ABFC", opacity: 0.9 }} />
+          <View style={{ position: "absolute", bottom: -60, right: -30, width: 240, height: 240, borderRadius: 120, backgroundColor: "#22D3EE", opacity: 0.9 }} />
+          <View style={{ position: "absolute", top: 60, right: 40, width: 150, height: 150, borderRadius: 75, backgroundColor: "#FBBF24", opacity: 0.85 }} />
+          <View style={{ position: "absolute", bottom: 20, left: 30, width: 160, height: 160, borderRadius: 80, backgroundColor: "#F43F5E", opacity: 0.8 }} />
+
+          <Glass style={{ padding: 16, borderRadius: 14, marginBottom: 12, width: 240 }}>
+            <GlaciaText variant="heading">Glass panel</GlaciaText>
+            <GlaciaText variant="caption" muted>
+              Over colour, not white.
+            </GlaciaText>
+          </Glass>
+
+          <View style={{ flexDirection: "row", gap: 12, alignItems: "center" }}>
+            <FAB accessibilityLabel="Compose over colour" onPress={() => {}} />
+            <Glass effect="clear" style={{ paddingHorizontal: 14, paddingVertical: 10, borderRadius: 9999 }}>
+              <GlaciaText variant="label">clear</GlaciaText>
+            </Glass>
+            <Button accessibilityLabel="Glass button over colour" onPress={() => {}}>
+              Glass
+            </Button>
+          </View>
+        </View>
+      </Section>
+
+      <Section title="50-56 · basics">
+        <GlaciaText variant="title">Title</GlaciaText>
+        <GlaciaText variant="heading">Heading</GlaciaText>
+        <GlaciaText variant="body">Body text, the default.</GlaciaText>
+        <GlaciaText variant="label">Label</GlaciaText>
+        <GlaciaText variant="caption" muted>
+          Caption, muted.
+        </GlaciaText>
+        <View style={{ flexDirection: "row", gap: 12, alignItems: "center" }}>
+          <Avatar name="Ada Lovelace" status="online" />
+          <Avatar name="Grace Hopper" size="lg" status="busy" />
+          <Badge>3</Badge>
+          <Badge tone="destructive">9+</Badge>
+          <Badge tone="success" />
+        </View>
+        <Separator />
+        <Separator orientation="vertical" style={{ height: 24 }} />
+        <Skeleton />
+        <Skeleton shape="circle" height={40} width={40} />
+        <Skeleton shape="line" />
+        <View style={{ flexDirection: "row", gap: 16, alignItems: "center" }}>
+          <Spinner size="sm" />
+          <Spinner />
+          <Spinner size="lg" />
+        </View>
+        <Progress value={64} />
+        <Progress variant="ring" value={40} />
+      </Section>
+
+      <Section title="57-59, 65 · feedback and display">
+        <Toast
+          visible={toastVisible}
+          message="Presets synced"
+          action={{ label: "Undo", onPress: () => setToastVisible(false) }}
+          onDismiss={() => setToastVisible(false)}
+        />
+        {bannerVisible && (
+          <Banner
+            title="Banner"
+            message="An inline alert that lives in the layout."
+            tone="warning"
+            onDismiss={() => setBannerVisible(false)}
+            action={{ label: "Retry", onPress: () => {} }}
+          />
+        )}
+        <ListSection header="A List section">
+          <ListItem leading={<Avatar name="Ada Lovelace" size="sm" />} title="Account" description="Ada Lovelace" onPress={() => {}} />
+          <ListItem title="Notifications" trailing={<GlaciaText variant="caption" muted>On</GlaciaText>} onPress={() => {}} />
+          <ListItem title="Version" trailing={<GlaciaText variant="caption" muted>0.4.0</GlaciaText>} />
+        </ListSection>
+        <Accordion
+          sections={[
+            { value: "a", title: "Accordion section", description: "with a description", content: <GlaciaText>Expanded content.</GlaciaText> },
+            { value: "b", title: "Another section", content: <GlaciaText>More content.</GlaciaText> },
+          ]}
+        />
+      </Section>
+
+      <Section title="60-64 · bars, buttons and navigation">
+        <SearchBar placeholder="SearchBar" />
+        <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
+          <Chip label="Chip" />
+          <Chip label="Selected" selected />
+          <Chip label="Closable" onClose={() => {}} />
+        </View>
+        <View style={{ flexDirection: "row", gap: 12, alignItems: "center" }}>
+          <FAB accessibilityLabel="FAB" onPress={() => {}} />
+          <FAB accessibilityLabel="Extended FAB" label="Extended" onPress={() => {}} />
+        </View>
+        <View style={{ flexDirection: "row", gap: 8, alignItems: "center" }}>
+          <IconButton accessibilityLabel="IconButton sm" size="sm" onPress={() => {}} icon={<GlaciaText variant="caption">*</GlaciaText>} />
+          <IconButton accessibilityLabel="IconButton md" onPress={() => {}} icon={<GlaciaText variant="caption">*</GlaciaText>} />
+          <IconButton accessibilityLabel="IconButton lg" size="lg" onPress={() => {}} icon={<GlaciaText variant="caption">*</GlaciaText>} />
+        </View>
+        <AppBar
+          title="AppBar"
+          subtitle="with a subtitle"
+          leading={{ accessibilityLabel: "Back", icon: <GlaciaText>{"\u2039"}</GlaciaText>, onPress: () => {} }}
+          actions={[{ accessibilityLabel: "Settings", icon: <GlaciaText>*</GlaciaText>, onPress: () => {} }]}
+          topInset={0}
+        />
+      </Section>
+
+      <Section title="66-68 · overlays">
+        <Menu
+          accessibilityLabel="Open menu"
+          trigger={<Button accessibilityLabel="Menu trigger">Menu</Button>}
+          items={[
+            { label: "Rename", onPress: () => {} },
+            { label: "Duplicate", onPress: () => {} },
+            { label: "Delete", onPress: () => {}, destructive: true },
+          ]}
+        />
+        <Button accessibilityLabel="Open Sheet" onPress={() => setGeneralSheetOpen(true)}>
+          Sheet
+        </Button>
+        <Button accessibilityLabel="Open Drawer" onPress={() => setDrawerOpen(true)}>
+          Drawer
+        </Button>
+      </Section>
+
+      <Section title="70-71 · carousel">
+        <Carousel
+          slides={[
+            <Glass key="1" style={{ height: 120, borderRadius: 14, alignItems: "center", justifyContent: "center" }}>
+              <GlaciaText variant="heading">Slide one</GlaciaText>
+            </Glass>,
+            <Glass key="2" style={{ height: 120, borderRadius: 14, alignItems: "center", justifyContent: "center" }}>
+              <GlaciaText variant="heading">Slide two</GlaciaText>
+            </Glass>,
+            <Glass key="3" style={{ height: 120, borderRadius: 14, alignItems: "center", justifyContent: "center" }}>
+              <GlaciaText variant="heading">Slide three</GlaciaText>
+            </Glass>,
+          ]}
+          index={page}
+          onIndexChange={setPage}
+        />
+        <PageControl count={3} activeIndex={page} onChange={setPage} />
+      </Section>
+
+      <Section title="69, 72-78 · forms and pickers">
+        <Stepper accessibilityLabel="Guests" value={guestCount} onValueChange={setGuestCount} min={0} max={10} />
+        <View style={{ flexDirection: "row", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+          <Toggle accessibilityLabel="Toggle">Toggle</Toggle>
+          <Toggle accessibilityLabel="Pinned" defaultPressed>
+            Pinned
+          </Toggle>
+        </View>
+        <ToggleGroup
+          items={[
+            { value: "day", label: "Day" },
+            { value: "week", label: "Week" },
+            { value: "month", label: "Month" },
+          ]}
+          defaultValue="day"
+        />
+        <InputOTP length={6} value={otp} onChange={setOtp} />
+        <ButtonGroup
+          items={[
+            { label: "Copy", onPress: () => {} },
+            { label: "Move", onPress: () => {} },
+            { label: "Delete", onPress: () => {} },
+          ]}
+        />
+        <Glass style={{ padding: 12, borderRadius: 14 }}>
+          <Calendar value={date} onChange={setDate} />
+        </Glass>
+        <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
+          <Button accessibilityLabel="Open DatePicker" onPress={() => setDatePickerOpen(true)}>
+            DatePicker
+          </Button>
+          <Button accessibilityLabel="Open TimePicker" onPress={() => setTimePickerOpen(true)}>
+            TimePicker
+          </Button>
+          <GlaciaText variant="caption" muted>
+            {`picked: ${date.toDateString()} at ${time}`}
+          </GlaciaText>
+        </View>
+      </Section>
+
+      <Sheet
+        open={generalSheetOpen}
+        onOpenChange={setGeneralSheetOpen}
+        title="Sheet"
+        footer={<Button accessibilityLabel="Close Sheet" onPress={() => setGeneralSheetOpen(false)}>Close</Button>}
+      >
+        <GlaciaText>The general-purpose bottom sheet.</GlaciaText>
+      </Sheet>
+
+      <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+        <List>
+          <ListItem title="Drawer" onPress={() => setDrawerOpen(false)} />
+          <ListItem title="Second row" onPress={() => setDrawerOpen(false)} />
+        </List>
+      </Drawer>
+
+      <DatePicker
+        open={datePickerOpen}
+        onOpenChange={setDatePickerOpen}
+        value={date}
+        onConfirm={setDate}
+      />
+
+      <TimePicker
+        open={timePickerOpen}
+        onOpenChange={setTimePickerOpen}
+        value={time}
+        onConfirm={setTime}
+      />
 
       <Dialog
         open={dialogOpen}

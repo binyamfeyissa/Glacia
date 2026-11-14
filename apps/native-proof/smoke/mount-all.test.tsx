@@ -1,9 +1,9 @@
-// Mounts all 49 glacia-native components under react-native-web.
+// Mounts all 78 glacia-native components under react-native-web.
 //
 // What this checks: with React Native's primitives present (via
 // react-native-web), every one of the 49 components can be imported and
 // mounted without throwing — the shared paths a device and the web preview
-// both run.
+// both run. This wave adds the 29 components numbered 50-78.
 //
 // What this does NOT check: a raw DOM element in component source. jsdom
 // renders a stray <div> happily, and the "View config not found" failure only
@@ -34,6 +34,18 @@ const NON_COMPONENTS = new Set([
   "formatValue",
   "seriesColor",
   "SERIES_COLORS",
+  // Helpers and formatters exported alongside the components.
+  "typeScale",
+  "toneColor",
+  "initialsOf",
+  "anchorPopover",
+  "monthGrid",
+  "startOfDay",
+  "sameDay",
+  "parseTime",
+  "formatTime",
+  "WEEKDAYS",
+  "MONTHS",
 ]);
 
 /** A realistic prop set per component; every optional path gets exercised. */
@@ -129,6 +141,53 @@ const propsFor: Record<string, Record<string, unknown>> = {
   NativeScatterChart: { series: [{ name: "s", points: [{ x: 1, y: 2 }] }] },
   NativeTreemapChart: { items: [{ label: "a", value: 1 }] },
   NativeWaterfallChart: { steps: [{ label: "a", value: 1 }] },
+
+  // Basics (50-56).
+  Text: { children: "Text", variant: "body" },
+  Avatar: { name: "Ada Lovelace", status: "online" },
+  Badge: { children: "3" },
+  Separator: {},
+  Skeleton: {},
+  Spinner: {},
+  Progress: { value: 40 },
+  // Feedback and display (57-59, 65).
+  Toast: { visible: true, message: "Saved" },
+  Banner: { message: "A banner", tone: "info" },
+  List: { inset: true },
+  ListItem: { title: "Row", onPress: () => {} },
+  ListSection: { header: "Group" },
+  Accordion: {
+    sections: [{ value: "a", title: "Section", content: React.createElement("span", null, "body") }],
+  },
+  // Bars, buttons and navigation (60-64, 66-68).
+  SearchBar: { placeholder: "Search" },
+  Chip: { label: "Chip", onPress: () => {} },
+  FAB: { accessibilityLabel: "FAB", onPress: () => {} },
+  IconButton: { accessibilityLabel: "Icon", onPress: () => {}, icon: null },
+  AppBar: { title: "AppBar" },
+  Menu: {
+    trigger: React.createElement("span", null, "open"),
+    items: [{ label: "Item", onPress: () => {} }],
+  },
+  Sheet: { open: true, title: "Sheet" },
+  Drawer: { open: true },
+  // Carousel (70-71).
+  Carousel: { slides: [React.createElement("span", { key: "1" }, "one")] },
+  PageControl: { count: 3, activeIndex: 1 },
+  // Forms and pickers (69, 72-78).
+  Stepper: { accessibilityLabel: "Count", defaultValue: 2 },
+  Toggle: { accessibilityLabel: "Toggle", children: "Toggle" },
+  ToggleGroup: {
+    items: [
+      { value: "a", label: "A" },
+      { value: "b", label: "B" },
+    ],
+  },
+  InputOTP: { length: 6 },
+  ButtonGroup: { items: [{ label: "One", onPress: () => {} }] },
+  Calendar: { value: new Date(2025, 0, 15) },
+  DatePicker: { open: true },
+  TimePicker: { open: true },
 };
 
 const names = Object.keys(Glacia)
@@ -142,12 +201,16 @@ describe("react-native-web smoke check", () => {
     expect(primitives().isNative).toBe(true);
   });
 
-  it("mounts every one of the 49 reviewed components", () => {
-    // The review counts 49 components. Six of them ship as slots or triggers
-    // that belong to a numbered entry rather than being separate entries —
-    // the Card family (#8: Card, CardHeader, CardTitle, CardDescription,
-    // CardContent, CardBody, CardFooter) and DialogTrigger (#16, which renders
-    // Button) — so 56 exports cover those 49.
+  it("mounts every one of the 78 reviewed components", () => {
+    // The library is counted in components, not exports. Some components ship
+    // several exported pieces that belong to one numbered entry rather than
+    // being separate entries:
+    //   - the Card family (#8): Card, CardHeader, CardTitle, CardDescription,
+    //     CardContent, CardBody, CardFooter
+    //   - DialogTrigger (#16, which renders Button)
+    //   - ListSection (#59, the grouped header around List)
+    //   - ListItem   (#59, the row inside a List)
+    // So 87 exports less those nine slots cover the 78 reviewed components.
     const SLOTS = [
       "CardHeader",
       "CardTitle",
@@ -156,8 +219,10 @@ describe("react-native-web smoke check", () => {
       "CardBody",
       "CardFooter",
       "DialogTrigger",
+      "ListSection",
+      "ListItem",
     ];
-    expect(names.length - SLOTS.length).toBe(49);
+    expect(names.length - SLOTS.length).toBe(78);
     // Every reviewed component is actually mounted by the tests below.
     for (const slot of SLOTS) expect(names).toContain(slot);
   });
