@@ -47,6 +47,20 @@ Most "glassmorphism" libraries merely apply a flat `backdrop-filter: blur(12px)`
 
 ---
 
+## Platform Support Matrix
+
+| Platform / Engine | Support Level | Technical Architecture |
+| :--- | :--- | :--- |
+| **Chromium** (Chrome, Edge, Brave, Arc) | **Full Optical Glass** | Layer 1 Frosted blur + Layer 2 live SVG `feDisplacementMap` refraction. |
+| **Safari** (macOS & iOS) | **Frosted Glass** | Layer 1 Backdrop blur, specular edge highlight, soft ambient shadows. |
+| **Firefox** (macOS, Windows, Linux) | **Frosted Glass** | Layer 1 Backdrop blur, specular highlights, and clean contrast. |
+| **iOS 26+ (Native)** | **True Apple Glass** | Native `UIGlassEffect` via `@callstack/liquid-glass`. |
+| **iOS <26 (Native)** | **Calibrated Tint** | Translucent tinted surface matching geometry with zero layout shifts. |
+| **Android (Native)** | **Calibrated Tint** | Semi-transparent surface tint matching exact layout metrics. |
+| **Expo Go** | **Calibrated Tint** | Operates safely in Expo Go without native build steps. |
+
+---
+
 ## Three Ways to Install
 
 ### 1. Web NPM Package (`glacia`)
@@ -275,19 +289,6 @@ Full-page application templates ready to copy into your project:
 
 ---
 
-## Platform Support Matrix
-
-| Platform / Engine | Support Level | Technical Architecture |
-| :--- | :--- | :--- |
-| **Chromium** (Chrome, Edge, Brave, Arc) | **Full Optical Glass** | Layer 1 Frosted blur + Layer 2 live SVG `feDisplacementMap` refraction. |
-| **Safari** (macOS & iOS) | **Frosted Glass** | Layer 1 Backdrop blur, specular edge highlight, soft ambient shadows. |
-| **Firefox** (macOS, Windows, Linux) | **Frosted Glass** | Layer 1 Backdrop blur, specular highlights, and clean contrast. |
-| **iOS 26+ (Native)** | **True Apple Glass** | Native `UIGlassEffect` via `@callstack/liquid-glass`. |
-| **iOS <26 (Native)** | **Calibrated Tint** | Translucent tinted surface matching geometry with zero layout shifts. |
-| **Android (Native)** | **Calibrated Tint** | Semi-transparent surface tint matching exact layout metrics. |
-| **Expo Go** | **Calibrated Tint** | Operates safely in Expo Go without native build steps. |
-
----
 
 ## Architecture & Design Tokens
 
