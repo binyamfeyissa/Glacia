@@ -17,9 +17,9 @@ import getpass
 import subprocess
 from ftplib import FTP, FTP_TLS
 
-HOST = os.environ.get("CPANEL_FTP_SERVER", "ftp.plutotechnologies.org")
-USER = os.environ.get("CPANEL_FTP_USERNAME", "glacia@glacia.binyamfeyissa.dev")
-PASSWORD = os.environ.get("CPANEL_FTP_PASSWORD")
+HOST = os.environ.get("CPANEL_FTP_SERVER", os.environ.get("FTP_SERVER", ""))
+USER = os.environ.get("CPANEL_FTP_USERNAME", os.environ.get("FTP_USERNAME", ""))
+PASSWORD = os.environ.get("CPANEL_FTP_PASSWORD", os.environ.get("FTP_PASSWORD", ""))
 PORT = int(os.environ.get("CPANEL_FTP_PORT", 21))
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 LOCAL_DIR = os.path.abspath(os.path.join(ROOT_DIR, "apps", "docs", "out"))

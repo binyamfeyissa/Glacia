@@ -1,12 +1,56 @@
+# Dependencies
 node_modules
 .pnpm-store
+
+# Production & Build Outputs
 dist
 lib
 build
 .next
 out
 .turbo
-*.log
 *.tsbuildinfo
+
+# Internal Verification & Scratch Reviews
+.verify/
+.review/
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.cert
+*.p8
+*.p12
+
+# Internal Development & Audit Reports
+BUILD_REPORT.md
+FIGMA_RECONCILIATION.md
+GLACIA_AUDIT_REPORT.md
+GLASS_AUDIT_MEASURED.md
+GLASS_UPGRADE_REPORT.md
+Glacia_Component_List.md
+CPANEL_DEPLOY_SETUP.md
+
+# Operating System & IDE
 .DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs & Diagnostics
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python & Scripts Cache
 __pycache__/
+*.pyc
+*.pyo

@@ -1,6 +1,6 @@
-MIT License
+MIT License with Anti-Plagiarism & Brand Protection Terms
 
-Copyright (c) 2026 Glacia Contributors
+Copyright (c) 2026 Binyam Feyissa. All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -9,8 +9,28 @@ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. COPYRIGHT & ATTRIBUTION:
+The above copyright notice, this permission notice, and the third-party
+attribution notices below shall be included in all copies or substantial
+portions of the Software.
+
+2. ACCEPTABLE USE & ANTI-PLAGIARISM RESTRICTIONS:
+You are granted full permission to use, customize, and integrate the Software
+in your own commercial, private, open-source, or enterprise end-user software,
+websites, web applications, and mobile applications ("Applications").
+
+However, the following are strictly prohibited:
+a) You may NOT republish, re-upload, rebrand, or redistribute this repository,
+   source code, component registry, or design token suite as a competing standalone
+   UI component library, design system kit, template product, or under an alternate
+   package name on public registries (including npm, PyPI, GitHub, or any other registry).
+b) You may NOT misrepresent yourself as the creator or original author of Glacia,
+   or remove or alter the original author attributions.
+
+3. TRADEMARKS & BRAND ASSETS:
+This license does not grant permission to use the trade names, trademarks,
+service marks, product names, logos, or brand marks of "Glacia" or "Binyam Feyissa"
+in connection with derivative works, forks, or any competing distributions.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -22,6 +42,6 @@ SOFTWARE.
 
 ---
 
-Attribution and Third-Party Notices:
-- Web glass engine based on Glisse by Kelvin Zhang (MIT): https://github.com/0kzh/glisse
-- React Native glass powered by @callstack/liquid-glass (MIT): https://github.com/callstack/liquid-glass
+Attribution and Third-Party Acknowledgements:
+- Web refractive optics engine inspired by & incorporating research from Glisse by Kelvin Zhang (MIT License): https://github.com/0kzh/glisse
+- React Native glass effect architecture powered by @callstack/liquid-glass (MIT License): https://github.com/callstack/liquid-glass

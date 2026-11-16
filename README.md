@@ -15,8 +15,9 @@
   <a href="https://www.npmjs.com/package/glacia"><img src="https://img.shields.io/npm/v/glacia.svg?label=glacia&color=0284c7" alt="glacia npm version"></a>
   <a href="https://www.npmjs.com/package/glacia-native"><img src="https://img.shields.io/npm/v/glacia-native.svg?label=glacia-native&color=6366f1" alt="glacia-native npm version"></a>
   <a href="https://www.npmjs.com/package/glacia-tokens"><img src="https://img.shields.io/npm/v/glacia-tokens.svg?label=glacia-tokens&color=059669" alt="glacia-tokens npm version"></a>
+  <a href="https://github.com/binyamfeyissa"><img src="https://img.shields.io/badge/Author-Binyam%20Feyissa-blueviolet.svg" alt="Author: Binyam Feyissa"></a>
   <a href="https://github.com/binyamfeyissa/Glacia/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
-  <a href="https://glacia.binyamfeyissa.dev"><img src="https://img.shields.io/badge/Tests-591%20passing-brightgreen.svg" alt="Tests"></a>
+  <a href="https://glacia.binyamfeyissa.dev"><img src="https://img.shields.io/badge/Tests-660%20passing-brightgreen.svg" alt="Tests"></a>
   <a href="https://glacia.binyamfeyissa.dev"><img src="https://img.shields.io/badge/Registry-97%20components-teal.svg" alt="Registry"></a>
   <a href="https://glacia.binyamfeyissa.dev"><img src="https://img.shields.io/badge/Docs-glacia.binyamfeyissa.dev-black.svg" alt="Documentation"></a>
 </p>
@@ -319,7 +320,7 @@ console.log(springs.snappy); // { stiffness: 300, damping: 28, mass: 1 }
 ## Verification & Testing
 
 Glacia maintains a strict verification suite across both React and React Native:
-- **591+ automated unit & component tests** passing across Vitest and React Testing Library (31 web suites + 15 React Native suites).
+- **660+ automated unit & component tests** passing across Vitest and React Testing Library (31 web suites + 18 React Native suites).
 - Full typecheck verification with `tsc --noEmit`.
 - Production bundle verification via `tsdown` (Rolldown) and `next build` (Next.js 15).
 
@@ -339,12 +340,18 @@ pnpm build
 
 ## Attribution & Acknowledgements
 
-Glacia is built with gratitude on the shoulders of giants:
-- **Web Glass Engine:** Based on [Glisse](https://github.com/0kzh/glisse) by Kelvin Zhang (MIT License).
+Glacia is created and maintained by **[Binyam Feyissa](https://github.com/binyamfeyissa)** and built with gratitude on the shoulders of giants:
+- **Web Glass Engine:** Refractive optics architecture inspired by & incorporating research from [Glisse](https://github.com/0kzh/glisse) by Kelvin Zhang (MIT License).
 - **React Native Engine:** Powered by [@callstack/liquid-glass](https://github.com/callstack/liquid-glass) by Callstack (MIT License).
 
 ---
 
-## License
+## License & Acceptable Use Policy
 
-Glacia is open-source software licensed under the [MIT License](LICENSE).
+Glacia is open-source software licensed under the [MIT License with Anti-Plagiarism & Brand Protection Terms](LICENSE).
+Copyright © 2026 **Binyam Feyissa**. All rights reserved.
+
+### Summary of Terms:
+- **What You Can Do:** You are free to use, customize, and bundle Glacia components and packages (`glacia`, `glacia-native`, `glacia-tokens`) in your own personal, commercial, open-source, or client applications, websites, SaaS platforms, and mobile apps.
+- **What You Cannot Do:** You may **not** copy, fork, re-host, re-brand, or redistribute this repository, source code, component registry, or design token suite as a competing standalone UI component library or package on npm, GitHub, or any other package registry. You may not claim original authorship or remove original author copyright notices.
+- **Trademarks:** "Glacia" and associated logos are trademarks of Binyam Feyissa and cannot be used in derivative works without prior written consent.

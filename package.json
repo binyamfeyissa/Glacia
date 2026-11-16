@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "description": "Monorepo for Glacia: Apple's Liquid Glass UI kit for React and React Native",
+  "author": "Binyam Feyissa (https://github.com/binyamfeyissa)",
   "scripts": {
     "build": "pnpm --filter glacia-tokens build && pnpm --filter glacia build && pnpm --filter glacia-native build && pnpm registry:build && pnpm --filter docs build",
     "dev": "pnpm --filter docs dev",
