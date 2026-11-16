@@ -6,6 +6,7 @@ import { Glass } from "./Glass";
 import { colors } from "./internal/tokens";
 import { primitives } from "./internal/primitives";
 import { useIsDark } from "./internal/motion";
+import { hapticSelection } from "./internal/haptics";
 
 export interface SliderProps {
   value?: number;
@@ -15,6 +16,8 @@ export interface SliderProps {
   step?: number;
   onValueChange?: (value: number) => void;
   disabled?: boolean;
+  /** One selection tick each time the stepped value changes while dragging. */
+  haptics?: boolean;
   accessibilityLabel: string;
   style?: StyleProp<ViewStyle>;
   isDark?: boolean;
@@ -55,6 +58,7 @@ export const Slider = forwardRef<any, SliderProps>(function Slider(
     step = 1,
     onValueChange,
     disabled = false,
+    haptics = true,
     accessibilityLabel,
     style,
     isDark: isDarkProp,
@@ -93,7 +97,10 @@ export const Slider = forwardRef<any, SliderProps>(function Slider(
   );
 
   const report = (next: number) => {
+    // Only a real step change ticks: a drag that stays inside one step is not
+    // a selection, and reporting the same value twice must not buzz twice.
     if (next === valueRef.current) return;
+    if (haptics) hapticSelection();
     valueRef.current = next;
     if (valueProp === undefined) setInternalValue(next);
     onValueChange?.(next);

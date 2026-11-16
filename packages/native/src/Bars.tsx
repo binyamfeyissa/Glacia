@@ -473,6 +473,15 @@ export interface AppBarProps {
    * knows its insets, and passing a number keeps this component dependency-free.
    */
   topInset?: number;
+  /**
+   * Whether content has scrolled under the bar.
+   *
+   * iOS bars sit quiet at the top of a screen and gain a defined edge once
+   * content passes beneath them, so the bar reads as a layer over the content
+   * rather than as part of it. Wire this to a ScrollView's scroll offset — see
+   * the component's documentation for the two-line version.
+   */
+  scrolled?: boolean;
   style?: StyleProp<ViewStyle>;
   isDark?: boolean;
   testID?: string;
@@ -483,6 +492,19 @@ export interface AppBarProps {
  *
  * A glass bar across the top of the screen with a leading action, a title and
  * trailing actions — the counterpart to the existing bottom TabBar.
+ *
+ * `scrolled` mirrors iOS 26's scroll-edge effect. At the top of the screen the
+ * bar is quiet: its bottom edge is invisible and the glass blends into the
+ * content above it. Once content has scrolled under it, the edge token becomes
+ * visible and the surface reads as a distinct layer — the change iOS makes when
+ * a navigation bar starts floating over scrolled content.
+ *
+ * ```
+ * const [scrolled, setScrolled] = useState(false);
+ * <ScrollView onScroll={(e) => setScrolled(e.nativeEvent.contentOffset.y > 8)}
+ *             scrollEventThrottle={16}>{...}</ScrollView>
+ * <AppBar title="Inbox" scrolled={scrolled} />
+ * ```
  */
 export const AppBar = forwardRef<any, AppBarProps>(function AppBar(
   {
@@ -491,6 +513,7 @@ export const AppBar = forwardRef<any, AppBarProps>(function AppBar(
     leading,
     actions,
     topInset = 0,
+    scrolled = false,
     style,
     isDark: isDarkProp,
     testID,
@@ -529,6 +552,9 @@ export const AppBar = forwardRef<any, AppBarProps>(function AppBar(
         borderTopWidth: 0,
         borderLeftWidth: 0,
         borderRightWidth: 0,
+        // Quiet at the top of a screen, defined once content is under it: the
+        // bottom edge is the difference iOS draws on a scrolled navigation bar.
+        ...(scrolled ? { borderBottomWidth: 0.5, borderBottomColor: theme.edge } : { borderBottomWidth: 0 }),
         ...(style as ViewStyle),
       }}
       {...props}
@@ -566,5 +592,206 @@ export const AppBar = forwardRef<any, AppBarProps>(function AppBar(
         ) : null}
       </View>
     </Glass>
+  );
+});
+
+// ---------------------------------------------------------------------------
+// FABGroup
+
+export interface FABGroupAction {
+  /** A leading node, typically an SVG icon the caller supplies. */
+  icon: ReactNode;
+  /** The action's name, shown on its mini button. */
+  label: string;
+  onPress: () => void;
+}
+
+export interface FABGroupProps {
+  /** The actions, listed top to bottom as they appear when expanded. */
+  actions: FABGroupAction[];
+  /** The icon on the main button. Rotates 45° while open. */
+  icon: ReactNode;
+  /** The icon on the main button while open. Defaults to the closed one. */
+  closeIcon?: ReactNode;
+  /** Controlled open state. Omit and the group keeps its own. */
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  /** The main button's accessible name. */
+  accessibilityLabel?: string;
+  size?: "md" | "lg";
+  style?: StyleProp<ViewStyle>;
+  isDark?: boolean;
+  testID?: string;
+}
+
+// The main button's size, and the mini buttons' — both from the size scale so
+// a mini button is never a hand-tuned multiple of the main one.
+const fabGroupSizes = {
+  md: { main: 56, mini: 44 },
+  lg: { main: 64, mini: 52 },
+};
+
+/**
+ * A main button that expands into a stack of labelled mini buttons.
+ *
+ * The pattern Paper calls `FAB.Group`: one floating button stands in for a set
+ * of actions until it is opened, then the actions appear above it, each on its
+ * own glass pill with a label. A scrim behind them takes the next press and
+ * closes the group, which is how a floating action set gets out of the way
+ * without a dismissal button.
+ *
+ * The mini buttons rise on the bouncy spring with a small stagger, and the main
+ * button's icon rotates 45° — both settle instantly under Reduce Motion.
+ *
+ * **Merging is an iOS 26+ visual effect.** This component is one glass surface
+ * plus one per action; to have them blend into a single connected surface, put
+ * the group inside a `GlassContainer` on iOS 26. It works standalone — nothing
+ * depends on the container — and that composition is left to the caller rather
+ * than forced, because a group outside a container is the correct rendering on
+ * every other platform anyway.
+ */
+export const FABGroup = forwardRef<any, FABGroupProps>(function FABGroup(
+  {
+    actions,
+    icon,
+    closeIcon,
+    open: openProp,
+    defaultOpen = false,
+    onOpenChange,
+    accessibilityLabel = "More actions",
+    size = "md",
+    style,
+    isDark: isDarkProp,
+    testID,
+    ...props
+  },
+  ref,
+) {
+  const isDark = useIsDark(isDarkProp);
+  const theme = isDark ? colors.dark : colors.light;
+  const { View, Text: RNText, Pressable, Animated } = primitives();
+
+  const [internalOpen, setInternalOpen] = useState(defaultOpen);
+  const open = openProp !== undefined ? openProp : internalOpen;
+
+  const setOpen = (next: boolean) => {
+    if (openProp === undefined) setInternalOpen(next);
+    onOpenChange?.(next);
+  };
+
+  // The stack's rise is one value: 0 closed, 1 open. The mini buttons ride it
+  // with their own stagger, so they follow the lead rather than all snapping
+  // at once.
+  const { value: rise, animated } = useSpring(open ? 1 : 0, "bouncy");
+
+  const { main: dimension, mini } = fabGroupSizes[size];
+  const closeFirst = closeIcon ?? icon;
+
+  const rotate = animated ? rise.interpolate({ inputRange: [0, 1], outputRange: ["0deg", "45deg"] }) : open ? "45deg" : "0deg";
+
+  return (
+    <View ref={ref} testID={testID} style={style} {...props}>
+      {open ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Close actions"
+          onPress={() => setOpen(false)}
+          style={{ position: "absolute", top: -2000, left: -2000, right: -2000, bottom: -2000, backgroundColor: theme.scrim }}
+        />
+      ) : null}
+
+      <View style={{ alignItems: "flex-end", gap: 10 }}>
+        {open
+          ? actions.map((action, index) => {
+              // Later actions sit higher, so the first is nearest the button.
+              const order = actions.length - 1 - index;
+              const translateY = animated
+                ? rise.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [24 + order * 18, 0],
+                  })
+                : 0;
+              const opacity = animated ? rise.interpolate({ inputRange: [0, 0.4, 1], outputRange: [0, 0, 1] }) : 1;
+
+              const pill = (
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={action.label}
+                  onPress={() => {
+                    setOpen(false);
+                    action.onPress();
+                  }}
+                  style={{ flexDirection: "row", alignItems: "center", gap: 8 }}
+                >
+                  <Glass
+                    effect="regular"
+                    isDark={isDark}
+                    style={{ borderRadius: radii.pill, paddingHorizontal: 12, paddingVertical: 7 }}
+                  >
+                    <RNText style={{ fontSize: 13, fontWeight: "600", color: theme.foreground }} numberOfLines={1}>
+                      {action.label}
+                    </RNText>
+                  </Glass>
+                  <Glass
+                    effect="regular"
+                    isDark={isDark}
+                    style={{
+                      width: mini,
+                      height: mini,
+                      borderRadius: mini / 2,
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {action.icon}
+                  </Glass>
+                </Pressable>
+              );
+
+              if (!animated) {
+                return (
+                  <View key={`${action.label}-${index}`}>{pill}</View>
+                );
+              }
+
+              return (
+                <Animated.View
+                  key={`${action.label}-${index}`}
+                  style={{ transform: [{ translateY }], opacity }}
+                >
+                  {pill}
+                </Animated.View>
+              );
+            })
+          : null}
+
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={accessibilityLabel}
+          accessibilityState={{ expanded: open }}
+          onPress={() => setOpen(!open)}
+        >
+          <Glass
+            effect="clear"
+            interactive
+            isDark={isDark}
+            style={{
+              width: dimension,
+              height: dimension,
+              borderRadius: dimension / 2,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {animated ? (
+              <Animated.View style={{ transform: [{ rotate }] }}>{open ? closeFirst : icon}</Animated.View>
+            ) : (
+              <View>{open ? closeFirst : icon}</View>
+            )}
+          </Glass>
+        </Pressable>
+      </View>
+    </View>
   );
 });

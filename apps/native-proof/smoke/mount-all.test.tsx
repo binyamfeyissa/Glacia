@@ -1,9 +1,9 @@
-// Mounts all 78 glacia-native components under react-native-web.
+// Mounts all 85 glacia-native components under react-native-web.
 //
 // What this checks: with React Native's primitives present (via
 // react-native-web), every one of the 49 components can be imported and
 // mounted without throwing — the shared paths a device and the web preview
-// both run. This wave adds the 29 components numbered 50-78.
+// both run. This wave adds the seven components numbered 79-85.
 //
 // What this does NOT check: a raw DOM element in component source. jsdom
 // renders a stray <div> happily, and the "View config not found" failure only
@@ -22,6 +22,18 @@ import { primitives } from "../../../packages/native/src/internal/primitives";
 
 const NON_COMPONENTS = new Set([
   "isGlassSupported",
+  // Values and helpers, added in wave 3: not components, so not mountable.
+  "DEFAULT_PALETTE",
+  "WEEKDAYS",
+  "MONTHS",
+  "SERIES_COLORS",
+  "controlSizes",
+  "palette",
+  "resolveSnapPoint",
+  "nearestSnapPoint",
+  "hexToRgb",
+  "rgbToHex",
+  "hueGradientColors",
   "colors",
   "radii",
   "springs",
@@ -188,6 +200,33 @@ const propsFor: Record<string, Record<string, unknown>> = {
   Calendar: { value: new Date(2025, 0, 15) },
   DatePicker: { open: true },
   TimePicker: { open: true },
+  // Wave 3.
+  GlassContainer: {
+    spacing: 8,
+    children: React.createElement(Glacia.FAB, {
+      accessibilityLabel: "Inside container",
+      onPress: () => {},
+    }),
+  },
+  FABGroup: {
+    accessibilityLabel: "Create",
+    icon: null,
+    actions: [{ icon: null, label: "Photo", onPress: () => {} }],
+  },
+  ToastViewport: {
+    toasts: [{ id: "1", message: "Queued", duration: 0 }],
+    onDismiss: () => {},
+  },
+  Rating: { value: 3.5, onChange: () => {} },
+  ColorPicker: { colors: ["#FF3B30", "#007AFF"], allowCustom: true },
+  Combobox: {
+    placeholder: "Search",
+    options: [{ label: "Apple", value: "apple" }],
+  },
+  NativeImage: { source: { uri: "https://example.test/a.png" }, accessibilityLabel: "Photo" },
+  Message: { name: "Ada", time: "10:42", avatar: true },
+  MessageBubble: { outgoing: true, children: "Hello" },
+  MessageAttachment: { name: "report.pdf", size: "1.2 MB" },
 };
 
 const names = Object.keys(Glacia)
@@ -201,7 +240,7 @@ describe("react-native-web smoke check", () => {
     expect(primitives().isNative).toBe(true);
   });
 
-  it("mounts every one of the 78 reviewed components", () => {
+  it("mounts every one of the 86 reviewed components", () => {
     // The library is counted in components, not exports. Some components ship
     // several exported pieces that belong to one numbered entry rather than
     // being separate entries:
@@ -210,7 +249,14 @@ describe("react-native-web smoke check", () => {
     //   - DialogTrigger (#16, which renders Button)
     //   - ListSection (#59, the grouped header around List)
     //   - ListItem   (#59, the row inside a List)
-    // So 87 exports less those nine slots cover the 78 reviewed components.
+    //   - MessageBubble and MessageAttachment (#85, the pieces of a Message)
+    // And the data constants below are values, not components.
+    // So 101 capitalised exports less 4 values less 11 belonging to an existing
+    // number cover the 86 reviewed components.
+    //
+    // 86, not 85: the brief numbers 79-85 as seven entries, but #85 (Message)
+    // ships three pieces, so the reviewed *components* — as opposed to the
+    // numbered entries — total 86.
     const SLOTS = [
       "CardHeader",
       "CardTitle",
@@ -221,8 +267,10 @@ describe("react-native-web smoke check", () => {
       "DialogTrigger",
       "ListSection",
       "ListItem",
+      "MessageBubble",
+      "MessageAttachment",
     ];
-    expect(names.length - SLOTS.length).toBe(78);
+    expect(names.length - SLOTS.length).toBe(86);
     // Every reviewed component is actually mounted by the tests below.
     for (const slot of SLOTS) expect(names).toContain(slot);
   });

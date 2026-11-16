@@ -13,8 +13,15 @@ import { describe, expect, it } from "vitest";
 const SRC = join(__dirname, "..", "src");
 
 /**
- * The components added in this wave. Listed explicitly so the guard fails if a
- * file is renamed or removed rather than silently checking nothing.
+ * The components added in the two waves that follow this discipline. Listed
+ * explicitly so the guard fails if a file is renamed or removed rather than
+ * silently checking nothing.
+ *
+ * Files from the first reconstruction (Button, Dialog, ai.tsx and the charts)
+ * still carry literals of their own; they are deliberately not listed here,
+ * because this guard is about the components built to the token rule and
+ * broadening it to old files would only make it fail for reasons outside this
+ * work.
  */
 const NEW_COMPONENTS = [
   "Text.tsx",
@@ -25,6 +32,11 @@ const NEW_COMPONENTS = [
   "Carousel.tsx",
   "Forms2.tsx",
   "Pickers.tsx",
+  // Wave 3: the interaction upgrades and the leftover components.
+  "Message.tsx",
+  "internal/GlassContainer.tsx",
+  "internal/a11y.ts",
+  "internal/haptics.ts",
 ];
 
 const read = (file: string) => readFileSync(join(SRC, file), "utf8");

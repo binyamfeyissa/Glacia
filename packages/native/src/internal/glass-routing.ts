@@ -16,6 +16,11 @@ declare const require: any;
 
 export interface LiquidGlassModule {
   LiquidGlassView?: any;
+  /**
+   * The container that merges nearby glass elements into one connected
+   * surface. Exported by `@callstack/liquid-glass` alongside the view.
+   */
+  LiquidGlassContainerView?: any;
   isLiquidGlassSupported?: boolean;
 }
 
@@ -25,6 +30,11 @@ export interface GlassRouter {
   supported: boolean;
   /** Apple's `LiquidGlassView`, or null when the fallback renders instead. */
   LiquidGlassView: any;
+  /**
+   * Apple's `LiquidGlassContainerView` — the surface that merges neighbouring
+   * glass — or null when the fallback wrapper renders instead.
+   */
+  LiquidGlassContainerView: any;
 }
 
 /**
@@ -35,9 +45,16 @@ export interface GlassRouter {
  */
 export function routerFor(module: LiquidGlassModule | null | undefined): GlassRouter {
   const view = module?.LiquidGlassView ?? null;
+  const container = module?.LiquidGlassContainerView ?? null;
   return {
+    // A module that reports support but lacks the container still renders real
+    // glass; the container is only needed by GlassContainer, which falls back
+    // when it is missing.
     supported: Boolean(module?.isLiquidGlassSupported) && Boolean(view),
     LiquidGlassView: view,
+    // The container merges only when the material itself is available; a
+    // container without the view would have nothing to merge.
+    LiquidGlassContainerView: container,
   };
 }
 

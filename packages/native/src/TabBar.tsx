@@ -5,6 +5,7 @@ import { Glass } from "./Glass";
 import { colors, radii } from "./internal/tokens";
 import { primitives } from "./internal/primitives";
 import { useIsDark, useSpring } from "./internal/motion";
+import { hapticSelection } from "./internal/haptics";
 
 export interface TabBarItem {
   id: string;
@@ -17,6 +18,8 @@ export interface TabBarProps {
   activeId?: string;
   defaultActiveId?: string;
   onTabChange?: (id: string) => void;
+  /** One selection tick when the tab changes. `false` opts out. */
+  haptics?: boolean;
   style?: StyleProp<ViewStyle>;
   isDark?: boolean;
   /** Passed through to the bar so it is testable. */
@@ -40,6 +43,7 @@ export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
     activeId: activeProp,
     defaultActiveId,
     onTabChange,
+    haptics = true,
     style,
     isDark: isDarkProp,
     testID,
@@ -62,6 +66,8 @@ export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
   const { value: slide, animated } = useSpring(activeIndex, "snappy");
 
   const handleSelect = (id: string) => {
+    // Selecting the tab already active is not a change, so it does not tick.
+    if (haptics && id !== activeId) hapticSelection();
     if (activeProp === undefined) setInternalId(id);
     onTabChange?.(id);
   };

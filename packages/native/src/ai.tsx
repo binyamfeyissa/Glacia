@@ -4,6 +4,7 @@ import type { StyleProp, ViewStyle } from "react-native";
 import { colors, radii } from "./internal/tokens";
 import { primitives } from "./internal/primitives";
 import { useIsDark } from "./internal/motion";
+import { useReducedMotion } from "./internal/a11y";
 
 export interface NativePlanStep {
   id: string;
@@ -390,15 +391,20 @@ export function NativeThinkingOrb({
   const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
   const { View, Text } = primitives();
+  const reducedMotion = useReducedMotion();
   const [tick, setTick] = useState(0);
 
+  // Reduce Motion: the orb stops pulsing and holds a steady size. The label is
+  // what carries the meaning, so nothing is lost by not moving.
+  const still = paused || reducedMotion;
+
   useEffect(() => {
-    if (paused) return;
+    if (still) return;
     const timer = setInterval(() => setTick((value) => value + 1), 700);
     return () => clearInterval(timer);
-  }, [paused]);
+  }, [still]);
 
-  const scale = paused ? 1 : [1, 1.12, 1][tick % 3]!;
+  const scale = still ? 1 : [1, 1.12, 1][tick % 3]!;
 
   return (
     <View

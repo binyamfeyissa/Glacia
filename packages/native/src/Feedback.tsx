@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useRef, useState, type ReactNode } from "react";
+import { createContext, forwardRef, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { StyleProp, ViewStyle } from "react-native";
 
 import { Glass } from "./Glass";
@@ -6,6 +6,7 @@ import { Separator } from "./Display";
 import { colors, radii, toneColor, type Tone } from "./internal/tokens";
 import { primitives } from "./internal/primitives";
 import { useIsDark, useSpring } from "./internal/motion";
+import { hapticSelection } from "./internal/haptics";
 
 // ---------------------------------------------------------------------------
 // Toast
@@ -169,6 +170,197 @@ function Entrance({
 }
 
 // ---------------------------------------------------------------------------
+// ToastViewport
+
+/** One message in a ToastViewport's queue. */
+export interface ToastItem {
+  /** A stable identity. Required, because the queue reorders and dismisses. */
+  id: string;
+  message: string;
+  action?: ToastAction;
+  icon?: ReactNode;
+  tone?: Tone | "neutral";
+  /** Milliseconds before it dismisses itself. 0 keeps it until dismissed. */
+  duration?: number;
+}
+
+export interface ToastViewportProps {
+  /** The messages to show. The oldest are dropped when more than 3 arrive. */
+  toasts: ToastItem[];
+  /** Called when one leaves, by timer, by swipe or by its action. */
+  onDismiss: (id: string) => void;
+  /** How many are visible at once. Extras wait in order. Defaults to 3. */
+  max?: number;
+  /** Where the stack sits. */
+  position?: "top" | "bottom";
+  style?: StyleProp<ViewStyle>;
+  isDark?: boolean;
+  testID?: string;
+}
+
+/**
+ * A queue of toasts, stacked the way Sonner stacks them.
+ *
+ * Three at a time is the practical limit: beyond that the messages stop being
+ * read and start covering the screen. Extras wait in the order they arrived, so
+ * no message is lost and the newest is never hidden behind a backlog.
+ *
+ * Each toast is independently dismissible — its own timer, its own action, and
+ * a swipe up. Swiping one up removes only that one.
+ *
+ * The single `Toast` keeps working unchanged: this is the host for when an app
+ * has several messages at once, not a replacement. A caller that shows one
+ * message continues to use `Toast` directly.
+ */
+export const ToastViewport = forwardRef<any, ToastViewportProps>(function ToastViewport(
+  { toasts, onDismiss, max = 3, position = "bottom", style, isDark: isDarkProp, testID, ...props },
+  ref,
+) {
+  const isDark = useIsDark(isDarkProp);
+  const theme = isDark ? colors.dark : colors.light;
+  const { View, PanResponder } = primitives();
+
+  // The visible window is the newest `max`, so a burst shows the latest
+  // messages rather than a stale backlog. Earlier ones remain queued in the
+  // caller's array and appear as the visible ones leave.
+  //
+  // A host is often rendered for the whole life of a screen and simply has no
+  // messages yet, so an absent queue means empty rather than a crash.
+  const visible = (toasts ?? []).slice(0, Math.max(0, max));
+
+  return (
+    <View
+      ref={ref}
+      testID={testID}
+      pointerEvents="box-none"
+      style={{
+        position: "absolute",
+        left: 0,
+        right: 0,
+        alignItems: "center",
+        gap: 8,
+        ...(position === "top" ? { top: 16 } : { bottom: 16 }),
+        ...(style as ViewStyle),
+      }}
+      {...props}
+    >
+      {visible.map((toast) => (
+        <SwipeableToast
+          key={toast.id}
+          toast={toast}
+          isDark={isDark}
+          onDismiss={() => onDismiss(toast.id)}
+          theme={theme}
+        />
+      ))}
+    </View>
+  );
+});
+
+/**
+ * One toast inside the viewport, with the swipe-up dismissal.
+ *
+ * Wrapping the existing Toast would have meant threading the gesture through
+ * its props, so the viewport renders the same pill with the gesture attached —
+ * the styling lives in one place (`Toast`), and this adds only the drag.
+ */
+function SwipeableToast({
+  toast,
+  isDark,
+  onDismiss,
+  theme,
+}: {
+  toast: ToastItem;
+  isDark: boolean;
+  onDismiss: () => void;
+  theme: any;
+}) {
+  const { View, Text: RNText, Pressable, PanResponder, Animated } = primitives();
+  const [lift, setLift] = useState(0);
+  const dismissRef = useRef(onDismiss);
+  dismissRef.current = onDismiss;
+
+  const duration = toast.duration ?? 4000;
+  useEffect(() => {
+    if (duration <= 0) return;
+    const timer = setTimeout(() => dismissRef.current(), duration);
+    return () => clearTimeout(timer);
+  }, [duration]);
+
+  const panResponder = useMemo(() => {
+    if (!PanResponder?.create) return null;
+    return PanResponder.create({
+      onMoveShouldSetPanResponder: (_event: any, gesture: any) =>
+        // Only an upward swipe removes a toast; downward drags are ignored.
+        gesture.dy < -8 && Math.abs(gesture.dy) > Math.abs(gesture.dx),
+      onPanResponderMove: (_event: any, gesture: any) => setLift(Math.min(0, gesture.dy)),
+      onPanResponderRelease: (_event: any, gesture: any) => {
+        // A quick flick or a long drag removes it; anything less springs back.
+        if (gesture.dy < -40 || gesture.vy < -0.5) {
+          dismissRef.current();
+        } else {
+          setLift(0);
+        }
+      },
+      onPanResponderTerminate: () => setLift(0),
+    });
+  }, [PanResponder]);
+
+  const tone = toast.tone ?? "neutral";
+  const accent = tone === "neutral" ? theme.foreground : toneColor(theme, tone);
+
+  const pill = (
+    <Glass
+      effect="regular"
+      isDark={isDark}
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 14,
+        borderRadius: radii.pill,
+        maxWidth: 420,
+        borderColor: tone === "neutral" ? theme.edge : accent,
+      }}
+    >
+      {toast.icon ? <View>{toast.icon}</View> : null}
+      <RNText
+        accessibilityRole="alert"
+        accessibilityLiveRegion="polite"
+        style={{ fontSize: 14, color: theme.foreground, flexShrink: 1 }}
+      >
+        {toast.message}
+      </RNText>
+      {toast.action ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={toast.action.label}
+          onPress={() => {
+            toast.action?.onPress();
+            onDismiss();
+          }}
+          style={{ paddingHorizontal: 4 }}
+        >
+          <RNText style={{ fontSize: 14, fontWeight: "600", color: theme.fill }}>
+            {toast.action.label}
+          </RNText>
+        </Pressable>
+      ) : null}
+    </Glass>
+  );
+
+  return (
+    <View
+      style={{ transform: [{ translateY: lift }], opacity: lift === 0 ? 1 : Math.max(0.4, 1 + lift / 120) }}
+      {...(panResponder ? panResponder.panHandlers : {})}
+    >
+      {pill}
+    </View>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Banner
 
 export interface BannerProps {
@@ -258,6 +450,16 @@ export const Banner = forwardRef<any, BannerProps>(function Banner(
 // ---------------------------------------------------------------------------
 // List
 
+/** One action revealed by swiping a row. */
+export interface ListSwipeAction {
+  label: string;
+  /** A leading node, typically an SVG icon the caller supplies. */
+  icon?: ReactNode;
+  /** The action's tint. Defaults to the theme's fill. */
+  color?: string;
+  onPress: () => void;
+}
+
 export interface ListItemProps {
   /** An avatar, icon or other leading node. */
   leading?: ReactNode;
@@ -272,10 +474,32 @@ export interface ListItemProps {
   onPress?: () => void;
   disabled?: boolean;
   selected?: boolean;
+  /** Actions revealed by swiping right (towards the trailing edge). */
+  swipeActions?: ListSwipeAction[];
+  /** Actions revealed by swiping left. */
+  leadingSwipeActions?: ListSwipeAction[];
+  /** Width allotted to each revealed action button. */
+  swipeActionWidth?: number;
+  /** Turns the swipe gesture off, leaving the row's `onPress` only. */
+  swipeable?: boolean;
+  /** Opt out of the selection tick when a swipe opens. */
+  haptics?: boolean;
   style?: StyleProp<ViewStyle>;
   isDark?: boolean;
   testID?: string;
 }
+
+/**
+ * Tracks which row of a List is open, so opening one closes the rest.
+ *
+ * A list with two open rows looks broken; iOS Mail and every kit that copied
+ * it keep at most one. The List provides the registry and each swipeable row
+ * registers its own close function.
+ */
+const OpenRowContext = createContext<{
+  openId: string | null;
+  setOpenId: (id: string | null) => void;
+} | null>(null);
 
 /**
  * One row of a List.
@@ -295,6 +519,11 @@ export const ListItem = forwardRef<any, ListItemProps>(function ListItem(
     onPress,
     disabled = false,
     selected = false,
+    swipeActions,
+    leadingSwipeActions,
+    swipeActionWidth = 78,
+    swipeable = true,
+    haptics = true,
     style,
     isDark: isDarkProp,
     testID,
@@ -304,10 +533,105 @@ export const ListItem = forwardRef<any, ListItemProps>(function ListItem(
 ) {
   const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
-  const { View, Text: RNText, Pressable } = primitives();
+  const { View, Text: RNText, Pressable, PanResponder } = primitives();
+  const rowGroup = useContext(OpenRowContext);
 
   const interactive = Boolean(onPress) && !disabled;
   const showChevron = interactive && chevron !== false && trailing === undefined;
+
+  const trailActions = swipeActions?.filter(Boolean) ?? [];
+  const leadActions = leadingSwipeActions?.filter(Boolean) ?? [];
+  const canSwipe = swipeable && !disabled && (trailActions.length > 0 || leadActions.length > 0);
+
+  // The row's own identity, so a List can close its siblings.
+  const rowId = useRef<string>(`row-${Math.random().toString(36).slice(2)}`);
+
+  // 0 is closed; a positive offset reveals trailing actions, negative leading.
+  const [offset, setOffset] = useState(0);
+  const offsetRef = useRef(0);
+  offsetRef.current = offset;
+  // A gesture that moved is a swipe, not a tap: the press that follows the
+  // release must not fire the row's onPress.
+  const swipedRef = useRef(false);
+
+  const trailingWidth = trailActions.length * swipeActionWidth;
+  const leadingWidth = leadActions.length * swipeActionWidth;
+
+  const close = () => setOffset(0);
+
+  // When another row opens, this one closes.
+  useEffect(() => {
+    if (rowGroup && rowGroup.openId !== rowId.current && offsetRef.current !== 0) {
+      setOffset(0);
+    }
+  }, [rowGroup?.openId]);
+
+  const settle = (next: number) => {
+    setOffset(next);
+    if (rowGroup) {
+      rowGroup.setOpenId(next !== 0 ? rowId.current : null);
+    }
+    if (next !== 0 && haptics && offsetRef.current === 0) hapticSelection();
+  };
+
+  const panResponder = useMemo(() => {
+    if (!canSwipe || !PanResponder?.create) return null;
+    return PanResponder.create({
+      // A horizontal drag claims the gesture; a vertical one stays with the
+      // surrounding scroll view.
+      onMoveShouldSetPanResponder: (_event: any, gesture: any) =>
+        Math.abs(gesture.dx) > Math.abs(gesture.dy) && Math.abs(gesture.dx) > 8,
+      onPanResponderGrant: () => {
+        swipedRef.current = false;
+      },
+      onPanResponderMove: (_event: any, gesture: any) => {
+        if (Math.abs(gesture.dx) > 4) swipedRef.current = true;
+        const from = offsetRef.current;
+        let next = from + gesture.dx;
+        // Do not drag past what the actions actually occupy; a small
+        // overshoot makes the edge feel elastic rather than hard.
+        next = Math.min(next, trailingWidth + 24);
+        next = Math.max(next, -(leadingWidth + 24));
+        setOffset(next);
+      },
+      onPanResponderRelease: (_event: any, gesture: any) => {
+        const released = offsetRef.current;
+        // Beyond half an action, or with a decisive flick, it stays open;
+        // otherwise it falls back closed.
+        if (gesture.dx > 0 && trailActions.length > 0) {
+          settle(released > trailingWidth / 2 || gesture.vx > 0.5 ? trailingWidth : 0);
+        } else if (gesture.dx < 0 && leadActions.length > 0) {
+          settle(released < -leadingWidth / 2 || gesture.vx < -0.5 ? -leadingWidth : 0);
+        } else {
+          settle(offsetRef.current > 0 ? Math.min(offsetRef.current, trailingWidth) : Math.max(offsetRef.current, -leadingWidth));
+        }
+      },
+      onPanResponderTerminate: () => settle(0),
+      onPanResponderTerminationRequest: () => false,
+    });
+    // The responder reads from refs, so it never acts on a stale offset.
+  }, [canSwipe, PanResponder, trailingWidth, leadingWidth, trailActions.length, leadActions.length]);
+
+  /**
+   * Runs an action and closes the row.
+   *
+   * The action is dispatched first so its own feedback is not delayed by the
+   * close, then the row resets — the reveal should not outlive the press.
+   */
+  const runAction = (action: ListSwipeAction) => {
+    action.onPress();
+    settle(0);
+    if (rowGroup) rowGroup.setOpenId(null);
+  };
+
+  const guardPress = (handler?: () => void) => () => {
+    // Swallow the press that ends a swipe.
+    if (swipedRef.current) {
+      swipedRef.current = false;
+      return;
+    }
+    handler?.();
+  };
 
   const content = (
     <>
@@ -345,28 +669,87 @@ export const ListItem = forwardRef<any, ListItemProps>(function ListItem(
     ...(style as ViewStyle),
   };
 
-  if (!interactive) {
-    return (
-      <View ref={ref} testID={testID} accessibilityRole="text" accessibilityState={{ disabled }} style={rowStyle} {...props}>
-        {content}
-      </View>
-    );
-  }
-
-  return (
+  const rowInner = !interactive ? (
+    <View accessibilityRole="text" accessibilityState={{ disabled }} style={rowStyle}>
+      {content}
+    </View>
+  ) : (
     <Pressable
-      ref={ref}
-      testID={testID}
       accessibilityRole="button"
       accessibilityLabel={description ? `${title}, ${description}` : title}
       accessibilityState={{ selected, disabled }}
       disabled={disabled}
-      onPress={onPress}
+      onPress={guardPress(onPress)}
       style={({ pressed }: { pressed: boolean }) => ({ ...rowStyle, opacity: pressed ? 0.7 : rowStyle.opacity })}
-      {...props}
     >
       {content}
     </Pressable>
+  );
+
+  if (!canSwipe) {
+    return (
+      <View ref={ref} testID={testID} style={{ overflow: "hidden" }} {...props}>
+        {rowInner}
+      </View>
+    );
+  }
+
+  /** The tinted tray behind the row: glass-tinted actions, flat not glass. */
+  const tray = (actions: ListSwipeAction[], edge: "left" | "right") => (
+    <View
+      style={{
+        position: "absolute",
+        top: 0,
+        bottom: 0,
+        [edge]: 0,
+        flexDirection: "row",
+      }}
+    >
+      {actions.map((action, index) => (
+        <Pressable
+          key={`${action.label}-${index}`}
+          accessibilityRole="button"
+          accessibilityLabel={action.label}
+          onPress={() => runAction(action)}
+          style={{
+            width: swipeActionWidth,
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 3,
+            backgroundColor: action.color ?? theme.glassActive,
+          }}
+        >
+          {action.icon}
+          <RNText style={{ fontSize: 12, color: theme.foreground }} numberOfLines={1}>
+            {action.label}
+          </RNText>
+        </Pressable>
+      ))}
+    </View>
+  );
+
+  return (
+    <View
+      ref={ref}
+      testID={testID}
+      accessibilityRole="none"
+      style={{ overflow: "hidden" }}
+      {...props}
+    >
+      {leadActions.length > 0 ? tray(leadActions, "right") : null}
+      {trailActions.length > 0 ? tray(trailActions, "left") : null}
+      <View
+        style={{
+          transform: [{ translateX: offset }],
+          // The row rides over its tray while it is open, so the actions are
+          // uncovered rather than shown alongside.
+          backgroundColor: "transparent",
+        }}
+        {...(panResponder ? panResponder.panHandlers : {})}
+      >
+        {rowInner}
+      </View>
+    </View>
   );
 });
 
@@ -395,15 +778,22 @@ export const List = forwardRef<any, ListProps>(function List(
 
   const rows = Array.isArray(children) ? children.filter(Boolean) : children == null ? [] : [children];
 
+  // At most one swipeable row is open at a time, so a list never shows two
+  // trays at once.
+  const [openId, setOpenId] = useState<string | null>(null);
+  const group = useMemo(() => ({ openId, setOpenId }), [openId]);
+
   const body = (
-    <View style={{ gap: 2 }}>
-      {rows.map((row, index) => (
-        <View key={index}>
-          {index > 0 ? <Separator isDark={isDark} inset={inset ? 14 : 0} /> : null}
-          {row}
-        </View>
-      ))}
-    </View>
+    <OpenRowContext.Provider value={group}>
+      <View style={{ gap: 2 }}>
+        {rows.map((row, index) => (
+          <View key={index}>
+            {index > 0 ? <Separator isDark={isDark} inset={inset ? 14 : 0} /> : null}
+            {row}
+          </View>
+        ))}
+      </View>
+    </OpenRowContext.Provider>
   );
 
   if (!inset) {

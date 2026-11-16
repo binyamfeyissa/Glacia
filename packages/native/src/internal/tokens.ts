@@ -29,6 +29,35 @@ export const typeScale = {
 };
 
 /**
+ * The default colour palette for ColorPicker.
+ *
+ * A palette is data, not a theme colour — it is the same twelve hues in light
+ * and dark — so it lives here rather than in either theme. Keeping it in the
+ * token module is also what lets the conformance guard require that component
+ * code contains no colour literal at all.
+ */
+export const palette = {
+  default: [
+    "#FF3B30", "#FF9500", "#FFCC00", "#34C759", "#32ADE6", "#007AFF",
+    "#5856D6", "#AF52DE", "#FF2D55", "#A2845E", "#8E8E93", "#1C1C1E",
+  ],
+  /** The colour a picker starts on when the caller gives none. */
+  fallback: "#007AFF",
+};
+
+/**
+ * Control sizes in points, for components whose dimension is not a radius.
+ *
+ * Rating's stars are the reason this exists: a star has a size and the size
+ * must come from the scale rather than from a literal in the component.
+ */
+export const controlSizes = {
+  star: { sm: 14, md: 20, lg: 28 },
+  swatch: { sm: 28, md: 36, lg: 44 },
+  picker: { track: 28 },
+};
+
+/**
  * Theme colours in the form React Native accepts.
  *
  * The shared tokens express colours as CSS colour strings (`rgb(r g b / a)`),
@@ -54,6 +83,20 @@ export const colors = {
     // Text and icons drawn on top of a filled (tinted) surface.
     onTint: "#FFFFFF",
     skeleton: "rgba(60, 60, 67, 0.12)",
+    /**
+     * The solid colour glass becomes when the user has asked the system to
+     * reduce transparency. Apple's rule is that a translucent surface is
+     * replaced by an opaque one, not merely tinted differently.
+     */
+    glassSolid: "#F2F2F7",
+    /**
+     * Neutral colours used by pickers and fields: the field's own wash, and
+     * the far end of a saturation gradient (the point of no saturation).
+     */
+    fieldWash: "rgba(120, 120, 128, 0.12)",
+    /** A flat neutral surface: incoming message bubbles, file chips. */
+    wash: "rgba(120, 120, 128, 0.12)",
+    neutralTop: "#FFFFFF",
     // Chart axis and grid lines: low-contrast, so they never compete with data.
     axis: "#3C3C43",
   },
@@ -72,6 +115,11 @@ export const colors = {
     scrim: "rgba(0, 0, 0, 0.6)",
     onTint: "#FFFFFF",
     skeleton: "rgba(235, 235, 245, 0.14)",
+    glassSolid: "#1C1C1E",
+    fieldWash: "rgba(120, 120, 128, 0.12)",
+    /** A flat neutral surface: incoming message bubbles, file chips. */
+    wash: "rgba(120, 120, 128, 0.12)",
+    neutralTop: "#FFFFFF",
     axis: "#EBEBF5",
   },
 };

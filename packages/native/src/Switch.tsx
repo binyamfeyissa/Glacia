@@ -5,11 +5,14 @@ import { Glass } from "./Glass";
 import { colors } from "./internal/tokens";
 import { primitives } from "./internal/primitives";
 import { useIsDark, useSpring } from "./internal/motion";
+import { hapticSelection } from "./internal/haptics";
 
 export interface SwitchProps {
   checked?: boolean;
   defaultChecked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
+  /** One selection tick when it toggles. `false` opts out. */
+  haptics?: boolean;
   disabled?: boolean;
   accessibilityLabel: string;
   style?: StyleProp<ViewStyle>;
@@ -37,6 +40,7 @@ export const Switch = forwardRef<any, SwitchProps>(function Switch(
     defaultChecked = false,
     onCheckedChange,
     disabled = false,
+    haptics = true,
     accessibilityLabel,
     style,
     isDark: isDarkProp,
@@ -57,6 +61,7 @@ export const Switch = forwardRef<any, SwitchProps>(function Switch(
   const toggle = () => {
     if (disabled) return;
     const next = !isChecked;
+    if (haptics) hapticSelection();
     if (checkedProp === undefined) setInternalChecked(next);
     onCheckedChange?.(next);
   };

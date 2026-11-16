@@ -111,6 +111,18 @@ import {
   Calendar,
   DatePicker,
   TimePicker,
+  // Wave 3 — glass capabilities
+  GlassContainer,
+  FABGroup,
+  ToastViewport,
+  // Wave 3 — the leftover components
+  Rating,
+  ColorPicker,
+  Combobox,
+  NativeImage,
+  Message,
+  MessageBubble,
+  MessageAttachment,
   // Diagnostics
   isGlassSupported,
 } from "glacia-native";
@@ -314,6 +326,113 @@ export default function App() {
         <NativeWaterfallChart steps={[{ label: "a", value: 1 }]} />
       </Section>
 
+
+      {/* ------------------------------------------------------------------
+          #79 · GlassContainer — merging two glass surfaces on iOS 26.
+          A TabBar and a FAB inside one container: on iOS 26 they blend into
+          one connected liquid surface; everywhere else they are the same two
+          components, each with its own edge. Watch this on the owner's iPhone.
+          ------------------------------------------------------------------ */}
+      <Section title="79 · GlassContainer (TabBar + FAB merging)">
+        <View
+          style={{
+            height: 300,
+            borderRadius: 16,
+            overflow: "hidden",
+            justifyContent: "flex-end",
+            backgroundColor: "#0F172A",
+          }}
+        >
+          <View style={{ position: "absolute", top: -30, left: -10, width: 200, height: 200, borderRadius: 100, backgroundColor: "#6366F1", opacity: 0.95 }} />
+          <View style={{ position: "absolute", top: 40, right: -20, width: 210, height: 210, borderRadius: 105, backgroundColor: "#F472B6", opacity: 0.9 }} />
+          <View style={{ position: "absolute", bottom: 0, left: 60, width: 180, height: 180, borderRadius: 90, backgroundColor: "#34D399", opacity: 0.85 }} />
+          <View style={{ position: "absolute", bottom: -30, right: 30, width: 150, height: 150, borderRadius: 75, backgroundColor: "#FBBF24", opacity: 0.9 }} />
+
+          <GlassContainer spacing={16} style={{ paddingHorizontal: 16, paddingBottom: 16, alignItems: "center" }}>
+            <View style={{ flexDirection: "row", alignItems: "flex-end", gap: 12 }}>
+              <TabBar
+                items={[
+                  { id: "home", label: "Home", icon: <View style={{ width: 18, height: 18, borderRadius: 9, backgroundColor: "#FFFFFF" }} /> },
+                  { id: "search", label: "Search", icon: <View style={{ width: 18, height: 18, borderRadius: 9, backgroundColor: "#FFFFFF" }} /> },
+                  { id: "you", label: "You", icon: <View style={{ width: 18, height: 18, borderRadius: 9, backgroundColor: "#FFFFFF" }} /> },
+                ]}
+                style={{ flex: 1 }}
+              />
+              <FAB accessibilityLabel="Compose beside the tab bar" onPress={() => {}} />
+            </View>
+          </GlassContainer>
+        </View>
+      </Section>
+
+      <Section title="80 · FABGroup">
+        <View style={{ height: 220, alignItems: "flex-end", justifyContent: "flex-end" }}>
+          <FABGroup
+            accessibilityLabel="Create"
+            icon={<Text style={{ fontSize: 22, color: "#007AFF" }}>+</Text>}
+            actions={[
+              { icon: <Text style={{ fontSize: 16 }}>A</Text>, label: "Album", onPress: () => {} },
+              { icon: <Text style={{ fontSize: 16 }}>P</Text>, label: "Photo", onPress: () => {} },
+              { icon: <Text style={{ fontSize: 16 }}>N</Text>, label: "Note", onPress: () => {} },
+            ]}
+          />
+        </View>
+      </Section>
+
+      <Section title="57 · Toast queue (at most three)">
+        <View style={{ height: 150 }}>
+          <ToastViewport
+            toasts={[
+              { id: "t1", message: "Saved to your library", duration: 0 },
+              { id: "t2", message: "Upload complete", duration: 0 },
+              { id: "t3", message: "3 photos shared", duration: 0 },
+              { id: "t4", message: "This one waits its turn", duration: 0 },
+            ]}
+            onDismiss={() => {}}
+          />
+        </View>
+      </Section>
+
+      <Section title="81-84 · Rating, ColorPicker, Combobox, Image">
+        <Rating value={3.5} size="md" onChange={() => {}} />
+        <ColorPicker
+          colors={["#FF3B30", "#FF9500", "#FFCC00", "#34C759", "#32ADE6", "#007AFF"]}
+          defaultValue="#32ADE6"
+          onChange={() => {}}
+        />
+        <Combobox
+          placeholder="Search a fruit…"
+          options={[
+            { label: "Apple", value: "apple" },
+            { label: "Apricot", value: "apricot" },
+            { label: "Banana", value: "banana" },
+            { label: "Blueberry", value: "blueberry" },
+          ]}
+          onChange={() => {}}
+        />
+        <View style={{ width: 160, height: 100, borderRadius: 12, overflow: "hidden" }}>
+          <NativeImage
+            accessibilityLabel="A landscape"
+            source={{ uri: "https://picsum.photos/320/200" }}
+          />
+        </View>
+      </Section>
+
+      <Section title="85 · chat screen (Message family + NativeAIInput)">
+        <View style={{ gap: 8 }}>
+          <Message name="Ada Lovelace" time="10:42" avatar>
+            <MessageBubble>
+              <GlaciaText variant="body">Can you summarise the report?</GlaciaText>
+            </MessageBubble>
+          </Message>
+          <Message name="You" time="10:43" avatar outgoing>
+            <MessageBubble outgoing>
+              <GlaciaText variant="body">Here it is — three pages, mostly charts.</GlaciaText>
+            </MessageBubble>
+            <MessageAttachment name="report.pdf" size="1.2 MB" onPress={() => {}} />
+          </Message>
+          <NativeAIInput placeholder="Message…" onSend={() => {}} />
+        </View>
+      </Section>
 
       {/* ------------------------------------------------------------------
           The glass proof.

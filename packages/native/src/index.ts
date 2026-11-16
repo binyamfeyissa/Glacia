@@ -105,6 +105,10 @@ export {
   type SpinnerSize,
   type ProgressProps,
   type ProgressVariant,
+  Rating,
+  type RatingProps,
+  NativeImage,
+  type NativeImageProps,
 } from "./Display";
 // Feedback and display.
 export {
@@ -114,11 +118,15 @@ export {
   ListItem,
   ListSection,
   Accordion,
+  ToastViewport,
   type ToastProps,
   type ToastAction,
+  type ToastItem,
+  type ToastViewportProps,
   type BannerProps,
   type ListProps,
   type ListItemProps,
+  type ListSwipeAction,
   type ListSectionProps,
   type AccordionProps,
   type AccordionSection,
@@ -136,6 +144,9 @@ export {
   type IconButtonProps,
   type AppBarProps,
   type AppBarAction,
+  FABGroup,
+  type FABGroupProps,
+  type FABGroupAction,
 } from "./Bars";
 // Overlays.
 export {
@@ -143,6 +154,8 @@ export {
   Sheet,
   Drawer,
   anchorPopover,
+  resolveSnapPoint,
+  nearestSnapPoint,
   type MenuProps,
   type MenuItem,
   type SheetProps,
@@ -169,6 +182,15 @@ export {
   type InputOTPProps,
   type ButtonGroupProps,
   type ButtonGroupItem,
+  ColorPicker,
+  DEFAULT_PALETTE,
+  hexToRgb,
+  rgbToHex,
+  hueGradientColors,
+  type ColorPickerProps,
+  Combobox,
+  type ComboboxProps,
+  type ComboboxOption,
 } from "./Forms2";
 export {
   Calendar,
@@ -186,5 +208,24 @@ export {
   type DatePickerProps,
   type TimePickerProps,
 } from "./Pickers";
+// Chat. Bubbles are flat tints; the composer (NativeAIInput) is the glass.
+export {
+  Message,
+  MessageBubble,
+  MessageAttachment,
+  type MessageProps,
+  type MessageBubbleProps,
+  type MessageAttachmentProps,
+} from "./Message";
 export { isGlassSupported } from "./internal/GlassView";
-export { colors, radii, springs, typeScale, toneColor, type Tone } from "./internal/tokens";
+export { GlassContainer, type NativeGlassContainerProps } from "./internal/GlassContainer";
+export {
+  colors,
+  controlSizes,
+  palette,
+  radii,
+  springs,
+  typeScale,
+  toneColor,
+  type Tone,
+} from "./internal/tokens";

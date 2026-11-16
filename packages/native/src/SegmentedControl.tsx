@@ -5,12 +5,15 @@ import { Glass } from "./Glass";
 import { colors, radii } from "./internal/tokens";
 import { primitives } from "./internal/primitives";
 import { useIsDark, useSpring } from "./internal/motion";
+import { hapticSelection } from "./internal/haptics";
 
 export interface SegmentedControlProps {
   values: string[];
   selectedIndex?: number;
   defaultIndex?: number;
   onValueChange?: (value: string, index: number) => void;
+  /** One selection tick when the segment changes. `false` opts out. */
+  haptics?: boolean;
   style?: StyleProp<ViewStyle>;
   isDark?: boolean;
   /** Passed through to the control so it is testable. */
@@ -32,6 +35,7 @@ export const SegmentedControl = forwardRef<any, SegmentedControlProps>(function 
     selectedIndex: selectedProp,
     defaultIndex = 0,
     onValueChange,
+    haptics = true,
     style,
     isDark: isDarkProp,
     testID,
@@ -52,6 +56,8 @@ export const SegmentedControl = forwardRef<any, SegmentedControlProps>(function 
   const { value: slide, animated } = useSpring(safeIndex, "snappy");
 
   const handleSelect = (index: number) => {
+    // Only a change ticks: re-pressing the current segment is not a selection.
+    if (haptics && index !== safeIndex) hapticSelection();
     if (selectedProp === undefined) setInternalIndex(index);
     const val = values[index];
     if (val !== undefined) onValueChange?.(val, index);

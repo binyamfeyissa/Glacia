@@ -54,6 +54,14 @@ export const isGlassSupported = defaultRouter().supported;
  * Platform Glass View — the single place a glass surface is chosen:
  * - iOS 26+: Real UIGlassEffect via @callstack/liquid-glass
  * - iOS < 26 / Android / Expo Go: translucent tint View with identical layout
+ *
+ * Reduce Transparency is honoured on the fallback branch only: there the
+ * translucent tint is replaced by the theme's solid glass colour, with the same
+ * radius and the same hairline border, because a translucent surface is what
+ * the user asked the system to remove. On iOS 26 the system applies its own
+ * treatment to `UIGlassEffect` and this component does not second-guess it —
+ * overriding Apple's accessibility treatment would be worse than deferring to
+ * it, so the real glass is left exactly as the system renders it.
  */
 export const GlassView = forwardRef<any, NativeGlassProps>(function GlassView(
   {

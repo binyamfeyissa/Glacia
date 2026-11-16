@@ -6,9 +6,13 @@
 //   does not pass `isDark`, so a theme-aware app needs no extra prop threading.
 // - `useSpring` animates a number towards its target with the package's spring
 //   tokens through React Native's Animated API. No CSS, no timers of our own.
+// - Motion respects the system's Reduce Motion preference: when it is on, the
+//   value settles at its target instead of animating. Doing it here means every
+//   animation built on `useSpring` complies without repeating the check.
 
 import { useEffect, useRef } from "react";
 
+import { useReducedMotion } from "./a11y";
 import { primitives } from "./primitives";
 import { springs } from "./tokens";
 
@@ -31,10 +35,15 @@ export type SpringName = keyof typeof springs;
  * on this platform. A caller that gets `animated === false` renders the target
  * directly, so the DOM preview and tests show the settled state rather than an
  * animation the environment cannot advance.
+ *
+ * Reduce Motion turns this into the same case: `animated` is false and the
+ * value is already at its target, so the component jumps to its end state
+ * rather than playing a transition the user asked not to see.
  */
 export function useSpring(target: number, spring: SpringName = "snappy") {
   const { Animated, isNative } = primitives();
-  const animated = Boolean(isNative && Animated?.Value && Animated?.spring);
+  const reducedMotion = useReducedMotion();
+  const animated = Boolean(isNative && Animated?.Value && Animated?.spring) && !reducedMotion;
 
   // Off-device there is no Animated; a plain ref keeps the call sites identical.
   const value = useRef<any>(null);

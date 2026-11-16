@@ -3,6 +3,7 @@ import type { StyleProp, ViewStyle } from "react-native";
 
 import { colors, radii } from "./tokens";
 import { primitives } from "./primitives";
+import { useReducedTransparency } from "./a11y";
 
 export interface FallbackGlassProps {
   effect?: "clear" | "regular" | "none";
@@ -11,6 +12,11 @@ export interface FallbackGlassProps {
   style?: StyleProp<ViewStyle>;
   children?: ReactNode;
   isDark?: boolean;
+  /**
+   * Force the solid treatment. Normally read from the system's Reduce
+   * Transparency preference; this exists so a test can pin it.
+   */
+  reducedTransparency?: boolean;
 }
 
 /**
@@ -28,6 +34,7 @@ export const FallbackGlassView = forwardRef<any, FallbackGlassProps>(function Fa
     style,
     children,
     isDark = false,
+    reducedTransparency,
     ...props
   },
   ref,
@@ -35,8 +42,18 @@ export const FallbackGlassView = forwardRef<any, FallbackGlassProps>(function Fa
   const themeColors = isDark ? colors.dark : colors.light;
   const { View } = primitives();
 
-  const bg =
-    effect === "none"
+  // Reduce Transparency means the translucent material is replaced by a solid
+  // colour — the point of the preference is to remove see-through surfaces.
+  const systemReduced = useReducedTransparency();
+  const solid = reducedTransparency ?? systemReduced;
+
+  const bg = solid
+    ? effect === "none"
+      ? "transparent"
+      : tintColor && effect === "clear"
+        ? tintColor
+        : themeColors.glassSolid
+    : effect === "none"
       ? "transparent"
       : effect === "clear"
         ? isDark

@@ -28,6 +28,11 @@ export interface RNPrimitives {
   Circle: any;
   Rect: any;
   Polygon: any;
+  /** Gradient and clipping nodes, for the colour picker's hue track. */
+  Defs: any;
+  LinearGradient: any;
+  Stop: any;
+  ClipPath: any;
   SvgText: any;
   TextInput: any;
   Modal: any;
@@ -46,6 +51,19 @@ export interface RNPrimitives {
   PanResponder: any;
   /** React Native's useColorScheme, or null outside a native runtime. */
   useColorScheme: (() => "light" | "dark" | null | undefined) | null;
+  /**
+   * React Native's AccessibilityInfo, or null outside a native runtime. Read
+   * for the Reduce Transparency and Reduce Motion preferences.
+   */
+  AccessibilityInfo: any;
+  /** React Native's Vibration, or null outside a native runtime. */
+  Vibration: any;
+  /**
+   * React Native's useWindowDimensions, or a fixed reader off-device. Snap
+   * points are fractions of the window, so the sheet needs the height before
+   * it can resolve them.
+   */
+  useWindowDimensions: () => { width: number; height: number };
 }
 
 /**
@@ -242,15 +260,23 @@ function resolve(): RNPrimitives {
 
   /** An image that reads its remote source in the DOM preview. */
   function imageFallback(props: any) {
-    const { source, accessibilityLabel, style, onError } = props ?? {};
+    const { source, accessibilityLabel, accessibilityRole, style, onError, onLoad, testID, ...rest } = props ?? {};
     const { createElement } = require("react");
+    const source_ = typeof source === "number" ? undefined : source?.uri;
     return createElement("img", {
-      src: source?.uri,
+      src: source_,
+      // `alt` covers the visible-description case; `aria-label` is what queries
+      // and screen readers in the preview read, so both are set.
       alt: accessibilityLabel ?? "",
+      "aria-label": accessibilityLabel,
+      "aria-role": accessibilityRole,
+      "data-testid": testID,
       style: toDomStyle(style),
-      // A broken source must reach the component the same way it does on a
-      // device, or a fallback (initials, placeholder) can never render.
+      // Load and error must reach the component the way they do on a device,
+      // or the placeholder and the fallback can never render in the preview.
       onError,
+      onLoad,
+      ...rest,
     });
   }
 
@@ -268,6 +294,10 @@ function resolve(): RNPrimitives {
     Circle: svg?.Circle ?? fallback("circle"),
     Rect: svg?.Rect ?? fallback("rect"),
     Polygon: svg?.Polygon ?? fallback("polygon"),
+    Defs: svg?.Defs ?? fallback("defs"),
+    LinearGradient: svg?.LinearGradient ?? fallback("linearGradient"),
+    Stop: svg?.Stop ?? fallback("stop"),
+    ClipPath: svg?.ClipPath ?? fallback("clipPath"),
     // TextInput is not an SVG primitive, but resolving it here keeps every
     // component on one runtime-resolution path instead of two.
     TextInput: rn?.TextInput ?? fallback("input"),
@@ -285,6 +315,19 @@ function resolve(): RNPrimitives {
     isNative: Boolean(rn?.View),
     PanResponder: rn?.PanResponder ?? panResponderShim(),
     useColorScheme: rn?.useColorScheme ?? null,
+    // AccessibilityInfo and Vibration are only meaningful on a device; both
+    // are null off it, and their callers already treat absence as "off".
+    AccessibilityInfo: rn?.AccessibilityInfo ?? null,
+    Vibration: rn?.Vibration ?? null,
+    // Off-device there is no window; the DOM preview reports the viewport when
+    // it can and a conventional phone size otherwise. Snap points are
+    // fractions, so any consistent height yields the same proportions.
+    useWindowDimensions:
+      rn?.useWindowDimensions ??
+      (() => {
+        const view: any = typeof globalThis !== "undefined" ? (globalThis as any).window : undefined;
+        return { width: view?.innerWidth ?? 390, height: view?.innerHeight ?? 800 };
+      }),
   };
 }
 
@@ -443,6 +486,32 @@ const LENGTH_PROPS = new Set([
 ]);
 
 /** Converts an RN style object to DOM-compatible CSS. */
+/**
+ * Rewrites React Native's `transform` array into a CSS transform string.
+ *
+ * The preview is a browser, and a browser does not understand
+ * `[{ translateX: 12 }, { scale: 2 }]`; React Native's Shape controls and
+ * glass offsets would silently not move. Translating the entries here keeps the
+ * preview faithful to what a device shows.
+ */
+function transformToCss(entries: any): string | undefined {
+  if (!Array.isArray(entries)) return typeof entries === "string" ? entries : undefined;
+  const parts: string[] = [];
+  for (const entry of entries) {
+    if (!entry || typeof entry !== "object") continue;
+    for (const [key, raw] of Object.entries(entry)) {
+      const value = typeof (raw as any)?.__getValue === "function" ? (raw as any).__getValue() : raw;
+      if (typeof value !== "number") continue;
+      if (key === "translateX") parts.push(`translateX(${value}px)`);
+      else if (key === "translateY") parts.push(`translateY(${value}px)`);
+      else if (key === "scale") parts.push(`scale(${value})`);
+      else if (key === "rotate") parts.push(`rotate(${value}deg)`);
+      else if (key === "rotateZ") parts.push(`rotateZ(${value}deg)`);
+    }
+  }
+  return parts.length > 0 ? parts.join(" ") : undefined;
+}
+
 function toDomStyle(style: any): any {
   if (!style) return style;
   const list = Array.isArray(style) ? style : [style];
@@ -455,6 +524,13 @@ function toDomStyle(style: any): any {
       // Animated values resolve to plain numbers off-device.
       const resolved =
         typeof (value as any)?.interpolate === "function" ? (value as any).__getValue?.() : value;
+      if (key === "transform") {
+        const css = transformToCss(resolved);
+        // Only set it when there is something to say; an empty transform would
+        // override an earlier entry in a style array.
+        if (css) merged[key] = css;
+        continue;
+      }
       merged[key] =
         typeof resolved === "number" && LENGTH_PROPS.has(key) ? `${resolved}px` : resolved;
     }
