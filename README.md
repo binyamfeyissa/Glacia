@@ -17,7 +17,7 @@
   <a href="https://www.npmjs.com/package/glacia-tokens"><img src="https://img.shields.io/npm/v/glacia-tokens.svg?label=glacia-tokens&color=059669" alt="glacia-tokens npm version"></a>
   <a href="https://github.com/binyamfeyissa"><img src="https://img.shields.io/badge/Author-Binyam%20Feyissa-blueviolet.svg" alt="Author: Binyam Feyissa"></a>
   <a href="https://github.com/binyamfeyissa/Glacia/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
-  <a href="https://glacia.binyamfeyissa.dev"><img src="https://img.shields.io/badge/Tests-660%20passing-brightgreen.svg" alt="Tests"></a>
+  <a href="https://glacia.binyamfeyissa.dev"><img src="https://img.shields.io/badge/Tests-678%20passing-brightgreen.svg" alt="Tests"></a>
   <a href="https://glacia.binyamfeyissa.dev"><img src="https://img.shields.io/badge/Registry-97%20components-teal.svg" alt="Registry"></a>
   <a href="https://glacia.binyamfeyissa.dev"><img src="https://img.shields.io/badge/Docs-glacia.binyamfeyissa.dev-black.svg" alt="Documentation"></a>
 </p>
@@ -321,7 +321,7 @@ console.log(springs.snappy); // { stiffness: 300, damping: 28, mass: 1 }
 ## Verification & Testing
 
 Glacia maintains a strict verification suite across both React and React Native:
-- **660+ automated unit & component tests** passing across Vitest and React Testing Library (31 web suites + 18 React Native suites).
+- **678+ automated unit & component tests** passing across Vitest and React Testing Library (31 web suites + 20 React Native suites).
 - Full typecheck verification with `tsc --noEmit`.
 - Production bundle verification via `tsdown` (Rolldown) and `next build` (Next.js 15).
 

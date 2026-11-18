@@ -26,6 +26,8 @@ out
 *.p12
 
 # Internal Development & Audit Reports
+*_REPORT.md
+*REPORT*.md
 BUILD_REPORT.md
 FIGMA_RECONCILIATION.md
 GLACIA_AUDIT_REPORT.md

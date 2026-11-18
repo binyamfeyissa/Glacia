@@ -1,6 +1,6 @@
 {
   "name": "glacia-tokens",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Shared design tokens and cross-platform types for Glacia",
   "author": "Binyam Feyissa (https://github.com/binyamfeyissa)",
   "license": "MIT",
