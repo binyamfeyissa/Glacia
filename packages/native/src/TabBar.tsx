@@ -6,6 +6,7 @@ import { colors, radii } from "./internal/tokens";
 import { primitives } from "./internal/primitives";
 import { useIsDark, useSpring } from "./internal/motion";
 import { hapticSelection } from "./internal/haptics";
+import { LensRim, lensShadow } from "./internal/lens";
 
 export interface TabBarItem {
   id: string;
@@ -26,7 +27,9 @@ export interface TabBarProps {
   testID?: string;
 }
 
-const BAR_HEIGHT = 52;
+// The web bar: a 40pt rail (32pt tabs in a 4pt inset) with a 20pt radius, a
+// glass lens filling the active slot, and 13pt labels at 500/400 weight.
+const BAR_HEIGHT = 40;
 
 /**
  * The bottom bar of an app: a row of tabs on one glass surface.
@@ -56,6 +59,7 @@ export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
   const { View, Text, Pressable, Animated } = primitives();
 
   const [internalId, setInternalId] = useState(defaultActiveId || items[0]?.id || "");
+  const [held, setHeld] = useState(false);
   const activeId = activeProp !== undefined ? activeProp : internalId;
 
   const activeIndex = Math.max(
@@ -77,8 +81,8 @@ export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
     alignItems: "center",
     justifyContent: "space-around",
     height: BAR_HEIGHT,
-    paddingHorizontal: 8,
-    borderRadius: radii.xl,
+    paddingHorizontal: 4,
+    borderRadius: radii.lg,
     ...(style as ViewStyle),
   };
 
@@ -87,17 +91,28 @@ export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
 
   const indicatorStyle = {
     position: "absolute" as const,
-    top: 6,
-    bottom: 6,
-    left: 8,
+    top: 4,
+    bottom: 4,
+    left: 4,
     width: itemWidth,
-    borderRadius: radii.lg,
+    borderRadius: radii.pill,
     backgroundColor: themeColors.glassActive,
     opacity: 0.75,
+    // A lens, not a wash: it lifts off the rail and carries the rim.
+    ...lensShadow(isDark),
   };
 
   return (
-    <Glass ref={ref} effect="regular" isDark={isDark} style={barStyle} testID={testID} {...props}>
+    <Glass
+      ref={ref}
+      effect="regular"
+      surface="rail"
+      pressed={held}
+      isDark={isDark}
+      style={barStyle}
+      testID={testID}
+      {...props}
+    >
       {/* The selected item's wash, one View behind the labels. */}
       {animated ? (
         <Animated.View
@@ -116,12 +131,16 @@ export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
               },
             ],
           }}
-        />
+        >
+          <LensRim radius={radii.pill} isDark={isDark} />
+        </Animated.View>
       ) : (
         <View
           pointerEvents="none"
           style={{ ...indicatorStyle, left: `${(activeIndex * 100) / count}%` }}
-        />
+        >
+          <LensRim radius={radii.pill} isDark={isDark} />
+        </View>
       )}
 
       {items.map((tab) => {
@@ -133,6 +152,8 @@ export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
             accessibilityLabel={tab.label}
             accessibilityState={{ selected: isActive }}
             onPress={() => handleSelect(tab.id)}
+            onPressIn={() => setHeld(true)}
+            onPressOut={() => setHeld(false)}
             style={{
               flex: 1,
               height: "100%",
@@ -148,8 +169,8 @@ export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
             <Text
               numberOfLines={1}
               style={{
-                fontSize: 11,
-                fontWeight: isActive ? "600" : "500",
+                fontSize: 13,
+                fontWeight: isActive ? "500" : "400",
                 color: isActive ? themeColors.fill : themeColors.muted,
               }}
             >

@@ -69,6 +69,7 @@ export const Avatar = forwardRef<any, AvatarProps>(function Avatar(
     >
       <Glass
         effect="regular"
+        surface="panel"
         isDark={isDark}
         style={{
           width: dimension,
@@ -158,7 +159,8 @@ export const Badge = forwardRef<any, BadgeProps>(function Badge(
           : theme.fill;
 
   const isDot = children == null;
-  const height = isDot ? 10 : 18;
+  // The web badge is 24 tall with 10 of horizontal padding and 12/500 type.
+  const height = isDot ? 10 : 24;
 
   const badge = (
     <View
@@ -170,7 +172,7 @@ export const Badge = forwardRef<any, BadgeProps>(function Badge(
         minWidth: height,
         height,
         borderRadius: height / 2,
-        paddingHorizontal: isDot ? 0 : 6,
+        paddingHorizontal: isDot ? 0 : 10,
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: background,
@@ -179,7 +181,7 @@ export const Badge = forwardRef<any, BadgeProps>(function Badge(
       {...props}
     >
       {!isDot && (
-        <Text style={{ fontSize: 11, fontWeight: "700", color: theme.onTint }} numberOfLines={1}>
+        <Text style={{ fontSize: 12, fontWeight: "500", color: theme.onTint }} numberOfLines={1}>
           {children}
         </Text>
       )}
@@ -226,8 +228,8 @@ export const Separator = forwardRef<any, SeparatorProps>(function Separator(
 
   const separatorStyle: ViewStyle =
     orientation === "horizontal"
-      ? { height: 0.5, alignSelf: "stretch", marginLeft: inset, backgroundColor: theme.separator }
-      : { width: 0.5, alignSelf: "stretch", backgroundColor: theme.separator };
+      ? { height: 1, alignSelf: "stretch", marginLeft: inset, backgroundColor: theme.separator }
+      : { width: 1, alignSelf: "stretch", backgroundColor: theme.separator };
 
   return (
     <View
@@ -526,6 +528,7 @@ export const Progress = forwardRef<any, ProgressProps>(function Progress(
     <Glass
       ref={ref}
       effect="regular"
+      surface="rail"
       isDark={isDark}
       style={{
         height: 8,

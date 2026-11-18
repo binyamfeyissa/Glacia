@@ -1,9 +1,11 @@
 import { forwardRef, useState, type ReactNode } from "react";
 import type { StyleProp, TextStyle, ViewStyle } from "react-native";
 
+import { Glass } from "./Glass";
 import { colors, radii } from "./internal/tokens";
 import { primitives } from "./internal/primitives";
 import { useIsDark } from "./internal/motion";
+import { SelectedLens, lensFill } from "./internal/lens";
 
 export interface LabelProps {
   children?: ReactNode;
@@ -35,7 +37,7 @@ export const Label = forwardRef<any, LabelProps>(function Label(
       accessibilityRole="text"
       style={{
         fontSize: 13,
-        fontWeight: "600",
+        fontWeight: "500",
         color: disabled ? theme.muted : theme.foreground,
         opacity: disabled ? 0.6 : 1,
         ...(style as TextStyle),
@@ -80,7 +82,7 @@ export function Field({
   const message = error ?? description;
 
   return (
-    <View style={{ gap: 6, ...(style as ViewStyle) }}>
+    <View style={{ gap: 7, ...(style as ViewStyle) }}>
       {label && (
         <Label required={required} disabled={disabled} isDark={isDark}>
           {label}
@@ -93,7 +95,7 @@ export function Field({
         <Text
           accessibilityRole={error ? "alert" : "text"}
           style={{
-            fontSize: 11,
+            fontSize: 12,
             color: error ? theme.destructive : theme.muted,
           }}
         >
@@ -165,28 +167,28 @@ export function Checkbox({
         ...(style as ViewStyle),
       }}
     >
-      <View
+      <Glass
+        surface="control"
+        isDark={isDark}
         style={{
           width: 20,
           height: 20,
           borderRadius: 6,
-          borderWidth: filled ? 0 : 1.5,
-          borderColor: theme.edge,
-          backgroundColor: filled ? theme.fill : "transparent",
+          backgroundColor: filled ? theme.fill : undefined,
           alignItems: "center",
           justifyContent: "center",
           marginTop: 1,
         }}
       >
         {indeterminate ? (
-          <View style={{ width: 10, height: 2, borderRadius: 1, backgroundColor: "#fff" }} />
+          <View style={{ width: 10, height: 2, borderRadius: 1, backgroundColor: theme.onTint }} />
         ) : checked ? (
           // A glyph rather than an icon dependency: one text node, no package.
-          <Text style={{ color: "#fff", fontSize: 12, fontWeight: "700", lineHeight: 14 }}>
+          <Text style={{ color: theme.onTint, fontSize: 12, fontWeight: "700", lineHeight: 14 }}>
             ✓
           </Text>
         ) : null}
-      </View>
+      </Glass>
 
       {(label || description) && (
         <View style={{ flex: 1 }}>
@@ -194,7 +196,7 @@ export function Checkbox({
             <Text style={{ fontSize: 14, color: theme.foreground, fontWeight: "500" }}>{label}</Text>
           )}
           {description && (
-            <Text style={{ fontSize: 11, color: theme.muted, marginTop: 2 }}>{description}</Text>
+            <Text style={{ fontSize: 12, color: theme.muted, marginTop: 2 }}>{description}</Text>
           )}
         </View>
       )}
@@ -279,20 +281,32 @@ export function RadioGroup({
               opacity: isDisabled ? 0.45 : 1,
             }}
           >
-            <View
+            {/* A glass circle with a white dot when chosen, rather than a
+                border that grows: the web draws the dot, and a thickening
+                border reads as a different control. */}
+            <Glass
+              surface="control"
+              isDark={isDark}
               style={{
                 width: 20,
                 height: 20,
                 borderRadius: 10,
-                borderWidth: isSelected ? 6 : 1.5,
-                borderColor: isSelected ? theme.fill : theme.edge,
+                backgroundColor: isSelected ? theme.fill : undefined,
+                alignItems: "center",
+                justifyContent: "center",
                 marginTop: 1,
               }}
-            />
+            >
+              {isSelected ? (
+                <View
+                  style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: theme.onTint }}
+                />
+              ) : null}
+            </Glass>
             <View style={{ flex: 1 }}>
               <Text style={{ fontSize: 14, color: theme.foreground }}>{option.label}</Text>
               {option.description && (
-                <Text style={{ fontSize: 11, color: theme.muted, marginTop: 2 }}>
+                <Text style={{ fontSize: 12, color: theme.muted, marginTop: 2 }}>
                   {option.description}
                 </Text>
               )}
@@ -366,34 +380,36 @@ export function Select({
         accessibilityLabel={selected?.label ?? placeholder}
         disabled={disabled}
         onPress={() => setOpen(!open)}
-        style={{
-          minHeight: 42,
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          paddingHorizontal: 12,
-          borderRadius: radii.md,
-          borderWidth: 1,
-          borderColor: theme.edge,
-          backgroundColor: theme.glass,
-          opacity: disabled ? 0.5 : 1,
-        }}
+        style={{ opacity: disabled ? 0.5 : 1 }}
       >
-        <Text style={{ fontSize: 15, color: selected ? theme.foreground : theme.muted }}>
-          {selected?.label ?? placeholder}
-        </Text>
-        <Text style={{ fontSize: 10, color: theme.muted }}>{open ? "▲" : "▼"}</Text>
+        <Glass
+          surface="field"
+          isDark={isDark}
+          style={{
+            minHeight: 34,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            paddingHorizontal: 14,
+          }}
+        >
+          <Text style={{ fontSize: 15, color: selected ? theme.foreground : theme.muted }}>
+            {selected?.label ?? placeholder}
+          </Text>
+          <Text style={{ fontSize: 10, color: theme.muted }}>{open ? "▲" : "▼"}</Text>
+        </Glass>
       </Pressable>
 
       {open && (
-        <View
+        <Glass
+          surface="overlay"
+          isDark={isDark}
           style={{
             marginTop: 6,
             borderRadius: radii.md,
-            borderWidth: 1,
-            borderColor: theme.edge,
-            backgroundColor: theme.glass,
-            overflow: "hidden",
+            shadowOpacity: 0.12,
+            shadowRadius: 30,
+            shadowOffset: { width: 0, height: 10 },
           }}
         >
           {options.map((option) => {
@@ -409,16 +425,20 @@ export function Select({
                   setOpen(false);
                 }}
                 style={{
-                  paddingVertical: 10,
+                  minHeight: 32,
                   paddingHorizontal: 12,
-                  backgroundColor: isSelected ? theme.glassActive : "transparent",
+                  borderRadius: 10,
+                  backgroundColor: "transparent",
                 }}
               >
+                {isSelected ? (
+                  <SelectedLens radius={10} isDark={isDark} style={lensFill} />
+                ) : null}
                 <Text style={{ fontSize: 14, color: theme.foreground }}>{option.label}</Text>
               </Pressable>
             );
           })}
-        </View>
+        </Glass>
       )}
     </View>
   );

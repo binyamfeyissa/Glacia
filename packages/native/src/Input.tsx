@@ -1,6 +1,7 @@
 import { forwardRef, useState, type ReactNode } from "react";
 import type { StyleProp, TextStyle, ViewStyle } from "react-native";
 
+import { Glass } from "./Glass";
 import { colors, radii } from "./internal/tokens";
 import { primitives } from "./internal/primitives";
 import { useIsDark } from "./internal/motion";
@@ -38,7 +39,7 @@ export interface InputProps {
   onBlur?: () => void;
 }
 
-const heights = { sm: 34, md: 42, lg: 50 };
+const heights = { sm: 28, md: 34, lg: 44 };
 const fontSizes = { sm: 14, md: 15, lg: 16 };
 
 /**
@@ -100,24 +101,27 @@ export const Input = forwardRef<any, InputProps>(function Input(
 
   const fieldStyle: TextStyle = {
     flex: 1,
-    paddingVertical: height_padding(size),
+    paddingVertical: multiline ? 0 : height_padding(size),
     paddingHorizontal: 0,
     fontSize: fontSizes[size],
     color: theme.foreground,
   };
 
   return (
-    <View
+    <Glass
+      surface="field"
+      isDark={isDark}
       style={{
         flexDirection: "row",
         alignItems: multiline ? "flex-start" : "center",
         gap: 8,
-        minHeight: multiline ? undefined : heights[size],
-        borderRadius: radii.md,
-        borderWidth: 1,
-        borderColor: invalid ? theme.destructive : theme.edge,
-        backgroundColor: theme.glass,
-        paddingHorizontal: 12,
+        // Fields are pills on the web; a multi-line field relaxes to the
+        // stack radius (18) because a pill around wrapped text reads wrong.
+        borderRadius: multiline ? 18 : radii.pill,
+        minHeight: multiline ? 84 : heights[size],
+        paddingHorizontal: 14,
+        paddingVertical: multiline ? 10 : 0,
+        borderColor: invalid ? theme.destructive : undefined,
         opacity: disabled ? 0.5 : 1,
         ...(style as ViewStyle),
       }}
@@ -165,13 +169,13 @@ export const Input = forwardRef<any, InputProps>(function Input(
       </View>
 
       {suffix}
-    </View>
+    </Glass>
   );
 });
 
 /** Vertical padding tuned per size so the text sits optically centred. */
 function height_padding(size: "sm" | "md" | "lg") {
-  return size === "sm" ? 6 : size === "lg" ? 12 : 9;
+  return size === "sm" ? 4 : size === "lg" ? 10 : 7;
 }
 
 export interface TextareaProps extends Omit<InputProps, "size" | "multiline" | "minLines"> {

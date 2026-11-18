@@ -5,6 +5,7 @@ export const radii = {
   md: tokenRadii.md.number,
   lg: tokenRadii.lg.number,
   xl: tokenRadii.xl.number,
+  stack: tokenRadii.stack.number,
   pill: tokenRadii.pill.number,
 };
 
@@ -71,8 +72,16 @@ export const colors = {
     muted: "#3C3C4399",
     glass: "rgba(255, 255, 255, 0.6)",
     glassActive: "rgba(236, 236, 240, 0.85)",
+    /**
+     * The near-solid surface the web uses where legibility beats translucency:
+     * menus and toggle groups. A glass surface underneath text that must be
+     * read at a glance is the one place the web deliberately goes opaque-ish.
+     */
+    surface: "rgba(255, 255, 255, 0.86)",
     edge: "rgba(0, 0, 0, 0.08)",
-    separator: "rgba(60, 60, 67, 0.18)",
+    // The agreed separator value: the web CSS one (0.15 / 0.16 dark), so the
+    // three files that carried three different light values now agree.
+    separator: "rgba(60, 60, 67, 0.15)",
     fill: "#0088FF",
     destructive: "#FF3B30",
     on: "#34C759",
@@ -105,6 +114,7 @@ export const colors = {
     muted: "#EBEBF599",
     glass: "rgba(40, 40, 40, 0.62)",
     glassActive: "rgba(70, 70, 70, 0.62)",
+    surface: "rgba(40, 40, 40, 0.86)",
     edge: "rgba(255, 255, 255, 0.08)",
     separator: "rgba(235, 235, 245, 0.16)",
     fill: "#0091FF",
@@ -126,6 +136,29 @@ export const colors = {
 
 /** Keeps the shared token file honest if a colour is added there first. */
 export type ThemeColors = typeof colors.light;
+
+/**
+ * The values the fallback's material layers are built from.
+ *
+ * These are the web engine's numbers, not new inventions: the rim shine is the
+ * web's `--gl-rim` brightness (0.30 light / 0.13 dark), the top highlight and
+ * press glow are the web overlay alphas, and the drop shadow is the web's
+ * `0 1px 3px` black 0.06. They live here, next to the colours, so no component
+ * carries a material literal of its own.
+ */
+export const material = {
+  /** Maximum alpha of the painted rim light, per theme (web: shine). */
+  rim: { light: 0.3, dark: 0.13 },
+  /** Alpha of the soft highlight drawn inside the top edge. */
+  highlight: 0.1,
+  /** Alpha of the radial glow that fades in while a surface is held. */
+  glow: 0.035,
+  /** Shadow colour; the web drops surfaces by 1px with 6% black in light. */
+  shadowColor: "#000000",
+  shadowOpacity: { light: 0.06, dark: 0 },
+  /** The colour the rim light and the top highlight are painted in. */
+  rimColor: "#FFFFFF",
+};
 
 /** The semantic tone of a feedback component (Banner, Toast). */
 export type Tone = "info" | "success" | "warning" | "error";

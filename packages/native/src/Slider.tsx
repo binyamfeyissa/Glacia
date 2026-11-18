@@ -3,7 +3,7 @@ import { measurePreviewWidth } from "./internal/primitives";
 import type { StyleProp, ViewStyle } from "react-native";
 
 import { Glass } from "./Glass";
-import { colors } from "./internal/tokens";
+import { colors, material } from "./internal/tokens";
 import { primitives } from "./internal/primitives";
 import { useIsDark } from "./internal/motion";
 import { hapticSelection } from "./internal/haptics";
@@ -25,8 +25,10 @@ export interface SliderProps {
   testID?: string;
 }
 
-const TRACK_HEIGHT = 8;
-const THUMB = 22;
+// The web slider: a 6pt track and a glass-lens thumb rather than a small dot.
+const TRACK_HEIGHT = 6;
+const THUMB_WIDTH = 36;
+const THUMB_HEIGHT = 24;
 const CONTAINER_HEIGHT = 40;
 
 /** Rounds `value` onto the nearest step from `min`, clamped to the range. */
@@ -160,15 +162,22 @@ export const Slider = forwardRef<any, SliderProps>(function Slider(
 
   const thumbStyle: ViewStyle = {
     position: "absolute",
-    top: (CONTAINER_HEIGHT - THUMB) / 2,
+    top: (CONTAINER_HEIGHT - THUMB_HEIGHT) / 2,
     left: `${Math.min(100, Math.max(0, percentage))}%`,
-    width: THUMB,
-    height: THUMB,
-    marginLeft: -THUMB / 2,
-    borderRadius: THUMB / 2,
-    backgroundColor: "#FFFFFF",
+    width: THUMB_WIDTH,
+    height: THUMB_HEIGHT,
+    marginLeft: -THUMB_WIDTH / 2,
+    borderRadius: THUMB_HEIGHT / 2,
+    backgroundColor: themeColors.onTint,
     borderWidth: 0.5,
-    borderColor: "rgba(0, 0, 0, 0.12)",
+    borderColor: themeColors.edge,
+    // The same lens shadow stack the Switch thumb carries: the web thumb is a
+    // lens with real depth, not a white dot painted on the track.
+    shadowColor: material.shadowColor,
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 3,
   };
 
   return (

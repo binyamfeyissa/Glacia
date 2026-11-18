@@ -3,12 +3,25 @@ import type { StyleProp, ViewStyle } from "react-native";
 
 import { FallbackGlassView } from "./fallback";
 import { defaultRouter } from "./glass-routing";
+import type { SurfaceProfile } from "./material";
 import { useIsDark } from "./motion";
 
 export interface NativeGlassProps {
   effect?: "clear" | "regular" | "none";
   tintColor?: string;
   interactive?: boolean;
+  /**
+   * Which web surface profile this is (panel, control, field, overlay, hint,
+   * rail). The fallback uses it to pick blur, rim brightness and highlight —
+   * read by the fallback branch only; Apple's material replaces the stack on
+   * iOS 26, so the prop is not forwarded there.
+   */
+  surface?: SurfaceProfile;
+  /**
+   * True while the surface is held, so the fallback can fade its specular glow
+   * in. Not forwarded to Apple's view, which draws its own press effect.
+   */
+  pressed?: boolean;
   /** Passed to whichever surface renders, so tests can find the glass itself. */
   testID?: string;
   style?: StyleProp<ViewStyle>;
@@ -68,6 +81,8 @@ export const GlassView = forwardRef<any, NativeGlassProps>(function GlassView(
     effect = "regular",
     tintColor,
     interactive = false,
+    surface = "panel",
+    pressed,
     testID,
     style,
     children,
@@ -100,6 +115,8 @@ export const GlassView = forwardRef<any, NativeGlassProps>(function GlassView(
       ref={ref}
       effect={effect}
       tintColor={tintColor}
+      surface={surface}
+      pressed={pressed}
       testID={testID}
       isDark={isDark}
       style={style}

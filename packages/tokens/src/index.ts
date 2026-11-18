@@ -5,7 +5,7 @@ export const tokens = tokensData;
 export type Effect = "clear" | "regular" | "none";
 export type Size = "sm" | "md" | "lg";
 export type Variant = "filled" | "glass" | "ghost";
-export type Radius = "sm" | "md" | "lg" | "xl" | "pill";
+export type Radius = "sm" | "md" | "lg" | "xl" | "stack" | "pill";
 
 export interface GlassPropsBase {
   /**
@@ -34,6 +34,12 @@ export const radii = {
   md: { px: "14px", number: 14 },
   lg: { px: "20px", number: 20 },
   xl: { px: "28px", number: 28 },
+  /**
+   * The web's stack radius (26): multi-line surfaces that are not overlays —
+   * accordion items, table frames. Added here because the native package must
+   * take every radius from this scale, never from a literal.
+   */
+  stack: { px: "26px", number: 26 },
   pill: { px: "9999px", number: 9999 },
 } as const;
 

@@ -2,7 +2,7 @@ import { forwardRef, useState } from "react";
 import type { StyleProp, ViewStyle } from "react-native";
 
 import { Glass } from "./Glass";
-import { colors } from "./internal/tokens";
+import { colors, material } from "./internal/tokens";
 import { primitives } from "./internal/primitives";
 import { useIsDark, useSpring } from "./internal/motion";
 import { hapticSelection } from "./internal/haptics";
@@ -21,9 +21,12 @@ export interface SwitchProps {
   testID?: string;
 }
 
-const TRACK_WIDTH = 51;
-const TRACK_HEIGHT = 31;
-const THUMB = 27;
+// The web switch's geometry: a 60 x 25 track with a 21pt thumb, which the web
+// draws at 160 x 67 and scales down by 0.375. The thumb is a lens, not a dot:
+// it carries the same shadow stack as the slider's.
+const TRACK_WIDTH = 60;
+const TRACK_HEIGHT = 25;
+const THUMB = 21;
 const TRAVEL = TRACK_WIDTH - THUMB - 4;
 
 /**
@@ -53,6 +56,7 @@ export const Switch = forwardRef<any, SwitchProps>(function Switch(
   const themeColors = isDark ? colors.dark : colors.light;
   const { View, Pressable, Animated } = primitives();
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
+  const [held, setHeld] = useState(false);
   const isChecked = checkedProp !== undefined ? checkedProp : internalChecked;
 
   // The thumb's travel is a single number animated on the springs token.
@@ -81,12 +85,20 @@ export const Switch = forwardRef<any, SwitchProps>(function Switch(
     width: THUMB,
     height: THUMB,
     borderRadius: THUMB / 2,
-    backgroundColor: "#FFFFFF",
-    // A hairline edge instead of a drop shadow: RN shadows need per-platform
-    // props, and the edge reads correctly on a translucent track.
+    backgroundColor: themeColors.onTint,
     borderWidth: 0.5,
-    borderColor: "rgba(0, 0, 0, 0.12)",
-    transform: [{ translateX: animated ? offset : isChecked ? TRAVEL : 0 }],
+    borderColor: themeColors.edge,
+    // The lens's lift: a soft shadow under the thumb, and a slight growth
+    // while it is held, matching the web thumb.
+    shadowColor: material.shadowColor,
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 3,
+    transform: [
+      { translateX: animated ? offset : isChecked ? TRAVEL : 0 },
+      { scale: held ? 1.06 : 1 },
+    ],
   };
 
   return (
@@ -98,10 +110,12 @@ export const Switch = forwardRef<any, SwitchProps>(function Switch(
       accessibilityState={{ checked: isChecked, disabled }}
       disabled={disabled}
       onPress={toggle}
+      onPressIn={() => setHeld(true)}
+      onPressOut={() => setHeld(false)}
       style={{ alignSelf: "flex-start" }}
       {...props}
     >
-      <Glass effect="regular" isDark={isDark} style={trackStyle}>
+      <Glass effect="regular" surface="control" isDark={isDark} style={trackStyle}>
         {animated ? <Animated.View style={thumbStyle} /> : <View style={thumbStyle} />}
       </Glass>
     </Pressable>

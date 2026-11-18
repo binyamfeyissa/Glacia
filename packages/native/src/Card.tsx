@@ -26,10 +26,10 @@ export const Card = forwardRef<any, CardProps>(function Card(
   const isDark = useIsDark(isDarkProp);
 
   const cardStyle: ViewStyle = {
-    padding: 20,
+    padding: 24,
     borderRadius: radii.lg,
     flexDirection: "column",
-    gap: 12,
+    gap: 16,
     ...(style as ViewStyle),
   };
 

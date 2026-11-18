@@ -1,9 +1,11 @@
 import { useEffect, useState, type ReactNode } from "react";
 import type { StyleProp, ViewStyle } from "react-native";
 
+import { Glass } from "./Glass";
 import { colors, radii } from "./internal/tokens";
 import { primitives } from "./internal/primitives";
 import { useIsDark } from "./internal/motion";
+import { SelectedLens, lensFill } from "./internal/lens";
 import { useReducedMotion } from "./internal/a11y";
 
 export interface NativePlanStep {
@@ -42,7 +44,7 @@ export function NativePlan({ title = "Plan", steps, isDark: isDarkProp, style }:
           : theme.muted;
 
   return (
-    <View style={style}>
+    <Glass surface="panel" isDark={isDark} style={[{ paddingHorizontal: 14, paddingVertical: 12, borderRadius: radii.lg }, style]}>
       <View
         style={{
           flexDirection: "row",
@@ -99,7 +101,7 @@ export function NativePlan({ title = "Plan", steps, isDark: isDarkProp, style }:
           </View>
         </View>
       ))}
-    </View>
+    </Glass>
   );
 }
 
@@ -139,7 +141,7 @@ export function NativeSources({
   if (sources.length === 0) return null;
 
   return (
-    <View style={style}>
+    <Glass surface="panel" isDark={isDark} style={[{ paddingHorizontal: 14, paddingVertical: 12, borderRadius: radii.lg }, style]}>
       <Text style={{ fontSize: 11, fontWeight: "600", color: theme.muted, marginBottom: 6 }}>
         {title}
       </Text>
@@ -179,7 +181,7 @@ export function NativeSources({
           </View>
         </Pressable>
       ))}
-    </View>
+    </Glass>
   );
 }
 
@@ -213,7 +215,7 @@ export function NativeResponse({
   const isStreaming = streaming ?? (revealed != null && revealed < text.length);
 
   return (
-    <View style={style}>
+    <Glass surface="panel" isDark={isDark} style={[{ paddingHorizontal: 14, paddingVertical: 12, borderRadius: radii.lg }, style]}>
       <Text
         accessibilityRole="text"
         accessibilityLabel={shown}
@@ -226,7 +228,7 @@ export function NativeResponse({
       <Text accessibilityRole="alert" style={{ height: 0, opacity: 0, fontSize: 0 }}>
         {isStreaming ? "Response streaming" : "Response complete"}
       </Text>
-    </View>
+    </Glass>
   );
 }
 
@@ -255,7 +257,9 @@ export function NativeTask({ task, isDark: isDarkProp, style }: NativeTaskProps)
     status === "failed" ? theme.destructive : status === "done" ? "#34c759" : theme.fill;
 
   return (
-    <View
+    <Glass
+      surface="panel"
+      isDark={isDark}
       accessibilityRole="progressbar"
       accessibilityLabel={task.label ?? "Task progress"}
       // Without the value, a screen reader only reads the label and never says
@@ -264,7 +268,7 @@ export function NativeTask({ task, isDark: isDarkProp, style }: NativeTaskProps)
       accessibilityState={{
         disabled: false,
       }}
-      style={style as StyleProp<ViewStyle>}
+      style={[{ paddingHorizontal: 14, paddingVertical: 12, borderRadius: radii.lg }, style as StyleProp<ViewStyle>]}
     >
       <View
         style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 6 }}
@@ -300,7 +304,7 @@ export function NativeTask({ task, isDark: isDarkProp, style }: NativeTaskProps)
       {task.detail && (
         <Text style={{ fontSize: 11, color: theme.muted, marginTop: 6 }}>{task.detail}</Text>
       )}
-    </View>
+    </Glass>
   );
 }
 
@@ -461,7 +465,7 @@ export function NativePanelside({
   const { View, Text, Pressable } = primitives();
 
   return (
-    <View style={style}>
+    <Glass surface="panel" isDark={isDark} style={[{ paddingHorizontal: 14, paddingVertical: 12, borderRadius: radii.lg }, style]}>
       {title && (
         <Text style={{ fontSize: 11, fontWeight: "600", color: theme.muted, marginBottom: 6 }}>
           {title}
@@ -484,10 +488,11 @@ export function NativePanelside({
               paddingVertical: 9,
               paddingHorizontal: 11,
               borderRadius: radii.md,
-              backgroundColor: isActive ? theme.glassActive : "transparent",
+              backgroundColor: "transparent",
               marginBottom: 2,
             }}
           >
+            {isActive ? <SelectedLens radius={radii.md} isDark={isDark} style={lensFill} /> : null}
             <Text
               style={{
                 fontSize: 13,
@@ -503,7 +508,7 @@ export function NativePanelside({
           </Pressable>
         );
       })}
-    </View>
+    </Glass>
   );
 }
 
@@ -563,16 +568,17 @@ export function NativeAIInput({
 
   return (
     <View style={style as StyleProp<ViewStyle>}>
-      <View
+      <Glass
+        surface="field"
+        isDark={isDark}
         style={{
           flexDirection: "row",
           alignItems: "flex-end",
           gap: 8,
-          padding: 8,
-          borderRadius: radii.lg,
-          borderWidth: 1,
-          borderColor: theme.edge,
-          backgroundColor: theme.glass,
+          paddingVertical: 6,
+          paddingRight: 6,
+          paddingLeft: 16,
+          borderRadius: radii.pill,
           opacity: disabled ? 0.5 : 1,
         }}
       >
@@ -618,8 +624,10 @@ export function NativeAIInput({
           disabled={!canSend}
           onPress={() => canSend && onSubmit?.()}
           style={{
-            paddingVertical: 8,
+            height: 34,
             paddingHorizontal: 14,
+            alignItems: "center",
+            justifyContent: "center",
             borderRadius: radii.pill,
             backgroundColor: canSend ? theme.fill : theme.edge,
           }}
@@ -628,7 +636,7 @@ export function NativeAIInput({
             {busy ? "…" : sendLabel}
           </Text>
         </Pressable>
-      </View>
+      </Glass>
 
       {footer}
     </View>

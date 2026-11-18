@@ -79,7 +79,7 @@ export function NativeTable({
   return (
     <View style={style as ViewStyle} testID={testID}>
       {caption && (
-        <Text style={{ fontSize: 11, color: theme.muted, marginBottom: 8 }}>{caption}</Text>
+        <Text style={{ fontSize: 12, color: theme.muted, marginBottom: 8 }}>{caption}</Text>
       )}
 
       {rows.map((row) => {
@@ -97,7 +97,8 @@ export function NativeTable({
             key={row.id}
             {...wrapperProps}
             style={{
-              paddingVertical: 10,
+              paddingVertical: 12,
+              paddingHorizontal: 16,
               borderBottomWidth: 1,
               borderBottomColor: theme.edge,
             }}
@@ -127,7 +128,7 @@ export function NativeTable({
                       gap: 12,
                     }}
                   >
-                    <Text style={{ fontSize: 11, color: theme.muted }}>{column.header}</Text>
+                    <Text style={{ fontSize: 12, fontWeight: "600", color: theme.muted }}>{column.header}</Text>
                     <Text
                       style={{
                         fontSize: 12,

@@ -21,6 +21,8 @@ export const Glass = forwardRef<any, GlassProps>(function Glass(
     effect = "regular",
     tintColor,
     interactive = false,
+    surface,
+    pressed,
     testID,
     style,
     children,
@@ -36,6 +38,8 @@ export const Glass = forwardRef<any, GlassProps>(function Glass(
       effect={effect}
       tintColor={tintColor}
       interactive={interactive}
+      surface={surface}
+      pressed={pressed}
       testID={testID}
       isDark={isDark}
       style={style}

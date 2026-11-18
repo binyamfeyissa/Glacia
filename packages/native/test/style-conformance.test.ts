@@ -117,10 +117,13 @@ describe("new components use the token system", () => {
     }
   });
 
-  it("uses glassActive for selected and active states", () => {
+  it("marks selected states with the shared lens or the shared tint", () => {
     // The library marks selection one way; a new colour for it would be drift.
+    // A lens (`SelectedLens`, which paints `glassActive` plus the rim) and the
+    // bare token are the two accepted forms: either is the same selection
+    // language, and neither invents a colour.
     const selectors = ["Display.tsx", "Bars.tsx", "Forms2.tsx", "Carousel.tsx", "Pickers.tsx"];
-    const usingActive = selectors.filter((file) => /glassActive/.test(code(file)));
+    const usingActive = selectors.filter((file) => /glassActive|SelectedLens/.test(code(file)));
     expect(usingActive.length).toBe(selectors.length);
   });
 });

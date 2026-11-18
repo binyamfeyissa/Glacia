@@ -54,6 +54,7 @@ export const Tabs = forwardRef<any, TabsProps>(function Tabs(
   const { View, Text, Pressable, Animated } = primitives();
 
   const [internalId, setInternalId] = useState(defaultActiveId || items[0]?.id || "");
+  const [held, setHeld] = useState(false);
   const activeId = activeProp !== undefined ? activeProp : internalId;
 
   const activeIndex = Math.max(
@@ -87,6 +88,8 @@ export const Tabs = forwardRef<any, TabsProps>(function Tabs(
     <Glass
       ref={ref}
       effect="regular"
+      surface="rail"
+      pressed={held}
       isDark={isDark}
       style={{
         flexDirection: "row",
@@ -131,6 +134,8 @@ export const Tabs = forwardRef<any, TabsProps>(function Tabs(
             accessibilityLabel={tab.label}
             accessibilityState={{ selected: isActive }}
             onPress={() => handleSelect(tab.id)}
+            onPressIn={() => setHeld(true)}
+            onPressOut={() => setHeld(false)}
             style={{
               flex: 1,
               height: 36,

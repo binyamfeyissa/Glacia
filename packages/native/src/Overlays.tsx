@@ -123,9 +123,21 @@ export const Menu = forwardRef<any, MenuProps>(function Menu(
   const popover = (
     <Glass
       effect="regular"
+      surface="overlay"
       isDark={isDark}
       testID={testID ? `${testID}-popover` : undefined}
-      style={{ width, borderRadius: radii.md, paddingVertical: 4, overflow: "hidden", ...(style as ViewStyle) }}
+      style={{
+        width,
+        borderRadius: radii.lg,
+        paddingVertical: 4,
+        // The web menu is deliberately near-solid so its labels stay legible
+        // over any backdrop, and it floats on a real shadow.
+        backgroundColor: theme.surface,
+        shadowOpacity: 0.12,
+        shadowRadius: 40,
+        shadowOffset: { width: 0, height: 12 },
+        ...(style as ViewStyle),
+      }}
     >
       {items.map((item, index) => (
         <Pressable
@@ -138,7 +150,7 @@ export const Menu = forwardRef<any, MenuProps>(function Menu(
             setOpen(false);
             item.onPress();
           }}
-          style={{ flexDirection: "row", alignItems: "center", gap: 10, paddingVertical: 10, paddingHorizontal: 12, opacity: item.disabled ? 0.38 : 1 }}
+          style={{ flexDirection: "row", alignItems: "center", gap: 10, minHeight: 40, paddingVertical: 8, paddingHorizontal: 12, opacity: item.disabled ? 0.38 : 1 }}
         >
           {item.icon ? <View>{item.icon}</View> : null}
           <RNText
@@ -487,6 +499,7 @@ function SheetPanel({
   return (
     <Glass
       effect="regular"
+      surface="overlay"
       isDark={isDark}
       testID={testID}
       style={{
@@ -494,7 +507,12 @@ function SheetPanel({
         borderTopRightRadius: radii.xl,
         borderBottomLeftRadius: 0,
         borderBottomRightRadius: 0,
-        paddingBottom: 20,
+        paddingBottom: 24,
+        // The web sheet carries a deep, soft shadow so it reads as a layer
+        // above the page rather than a rectangle painted on it.
+        shadowOpacity: 0.5,
+        shadowRadius: 40,
+        shadowOffset: { width: 0, height: 0 },
         // A snap point fixes the height; without one the panel is natural.
         ...(height != null ? { height } : { maxHeight: 560 }),
         ...(style as ViewStyle),
@@ -510,14 +528,14 @@ function SheetPanel({
         </View>
       ) : null}
       {title ? (
-        <View style={{ paddingHorizontal: 20, paddingVertical: 10 }}>
+        <View style={{ paddingHorizontal: 24, paddingVertical: 10 }}>
           <RNText accessibilityRole="heading" style={{ fontSize: 17, fontWeight: "600", color: theme.foreground }}>
             {title}
           </RNText>
         </View>
       ) : null}
-      <View style={{ paddingHorizontal: 20 }}>{children}</View>
-      {footer ? <View style={{ paddingHorizontal: 20, paddingTop: 12, gap: 8 }}>{footer}</View> : null}
+      <View style={{ paddingHorizontal: 24 }}>{children}</View>
+      {footer ? <View style={{ paddingHorizontal: 24, paddingTop: 12, gap: 8 }}>{footer}</View> : null}
     </Glass>
   );
 }
@@ -637,6 +655,7 @@ export const Drawer = forwardRef<any, DrawerProps>(function Drawer(
   const panel = (
     <Glass
       effect="regular"
+      surface="overlay"
       isDark={isDark}
       testID={testID}
       style={{

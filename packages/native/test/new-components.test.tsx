@@ -132,13 +132,14 @@ describe("#53 Separator", () => {
   it("draws a hairline in the separator colour", () => {
     const { container } = render(<Separator />);
     const rule = container.firstElementChild as HTMLElement;
-    expect(rule.style.height).toBe("0.5px");
-    expect(rule.style.backgroundColor).toBe("rgba(60, 60, 67, 0.18)");
+    // The web separator is 1px, and its light token is the agreed 0.15.
+    expect(rule.style.height).toBe("1px");
+    expect(rule.style.backgroundColor).toBe("rgba(60, 60, 67, 0.15)");
   });
 
   it("can run vertically", () => {
     const { container } = render(<Separator orientation="vertical" />);
-    expect((container.firstElementChild as HTMLElement).style.width).toBe("0.5px");
+    expect((container.firstElementChild as HTMLElement).style.width).toBe("1px");
   });
 });
 
@@ -179,8 +180,12 @@ describe("#56 Progress", () => {
     const { container } = render(<Progress value={35} />);
     const bar = container.querySelector('[role="progressbar"]')!;
     expect(bar.getAttribute("aria-valuenow")).toBe("35");
-    const fill = bar.firstElementChild as HTMLElement;
-    expect(fill.style.width).toBe("35%");
+    // The bar's first child is the glass material layer; the fill is the
+    // element that actually carries the percentage width.
+    const fill = Array.from(bar.querySelectorAll("div")).find(
+      (el) => (el as HTMLElement).style.width === "35%",
+    ) as HTMLElement | undefined;
+    expect(fill).toBeTruthy();
   });
 
   it("clamps a value outside 0–100 instead of drawing past the track", () => {
@@ -301,7 +306,7 @@ describe("#59 List and ListItem", () => {
     );
     // Three rows, two separators between them.
     const rules = Array.from(container.querySelectorAll("div")).filter(
-      (el) => (el as HTMLElement).style.height === "0.5px",
+      (el) => (el as HTMLElement).style.height === "1px",
     );
     expect(rules.length).toBe(2);
   });

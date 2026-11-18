@@ -74,6 +74,7 @@ export const SearchBar = forwardRef<any, SearchBarProps>(function SearchBar(
     >
       <Glass
         effect="regular"
+        surface="field"
         isDark={isDark}
         style={{
           flex: 1,
@@ -204,6 +205,7 @@ export const Chip = forwardRef<any, ChipProps>(function Chip(
   const { View, Text: RNText, Pressable } = primitives();
 
   const [internalSelected, setInternalSelected] = useState(defaultSelected);
+  const [held, setHeld] = useState(false);
   const selected = selectedProp !== undefined ? selectedProp : internalSelected;
   const selectable = selectedProp !== undefined || onSelectedChange !== undefined || defaultSelected;
 
@@ -220,6 +222,8 @@ export const Chip = forwardRef<any, ChipProps>(function Chip(
   const pill = (
     <Glass
       effect="regular"
+      surface="control"
+      pressed={held}
       isDark={isDark}
       tintColor={selected ? theme.glassActive : undefined}
       interactive={!disabled}
@@ -227,7 +231,7 @@ export const Chip = forwardRef<any, ChipProps>(function Chip(
         flexDirection: "row",
         alignItems: "center",
         gap: 6,
-        height: 30,
+        height: 34,
         paddingHorizontal: 12,
         borderRadius: radii.pill,
         opacity: disabled ? 0.38 : 1,
@@ -237,7 +241,7 @@ export const Chip = forwardRef<any, ChipProps>(function Chip(
       {icon ? <View>{icon}</View> : null}
       <RNText
         numberOfLines={1}
-        style={{ fontSize: 13, fontWeight: selected ? "600" : "500", color: selected ? theme.foreground : theme.muted }}
+        style={{ fontSize: 14, fontWeight: selected ? "600" : "500", color: selected ? theme.foreground : theme.muted }}
       >
         {label}
       </RNText>
@@ -344,6 +348,7 @@ export const FAB = forwardRef<any, FABProps>(function FAB(
     >
       <Glass
         effect="clear"
+        surface="control"
         interactive={!disabled}
         isDark={isDark}
         style={{
@@ -428,6 +433,7 @@ export const IconButton = forwardRef<any, IconButtonProps>(function IconButton(
     >
       <Glass
         effect={variant === "ghost" ? "none" : "regular"}
+        surface="control"
         interactive={!disabled && variant !== "ghost"}
         isDark={isDark}
         style={{
@@ -545,6 +551,7 @@ export const AppBar = forwardRef<any, AppBarProps>(function AppBar(
     <Glass
       ref={ref}
       effect="regular"
+      surface="rail"
       isDark={isDark}
       testID={testID}
       style={{
@@ -726,6 +733,7 @@ export const FABGroup = forwardRef<any, FABGroupProps>(function FABGroup(
                 >
                   <Glass
                     effect="regular"
+                    surface="control"
                     isDark={isDark}
                     style={{ borderRadius: radii.pill, paddingHorizontal: 12, paddingVertical: 7 }}
                   >
@@ -735,6 +743,7 @@ export const FABGroup = forwardRef<any, FABGroupProps>(function FABGroup(
                   </Glass>
                   <Glass
                     effect="regular"
+                    surface="control"
                     isDark={isDark}
                     style={{
                       width: mini,
@@ -774,6 +783,7 @@ export const FABGroup = forwardRef<any, FABGroupProps>(function FABGroup(
         >
           <Glass
             effect="clear"
+            surface="control"
             interactive
             isDark={isDark}
             style={{

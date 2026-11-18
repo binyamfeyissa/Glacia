@@ -31,6 +31,8 @@ export interface RNPrimitives {
   /** Gradient and clipping nodes, for the colour picker's hue track. */
   Defs: any;
   LinearGradient: any;
+  /** The radial gradient the press glow is painted with. */
+  RadialGradient: any;
   Stop: any;
   ClipPath: any;
   SvgText: any;
@@ -296,6 +298,7 @@ function resolve(): RNPrimitives {
     Polygon: svg?.Polygon ?? fallback("polygon"),
     Defs: svg?.Defs ?? fallback("defs"),
     LinearGradient: svg?.LinearGradient ?? fallback("linearGradient"),
+    RadialGradient: svg?.RadialGradient ?? fallback("radialGradient"),
     Stop: svg?.Stop ?? fallback("stop"),
     ClipPath: svg?.ClipPath ?? fallback("clipPath"),
     // TextInput is not an SVG primitive, but resolving it here keeps every

@@ -109,7 +109,8 @@ describe("#16 Dialog panel and #17 AlertDialog cancel", () => {
     const panel = container.querySelector('[data-testid="panel"]')!;
     expect(panel).toBeTruthy();
     expect(panel.getAttribute("style")).toContain("border-radius");
-    expect(panel.getAttribute("style")).toContain("background-color");
+    const material = container.querySelector('[data-testid="panel-tint"]')!;
+    expect(material.getAttribute("style")).toContain("background-color");
   });
 
   // The Android back path itself is covered in android-back.test.tsx, which

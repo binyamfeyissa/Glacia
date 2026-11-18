@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 
 import { colors } from "../internal/tokens";
 import { useIsDark } from "../internal/motion";
@@ -42,7 +42,19 @@ export function NativeBarChart({
   const [active, setActive] = useState<number | null>(null);
   const isDark = useIsDark(isDarkProp);
   const theme = isDark ? colors.dark : colors.light;
-  const { View, Text, Pressable, Svg, G, Line, Rect, SvgText } = primitives();
+  const {
+    View,
+    Text,
+    Pressable,
+    Svg,
+    G,
+    Line,
+    Rect,
+    SvgText,
+    Defs,
+    LinearGradient,
+    Stop,
+  } = primitives();
 
   const plot = {
     x: PADDING.left,
@@ -64,6 +76,9 @@ export function NativeBarChart({
 
   const y = linearScale(domain, [bottom, plot.y], { nice: false });
   const bands = bandScale(labels.length, [plot.x, right], 0.32);
+  const seriesColors = series.map((s, si) => s.color ?? seriesColor(si, palette));
+  // One gradient per series, so the SVG can reference them by id.
+  const gradientKey = useId().replace(/[^a-zA-Z0-9_-]/g, "");
   const barWidth = stacked ? bands.width : bands.width / Math.max(1, series.length);
   const yTicks = ticks(domain, 4);
 
@@ -78,6 +93,25 @@ export function NativeBarChart({
   return (
     <View style={style}>
       <Svg width={width} height={height}>
+        <Defs>
+          {seriesColors.map((color, si) => (
+            // The web's bar fill runs from the series colour at the top to
+            // transparent at the base, so a bar reads as lit from above.
+            <LinearGradient
+              key={`grad-${si}`}
+              id={`bar-${gradientKey}-${si}`}
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="1"
+            >
+              <Stop offset="0" stopColor={color} stopOpacity={1} />
+              <Stop offset="0.55" stopColor={color} stopOpacity={0.62} />
+              <Stop offset="1" stopColor={color} stopOpacity={0.04} />
+            </LinearGradient>
+          ))}
+        </Defs>
+
         {yTicks.map((tick, i) => (
           <Line
             key={`grid-${i}`}
@@ -117,7 +151,11 @@ export function NativeBarChart({
                     width={w}
                     height={barHeight}
                     rx={Math.min(radius, w / 2)}
-                    fill={color}
+                    fill={`url(#bar-${gradientKey}-${si})`}
+                    // The inset edge the web draws inside every bar.
+                    stroke={color}
+                    strokeOpacity={0.35}
+                    strokeWidth={0.5}
                     opacity={active === null || active === i ? 1 : 0.45}
                   />
                 );

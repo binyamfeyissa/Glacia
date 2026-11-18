@@ -2,6 +2,7 @@ import { forwardRef, type ReactNode } from "react";
 import type { StyleProp, ViewStyle } from "react-native";
 
 import { Avatar } from "./Display";
+import { Glass } from "./Glass";
 import { colors, radii } from "./internal/tokens";
 import { primitives } from "./internal/primitives";
 import { useIsDark } from "./internal/motion";
@@ -21,15 +22,11 @@ export interface MessageBubbleProps {
 /**
  * One message's bubble.
  *
- * Both directions are flat tints, not glass: a chat transcript is a long
- * scrolling list, and glass under every line would stack translucent surfaces
- * over each other and over the conversation behind them. The glass in a chat
- * belongs to the composer, which floats over the transcript — so
- * `NativeAIInput` is glass and the bubbles are not.
- *
- * Incoming messages take the theme's wash; outgoing take `glassActive`, the
- * same tint the library uses for any selected surface, so a transcript reads
- * consistently with the rest of Glacia.
+ * The bubble is a glass surface like the rest of the library (panel profile),
+ * so it carries the same blurred backdrop, lit rim and shadow as a card. The
+ * outgoing direction is tinted with `glassActive` — the theme's selected
+ * tint — and the incoming one uses the plain glass token, which is what keeps
+ * the two directions distinguishable without a second material.
  */
 export const MessageBubble = forwardRef<any, MessageBubbleProps>(function MessageBubble(
   { outgoing = false, children, style, isDark: isDarkProp, testID, ...props },
@@ -40,22 +37,24 @@ export const MessageBubble = forwardRef<any, MessageBubbleProps>(function Messag
   const { View } = primitives();
 
   return (
-    <View
+    <Glass
       ref={ref}
       testID={testID}
+      surface="panel"
+      isDark={isDark}
+      tintColor={outgoing ? theme.glassActive : undefined}
       style={{
         alignSelf: outgoing ? "flex-end" : "flex-start",
         maxWidth: "82%",
-        paddingHorizontal: 12,
-        paddingVertical: 8,
+        paddingHorizontal: 14,
+        paddingVertical: 10,
         borderRadius: radii.lg,
-        backgroundColor: outgoing ? theme.glassActive : theme.wash,
         ...(style as ViewStyle),
       }}
       {...props}
     >
       {children}
-    </View>
+    </Glass>
   );
 });
 
@@ -111,8 +110,8 @@ export const MessageAttachment = forwardRef<any, MessageAttachmentProps>(
     const chipStyle: ViewStyle = {
       flexDirection: "row",
       alignItems: "center",
-      paddingHorizontal: 10,
-      paddingVertical: 7,
+      paddingHorizontal: 12,
+      paddingVertical: 8,
       borderRadius: radii.md,
       backgroundColor: theme.wash,
       borderWidth: 0.5,

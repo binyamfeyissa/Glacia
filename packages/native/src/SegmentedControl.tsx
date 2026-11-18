@@ -6,6 +6,7 @@ import { colors, radii } from "./internal/tokens";
 import { primitives } from "./internal/primitives";
 import { useIsDark, useSpring } from "./internal/motion";
 import { hapticSelection } from "./internal/haptics";
+import { LensRim, lensShadow } from "./internal/lens";
 
 export interface SegmentedControlProps {
   values: string[];
@@ -20,7 +21,9 @@ export interface SegmentedControlProps {
   testID?: string;
 }
 
-const SEGMENT_HEIGHT = 30;
+// The web segment is 32 high inside a 2pt inset, on a pill container, with the
+// selected pill itself a pill: 500/400 weights, not a bold selected label.
+const SEGMENT_HEIGHT = 32;
 
 /**
  * A row of mutually exclusive segments on one glass container.
@@ -48,6 +51,7 @@ export const SegmentedControl = forwardRef<any, SegmentedControlProps>(function 
   const { View, Text, Pressable, Animated } = primitives();
 
   const [internalIndex, setInternalIndex] = useState(defaultIndex);
+  const [held, setHeld] = useState(false);
   const activeIndex = selectedProp !== undefined ? selectedProp : internalIndex;
   const safeIndex = Math.min(Math.max(activeIndex, 0), Math.max(values.length - 1, 0));
 
@@ -72,8 +76,10 @@ export const SegmentedControl = forwardRef<any, SegmentedControlProps>(function 
     alignItems: "center",
     alignSelf: "flex-start",
     padding: 2,
-    borderRadius: radii.md,
-    backgroundColor: "rgba(118, 118, 128, 0.12)",
+    borderRadius: radii.pill,
+    // The web lays the segment track tint over glass; the fallback paints the
+    // same tint as the flat track the web sees through the glass.
+    backgroundColor: themeColors.fieldWash,
     ...(style as ViewStyle),
   };
 
@@ -86,7 +92,16 @@ export const SegmentedControl = forwardRef<any, SegmentedControlProps>(function 
     : `${(safeIndex * 100) / count}%`;
 
   return (
-    <Glass ref={ref} effect="regular" isDark={isDark} style={containerStyle} testID={testID} {...props}>
+    <Glass
+      ref={ref}
+      effect="regular"
+      surface="rail"
+      pressed={held}
+      isDark={isDark}
+      style={containerStyle}
+      testID={testID}
+      {...props}
+    >
       {/* The sliding pill: one View behind the labels, coloured by the theme. */}
       {animated ? (
         <Animated.View
@@ -96,14 +111,18 @@ export const SegmentedControl = forwardRef<any, SegmentedControlProps>(function 
             left: 2,
             width: pillWidth,
             height: SEGMENT_HEIGHT,
-            borderRadius: radii.sm,
+            borderRadius: radii.pill,
             backgroundColor: themeColors.glassActive,
             borderWidth: 0.5,
             borderColor: themeColors.edge,
+            // The thumb is a lens: lifted off the rail, with its own rim.
+            ...lensShadow(isDark),
             transform: [{ translateX: pillTranslate }],
           }}
           pointerEvents="none"
-        />
+        >
+          <LensRim radius={radii.pill} isDark={isDark} />
+        </Animated.View>
       ) : (
         <View
           style={{
@@ -112,13 +131,16 @@ export const SegmentedControl = forwardRef<any, SegmentedControlProps>(function 
             left: `${2 + (safeIndex * 100) / count}%`,
             width: pillWidth,
             height: SEGMENT_HEIGHT,
-            borderRadius: radii.sm,
+            borderRadius: radii.pill,
             backgroundColor: themeColors.glassActive,
             borderWidth: 0.5,
             borderColor: themeColors.edge,
+            ...lensShadow(isDark),
           }}
           pointerEvents="none"
-        />
+        >
+          <LensRim radius={radii.pill} isDark={isDark} />
+        </View>
       )}
 
       {values.map((label, idx) => {
@@ -130,6 +152,8 @@ export const SegmentedControl = forwardRef<any, SegmentedControlProps>(function 
             accessibilityLabel={label}
             accessibilityState={{ selected: isSelected }}
             onPress={() => handleSelect(idx)}
+            onPressIn={() => setHeld(true)}
+            onPressOut={() => setHeld(false)}
             style={{
               flex: 1,
               height: SEGMENT_HEIGHT,
@@ -143,7 +167,7 @@ export const SegmentedControl = forwardRef<any, SegmentedControlProps>(function 
               numberOfLines={1}
               style={{
                 fontSize: 13,
-                fontWeight: isSelected ? "600" : "500",
+                fontWeight: isSelected ? "500" : "400",
                 color: isSelected ? themeColors.foreground : themeColors.muted,
               }}
             >

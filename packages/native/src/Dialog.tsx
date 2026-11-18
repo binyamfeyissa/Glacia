@@ -103,14 +103,17 @@ export function Dialog({
         >
           <Glass
             effect="regular"
+            surface="overlay"
             isDark={isDark}
             testID={testID}
             style={{
-              borderRadius: radii.lg,
-              borderWidth: 1,
-              borderColor: theme.edge,
+              borderRadius: radii.xl,
               padding: 20,
               gap: 8,
+              // The web overlay shadow: the panel has to float above the scrim.
+              shadowOpacity: 0.12,
+              shadowRadius: 50,
+              shadowOffset: { width: 0, height: 20 },
               ...(style as ViewStyle),
             }}
           >
@@ -124,7 +127,7 @@ export function Dialog({
             )}
 
             {description && (
-              <Text style={{ fontSize: 13, color: theme.muted, lineHeight: 18 }}>{description}</Text>
+              <Text style={{ fontSize: 14, color: theme.muted, lineHeight: 20 }}>{description}</Text>
             )}
 
             {children}
@@ -313,12 +316,16 @@ export function ActionSheet({
           onPress={() => {}}
           style={{ padding: 10, gap: 8 }}
         >
-          <Glass
-            effect="regular"
-            isDark={isDark}
-            style={{ borderRadius: radii.lg, overflow: "hidden" }}
-          >
-            {(title || message) && (
+          {/* The web's ActionSheet is not one panel: it is a stack of separate
+              glass pills. That shape is the single most visible difference in
+              the owner's screenshots, so each row gets its own surface. */}
+          {(title || message) && (
+            <Glass
+              effect="regular"
+              surface="overlay"
+              isDark={isDark}
+              style={{ borderRadius: radii.lg }}
+            >
               <View style={{ paddingVertical: 12, paddingHorizontal: 16, alignItems: "center" }}>
                 {title && (
                   <Text style={{ fontSize: 13, fontWeight: "600", color: theme.foreground }}>
@@ -331,44 +338,48 @@ export function ActionSheet({
                   </Text>
                 )}
               </View>
-            )}
+            </Glass>
+          )}
 
-            {options.map((option, index) => (
+          {options.map((option) => (
+            <Glass
+              key={option.label}
+              effect="regular"
+              surface="overlay"
+              isDark={isDark}
+              style={{ borderRadius: radii.pill }}
+            >
               <Pressable
-                key={option.label}
                 accessibilityRole="button"
                 accessibilityLabel={option.label}
                 onPress={() => {
                   option.onPress?.();
                   close();
                 }}
-                style={{
-                  paddingVertical: 14,
-                  alignItems: "center",
-                  borderTopWidth: index === 0 && !title && !message ? 0 : 1,
-                  borderTopColor: theme.edge,
-                }}
+                style={{ minHeight: 44, paddingVertical: 12, paddingHorizontal: 20, alignItems: "center", justifyContent: "center" }}
               >
                 <Text
                   style={{
-                    fontSize: 16,
-                    color: option.destructive ? theme.destructive : theme.foreground,
+                    fontSize: 17,
+                    // The web's iOS-style action sheet: every row is the tint
+                    // colour, and only a destructive one is red.
+                    color: option.destructive ? theme.destructive : theme.fill,
                   }}
                 >
                   {option.label}
                 </Text>
               </Pressable>
-            ))}
-          </Glass>
+            </Glass>
+          ))}
 
-          <Glass effect="regular" isDark={isDark} style={{ borderRadius: radii.lg }}>
+          <Glass effect="regular" surface="overlay" isDark={isDark} style={{ borderRadius: radii.pill }}>
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={cancelLabel}
               onPress={close}
-              style={{ paddingVertical: 14, alignItems: "center" }}
+              style={{ minHeight: 44, paddingVertical: 12, alignItems: "center", justifyContent: "center" }}
             >
-              <Text style={{ fontSize: 16, fontWeight: "600", color: theme.foreground }}>
+              <Text style={{ fontSize: 17, fontWeight: "600", color: theme.foreground }}>
                 {cancelLabel}
               </Text>
             </Pressable>

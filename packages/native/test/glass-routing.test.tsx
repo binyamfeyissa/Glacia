@@ -92,7 +92,9 @@ describe("Glass on iOS 26+ (liquid glass supported)", () => {
     const { container } = render(<Glass testID="g">x</Glass>);
     const surface = container.querySelector('[data-testid="g"]')!;
     expect(surface).toBeTruthy();
-    expect(surface.getAttribute("style")).toContain("background-color");
+    // The tint now lives on the clipped material layer, behind the children.
+    const material = container.querySelector('[data-testid="g-tint"]')!;
+    expect(material.getAttribute("style")).toContain("background-color");
     expect(surface.getAttribute("style")).toContain("border-radius");
   });
 });
@@ -110,7 +112,9 @@ describe("Glass on older iOS / Android (liquid glass absent)", () => {
     const style = surface.getAttribute("style");
     expect(style).toContain("border-radius");
     expect(style).toContain("border-width");
-    expect(style).toContain("background-color");
+    // Same shape and tint; the tint sits on the material layer.
+    const material = container.querySelector('[data-testid="surface-tint"]')!;
+    expect(material.getAttribute("style")).toContain("background-color");
   });
 
   it("uses the tint passed by the component", () => {
@@ -118,9 +122,12 @@ describe("Glass on older iOS / Android (liquid glass absent)", () => {
       createElement(Surface, { tintColor: "rgb(1, 2, 3)" }, "x"),
     );
     const { container } = render(output);
-    const surface = container.firstElementChild!;
-    expect(surface.getAttribute("style")).toContain("background-color");
-    expect((surface as HTMLElement).style.backgroundColor).toBe("rgb(1, 2, 3)");
+    // No testID was given, so find the tint layer by its colour: the caller's
+    // tint reaches the material stack rather than the layout box.
+    const tinted = Array.from(container.querySelectorAll("div")).find(
+      (el) => (el as HTMLElement).style.backgroundColor === "rgb(1, 2, 3)",
+    );
+    expect(tinted).toBeTruthy();
   });
 });
 

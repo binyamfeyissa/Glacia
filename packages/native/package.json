@@ -30,7 +30,9 @@
     "@callstack/liquid-glass": ">=0.7.0",
     "react": ">=18",
     "react-native": ">=0.80",
-    "react-native-svg": ">=13"
+    "react-native-svg": ">=13",
+    "expo-blur": ">=12",
+    "@react-native-community/blur": ">=4"
   },
   "dependencies": {
     "glacia-tokens": "workspace:*"
@@ -46,6 +48,12 @@
   },
   "peerDependenciesMeta": {
     "react-native-svg": {
+      "optional": true
+    },
+    "expo-blur": {
+      "optional": true
+    },
+    "@react-native-community/blur": {
       "optional": true
     }
   }

@@ -147,6 +147,33 @@ const styles = StyleSheet.create({
 
 ---
 
+## The fallback material
+
+On iOS 26+ every glass surface is Apple's `UIGlassEffect`. On iOS below 26, on
+Android and in Expo Go, the fallback renders the same design in layers, so it
+reads as glass rather than as a translucent rectangle:
+
+1. **Backdrop blur** — a real native blur view, when one is installed:
+   `expo-blur` (Expo apps) or `@react-native-community/blur` (bare React Native).
+   Both are optional peer dependencies; without either, the surface degrades to
+   tint + rim + edge + shadow instead of failing.
+2. **Tint** — the `glass` token (or your `tintColor`, or 0.35 alpha for `clear`).
+3. **Rim light** — a gradient stroke painted on the edge, brightest along the
+   top, so rounded corners read as lit curves.
+4. **Top highlight** — a soft white falloff just inside the top edge.
+5. **Edge** — the 0.5px hairline in the `edge` token.
+6. **Drop shadow** — the surface lifts off the page behind it.
+
+`Glass` accepts two optional props for this branch: `surface` picks one of the
+web's six lenses (`"panel"`, `"control"`, `"field"`, `"overlay"`, `"hint"`,
+`"rail"`), and `pressed` fades the specular press glow in. Neither is forwarded
+to Apple's view — on iOS 26 the real material replaces the whole stack.
+
+Reduce Transparency is honoured exactly as before: the layered material is
+replaced by one solid colour.
+
+---
+
 ## Optical Diagnostics
 
 You can check whether the running device supports Apple's native `UIGlassEffect` at runtime:

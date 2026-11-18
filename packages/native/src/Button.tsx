@@ -1,4 +1,4 @@
-import { forwardRef, type ReactNode } from "react";
+import { forwardRef, useState, type ReactNode } from "react";
 import type { StyleProp, TextStyle, ViewStyle } from "react-native";
 
 import { Glass } from "./Glass";
@@ -21,10 +21,12 @@ export interface ButtonProps {
   testID?: string;
 }
 
+// The web control scale: 28 / 34 / 44, one horizontal padding and one type
+// size for every button, and the inherited 400 weight rather than a 500.
 const sizeHeights = {
-  sm: 32,
-  md: 40,
-  lg: 48,
+  sm: 28,
+  md: 34,
+  lg: 44,
 };
 
 /**
@@ -54,6 +56,7 @@ export const Button = forwardRef<any, ButtonProps>(function Button(
   const isDark = useIsDark(isDarkProp);
   const themeColors = isDark ? colors.dark : colors.light;
   const { Pressable, View, Text } = primitives();
+  const [held, setHeld] = useState(false);
   const height = sizeHeights[size];
 
   const buttonStyle: ViewStyle = {
@@ -62,7 +65,7 @@ export const Button = forwardRef<any, ButtonProps>(function Button(
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: size === "sm" ? 12 : size === "lg" ? 22 : 16,
+    paddingHorizontal: 14,
     opacity: disabled ? 0.38 : 1,
     backgroundColor:
       variant === "filled"
@@ -74,9 +77,9 @@ export const Button = forwardRef<any, ButtonProps>(function Button(
   };
 
   const textStyle: TextStyle = {
-    color: variant === "filled" ? "#FFFFFF" : tint || themeColors.foreground,
-    fontSize: size === "sm" ? 13 : size === "lg" ? 16 : 14,
-    fontWeight: "500",
+    color: variant === "filled" ? themeColors.onTint : tint || themeColors.foreground,
+    fontSize: 14,
+    fontWeight: "400",
   };
 
   return (
@@ -88,16 +91,20 @@ export const Button = forwardRef<any, ButtonProps>(function Button(
       accessibilityState={{ disabled }}
       disabled={disabled}
       onPress={disabled ? undefined : onPress}
+      onPressIn={() => setHeld(true)}
+      onPressOut={() => setHeld(false)}
       style={({ pressed }: { pressed: boolean }) => ({ opacity: pressed && !disabled ? 0.85 : 1 })}
       {...props}
     >
       <Glass
         effect={variant === "ghost" ? "none" : "regular"}
+        surface="control"
+        pressed={held && !disabled}
         interactive={!disabled}
         isDark={isDark}
         style={buttonStyle}
       >
-        {icon ? <View style={{ marginRight: children ? 8 : 0 }}>{icon}</View> : null}
+        {icon ? <View style={{ marginRight: children ? 7 : 0 }}>{icon}</View> : null}
         {typeof children === "string" ? (
           // A string label is text: it needs Text to inherit font and colour.
           <Text style={textStyle} numberOfLines={1}>

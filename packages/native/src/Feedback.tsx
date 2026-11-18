@@ -6,6 +6,7 @@ import { Separator } from "./Display";
 import { colors, radii, toneColor, type Tone } from "./internal/tokens";
 import { primitives } from "./internal/primitives";
 import { useIsDark, useSpring } from "./internal/motion";
+import { SelectedLens, rowLensStyle } from "./internal/lens";
 import { hapticSelection } from "./internal/haptics";
 
 // ---------------------------------------------------------------------------
@@ -105,15 +106,21 @@ export const Toast = forwardRef<any, ToastProps>(function Toast(
       <Entrance animated={animated} rise={rise} fade={fade}>
       <Glass
         effect="regular"
+        surface="overlay"
         isDark={isDark}
         style={{
           flexDirection: "row",
           alignItems: "center",
           gap: 10,
-          paddingVertical: 10,
-          paddingHorizontal: 14,
-          borderRadius: radii.pill,
-          maxWidth: 420,
+          paddingVertical: 12,
+          paddingHorizontal: 16,
+          borderRadius: radii.lg,
+          maxWidth: 400,
+          minWidth: 280,
+          // A toast floats above everything; without a shadow it is a label.
+          shadowOpacity: 0.12,
+          shadowRadius: 30,
+          shadowOffset: { width: 0, height: 10 },
           borderColor: tone === "neutral" ? theme.edge : accent,
         }}
       >
@@ -121,7 +128,7 @@ export const Toast = forwardRef<any, ToastProps>(function Toast(
         <RNText
           accessibilityRole="alert"
           accessibilityLiveRegion="polite"
-          style={{ fontSize: 14, color: theme.foreground, flexShrink: 1 }}
+          style={{ fontSize: 13, color: theme.foreground, flexShrink: 1 }}
         >
           {message}
         </RNText>
@@ -399,6 +406,7 @@ export const Banner = forwardRef<any, BannerProps>(function Banner(
     <Glass
       ref={ref}
       effect="regular"
+      surface="overlay"
       isDark={isDark}
       testID={testID}
       style={{ borderRadius: radii.md, borderColor: accent, ...(style as ViewStyle) }}
@@ -661,16 +669,27 @@ export const ListItem = forwardRef<any, ListItemProps>(function ListItem(
   const rowStyle: ViewStyle = {
     flexDirection: "row",
     alignItems: "center",
-    minHeight: 48,
+    minHeight: 44,
     paddingVertical: 10,
-    paddingHorizontal: 14,
-    backgroundColor: selected ? theme.glassActive : "transparent",
+    paddingHorizontal: 16,
+    // The selected row is a lens painted behind the content, not a flat wash.
+    backgroundColor: "transparent",
     opacity: disabled ? 0.38 : 1,
     ...(style as ViewStyle),
   };
 
+  const lens = selected ? (
+    <SelectedLens
+      radius={8}
+      isDark={isDark}
+      style={rowLensStyle(8)}
+      testID={testID ? `${testID}-lens` : undefined}
+    />
+  ) : null;
+
   const rowInner = !interactive ? (
     <View accessibilityRole="text" accessibilityState={{ disabled }} style={rowStyle}>
+      {lens}
       {content}
     </View>
   ) : (
@@ -682,6 +701,7 @@ export const ListItem = forwardRef<any, ListItemProps>(function ListItem(
       onPress={guardPress(onPress)}
       style={({ pressed }: { pressed: boolean }) => ({ ...rowStyle, opacity: pressed ? 0.7 : rowStyle.opacity })}
     >
+      {lens}
       {content}
     </Pressable>
   );
@@ -808,9 +828,10 @@ export const List = forwardRef<any, ListProps>(function List(
     <Glass
       ref={ref}
       effect="regular"
+      surface="panel"
       isDark={isDark}
       testID={testID}
-      style={{ borderRadius: radii.md, overflow: "hidden", ...(style as ViewStyle) }}
+      style={{ borderRadius: radii.lg, ...(style as ViewStyle) }}
       {...props}
     >
       {body}
@@ -846,7 +867,8 @@ export const ListSection = forwardRef<any, ListSectionProps>(function ListSectio
             letterSpacing: 0.4,
             textTransform: "uppercase",
             color: theme.muted,
-            paddingHorizontal: 14,
+            paddingHorizontal: 16,
+            paddingVertical: 5,
           }}
         >
           {header}
@@ -925,9 +947,10 @@ export const Accordion = forwardRef<any, AccordionProps>(function Accordion(
     <Glass
       ref={ref}
       effect="regular"
+      surface="panel"
       isDark={isDark}
       testID={testID}
-      style={{ borderRadius: radii.md, overflow: "hidden", ...(style as ViewStyle) }}
+      style={{ borderRadius: radii.stack, ...(style as ViewStyle) }}
       {...props}
     >
       {sections.map((section, index) => {
@@ -940,7 +963,7 @@ export const Accordion = forwardRef<any, AccordionProps>(function Accordion(
               accessibilityLabel={section.title}
               accessibilityState={{ expanded }}
               onPress={() => toggle(section.value)}
-              style={{ paddingVertical: 12, paddingHorizontal: 14, flexDirection: "row", alignItems: "center" }}
+              style={{ paddingVertical: 16, paddingHorizontal: 20, flexDirection: "row", alignItems: "center" }}
             >
               <View style={{ flex: 1, gap: 2 }}>
                 <RNText style={{ fontSize: 15, fontWeight: "500", color: theme.foreground }}>
@@ -959,7 +982,7 @@ export const Accordion = forwardRef<any, AccordionProps>(function Accordion(
               </RNText>
             </Pressable>
             {expanded ? (
-              <View style={{ paddingHorizontal: 14, paddingBottom: 12 }}>{section.content}</View>
+              <View style={{ paddingHorizontal: 20, paddingBottom: 16 }}>{section.content}</View>
             ) : null}
           </View>
         );

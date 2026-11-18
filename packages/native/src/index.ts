@@ -1,4 +1,5 @@
 export { Glass, type GlassProps } from "./Glass";
+export type { SurfaceProfile } from "./internal/material";
 export { Button, type ButtonProps } from "./Button";
 export { Switch, type SwitchProps } from "./Switch";
 export { Slider, type SliderProps } from "./Slider";

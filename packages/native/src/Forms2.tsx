@@ -6,6 +6,7 @@ import { Text } from "./Text";
 import { colors, controlSizes, palette as tokenPalette, radii } from "./internal/tokens";
 import { primitives } from "./internal/primitives";
 import { useIsDark } from "./internal/motion";
+import { SelectedLens, lensFill } from "./internal/lens";
 
 // ---------------------------------------------------------------------------
 // Stepper
@@ -82,9 +83,9 @@ export const Stepper = forwardRef<any, StepperProps>(function Stepper(
       accessibilityState={{ disabled: disabled || blocked }}
       disabled={disabled || blocked}
       onPress={action}
-      style={{ width: 36, height: 36, alignItems: "center", justifyContent: "center", opacity: disabled || blocked ? 0.38 : 1 }}
+      style={{ width: 46, height: 34, alignItems: "center", justifyContent: "center", opacity: disabled || blocked ? 0.38 : 1 }}
     >
-      <RNText style={{ fontSize: 20, fontWeight: "500", color: theme.foreground, lineHeight: 22 }}>
+      <RNText style={{ fontSize: 17, fontWeight: "500", color: theme.foreground, lineHeight: 20 }}>
         {sign}
       </RNText>
     </Pressable>
@@ -94,6 +95,7 @@ export const Stepper = forwardRef<any, StepperProps>(function Stepper(
     <Glass
       ref={ref}
       effect="regular"
+      surface="control"
       isDark={isDark}
       testID={testID}
       accessibilityRole="adjustable"
@@ -108,6 +110,7 @@ export const Stepper = forwardRef<any, StepperProps>(function Stepper(
         flexDirection: "row",
         alignItems: "center",
         alignSelf: "flex-start",
+        height: 34,
         borderRadius: radii.pill,
         paddingHorizontal: 2,
         opacity: disabled ? 0.38 : 1,
@@ -148,7 +151,7 @@ export interface ToggleProps {
   testID?: string;
 }
 
-const toggleSizes = { sm: 30, md: 36, lg: 44 };
+const toggleSizes = { sm: 30, md: 34, lg: 44 };
 
 /**
  * A button that stays pressed.
@@ -185,6 +188,8 @@ export const Toggle = forwardRef<any, ToggleProps>(function Toggle(
   const [internal, setInternal] = useState(defaultPressed);
   const isPressed = controlled !== undefined ? controlled : internal;
 
+  const [held, setHeld] = useState(false);
+
   const dimension = toggleSizes[size];
 
   const handlePress = () => {
@@ -202,11 +207,15 @@ export const Toggle = forwardRef<any, ToggleProps>(function Toggle(
       accessibilityState={{ selected: isPressed, disabled }}
       disabled={disabled}
       onPress={handlePress}
+      onPressIn={() => setHeld(true)}
+      onPressOut={() => setHeld(false)}
       style={({ pressed }: { pressed: boolean }) => ({ alignSelf: "flex-start", opacity: disabled ? 0.38 : pressed ? 0.8 : 1 })}
       {...props}
     >
       <Glass
         effect={variant === "ghost" ? "none" : "regular"}
+        surface="control"
+        pressed={held}
         interactive={!disabled && variant !== "ghost"}
         isDark={isDark}
         tintColor={isPressed && variant !== "ghost" ? theme.glassActive : undefined}
@@ -228,7 +237,7 @@ export const Toggle = forwardRef<any, ToggleProps>(function Toggle(
           <RNText
             numberOfLines={1}
             style={{
-              fontSize: size === "sm" ? 12 : size === "lg" ? 15 : 13,
+              fontSize: size === "sm" ? 12 : size === "lg" ? 15 : 14,
               fontWeight: isPressed ? "600" : "500",
               color: isPressed ? theme.foreground : theme.muted,
             }}
@@ -322,6 +331,7 @@ export const ToggleGroup = forwardRef<any, ToggleGroupProps>(function ToggleGrou
     <Glass
       ref={ref}
       effect="regular"
+      surface="control"
       isDark={isDark}
       testID={testID}
       accessibilityRole="radiogroup"
@@ -333,6 +343,12 @@ export const ToggleGroup = forwardRef<any, ToggleGroupProps>(function ToggleGrou
         padding: 3,
         gap: 3,
         borderRadius: radii.pill,
+        // The web makes the group's own surface near-solid for legibility; the
+        // selected item is the glass lens on top of it.
+        backgroundColor: theme.surface,
+        shadowOpacity: 0.08,
+        shadowRadius: 8,
+        shadowOffset: { width: 0, height: 2 },
         ...(style as ViewStyle),
       }}
       {...props}
@@ -358,11 +374,11 @@ export const ToggleGroup = forwardRef<any, ToggleGroupProps>(function ToggleGrou
                 alignItems: "center",
                 justifyContent: "center",
                 gap: 6,
-                backgroundColor: on ? theme.glassActive : "transparent",
-                borderWidth: on ? 0.5 : 0,
-                borderColor: theme.edge,
+                backgroundColor: "transparent",
               }}
             >
+              {/* The chosen item is a lens; the group's rail is the glass. */}
+              {on ? <SelectedLens radius={radii.pill} isDark={isDark} style={lensFill} /> : null}
               {item.icon ? <View>{item.icon}</View> : null}
               <RNText
                 numberOfLines={1}
@@ -453,6 +469,7 @@ export const InputOTP = forwardRef<any, InputOTPProps>(function InputOTP(
           <Glass
             key={index}
             effect="regular"
+            surface="field"
             isDark={isDark}
             tintColor={isActive ? theme.glassActive : undefined}
             style={{
@@ -582,6 +599,7 @@ export const ButtonGroup = forwardRef<any, ButtonGroupProps>(function ButtonGrou
           >
             <Glass
               effect="regular"
+              surface="control"
               interactive={!item.disabled}
               isDark={isDark}
               style={{
@@ -959,25 +977,45 @@ export const Combobox = forwardRef<any, ComboboxProps>(function Combobox(
 
   return (
     <View ref={ref} testID={testID} style={{ ...(style as ViewStyle) }}>
-      <TextInput
-        value={query}
-        onChangeText={(text: string) => setQuery(text)}
-        placeholder={placeholder}
-        accessibilityLabel={label ?? placeholder}
-        accessibilityState={{ disabled }}
-        editable={!disabled}
+      <Glass
+        surface="field"
+        isDark={isDark}
         style={{
-          borderRadius: radii.md,
-          paddingHorizontal: 12,
-          paddingVertical: 8,
-          fontSize: 16,
-          color: theme.foreground,
-          backgroundColor: disabled ? theme.muted : theme.fieldWash,
+          minHeight: 34,
+          paddingHorizontal: 14,
+          justifyContent: "center",
+          opacity: disabled ? 0.5 : 1,
         }}
-      />
+      >
+        <TextInput
+          value={query}
+          onChangeText={(text: string) => setQuery(text)}
+          placeholder={placeholder}
+          accessibilityLabel={label ?? placeholder}
+          accessibilityState={{ disabled }}
+          editable={!disabled}
+          style={{
+            paddingVertical: 8,
+            fontSize: 15,
+            color: theme.foreground,
+          }}
+        />
+      </Glass>
       {/* The dropdown: opens once there is something to match. */}
       {query.length > 0 ? (
-        <View style={{ marginTop: 6, borderRadius: radii.md, overflow: "hidden", backgroundColor: disabled ? theme.muted : theme.glass }}>
+        <Glass
+          surface="overlay"
+          isDark={isDark}
+          style={{
+            marginTop: 6,
+            borderRadius: radii.md,
+            // The web dropdown floats on its own shadow rather than sitting
+            // flush on the page.
+            shadowOpacity: 0.4,
+            shadowRadius: 32,
+            shadowOffset: { width: 0, height: 12 },
+          }}
+        >
           {matches.length === 0 ? (
             <View style={{ paddingHorizontal: 12, paddingVertical: 10 }}>
               <RNText style={{ fontSize: 14, color: theme.muted }}>No matches</RNText>
@@ -995,8 +1033,11 @@ export const Combobox = forwardRef<any, ComboboxProps>(function Combobox(
                     setValue(option.value);
                     setQuery("");
                   }}
-                  style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: 12, paddingVertical: 10, backgroundColor: isSelected ? theme.glassActive : "transparent" }}
+                  style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: 12, paddingVertical: 10, backgroundColor: "transparent" }}
                 >
+                  {isSelected ? (
+                    <SelectedLens radius={8} isDark={isDark} style={lensFill} />
+                  ) : null}
                   <View style={{ flex: 1 }}>
                     <RNText style={{ fontSize: 15, color: theme.foreground }}>{option.label}</RNText>
                     {option.description ? (
@@ -1007,7 +1048,7 @@ export const Combobox = forwardRef<any, ComboboxProps>(function Combobox(
               );
             })
           )}
-        </View>
+        </Glass>
       ) : null}
     </View>
   );

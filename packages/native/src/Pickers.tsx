@@ -7,6 +7,7 @@ import { Sheet } from "./Overlays";
 import { colors, radii } from "./internal/tokens";
 import { primitives } from "./internal/primitives";
 import { useIsDark } from "./internal/motion";
+import { SelectedLens, lensFill } from "./internal/lens";
 
 // ---------------------------------------------------------------------------
 // Date helpers
@@ -211,12 +212,16 @@ export const Calendar = forwardRef<any, CalendarProps>(function Calendar(
                     borderRadius: cellSize / 2,
                     alignItems: "center",
                     justifyContent: "center",
-                    backgroundColor: selected ? theme.glassActive : "transparent",
-                    borderWidth: isToday && !selected ? 0.5 : selected ? 1 : 0,
+                    backgroundColor: "transparent",
+                    // Today is ringed; the selection is a lens on top of it.
+                    borderWidth: isToday && !selected ? 0.5 : 0,
                     borderColor: isToday && !selected ? theme.fill : theme.edge,
                     opacity: disabled ? 0.28 : cell.outside ? 0.45 : 1,
                   }}
                 >
+                  {selected ? (
+                    <SelectedLens radius={cellSize / 2} isDark={isDark} style={lensFill} />
+                  ) : null}
                   <RNText
                     style={{
                       fontSize: 14,
@@ -514,11 +519,10 @@ export const TimePicker = forwardRef<any, TimePickerProps>(function TimePicker(
                     borderRadius: radii.sm,
                     alignItems: "center",
                     justifyContent: "center",
-                    backgroundColor: active ? theme.glassActive : "transparent",
-                    borderWidth: 0.5,
-                    borderColor: active ? theme.edge : "transparent",
+                    backgroundColor: "transparent",
                   }}
                 >
+                  {active ? <SelectedLens radius={radii.sm} isDark={isDark} style={lensFill} /> : null}
                   <RNText style={{ fontSize: 14, fontWeight: active ? "600" : "500", color: active ? theme.foreground : theme.muted }}>
                     {label}
                   </RNText>
@@ -565,9 +569,10 @@ function ScrollColumn({
           alignItems: "center",
           justifyContent: "center",
           borderRadius: radii.sm,
-          backgroundColor: active ? theme.glassActive : "transparent",
+          backgroundColor: "transparent",
         }}
       >
+        {active ? <SelectedLens radius={radii.sm} isDark={isDark} style={lensFill} /> : null}
         <RNText style={{ fontSize: 17, fontWeight: active ? "600" : "400", color: active ? theme.foreground : theme.muted }}>
           {String(item).padStart(pad, "0")}
         </RNText>
