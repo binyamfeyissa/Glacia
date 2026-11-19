@@ -1,5 +1,15 @@
-export { Glass, type GlassProps } from "./Glass";
+export { Glass, GlassView, type GlassProps, type GlassViewProps } from "./Glass";
+export { isGlassSupported } from "./internal/GlassView";
+export {
+  supportsGlass,
+  supportsNativeGlass,
+  readCapabilities,
+  type GlassCapabilities,
+} from "./internal/glass-routing";
 export type { SurfaceProfile } from "./internal/material";
+export { GlassContainer, type NativeGlassContainerProps } from "./internal/GlassContainer";
+export { GlassProvider, type GlassProviderProps } from "./glass-provider";
+export { GlassStack, type GlassStackProps } from "./glass-stack";
 export { Button, type ButtonProps } from "./Button";
 export { Switch, type SwitchProps } from "./Switch";
 export { Slider, type SliderProps } from "./Slider";
@@ -218,8 +228,6 @@ export {
   type MessageBubbleProps,
   type MessageAttachmentProps,
 } from "./Message";
-export { isGlassSupported } from "./internal/GlassView";
-export { GlassContainer, type NativeGlassContainerProps } from "./internal/GlassContainer";
 export {
   colors,
   controlSizes,

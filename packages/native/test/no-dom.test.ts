@@ -18,6 +18,9 @@ const SRC = join(__dirname, "..", "src");
 /** Files allowed to contain DOM vocabulary: the resolver's adapter. */
 const ALLOWED = new Set(["internal/primitives.ts"]);
 
+/** The vendored glass engine is third-party source; it is not Glacia-authored. */
+const VENDOR_PREFIX = "engine/";
+
 /** Every .ts/.tsx file under src, as paths relative to src. */
 function sourceFiles(dir: string = SRC): string[] {
   const found: string[] = [];
@@ -27,6 +30,11 @@ function sourceFiles(dir: string = SRC): string[] {
     else if (/\.tsx?$/.test(entry) && !entry.endsWith(".d.ts")) found.push(full);
   }
   return found;
+}
+
+/** Whether a src-relative path points into the vendored engine. */
+function isVendored(rel: string): boolean {
+  return rel === "engine" || rel.startsWith(`${VENDOR_PREFIX}`) || rel.startsWith("engine");
 }
 
 /** Source with comments and string literals stripped, so prose about the DOM
@@ -43,7 +51,9 @@ const WEB_VOCAB = /\bonClick\b|\bcursor:\s*["']|\bboxShadow\b|\btransition:\s*["
 const CSS_LENGTH = /["']\d+px(\s+\d+px)*["']/;
 
 describe("component source renders no DOM host elements", () => {
-  const files = sourceFiles().filter((file) => !ALLOWED.has(relative(SRC, file)));
+  const files = sourceFiles().filter(
+    (file) => !ALLOWED.has(relative(SRC, file)) && !isVendored(relative(SRC, file)),
+  );
 
   it("has files to check", () => {
     expect(files.length).toBeGreaterThan(20);

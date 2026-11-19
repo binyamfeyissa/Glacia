@@ -40,13 +40,12 @@ export interface NativeGlassProps {
 }
 
 /**
- * The installed `@callstack/liquid-glass` module's routing decision.
- *
- * Resolved lazily and memoised on first use, rather than at module load, so the
- * decision is taken when a surface first renders. On a device that is the same
- * answer either way — `isLiquidGlassSupported` is a constant of the installed
- * build — but it keeps the choice a property of the module rather than of
- * import order, which is what makes both branches reachable in tests.
+ * The installed engine module's routing decision, memoised on first use, rather
+ * than at module load, so the decision is taken when a surface first renders.
+ * On a device that is the same answer either way — the engine's capability flag
+ * is a constant of the installed build — but it keeps the choice a property of
+ * the module rather than of import order, which is what makes both branches
+ * reachable in tests.
  */
 let cachedRouter: ReturnType<typeof defaultRouter> | null = null;
 
@@ -65,8 +64,10 @@ export const isGlassSupported = defaultRouter().supported;
 
 /**
  * Platform Glass View — the single place a glass surface is chosen:
- * - iOS 26+: Real UIGlassEffect via @callstack/liquid-glass
- * - iOS < 26 / Android / Expo Go: translucent tint View with identical layout
+ * - iOS 26+: Real `UIGlassEffect` via the vendored engine's native view
+ * - iOS 16.4–25: the engine's Metal renderer over a captured backdrop
+ * - Android 13+: the engine's AGSL renderer over a recorded backdrop
+ * - Everywhere else: Glacia's own glass fallback of identical shape
  *
  * Reduce Transparency is honoured on the fallback branch only: there the
  * translucent tint is replaced by the theme's solid glass colour, with the same
@@ -93,23 +94,37 @@ export const GlassView = forwardRef<any, NativeGlassProps>(function GlassView(
 ) {
   const isDark = useIsDark(isDarkProp);
   const decision = router();
-  if (decision.supported && decision.LiquidGlassView) {
+
+  // A deliberate "no surface here" (a ghost button) never mounts a material:
+  // the engine has no none-variant and the fallback paints nothing, so the
+  // content renders bare in both.
+  const bare = effect === "none";
+
+  if (!bare && decision.supported && decision.LiquidGlassView) {
     const LiquidGlassView = decision.LiquidGlassView;
+    const variant = effect === "clear" ? "clear" : "regular";
+    const glow = pressed === undefined ? props.glow : { progress: pressed ? 1 : 0, lens: true };
+
+    // The engine owns the material; Glacia's own surface parameters stop at
+    // the branch. Everything else (accessibility contract, provider pairing,
+    // the adaptive sensor, an externally driven press) rides through.
     return (
       <LiquidGlassView
-        ref={ref}
-        effect={effect}
-        tintColor={tintColor}
-        interactive={interactive}
-        testID={testID}
-        style={style}
         {...props}
-      >
-        {children}
-      </LiquidGlassView>
+        ref={ref}
+        variant={variant}
+        tint={tintColor}
+        interactive={interactive}
+        glow={glow}
+        style={style}
+        testID={testID}
+        children={children}
+      />
     );
   }
 
+  // Unsupported, or a deliberate "no surface": the fallback floor renders —
+  // with the same shape, states and materials as the glass would have.
   return (
     <FallbackGlassView
       ref={ref}

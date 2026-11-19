@@ -66,6 +66,12 @@ export interface RNPrimitives {
    * it can resolve them.
    */
   useWindowDimensions: () => { width: number; height: number };
+  /**
+   * React Native's safe-area insets, or a zero reader off-device. Bottom bars
+   * (the TabBar) float the glass above the system inset — the Android nav bar or
+   * the iOS home indicator — instead of letting it sink under.
+   */
+  useSafeAreaInsets: () => { top: number; bottom: number; left: number; right: number };
 }
 
 /**
@@ -331,6 +337,14 @@ function resolve(): RNPrimitives {
         const view: any = typeof globalThis !== "undefined" ? (globalThis as any).window : undefined;
         return { width: view?.innerWidth ?? 390, height: view?.innerHeight ?? 800 };
       }),
+    useSafeAreaInsets:
+      rn?.useSafeAreaInsets ??
+      (() => ({
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+      })),
   };
 }
 

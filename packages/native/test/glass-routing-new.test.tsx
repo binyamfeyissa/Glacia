@@ -56,6 +56,7 @@ function FakeLiquidGlassView(props: any) {
     testID,
     effect,
     interactive,
+    tint,
     tintColor,
     style,
     accessibilityRole,
@@ -64,6 +65,9 @@ function FakeLiquidGlassView(props: any) {
     accessibilityState,
     ...rest
   } = props;
+  // The tint rides the engine's `tint` field; `tintColor` is accepted too, so a
+  // test fake built against either spelling reports the same value.
+  const resolvedTint = tint ?? tintColor;
   // Accessibility props are forwarded the way the native view forwards them,
   // so a test can assert a component's contract holds on this branch too.
   const a11y: Record<string, any> = {};
@@ -81,7 +85,7 @@ function FakeLiquidGlassView(props: any) {
       "data-testid": testID,
       "data-effect": effect,
       "data-interactive": String(interactive),
-      "data-tint": tintColor ?? "",
+      "data-tint": resolvedTint ?? "",
       style: typeof style === "object" ? { ...style } : undefined,
       ...a11y,
       ...rest,

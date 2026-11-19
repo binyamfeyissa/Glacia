@@ -12,5 +12,9 @@
     "declarationDir": "lib/typescript",
     "outDir": "lib/module"
   },
-  "include": ["src"]
+  "include": ["src"],
+  // The vendored glass engine (src/engine) ships as source for Metro and is
+  // consumed through the runtime module loader; it is built by the engine's own
+  // toolchain, so it is not part of this package's compilation output.
+  "exclude": ["src/engine"]
 }

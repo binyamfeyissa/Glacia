@@ -1,0 +1,68 @@
+{
+  "name": "expo-liquid-glass-ui",
+  "version": "0.2.0",
+  "description": "🧊 Liquid Glass for React Native — the glass view (Apple's UIGlassEffect on iOS 26, a Metal renderer below it, an AGSL port on Android 13+ with tiers down to API 29) and the controls built on it: tab bar, buttons that merge like liquid, icon button, chip, switch, slider, stepper, text input, segmented control, card, toolbar, toast, bottom sheet, morph group and scroll-edge scrim.",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "expo-module build",
+    "clean": "expo-module clean",
+    "lint": "expo-module lint",
+    "test": "expo-module test",
+    "typecheck": "tsc --noEmit",
+    "prepare": "expo-module prepare",
+    "prepublishOnly": "expo-module prepublishOnly",
+    "expo-module": "expo-module",
+    "open:ios": "xed example/ios",
+    "open:android": "open -a \"Android Studio\" example/android"
+  },
+  "keywords": [
+    "ExpoLiquidGlass",
+    "agsl",
+    "bottom-sheet",
+    "button",
+    "chip",
+    "expo",
+    "expo-liquid-glass",
+    "glass-ui",
+    "liquid-glass",
+    "metal",
+    "progressive-blur",
+    "react-native",
+    "slider",
+    "stepper",
+    "switch",
+    "tab-bar",
+    "toast",
+    "toolbar"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/capthndsme/expo-liquid-glass-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/capthndsme/expo-liquid-glass-ui/issues"
+  },
+  "homepage": "https://github.com/capthndsme/expo-liquid-glass-ui#readme",
+  "author": "capthndsme",
+  "license": "MIT",
+  "peerDependencies": {
+    "expo": "*",
+    "react": "*",
+    "react-native": "*",
+    "react-native-gesture-handler": ">=2.20.0",
+    "react-native-reanimated": ">=3.16.0"
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.14",
+    "expo": "~56.0.18",
+    "expo-module-scripts": "~56.0.3",
+    "react": "19.2.3",
+    "react-native": "0.85.3",
+    "react-native-gesture-handler": "^2.31.1",
+    "react-native-reanimated": "^4.3.1",
+    "react-native-worklets": "^0.8.3",
+    "typescript": "~5.9.2"
+  }
+}

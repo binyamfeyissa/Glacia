@@ -1,0 +1,164 @@
+import type { ColorValue } from "react-native";
+import { interpolateColor, processColor } from "react-native-reanimated";
+
+import type { GlassMetalOptions } from "../core";
+
+/**
+ * Blending between two glass recipes, on the UI thread.
+ *
+ * The reference animates its material directly — `lens(24dp * progress, 24dp * progress)`,
+ * `Highlight.Default.copy(alpha = progress)` — recomposing the effect chain on every frame of a
+ * press. Nothing in a React prop can follow that: a `useState` swap is one JS render behind the
+ * gesture, and it lands at whatever moment the JS thread gets to it.
+ *
+ * {@link lerpMetal} is a worklet, so `useAnimatedProps` can rebuild the recipe from a shared value
+ * each frame and hand it to the native view without JS ever waking up. The native side re-uploads
+ * uniforms and redraws; it does not rebuild geometry, re-record the backdrop or resize the padded
+ * render node, so this is genuinely cheap to run at display rate.
+ */
+
+/**
+ * One field.
+ *
+ * Absent on both sides means "never mentioned" — it stays absent so the native default applies,
+ * rather than being invented as 0 (which would be a real value for `saturation` and `opacity`, and
+ * the wrong one). Absent on one side means "constant across the blend", which is what lets a recipe
+ * name only the fields it actually animates.
+ */
+const blend = (
+  from: number | undefined,
+  to: number | undefined,
+  t: number
+): number | undefined => {
+  "worklet";
+  if (from == null && to == null) return undefined;
+  const a = from ?? (to as number);
+  const b = to ?? (from as number);
+  return a + (b - a) * t;
+};
+
+/** A colour as the platform's ARGB number: a string through Reanimated's `processColor`, a
+ * number taken as already processed (which is what the wrapper and this blend produce). */
+const argbOf = (color: string | number): number | null => {
+  "worklet";
+  if (typeof color === "number") return color >>> 0;
+  const n = processColor(color);
+  return n == null ? null : n >>> 0;
+};
+
+/** `rgba()` text for an ARGB number, optionally at another alpha. */
+const rgbaOf = (argb: number, alpha?: number): string => {
+  "worklet";
+  const a = ((argb >>> 24) & 0xff) / 255;
+  const r = (argb >>> 16) & 0xff;
+  const g = (argb >>> 8) & 0xff;
+  const b = argb & 0xff;
+  return `rgba(${r},${g},${b},${alpha ?? a})`;
+};
+
+/**
+ * The wash. Unlike the numeric fields, a side without a tint is not "constant": it is *no wash*,
+ * so the blend runs from the other colour at alpha 0 — a pill with no tint at rest and blue in
+ * `pillDraggedMetal` fades blue in as it lifts, and fades it out again on release.
+ *
+ * `interpolateColor` is fed `rgba()` strings, never numbers: Reanimated treats a numeric input
+ * as unprocessed RGBA and rotates it, which is how a blue came out magenta. Inside a worklet
+ * the result is already the platform's ARGB number; on the JS thread — the initial props — it
+ * is an `rgba()` string, converted once here.
+ */
+const blendTint = (
+  from: ColorValue | undefined,
+  to: ColorValue | undefined,
+  t: number
+): ColorValue | undefined => {
+  "worklet";
+  const fa = from != null ? argbOf(from as string | number) : null;
+  const ta = to != null ? argbOf(to as string | number) : null;
+  if (fa == null && ta == null) return undefined;
+  const fromText = fa != null ? rgbaOf(fa) : rgbaOf(ta as number, 0);
+  const toText = ta != null ? rgbaOf(ta) : rgbaOf(fa as number, 0);
+  const mixed = interpolateColor(
+    Math.min(1, Math.max(0, t)),
+    [0, 1],
+    [fromText, toText]
+  );
+  const out = typeof mixed === "number" ? mixed : processColor(mixed as string);
+  return out as unknown as ColorValue;
+};
+
+/**
+ * `from` at `t = 0`, `to` at `t = 1`, linear in between. Every numeric field is blended; the
+ * non-numeric ones (`android.quality`, `android.maxTier`) are taken from `to`, because a quality
+ * tier has no midpoint and swapping it mid-gesture would recompile the shader.
+ *
+ * `t` is not clamped — an overshooting spring is allowed to overshoot the material with it, which
+ * is the whole point of driving this from a spring rather than a timing curve.
+ */
+const lerpMetal = (
+  from: GlassMetalOptions,
+  to: GlassMetalOptions,
+  t: number
+): GlassMetalOptions => {
+  "worklet";
+  return {
+    tint: blendTint(from.tint, to.tint, t),
+    blurRadius: blend(from.blurRadius, to.blurRadius, t),
+    opacity: blend(from.opacity, to.opacity, t),
+    frost: blend(from.frost, to.frost, t),
+    saturation: blend(from.saturation, to.saturation, t),
+    noise: blend(from.noise, to.noise, t),
+    light: blend(from.light, to.light, t),
+    magnification: blend(from.magnification, to.magnification, t),
+    refraction: {
+      amount: blend(from.refraction?.amount, to.refraction?.amount, t),
+      width: blend(from.refraction?.width, to.refraction?.width, t),
+      height: blend(from.refraction?.height, to.refraction?.height, t),
+      depth: blend(from.refraction?.depth, to.refraction?.depth, t),
+      swirl: blend(from.refraction?.swirl, to.refraction?.swirl, t),
+      // `curve` is all-or-nothing on the native side: supplying the object at all replaces the
+      // variant's whole profile with the Record's defaults for anything left out. So a blend
+      // between two recipes that never mentioned a curve must not invent one.
+      curve:
+        from.refraction?.curve == null && to.refraction?.curve == null
+          ? undefined
+          : {
+              power: blend(
+                from.refraction?.curve?.power,
+                to.refraction?.curve?.power,
+                t
+              ),
+              bias: blend(
+                from.refraction?.curve?.bias,
+                to.refraction?.curve?.bias,
+                t
+              ),
+            },
+    },
+    dispersion: {
+      amount: blend(from.dispersion?.amount, to.dispersion?.amount, t),
+      reach: blend(from.dispersion?.reach, to.dispersion?.reach, t),
+      quadrant: blend(from.dispersion?.quadrant, to.dispersion?.quadrant, t),
+    },
+    highlight: {
+      intensity: blend(from.highlight?.intensity, to.highlight?.intensity, t),
+      angle: blend(from.highlight?.angle, to.highlight?.angle, t),
+      width: blend(from.highlight?.width, to.highlight?.width, t),
+      falloff: blend(from.highlight?.falloff, to.highlight?.falloff, t),
+    },
+    border: {
+      width: blend(from.border?.width, to.border?.width, t),
+      opacity: blend(from.border?.opacity, to.border?.opacity, t),
+    },
+    // Radius and opacity both ramp, so a recipe that names `{ radius: 0, opacity: 0 }` at rest
+    // and Kyant's `{ radius: 8, opacity: 0.15 }` held fades the band in rather than popping it.
+    innerShadow: {
+      radius: blend(from.innerShadow?.radius, to.innerShadow?.radius, t),
+      offsetX: blend(from.innerShadow?.offsetX, to.innerShadow?.offsetX, t),
+      offsetY: blend(from.innerShadow?.offsetY, to.innerShadow?.offsetY, t),
+      opacity: blend(from.innerShadow?.opacity, to.innerShadow?.opacity, t),
+    },
+    android: to.android,
+  };
+};
+
+export { lerpMetal };

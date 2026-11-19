@@ -14,7 +14,7 @@
 
 **`glacia-native`** brings the physical material of Apple's iOS 26 Liquid Glass to React Native applications:
 
-- **Native iOS 26 Material:** Uses `@callstack/liquid-glass` to render Apple's authentic native `UIGlassEffect` on supported devices.
+- **Native iOS 26 Material:** Uses the vendored glass engine (`expo-liquid-glass-ui`) to render Apple's authentic native `UIGlassEffect` on supported devices, the engine's Metal renderer on iOS 16.4–25 and its AGSL renderer on Android 13+.
 - **Graceful Fallback Ladder:** On older iOS versions and Android, falls back to a tuned visual hierarchy with frosted translucency, matching layout geometry, and zero runtime crashes.
 - **Physical Spring Animations:** Native spring interactions for presses, toggles, slider scrubbing, and tab transitions.
 - **Human Interface Guidelines (HIG):** Designed to match Apple's native tactile controls, radii, and typography scales.

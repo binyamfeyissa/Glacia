@@ -23,6 +23,13 @@ export interface TabBarProps {
   haptics?: boolean;
   style?: StyleProp<ViewStyle>;
   isDark?: boolean;
+  /**
+   * The safe-area inset the bar must float above — the Android navigation bar
+   * or the iOS home indicator. Defaults to the device's own bottom inset, read
+   * from the safe area, so the bar floats fully above it and its labels are
+   * never clipped. Pass a number to pin the bar to a design height instead.
+   */
+  bottomInset?: number;
   /** Passed through to the bar so it is testable. */
   testID?: string;
 }
@@ -35,10 +42,14 @@ const BAR_HEIGHT = 40;
  * The bottom bar of an app: a row of tabs on one glass surface.
  *
  * The platform rule is the point of this component. On iOS 26+ the surface is
- * Apple's real Liquid Glass (`UIGlassEffect` via `@callstack/liquid-glass`)
- * with Glacia's own items inside it; on older iOS and on Android it is
- * Glacia's bar. The items are always our Pressables and Texts — no native tab
- * bar is used on any platform.
+ * Apple's real Liquid Glass (`UIGlassEffect`) with Glacia's own items inside it;
+ * on older iOS and on Android it is Glacia's bar. The items are always our
+ * Pressables and Texts — no native tab bar is used on any platform.
+ *
+ * The bar floats fully above the system inset (the Android navigation bar or
+ * the iOS home indicator): the safe-area bottom inset is added to the bar's
+ * height, so the glass ends above the inset rather than sinking into it and the
+ * labels never clip.
  */
 export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
   {
@@ -49,6 +60,7 @@ export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
     haptics = true,
     style,
     isDark: isDarkProp,
+    bottomInset: bottomInsetProp,
     testID,
     ...props
   },
@@ -56,7 +68,9 @@ export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
 ) {
   const isDark = useIsDark(isDarkProp);
   const themeColors = isDark ? colors.dark : colors.light;
-  const { View, Text, Pressable, Animated } = primitives();
+  const { View, Text, Pressable, Animated, useSafeAreaInsets } = primitives();
+  const insets = typeof useSafeAreaInsets === "function" ? useSafeAreaInsets() : { top: 0, bottom: 0, left: 0, right: 0 };
+  const bottomInset = bottomInsetProp ?? insets.bottom;
 
   const [internalId, setInternalId] = useState(defaultActiveId || items[0]?.id || "");
   const [held, setHeld] = useState(false);
@@ -80,7 +94,10 @@ export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
-    height: BAR_HEIGHT,
+    // The bar floats fully above the system inset, so it is taller than its
+    // design height by the safe-area bottom inset. At zero inset it is exactly
+    // the design height.
+    height: BAR_HEIGHT + Math.max(bottomInset, 0),
     paddingHorizontal: 4,
     borderRadius: radii.lg,
     ...(style as ViewStyle),
