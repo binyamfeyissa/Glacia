@@ -105,7 +105,7 @@ import { useSpring } from "../src/internal/motion";
 import { colors as tokenColors } from "../src/internal/tokens";
 import { GlassView, resetGlassRouter } from "../src/internal/GlassView";
 import * as indexExports from "../src/index";
-import { FAB, Sheet, TabBar, PageControl } from "../src/index";
+import { FAB, Sheet, TabBar } from "../src/index";
 
 beforeEach(() => {
   globalThis.__glaciaSupported2 = false;
@@ -321,10 +321,4 @@ describe("Reduce Motion — named animations settle instead of animating", () =>
     expect(changes).toEqual(["b"]);
   });
 
-  it("the orb holds still but keeps its label when motion is reduced", async () => {
-    globalThis.__glaciaMotionReduced = true;
-    const { NativeThinkingOrb } = indexExports;
-    const { container } = render(createElement(NativeThinkingOrb, { label: "Thinking" }));
-    await waitFor(() => expect(container.textContent).toContain("Thinking"));
-  });
 });

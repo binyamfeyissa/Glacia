@@ -25,11 +25,9 @@ const SRC = join(__dirname, "..", "src");
  */
 const NEW_COMPONENTS = [
   "Text.tsx",
-  "Display.tsx",
   "Feedback.tsx",
   "Bars.tsx",
   "Overlays.tsx",
-  "Carousel.tsx",
   "Forms2.tsx",
   "Pickers.tsx",
   // Wave 1–2: the engine-dressed controls, one file per component.
@@ -59,7 +57,6 @@ const NEW_COMPONENTS = [
   "ToggleGroup.tsx",
   "Tooltip.tsx",
   // Wave 3: the interaction upgrades and the leftover components.
-  "Message.tsx",
   "internal/GlassContainer.tsx",
   "internal/a11y.ts",
   "internal/haptics.ts",

@@ -32,8 +32,6 @@ const NON_COMPONENTS = new Set([
   "SERIES_COLORS",
   "controlSizes",
   "palette",
-  "resolveSnapPoint",
-  "nearestSnapPoint",
   "hexToRgb",
   "rgbToHex",
   "hueGradientColors",
@@ -119,25 +117,6 @@ const propsFor: Record<string, Record<string, unknown>> = {
   DialogTrigger: { label: "Open", title: "Dialog", description: "d" },
   AlertDialog: { open: true, title: "Delete?", onConfirm: () => {}, onCancel: () => {} },
   ActionSheet: { open: true, options: [{ label: "Share", onPress: () => {} }] },
-  NativeTable: {
-    columns: [
-      { key: "n", header: "Name" },
-      { key: "r", header: "Role" },
-    ],
-    rows: [
-      { id: "1", cells: { n: "Ada", r: "Engineer" } },
-      { id: "2", cells: { n: "Grace", r: "Admiral" } },
-    ],
-  },
-  NativeScrollArea: { maxHeight: 120, children: React.createElement("span", null, "scroll") },
-  NativeAIInput: { placeholder: "Ask" },
-  NativeImageGeneration: { prompt: "p" },
-  NativePanelside: { items: [{ id: "a", label: "A" }] },
-  NativePlan: { steps: [{ id: "1", title: "Plan", status: "done" }] },
-  NativeResponse: { text: "Response" },
-  NativeSoundwave: {},
-  NativeSources: { sources: [{ id: "a", title: "Source", url: "https://x.dev" }] },
-  NativeTask: { task: { progress: 0.5, label: "Task" } },
   NativeThinkingOrb: {},
   NativeAreaChart: { labels: ["a", "b"], series: [{ name: "s", values: [1, 2] }] },
   NativeBarChart: { labels: ["a", "b"], series: [{ name: "s", values: [1, 2] }] },
@@ -155,13 +134,6 @@ const propsFor: Record<string, Record<string, unknown>> = {
   NativePyramidChart: { levels: [{ label: "a", value: 1 }] },
   NativeRadarChart: { axes: ["a", "b", "c"], series: [{ name: "s", values: [1, 2, 3] }] },
   NativeRingChart: { data: [{ label: "a", value: 1 }] },
-  NativeSankeyChart: {
-    nodes: [
-      { id: "a", label: "A" },
-      { id: "b", label: "B" },
-    ],
-    links: [{ from: "a", to: "b", value: 1 }],
-  },
   NativeScatterChart: { series: [{ name: "s", points: [{ x: 1, y: 2 }] }] },
   NativeTreemapChart: { items: [{ label: "a", value: 1 }] },
   NativeWaterfallChart: { steps: [{ label: "a", value: 1 }] },
@@ -172,7 +144,6 @@ const propsFor: Record<string, Record<string, unknown>> = {
   Badge: { children: "3" },
   Separator: {},
   Skeleton: {},
-  Spinner: {},
   Progress: { value: 40 },
   // Feedback and display (57-59, 65).
   Toast: { visible: true, message: "Saved" },
@@ -196,8 +167,6 @@ const propsFor: Record<string, Record<string, unknown>> = {
   Sheet: { open: true, title: "Sheet" },
   Drawer: { open: true },
   // Carousel (70-71).
-  Carousel: { slides: [React.createElement("span", { key: "1" }, "one")] },
-  PageControl: { count: 3, activeIndex: 1 },
   // Forms and pickers (69, 72-78).
   Stepper: { accessibilityLabel: "Count", defaultValue: 2 },
   Toggle: { accessibilityLabel: "Toggle", children: "Toggle" },
@@ -229,16 +198,11 @@ const propsFor: Record<string, Record<string, unknown>> = {
     toasts: [{ id: "1", message: "Queued", duration: 0 }],
     onDismiss: () => {},
   },
-  Rating: { value: 3.5, onChange: () => {} },
   ColorPicker: { colors: ["#FF3B30", "#007AFF"], allowCustom: true },
   Combobox: {
     placeholder: "Search",
     options: [{ label: "Apple", value: "apple" }],
   },
-  NativeImage: { source: { uri: "https://example.test/a.png" }, accessibilityLabel: "Photo" },
-  Message: { name: "Ada", time: "10:42", avatar: true },
-  MessageBubble: { outgoing: true, children: "Hello" },
-  MessageAttachment: { name: "report.pdf", size: "1.2 MB" },
 };
 
 const names = Object.keys(Glacia)
@@ -267,10 +231,9 @@ describe("react-native-web smoke check", () => {
     // number cover the 86 reviewed components.
     //
     // 86, not 85: the brief numbers 79-85 as seven entries, but #85 (Message)
-    // ships three pieces, so the reviewed *components* — as opposed to the
-    // numbered entries — total 86. The rebuild added Wave 2 (Alert,
-    // Collapsible, ContextMenu, DropdownMenu, Popover, Tooltip and the split-out
-    // Wave 2 pieces) for 100 exported components today.
+    // shipped three pieces. The rebuild then removed the out-of-scope charts,
+    // the AI family, the table, the carousel and the leftover display pieces
+    // (master prompt §2.3) and added Wave 2, leaving 63 exported components.
     const SLOTS = [
       "CardHeader",
       "CardTitle",
@@ -281,10 +244,8 @@ describe("react-native-web smoke check", () => {
       "DialogTrigger",
       "ListSection",
       "ListItem",
-      "MessageBubble",
-      "MessageAttachment",
     ];
-    expect(names.length - SLOTS.length).toBe(100);
+    expect(names.length - SLOTS.length).toBe(63);
     // Every reviewed component is actually mounted by the tests below.
     for (const slot of SLOTS) expect(names).toContain(slot);
   });

@@ -46,7 +46,7 @@ vi.mock("../src/internal/haptics", () => ({
 }));
 
 import { List, ListItem } from "../src/Feedback";
-import { Sheet, Drawer } from "../src/Overlays";
+import { Drawer } from "../src/Overlays";
 import { FABGroup } from "../src/Bars";
 import { ToastViewport } from "../src/Feedback";
 import { Switch, SegmentedControl, Toolbar } from "../src/index";
@@ -85,83 +85,6 @@ function release(dx: number, dy: number, vx = 0, vy = 0) {
     lastConfig.onPanResponderRelease?.({ nativeEvent: {} }, { dx, dy, vx, vy });
   });
 }
-
-describe("Sheet snap points (#67)", () => {
-  const snapPoints = [0.4, 0.9];
-
-  it("snaps to the nearest point after a drag", () => {
-    const changes: number[] = [];
-    render(
-      createElement(
-        Sheet,
-        { open: true, snapPoints, onSnapIndexChange: (i: number) => changes.push(i) },
-        createElement("span", null, "body"),
-      ),
-    );
-
-    // Opening is at the first (smallest) point.
-    expect(changes).toEqual([]);
-
-    // A long upward drag should reach the taller point.
-    drag(0, -300);
-    release(0, -300, 0, -1.2);
-
-    expect(changes).toEqual([1]);
-  });
-
-  it("springs back when the drag stays within the same point", () => {
-    const changes: number[] = [];
-    render(
-      createElement(Sheet, { open: true, snapPoints, onSnapIndexChange: (i: number) => changes.push(i) }),
-    );
-    drag(0, -10);
-    release(0, -10, 0, 0);
-    // No point change: the drag did not cross to another snap point.
-    expect(changes).toEqual([]);
-  });
-
-  it("dismisses when dragged below the lowest point with dismissOnSnapToBottom", () => {
-    const openChanges: boolean[] = [];
-    render(
-      createElement(Sheet, {
-        open: true,
-        snapPoints,
-        dismissOnSnapToBottom: true,
-        onOpenChange: (open: boolean) => openChanges.push(open),
-      }),
-    );
-    // Dragging far down (positive dy) goes past the smallest sheet.
-    drag(0, 400);
-    release(0, 400, 0, 1.5);
-    expect(openChanges).toEqual([false]);
-  });
-
-  it("does not dismiss below the lowest point when dismissOnSnapToBottom is off", () => {
-    const openChanges: boolean[] = [];
-    render(
-      createElement(Sheet, { open: true, snapPoints, onOpenChange: (open: boolean) => openChanges.push(open) }),
-    );
-    drag(0, 400);
-    release(0, 400, 0, 1.5);
-    expect(openChanges).toEqual([]);
-  });
-
-  it("keeps dismissing on backdrop press", () => {
-    const openChanges: boolean[] = [];
-    render(
-      createElement(Sheet, { open: true, onOpenChange: (open: boolean) => openChanges.push(open) }),
-    );
-    fireEvent.click(screen.getByLabelText("Close sheet"));
-    expect(openChanges).toEqual([false]);
-  });
-
-  it("ticks the haptics helper when the snap point changes", () => {
-    render(createElement(Sheet, { open: true, snapPoints }));
-    drag(0, -300);
-    release(0, -300, 0, -1.2);
-    expect(hapticSpy).toHaveBeenCalled();
-  });
-});
 
 describe("Drawer drag (#68)", () => {
   it("closes when dragged past halfway", () => {

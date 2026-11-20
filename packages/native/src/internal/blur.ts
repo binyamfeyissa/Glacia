@@ -15,6 +15,8 @@
 
 declare const require: any;
 
+import { loadCommunityBlurView } from "./blur-community";
+
 export type BlurKind = "expo" | "community";
 
 interface ResolvedBlur {
@@ -43,15 +45,12 @@ export function resolveBlurView(): ResolvedBlur | null {
     // Not installed: try the bare-React-Native backend below.
   }
 
-  try {
-    const community = require("@react-native-community/blur");
-    if (community?.BlurView) {
-      resolved = { kind: "community", View: community.BlurView };
-      return resolved;
-    }
-  } catch {
-    // Neither backend is installed; the fallback renders tint, rim and shadow.
+  const communityView = loadCommunityBlurView();
+  if (communityView) {
+    resolved = { kind: "community", View: communityView };
+    return resolved;
   }
+  // Neither backend is installed; the fallback renders tint, rim and shadow.
 
   resolved = null;
   return resolved;

@@ -6,8 +6,21 @@
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "ios": { "supportsTablet": true, "bundleIdentifier": "dev.binyamfeyissa.glaciaproof" },
-    "android": { "package": "dev.binyamfeyissa.glaciaproof" },
-    "web": { "bundler": "metro" }
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "dev.binyamfeyissa.glaciaproof"
+    },
+    "android": {
+      "package": "dev.binyamfeyissa.glaciaproof"
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e4048709-72ca-46d1-a162-d56f4862b8f5"
+      }
+    },
+    "owner": "binapluto"
   }
 }

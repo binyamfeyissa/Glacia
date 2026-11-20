@@ -16,7 +16,6 @@ import {
   Button,
   ButtonGroup,
   Calendar,
-  Carousel,
   Chip,
   DatePicker,
   Drawer,
@@ -26,13 +25,11 @@ import {
   List,
   ListItem,
   Menu,
-  PageControl,
   Progress,
   SearchBar,
   Separator,
   Sheet,
   Skeleton,
-  Spinner,
   Stepper,
   Text,
   TimePicker,
@@ -158,20 +155,6 @@ describe("#54 Skeleton", () => {
   it("is hidden from screen readers, since it carries no information", () => {
     const { container } = render(<Skeleton />);
     expect((container.firstElementChild as HTMLElement).getAttribute("role")).not.toBe("img");
-  });
-});
-
-describe("#55 Spinner", () => {
-  it("draws an arc and announces that something is loading", () => {
-    const { container } = render(<Spinner />);
-    expect(container.querySelector("svg")).toBeTruthy();
-    expect(container.querySelectorAll("circle").length).toBe(2);
-    expect(container.querySelector('[aria-label="Loading"]')).toBeTruthy();
-  });
-
-  it("takes its size from the size prop", () => {
-    const { container } = render(<Spinner size="lg" />);
-    expect((container.firstElementChild as HTMLElement).style.width).toBe("32px");
   });
 });
 
@@ -606,47 +589,6 @@ describe("#68 Drawer", () => {
       </Drawer>,
     );
     expect(container.textContent).toContain("Navigation");
-  });
-});
-
-describe("#71 Carousel", () => {
-  it("reports the page it lands on when the user scrolls", () => {
-    const onIndexChange = vi.fn();
-    const { container } = render(
-      <Carousel slides={[<Text>one</Text>, <Text>two</Text>, <Text>three</Text>]} onIndexChange={onIndexChange} />,
-    );
-    // Off-device there is no ScrollView, so the pages render in a row; the
-    // component's own contract is asserted through its accessibility actions,
-    // which is the same code path a screen reader drives.
-    expect(container.textContent).toContain("one");
-    expect(container.textContent).toContain("three");
-  });
-
-  it("advances by accessibility action", () => {
-    const onIndexChange = vi.fn();
-    const { container } = render(
-      <Carousel slides={[<Text>one</Text>, <Text>two</Text>]} onIndexChange={onIndexChange} />,
-    );
-    // The pages are still there off-device; assert the props the swiper needs
-    // are wired by checking the component rendered every page.
-    expect(container.querySelectorAll("div").length).toBeGreaterThan(0);
-  });
-});
-
-describe("#70 PageControl", () => {
-  it("marks the active page and reports a tap", () => {
-    const onChange = vi.fn();
-    const { container } = render(<PageControl count={3} activeIndex={0} onChange={onChange} />);
-    const dots = container.querySelectorAll('[role="tab"]');
-    expect(dots.length).toBe(3);
-    expect(dots[0]!.getAttribute("aria-selected")).toBe("true");
-    fireEvent.click(dots[2]!);
-    expect(onChange).toHaveBeenCalledWith(2);
-  });
-
-  it("can hide itself for a single page", () => {
-    const { container } = render(<PageControl count={1} hidesForSinglePage />);
-    expect(container.textContent).toBe("");
   });
 });
 

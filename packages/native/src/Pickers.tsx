@@ -1,9 +1,9 @@
-import { forwardRef, useMemo, useState } from "react";
+import { forwardRef, useMemo, useState, type ReactNode, type Ref } from "react";
 import type { StyleProp, ViewStyle } from "react-native";
 
 import { Glass } from "./Glass";
 import { Button } from "./Button";
-import { Sheet } from "./Overlays";
+import { Sheet } from "./Sheet";
 import { colors, radii } from "./internal/tokens";
 import { primitives } from "./internal/primitives";
 import { useIsDark } from "./internal/motion";
@@ -242,6 +242,73 @@ export const Calendar = forwardRef<any, CalendarProps>(function Calendar(
 });
 
 // ---------------------------------------------------------------------------
+// The pickers' sheet
+//
+// Both pickers present their control in the Wave 1 `Sheet`: a handle, a dim
+// that dismisses, a fixed height and the content's own header and footer row —
+// the engine sheet has no title/footer slots of its own.
+
+function PickerSheet({
+  sheetRef,
+  open,
+  onClose,
+  title,
+  footer,
+  height,
+  isDark,
+  style,
+  testID,
+  children,
+}: {
+  sheetRef?: Ref<any>;
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  footer: ReactNode;
+  height: number;
+  isDark: boolean;
+  style?: StyleProp<ViewStyle>;
+  testID?: string;
+  children: ReactNode;
+}) {
+  const theme = isDark ? colors.dark : colors.light;
+  const { View, Text: RNText } = primitives();
+  return (
+    <Sheet
+      ref={sheetRef}
+      visible={open}
+      onDismiss={onClose}
+      height={height}
+      isDark={isDark}
+      style={style}
+      testID={testID}
+    >
+      <View style={{ paddingHorizontal: 20, paddingTop: 12, paddingBottom: 4 }}>
+        <RNText
+          accessibilityRole="heading"
+          style={{ fontSize: 20, lineHeight: 26, fontWeight: "600", color: theme.foreground }}
+        >
+          {title}
+        </RNText>
+      </View>
+      {children}
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "flex-end",
+          gap: 8,
+          paddingHorizontal: 20,
+          paddingTop: 12,
+          paddingBottom: 20,
+        }}
+      >
+        {footer}
+      </View>
+    </Sheet>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // DatePicker
 
 export interface DatePickerProps {
@@ -303,11 +370,12 @@ export const DatePicker = forwardRef<any, DatePickerProps>(function DatePicker(
   };
 
   return (
-    <Sheet
-      ref={ref}
+    <PickerSheet
+      sheetRef={ref}
       open={open}
-      onOpenChange={setOpen}
+      onClose={() => setOpen(false)}
       title={title}
+      height={540}
       isDark={isDark}
       testID={testID}
       style={style}
@@ -348,7 +416,7 @@ export const DatePicker = forwardRef<any, DatePickerProps>(function DatePicker(
         isDark={isDark}
         initialMonth={value}
       />
-    </Sheet>
+    </PickerSheet>
   );
 });
 
@@ -452,11 +520,12 @@ export const TimePicker = forwardRef<any, TimePickerProps>(function TimePicker(
   );
 
   return (
-    <Sheet
-      ref={ref}
+    <PickerSheet
+      sheetRef={ref}
       open={open}
-      onOpenChange={setOpen}
+      onClose={() => setOpen(false)}
       title={title}
+      height={540}
       isDark={isDark}
       testID={testID}
       style={style}
@@ -532,7 +601,7 @@ export const TimePicker = forwardRef<any, TimePickerProps>(function TimePicker(
           </View>
         )}
       </View>
-    </Sheet>
+    </PickerSheet>
   );
 });
 

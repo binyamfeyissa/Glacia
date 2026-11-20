@@ -49,53 +49,8 @@ export { ContextMenu, type ContextMenuProps, type ContextMenuItem } from "./Cont
 export { DropdownMenu, type DropdownMenuProps, type DropdownMenuItem } from "./DropdownMenu";
 export { Popover, type PopoverProps } from "./Popover";
 export { Tooltip, type TooltipProps } from "./Tooltip";
-// AI conversation primitives.
-export {
-  NativePlan,
-  NativeSources,
-  NativeResponse,
-  NativeTask,
-  NativeSoundwave,
-  NativeThinkingOrb,
-  NativePanelside,
-  NativeAIInput,
-  NativeImageGeneration,
-  type NativePlanProps,
-  type NativePlanStep,
-  type NativeSourcesProps,
-  type NativeSource,
-  type NativeResponseProps,
-  type NativeTaskProps,
-  type NativeSoundwaveProps,
-  type NativeThinkingOrbProps,
-  type NativePanelsideProps,
-  type NativePanelNavItem,
-  type NativeAIInputProps,
-  type NativeImageGenerationProps,
-  type NativeGeneratedImage,
-} from "./ai";
-// Data display.
-export {
-  NativeTable,
-  NativeScrollArea,
-  type NativeTableProps,
-  type NativeTableColumn,
-  type NativeTableRow,
-  type NativeScrollAreaProps,
-} from "./Table";
-// Charts, drawn with react-native-svg using the same maths as the web package.
-export * from "./charts";
 // Basics.
 export { Text, type TextProps, type TextVariant } from "./Text";
-export {
-  Spinner,
-  type SpinnerProps,
-  type SpinnerSize,
-  Rating,
-  type RatingProps,
-  NativeImage,
-  type NativeImageProps,
-} from "./Display";
 export { Avatar, initialsOf, type AvatarProps, type AvatarSize } from "./Avatar";
 export { Badge, type BadgeProps } from "./Badge";
 export { Separator, type SeparatorProps } from "./Separator";
@@ -140,17 +95,10 @@ export { Group, type GroupProps } from "./Group";
 export { MorphGroup, type MorphGroupProps, type MorphGroupItem } from "./MorphGroup";
 export { Scrim, type ScrimProps } from "./Scrim";
 // Overlays.
-export { Menu, Drawer, anchorPopover, resolveSnapPoint, nearestSnapPoint, type MenuProps, type MenuItem, type DrawerProps } from "./Overlays";
+export { Menu, Drawer, anchorPopover, type MenuProps, type MenuItem, type DrawerProps } from "./Overlays";
 // The engine-dressed sheet is the Wave 1 control; Overlays' sheet was the
 // pre-rebuild one and is no longer exported.
 export { Sheet, type SheetProps } from "./Sheet";
-// Carousel.
-export {
-  Carousel,
-  PageControl,
-  type CarouselProps,
-  type PageControlProps,
-} from "./Carousel";
 // Forms and pickers.
 export { Stepper, type StepperProps } from "./Stepper";
 export { Toggle, type ToggleProps } from "./Toggle";
@@ -187,15 +135,6 @@ export {
   type DatePickerProps,
   type TimePickerProps,
 } from "./Pickers";
-// Chat. Bubbles are flat tints; the composer (NativeAIInput) is the glass.
-export {
-  Message,
-  MessageBubble,
-  MessageAttachment,
-  type MessageProps,
-  type MessageBubbleProps,
-  type MessageAttachmentProps,
-} from "./Message";
 export {
   colors,
   controlSizes,

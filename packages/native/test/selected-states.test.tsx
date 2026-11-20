@@ -7,8 +7,6 @@
 //
 // - a selected row renders the lens, rim included, and an unselected one doesn't,
 // - the segmented control and tab bar keep their sliding indicator with a rim,
-// - bar charts draw the web's gradient fill with an inset edge,
-// - the AI family's five surfaces are real panel glass,
 // - and the routing pass covers the surfaces that used to default.
 
 import { render } from "@testing-library/react";
@@ -24,14 +22,6 @@ import { Avatar } from "../src/Avatar";
 import { Progress } from "../src/Progress";
 import { Toolbar, FAB, IconButton, SearchBar } from "../src/Bars";
 import { Drawer } from "../src/Overlays";
-import { NativeBarChart } from "../src/charts/BarChart";
-import {
-  NativePanelside,
-  NativePlan,
-  NativeResponse,
-  NativeSources,
-  NativeTask,
-} from "../src/ai";
 
 /** The painted rim of a lens or surface: an SVG stroked with a gradient. */
 function hasRim(node: ParentNode) {
@@ -83,18 +73,6 @@ describe("the selected lens", () => {
     expect(rimCount(container)).toBeGreaterThanOrEqual(2);
   });
 
-  it("lifts the AI panelside's active row", () => {
-    const { container } = render(
-      <NativePanelside
-        value="chat"
-        items={[
-          { id: "chat", label: "Chats" },
-          { id: "prompts", label: "Prompts" },
-        ]}
-      />,
-    );
-    expect(rimCount(container)).toBeGreaterThanOrEqual(2);
-  });
 });
 
 describe("the sliding indicators keep their motion and gain the light", () => {
@@ -119,53 +97,7 @@ describe("the sliding indicators keep their motion and gain the light", () => {
   });
 });
 
-describe("charts", () => {
-  it("fills bars with a vertical gradient and an inset edge", () => {
-    const { container } = render(
-      <NativeBarChart
-        labels={["Mon", "Tue"]}
-        series={[{ name: "Visits", values: [4, 9] }]}
-      />,
-    );
-
-    // The gradient is identified by its id, so the assertion does not depend on
-    // how the SVG element's camel-case name survives in the DOM.
-    const gradients = Array.from(container.querySelectorAll('[id^="bar-"]'));
-    expect(gradients.length).toBeGreaterThan(0);
-    expect(gradients[0].querySelectorAll("stop").length).toBe(3);
-
-    const bars = Array.from(container.querySelectorAll("rect")).filter((rect) =>
-      (rect.getAttribute("fill") ?? "").startsWith("url(#bar-"),
-    );
-    expect(bars.length).toBe(2);
-    // The web draws the edge inside the bar, not around it.
-    expect(bars[0].getAttribute("stroke")).toBeTruthy();
-    expect(Number(bars[0].getAttribute("stroke-width"))).toBeLessThanOrEqual(1);
-  });
-});
-
 describe("profile routing, second pass", () => {
-  it("puts the AI family's five surfaces on panel glass", () => {
-    const views = [
-      render(<NativePlan steps={[{ id: "1", title: "Read", status: "done" }]} />),
-      render(<NativeResponse text="Done." />),
-      render(<NativeTask task={{ label: "Indexing", progress: 0.4 }} />),
-      render(
-        <NativeSources
-          sources={[{ id: "s", title: "Docs", url: "https://example.com" }]}
-        />,
-      ),
-      render(<NativePanelside items={[{ id: "a", label: "Chats" }]} value="a" />),
-    ];
-
-    for (const view of views) {
-      // Each is a Glass surface now: the fallback material and its rim exist
-      // at the root.
-      expect(rimCount(view.container)).toBeGreaterThanOrEqual(1);
-      expect(hasRim(view.container)).toBe(true);
-    }
-  });
-
   it("routes the remaining surfaces to a profile instead of the default", () => {
     // These used to fall through to the default panel profile.
     const views = [

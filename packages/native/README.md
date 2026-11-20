@@ -179,16 +179,39 @@ const styles = StyleSheet.create({
 
 ## Component Catalog
 
+The package exports 63 components. Everything below is part of this rebuild;
+the old charts and AI surfaces are not.
+
+**Surfaces** — the material and its containers
+
 | Component | Description |
 | :--- | :--- |
-| **`<Glass />`** | Core material view rendering native `UIGlassEffect` on iOS 26 and calibrated fallback on other platforms. |
-| **`<Button />`** | Interactive button with `filled`, `glass`, and `ghost` variants with haptic and spring feedback. |
-| **`<Card />`** | Liquid glass content container with `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, and `CardFooter`. |
-| **`<SegmentedControl />`** | Apple-style segmented picker with animated sliding thumb indicator. |
-| **`<Switch />`** | Physical toggle switch with specular lighting and smooth spring state transitions. |
-| **`<Slider />`** | Continuous slider control with custom track lighting and glass thumb. |
-| **`<TabBar />`** | Bottom navigation bar floating with real optical material. |
-| **`<Tabs />`** | Tab switching layout with animated glass selector indicator. |
+| **`<Glass />`** / **`<GlassView />`** | The one surface every component is built on. Routes to Apple's `UIGlassEffect` on iOS 26+, the Metal renderer below it, AGSL on Android 13+, and the fallback floor elsewhere. |
+| **`<GlassContainer />`** | Groups several glass views so their optics agree. |
+| **`<GlassProvider />`** | The Android backdrop provider. One direct child; glass views are its siblings. |
+| **`<GlassStack />`** | Stacked glass layers with `GlassStack.Layer` markers. |
+
+**Wave 1 — the engine's controls** (Apple geometry and behaviour)
+
+`TabBar` · `Button` · `IconButton` · `Chip` · `Switch` · `Slider` · `Stepper` ·
+`SegmentedControl` · `Input` · `Card` (with `CardHeader`, `CardTitle`,
+`CardDescription`, `CardContent`, `CardBody`, `CardFooter`) · `Toolbar` ·
+`Toast` · `Sheet` · `Group` · `MorphGroup` · `Scrim`
+
+**Wave 2 — donor behaviour, Apple dress**
+
+`Accordion` · `Alert` · `AlertDialog` · `Avatar` · `Badge` · `Checkbox` ·
+`Collapsible` · `ContextMenu` · `Dialog` (with `DialogTrigger`) ·
+`DropdownMenu` · `Label` · `Popover` · `Progress` · `RadioGroup` · `Select` ·
+`Separator` · `Skeleton` · `Tabs` · `Text` · `Textarea` · `Toggle` ·
+`ToggleGroup` · `Tooltip`
+
+**Supporting components**
+
+`ActionSheet` · `Field` · `Banner` · `List` / `ListItem` / `ListSection` ·
+`ToastViewport` · `Menu` · `Drawer` · `FAB` / `FABGroup` · `SearchBar` ·
+`InputOTP` · `ButtonGroup` · `ColorPicker` · `Combobox` · `Calendar` ·
+`DatePicker` · `TimePicker`
 
 ---
 

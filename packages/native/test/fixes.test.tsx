@@ -13,12 +13,6 @@ import {
   Dialog as DialogPanel,
   Input,
   Label,
-  NativeAIInput,
-  NativePlotChart,
-  NativeScatterChart,
-  NativeTable,
-  NativeTask,
-  NativeWaterfallChart,
   RadioGroup,
   SegmentedControl,
   Select,
@@ -124,75 +118,6 @@ describe("#16 Dialog panel and #17 AlertDialog cancel", () => {
   });
 });
 
-describe("#19 NativeTable — row label", () => {
-  it("never stringifies an element cell into the row label", () => {
-    const onRowPress = vi.fn();
-    const { container } = render(
-      <NativeTable
-        columns={[
-          { key: "name", header: "Name" },
-          { key: "role", header: "Role" },
-        ]}
-        rows={[{ id: "1", cells: { name: <b>Ada</b>, role: "Engineer" } }]}
-        onRowPress={onRowPress}
-      />,
-    );
-    const row = container.querySelector('[role="button"]')!;
-    expect(row.getAttribute("aria-label")).not.toContain("[object Object]");
-    expect(row.getAttribute("aria-label")).toBe("Row");
-  });
-
-  it("prefers an explicit row label", () => {
-    const { container } = render(
-      <NativeTable
-        columns={[{ key: "name", header: "Name" }]}
-        rows={[{ id: "1", cells: { name: "Ada" }, accessibilityLabel: "Ada Lovelace" }]}
-        onRowPress={() => {}}
-      />,
-    );
-    expect(container.querySelector('[role="button"]')!.getAttribute("aria-label")).toBe(
-      "Ada Lovelace",
-    );
-  });
-
-  it("uses a textual primary cell", () => {
-    const { container } = render(
-      <NativeTable
-        columns={[{ key: "name", header: "Name" }]}
-        rows={[{ id: "1", cells: { name: "Ada" } }]}
-        onRowPress={() => {}}
-      />,
-    );
-    expect(container.querySelector('[role="button"]')!.getAttribute("aria-label")).toBe("Ada");
-  });
-});
-
-describe("#21 NativeAIInput — uncontrolled", () => {
-  it("shows typed text and enables send without a controlling parent", () => {
-    const { container } = render(<NativeAIInput placeholder="Ask anything" />);
-    const field = container.querySelector("textarea")!;
-    expect(container.querySelector('[aria-label="Send"]')!.getAttribute("aria-disabled")).toBe(
-      "true",
-    );
-    fireEvent.change(field, { target: { value: "Hello" } });
-    expect((field as HTMLTextAreaElement).value).toBe("Hello");
-    expect(container.querySelector('[aria-label="Send"]')!.getAttribute("aria-disabled")).toBe(
-      "false",
-    );
-  });
-
-  it("hides the themed placeholder once there is text", () => {
-    const { container } = render(<NativeAIInput placeholder="Ask anything" />);
-    const placeholders = () =>
-      Array.from(container.querySelectorAll("span")).filter(
-        (el) => el.textContent === "Ask anything",
-      );
-    expect(placeholders()).toHaveLength(1);
-    fireEvent.change(container.querySelector("textarea")!, { target: { value: "Hi" } });
-    expect(placeholders()).toHaveLength(0);
-  });
-});
-
 describe("#4 Slider — real dragging", () => {
   it("reads the value from the touch position, honouring min/max/step", () => {
     // jsdom performs no layout, so give every element the width of a real
@@ -258,62 +183,6 @@ describe("#4 Slider — real dragging", () => {
     expect(onValueChange).toHaveBeenLastCalledWith(60);
     props.onAccessibilityAction({ nativeEvent: { actionName: "decrement" } });
     expect(onValueChange).toHaveBeenLastCalledWith(50);
-  });
-});
-
-describe("#27 NativeTask — progress value", () => {
-  it("exposes the progress as an accessibility value", () => {
-    const { container } = render(<NativeTask task={{ progress: 0.62, label: "Indexing" }} />);
-    const bar = container.querySelector('[role="progressbar"]')!;
-    expect(bar.getAttribute("aria-valuemin")).toBe("0");
-    expect(bar.getAttribute("aria-valuemax")).toBe("100");
-    expect(bar.getAttribute("aria-valuenow")).toBe("62");
-  });
-
-  it("omits the value for an indeterminate task", () => {
-    const { container } = render(<NativeTask task={{ label: "Indexing" }} />);
-    expect(container.querySelector('[role="progressbar"]')!.getAttribute("aria-valuenow")).toBeNull();
-  });
-});
-
-describe("#41 / #47 / #49 — chart summaries", () => {
-  it("NativePlotChart announces a summary", () => {
-    const { container } = render(
-      <NativePlotChart
-        points={[
-          { x: 1, y: 10 },
-          { x: 2, y: 20 },
-        ]}
-      />,
-    );
-    const summary = container.querySelector('[role="img"]')!.getAttribute("aria-label")!;
-    expect(summary).toContain("2 points");
-  });
-
-  it("NativeScatterChart announces a summary per series", () => {
-    const { container } = render(
-      <NativeScatterChart
-        series={[{ name: "Plans", points: [{ x: 1, y: 2 }, { x: 3, y: 9 }] }]}
-      />,
-    );
-    const summary = container.querySelector('[role="img"]')!.getAttribute("aria-label")!;
-    expect(summary).toContain("Plans");
-    expect(summary).toContain("2 points");
-  });
-
-  it("NativeWaterfallChart announces a summary", () => {
-    const { container } = render(
-      <NativeWaterfallChart
-        steps={[
-          { label: "Start", value: 100, isTotal: true },
-          { label: "Sales", value: 30 },
-          { label: "End", value: 130, isTotal: true },
-        ]}
-      />,
-    );
-    const summary = container.querySelector('[role="img"]')!.getAttribute("aria-label")!;
-    expect(summary).toContain("3 steps");
-    expect(summary).toContain("Closing value 130");
   });
 });
 
