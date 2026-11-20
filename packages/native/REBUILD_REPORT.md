@@ -3,10 +3,8 @@
 Branch `rebuild/native-v1`. Master prompt §8 order: deviations, renderer verdicts,
 component table, token mapping, §6 results, builds, then the §9 checklist.
 Every claim below is true of the **pushed** tree. The checks in §7 were run in a
-clean checkout of the pushed commit (`git worktree` of `f0ac73b`, no uncommitted
-files, no build output, fresh `pnpm install`). A network clone of the repository
-was attempted first and failed twice with `Recv failure: Connection reset by
-peer` — the checkout method, not the result, is what changed.
+clean checkout of the pushed commit (`git worktree` of `44cc267`, detached, no
+uncommitted files, no build output, fresh `pnpm install`).
 
 ## 1. Deviations first (Law 6)
 
@@ -257,7 +255,7 @@ A fresh clone needs only `pnpm install`: both packages resolve
 | Proof-app tests | `pnpm --filter glacia-native-proof test` | `1 file, 58 tests passed` |
 | Proof-app typecheck | `pnpm --filter glacia-native-proof exec tsc --noEmit` | 0 errors |
 | Web untouched | `git diff --stat origin/main -- packages/core packages/tokens apps/docs` | empty |
-| Proof app bundles | `npx expo export -c --platform web` | exported 3 files, exit 0 |
+| Proof app bundles | `npx expo export -c --platform web` | JS bundle written to `dist/_expo/static/js/web/`, exit 0 |
 | npm publish | — | not run (gate is Binyam's device pass) |
 
 ## 8. Definition of done (§9)
