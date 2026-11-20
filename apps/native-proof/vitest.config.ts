@@ -14,6 +14,7 @@ export default defineConfig({
     alias: [
       { find: /^react-native$/, replacement: path.resolve(__dirname, "node_modules/react-native-web") },
       { find: /^glacia-native$/, replacement: path.resolve(__dirname, "../../packages/native/src/index.ts") },
+      { find: /^glacia-tokens$/, replacement: path.resolve(__dirname, "../../packages/tokens/src/index.ts") },
       // One React, as a peer dependency gives a real app.
       { find: /^react$/, replacement: path.resolve(__dirname, "node_modules/react") },
     ],

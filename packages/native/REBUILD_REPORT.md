@@ -57,7 +57,13 @@ fresh clone of the pushed commit (commands and numbers in §7).
    Fixed by isolating the optional backend in `src/internal/blur-community.ts`
    with a `.web.ts` twin, so the web bundle never resolves it. No public API
    change; `test/` covers the resolver as before.
-8. **`apps/native-proof` has a `tsconfig.json` in the tree.** Session 3's report
+8. **Workspace resolution is pinned to source.** A fresh clone previously
+   failed typecheck and tests because `glacia-tokens` (and, for the app,
+   `glacia-native`) resolved to unbuilt `dist`/`lib` output. The app's
+   typecheck reported those failures as `any`-typed parameters. `tsconfig`
+   paths and Vitest aliases now point at the packages' source; nothing in the
+   published API changed.
+9. **`apps/native-proof` has a `tsconfig.json` in the tree.** Session 3's report
    claimed a clean app typecheck while the claim could not be reproduced from the
    pushed tree (the commit carrying it had not been pushed). The config and the
    four checks are now committed and verified from a fresh clone (§7).
@@ -175,6 +181,10 @@ build's own page, and its status there is the authority, not this line. No
 device pass has happened.
 
 ## 7. Checks (run from a fresh clone of the pushed commit)
+
+A fresh clone needs only `pnpm install`: both packages resolve
+`glacia-tokens` and the app resolves `glacia-native` from source through
+`tsconfig` paths and Vitest aliases, so no package has to be built first.
 
 | Check | Command | Result |
 | --- | --- | --- |

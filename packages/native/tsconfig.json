@@ -8,7 +8,13 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "noEmit": true
+    "noEmit": true,
+    // The tokens package is built for consumers; inside the monorepo its source
+    // is the truth, so typecheck and tests do not depend on a prior build.
+    "baseUrl": ".",
+    "paths": {
+      "glacia-tokens": ["../tokens/src/index.ts"]
+    }
   },
   "include": ["src", "test"],
   // The vendored glass engine (src/engine) ships as source for Metro and is
