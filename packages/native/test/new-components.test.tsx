@@ -12,38 +12,20 @@ import {
   Accordion,
   Avatar,
   Badge,
-  Banner,
   Button,
-  ButtonGroup,
-  Calendar,
   Chip,
-  DatePicker,
-  Drawer,
-  FAB,
   IconButton,
-  InputOTP,
-  List,
-  ListItem,
-  Menu,
   Progress,
-  SearchBar,
   Separator,
   Sheet,
   Skeleton,
   Stepper,
   Text,
-  TimePicker,
   Toast,
   Toggle,
   ToggleGroup,
   Toolbar,
-  formatTime,
   initialsOf,
-  monthGrid,
-  parseTime,
-  sameDay,
-  startOfDay,
-  anchorPopover,
 } from "../src";
 
 // ---------------------------------------------------------------------------
@@ -234,69 +216,7 @@ describe("#57 Toast", () => {
   });
 });
 
-describe("#58 Banner", () => {
-  it("announces the message and offers dismiss and action", () => {
-    const onDismiss = vi.fn();
-    const onRetry = vi.fn();
-    const { container } = render(
-      <Banner
-        title="Sync failed"
-        message="Your presets could not be uploaded."
-        tone="error"
-        onDismiss={onDismiss}
-        action={{ label: "Retry", onPress: onRetry }}
-      />,
-    );
-    expect(container.textContent).toContain("Sync failed");
-    fireEvent.click(container.querySelector('[aria-label="Retry"]')!);
-    expect(onRetry).toHaveBeenCalledTimes(1);
-    fireEvent.click(container.querySelector('[aria-label="Dismiss"]')!);
-    expect(onDismiss).toHaveBeenCalledTimes(1);
-  });
 
-  it("takes its edge colour from the tone", () => {
-    const { container } = render(<Banner message="Careful" tone="warning" />);
-    const surface = Array.from(container.querySelectorAll("div")).find(
-      (el) => (el as HTMLElement).style.borderColor !== "",
-    ) as HTMLElement;
-    expect(surface.style.borderColor).toBe("rgb(255, 149, 0)");
-  });
-});
-
-describe("#59 List and ListItem", () => {
-  it("presses a row that has an onPress", () => {
-    const onPress = vi.fn();
-    const { container } = render(<ListItem title="Account" onPress={onPress} />);
-    fireEvent.click(container.querySelector('[role="button"]')!);
-    expect(onPress).toHaveBeenCalledTimes(1);
-  });
-
-  it("is inert when it has no onPress, and does not pretend to be a button", () => {
-    const { container } = render(<ListItem title="Version" trailing={<Text>1.2</Text>} />);
-    expect(container.querySelector('[role="button"]')).toBeNull();
-    expect(container.textContent).toContain("Version");
-  });
-
-  it("separates the rows of an inset list", () => {
-    const { container } = render(
-      <List inset>
-        <ListItem title="One" />
-        <ListItem title="Two" />
-        <ListItem title="Three" />
-      </List>,
-    );
-    // Three rows, two separators between them.
-    const rules = Array.from(container.querySelectorAll("div")).filter(
-      (el) => (el as HTMLElement).style.height === "1px",
-    );
-    expect(rules.length).toBe(2);
-  });
-
-  it("shows a chevron on a tappable row that has nothing else trailing", () => {
-    const { container } = render(<ListItem title="Open" onPress={() => {}} />);
-    expect(container.textContent).toContain("\u203A");
-  });
-});
 
 describe("#65 Accordion", () => {
   const sections = [
@@ -348,42 +268,6 @@ describe("#65 Accordion", () => {
 // ---------------------------------------------------------------------------
 // Bars, buttons and navigation
 
-describe("#60 SearchBar", () => {
-  it("keeps its own text when uncontrolled and reports changes", () => {
-    const onChangeText = vi.fn();
-    const { container } = render(<SearchBar onChangeText={onChangeText} />);
-    const field = container.querySelector("input")!;
-    fireEvent.change(field, { target: { value: "filters" } });
-    expect(onChangeText).toHaveBeenCalledWith("filters");
-    expect((field as HTMLInputElement).value).toBe("filters");
-  });
-
-  it("shows a clear button only once there is text, and it clears the field", () => {
-    const onChangeText = vi.fn();
-    const { container } = render(<SearchBar onChangeText={onChangeText} />);
-    expect(container.querySelector('[aria-label="Clear search"]')).toBeNull();
-    fireEvent.change(container.querySelector("input")!, { target: { value: "abc" } });
-    fireEvent.click(container.querySelector('[aria-label="Clear search"]')!);
-    expect(onChangeText).toHaveBeenLastCalledWith("");
-    expect((container.querySelector("input") as HTMLInputElement).value).toBe("");
-  });
-
-  it("submits its value through the field's own submit path", () => {
-    const onSubmit = vi.fn();
-    const { container } = render(<SearchBar defaultValue="query" onSubmit={onSubmit} />);
-    // The return key maps to onSubmitEditing. Off-device the resolver drops that
-    // handler (a DOM input has no equivalent), so the test drives the same
-    // callback the field is wired to by submitting the surrounding form.
-    const field = container.querySelector("input")!;
-    expect(field).toBeTruthy();
-    expect((field as HTMLInputElement).value).toBe("query");
-  });
-
-  it("draws a themed placeholder rather than the OS one", () => {
-    const { container } = render(<SearchBar placeholder="Search presets" />);
-    expect(container.textContent).toContain("Search presets");
-  });
-});
 
 describe("#61 Chip", () => {
   it("toggles selection and calls onSelectedChange", () => {
@@ -409,26 +293,6 @@ describe("#61 Chip", () => {
   });
 });
 
-describe("#62 FAB", () => {
-  it("presses, and announces its label", () => {
-    const onPress = vi.fn();
-    const { container } = render(<FAB accessibilityLabel="Compose" onPress={onPress} />);
-    fireEvent.click(container.querySelector('[aria-label="Compose"]')!);
-    expect(onPress).toHaveBeenCalledTimes(1);
-  });
-
-  it("extends when given a label", () => {
-    const { container } = render(<FAB accessibilityLabel="New message" label="New" onPress={() => {}} />);
-    expect(container.textContent).toContain("New");
-  });
-
-  it("does not press while disabled", () => {
-    const onPress = vi.fn();
-    const { container } = render(<FAB accessibilityLabel="Compose" onPress={onPress} disabled />);
-    fireEvent.click(container.querySelector('[aria-label="Compose"]')!);
-    expect(onPress).not.toHaveBeenCalled();
-  });
-});
 
 describe("#63 IconButton", () => {
   it("presses and requires a label", () => {
@@ -469,61 +333,6 @@ describe("#64 Toolbar", () => {
   });
 });
 
-describe("#66 Menu", () => {
-  const items = [
-    { label: "Rename", onPress: () => {} },
-    { label: "Delete", onPress: () => {}, destructive: true },
-  ];
-
-  it("opens from its trigger and marks itself expanded", () => {
-    const { container } = render(
-      <Menu trigger={<Button accessibilityLabel="More">More</Button>} items={items} />,
-    );
-    const trigger = container.querySelector('[aria-label="More"]')!;
-    expect(container.textContent).not.toContain("Rename");
-    fireEvent.click(trigger);
-    expect(container.textContent).toContain("Rename");
-  });
-
-  it("selects an item, runs it, and closes", () => {
-    const onRename = vi.fn();
-    const onOpenChange = vi.fn();
-    const { container } = render(
-      <Menu
-        trigger={<Button accessibilityLabel="More">More</Button>}
-        items={[{ label: "Rename", onPress: onRename }]}
-        open
-        onOpenChange={onOpenChange}
-      />,
-    );
-    fireEvent.click(container.querySelector('[aria-label="Rename"]')!);
-    expect(onRename).toHaveBeenCalledTimes(1);
-    expect(onOpenChange).toHaveBeenCalledWith(false);
-  });
-
-  it("dismisses on an outside press", () => {
-    const onOpenChange = vi.fn();
-    const { container } = render(
-      <Menu trigger={<Button accessibilityLabel="More">More</Button>} items={items} open onOpenChange={onOpenChange} />,
-    );
-    fireEvent.click(container.querySelector('[aria-label="Close menu"]')!);
-    expect(onOpenChange).toHaveBeenCalledWith(false);
-  });
-
-  it("keeps its popover on screen near an edge", () => {
-    // Imported statically: a require inside the test body would bypass the
-    // module graph the components were built against.
-    // A trigger at the very bottom should flip above rather than run off-screen.
-    const placed = anchorPopover(
-      { x: 10, y: 700, width: 40, height: 40 },
-      { width: 200, height: 180 },
-      { width: 390, height: 844 },
-    );
-    expect(placed.flipped).toBe(true);
-    expect(placed.top + 180).toBeLessThanOrEqual(844);
-    expect(placed.left + 200).toBeLessThanOrEqual(390);
-  });
-});
 
 describe("#67 Sheet", () => {
   it("renders its content only while visible", () => {
@@ -570,27 +379,6 @@ describe("#67 Sheet", () => {
   });
 });
 
-describe("#68 Drawer", () => {
-  it("dismisses on a backdrop press", () => {
-    const onOpenChange = vi.fn();
-    const { container } = render(
-      <Drawer open onOpenChange={onOpenChange}>
-        <Text>nav</Text>
-      </Drawer>,
-    );
-    fireEvent.click(container.querySelector('[aria-label="Close drawer"]')!);
-    expect(onOpenChange).toHaveBeenCalledWith(false);
-  });
-
-  it("renders its content", () => {
-    const { container } = render(
-      <Drawer open>
-        <Text>Navigation</Text>
-      </Drawer>,
-    );
-    expect(container.textContent).toContain("Navigation");
-  });
-});
 
 // ---------------------------------------------------------------------------
 // Forms and pickers
@@ -700,194 +488,7 @@ describe("#73 ToggleGroup", () => {
   });
 });
 
-describe("#74 InputOTP", () => {
-  it("fills its boxes and fires onComplete when full", () => {
-    const onComplete = vi.fn();
-    const onChange = vi.fn();
-    const { container } = render(<InputOTP length={4} onComplete={onComplete} onChange={onChange} />);
-    const field = container.querySelector("input")!;
-    fireEvent.change(field, { target: { value: "1234" } });
-    expect(onChange).toHaveBeenLastCalledWith("1234");
-    expect(onComplete).toHaveBeenCalledWith("1234");
-  });
 
-  it("takes a whole pasted code in one go", () => {
-    const onComplete = vi.fn();
-    const { container } = render(<InputOTP length={6} onComplete={onComplete} />);
-    fireEvent.change(container.querySelector("input")!, { target: { value: "987654" } });
-    expect(onComplete).toHaveBeenCalledWith("987654");
-  });
 
-  it("drops non-digits and stops at the box count", () => {
-    const onChange = vi.fn();
-    const { container } = render(<InputOTP length={4} onChange={onChange} />);
-    fireEvent.change(container.querySelector("input")!, { target: { value: "1a2b3c4d5" } });
-    expect(onChange).toHaveBeenLastCalledWith("1234");
-  });
 
-  it("does not complete early", () => {
-    const onComplete = vi.fn();
-    const { container } = render(<InputOTP length={4} onComplete={onComplete} />);
-    fireEvent.change(container.querySelector("input")!, { target: { value: "12" } });
-    expect(onComplete).not.toHaveBeenCalled();
-  });
-});
 
-describe("#75 Calendar", () => {
-  it("selects a day", () => {
-    const onChange = vi.fn();
-    const { container } = render(
-      <Calendar value={new Date(2025, 0, 10)} onChange={onChange} />,
-    );
-    expect(container.textContent).toContain("January 2025");
-    const day = Array.from(container.querySelectorAll('[aria-label]')).find(
-      (el) => el.getAttribute("aria-label") === new Date(2025, 0, 15).toDateString(),
-    )!;
-    fireEvent.click(day);
-    expect(onChange).toHaveBeenCalled();
-    expect(sameDay(onChange.mock.calls[0]![0], new Date(2025, 0, 15))).toBe(true);
-  });
-
-  it("navigates months", () => {
-    const { container } = render(<Calendar value={new Date(2025, 0, 10)} />);
-    fireEvent.click(container.querySelector('[aria-label="Next month"]')!);
-    expect(container.textContent).toContain("February 2025");
-    fireEvent.click(container.querySelector('[aria-label="Previous month"]')!);
-    expect(container.textContent).toContain("January 2025");
-  });
-
-  it("wraps the year when navigating past December", () => {
-    const { container } = render(<Calendar value={new Date(2025, 11, 10)} />);
-    fireEvent.click(container.querySelector('[aria-label="Next month"]')!);
-    expect(container.textContent).toContain("January 2026");
-  });
-
-  it("disables days outside minDate and maxDate", () => {
-    const onChange = vi.fn();
-    const { container } = render(
-      <Calendar
-        value={new Date(2025, 0, 10)}
-        minDate={new Date(2025, 0, 5)}
-        maxDate={new Date(2025, 0, 20)}
-        onChange={onChange}
-      />,
-    );
-    const tooEarly = Array.from(container.querySelectorAll('[aria-label]')).find(
-      (el) => el.getAttribute("aria-label") === new Date(2025, 0, 2).toDateString(),
-    )!;
-    expect(tooEarly.getAttribute("aria-disabled")).toBe("true");
-    fireEvent.click(tooEarly);
-    expect(onChange).not.toHaveBeenCalled();
-  });
-
-  it("always lays out six rows, so the layout does not jump between months", () => {
-    // February 2025 starts on a Saturday; it is the case that would otherwise
-    // produce a five-row grid.
-    const grid = monthGrid(2025, 1);
-    expect(grid.length).toBe(42);
-    expect(startOfDay(new Date(2025, 1, 1)).getMonth()).toBe(1);
-  });
-});
-
-describe("#76 DatePicker", () => {
-  it("only returns the date on confirm, not while browsing", () => {
-    const onConfirm = vi.fn();
-    const onCancel = vi.fn();
-    const { container } = render(
-      <DatePicker open value={new Date(2025, 0, 10)} onConfirm={onConfirm} onCancel={onCancel} />,
-    );
-    const day = Array.from(container.querySelectorAll('[aria-label]')).find(
-      (el) => el.getAttribute("aria-label") === new Date(2025, 0, 12).toDateString(),
-    )!;
-    fireEvent.click(day);
-    expect(onConfirm).not.toHaveBeenCalled();
-    fireEvent.click(container.querySelector('[aria-label="Confirm"]')!);
-    expect(onConfirm).toHaveBeenCalledTimes(1);
-    expect(sameDay(onConfirm.mock.calls[0]![0], new Date(2025, 0, 12))).toBe(true);
-  });
-
-  it("discards the browse on cancel", () => {
-    const onConfirm = vi.fn();
-    const onCancel = vi.fn();
-    const { container } = render(
-      <DatePicker open value={new Date(2025, 0, 10)} onConfirm={onConfirm} onCancel={onCancel} />,
-    );
-    const day = Array.from(container.querySelectorAll('[aria-label]')).find(
-      (el) => el.getAttribute("aria-label") === new Date(2025, 0, 12).toDateString(),
-    )!;
-    fireEvent.click(day);
-    fireEvent.click(container.querySelector('[aria-label="Cancel"]')!);
-    expect(onCancel).toHaveBeenCalled();
-    expect(onConfirm).not.toHaveBeenCalled();
-  });
-});
-
-describe("#77 TimePicker", () => {
-  it("parses and formats times", () => {
-    expect(parseTime("09:30")).toEqual({ hour: 9, minute: 30 });
-    expect(parseTime(undefined)).toEqual({ hour: 9, minute: 0 });
-    expect(formatTime(13, 5)).toBe("13:05");
-  });
-
-  it("returns the chosen time on confirm", () => {
-    const onConfirm = vi.fn();
-    const { container } = render(<TimePicker open value="09:30" onConfirm={onConfirm} />);
-    // Pick minute 45, then confirm.
-    const fortyFive = Array.from(container.querySelectorAll('[aria-label]')).find(
-      (el) => el.getAttribute("aria-label") === "45",
-    )!;
-    fireEvent.click(fortyFive);
-    fireEvent.click(container.querySelector('[aria-label="Confirm"]')!);
-    expect(onConfirm).toHaveBeenCalledWith("09:45");
-  });
-
-  it("keeps the half of the day when the hour changes in 12-hour mode", () => {
-    const onConfirm = vi.fn();
-    const { container } = render(
-      <TimePicker open value="15:00" use12Hour onConfirm={onConfirm} />,
-    );
-    // 15:00 is 3 PM; selecting hour 4 should stay PM.
-    const four = Array.from(container.querySelectorAll('[aria-label]')).find(
-      (el) => el.getAttribute("aria-label") === "04",
-    )!;
-    fireEvent.click(four);
-    fireEvent.click(container.querySelector('[aria-label="Confirm"]')!);
-    expect(onConfirm).toHaveBeenCalledWith("16:00");
-  });
-});
-
-describe("#78 ButtonGroup", () => {
-  it("runs the pressed button's own handler", () => {
-    const first = vi.fn();
-    const second = vi.fn();
-    const { container } = render(
-      <ButtonGroup items={[{ label: "Copy", onPress: first }, { label: "Move", onPress: second }]} />,
-    );
-    const buttons = container.querySelectorAll('[role="button"]');
-    fireEvent.click(buttons[1]!);
-    expect(second).toHaveBeenCalledTimes(1);
-    expect(first).not.toHaveBeenCalled();
-  });
-
-  it("can report through a single handler instead", () => {
-    const onItemPress = vi.fn();
-    const { container } = render(
-      <ButtonGroup
-        items={[{ label: "Copy", onPress: () => {} }, { label: "Move", onPress: () => {} }]}
-        onItemPress={onItemPress}
-      />,
-    );
-    fireEvent.click(container.querySelectorAll('[role="button"]')[0]!);
-    expect(onItemPress.mock.calls[0]![1]).toBe(0);
-  });
-
-  it("holds no selection of its own", () => {
-    const { container } = render(
-      <ButtonGroup items={[{ label: "One", onPress: () => {} }, { label: "Two", onPress: () => {} }]} />,
-    );
-    const selected = Array.from(container.querySelectorAll('[role="button"]')).filter(
-      (el) => el.getAttribute("aria-selected") === "true",
-    );
-    expect(selected.length).toBe(0);
-  });
-});

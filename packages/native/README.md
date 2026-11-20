@@ -179,8 +179,9 @@ const styles = StyleSheet.create({
 
 ## Component Catalog
 
-The package exports 63 components. Everything below is part of this rebuild;
-the old charts and AI surfaces are not.
+The package exports 49 components. Everything below is part of this rebuild; the old charts, AI
+surfaces, forms, pickers, overlays and bar pieces are not — they survive in published 0.5.2 and in
+git history.
 
 **Surfaces** — the material and its containers
 
@@ -190,6 +191,7 @@ the old charts and AI surfaces are not.
 | **`<GlassContainer />`** | Groups several glass views so their optics agree. |
 | **`<GlassProvider />`** | The Android backdrop provider. One direct child; glass views are its siblings. |
 | **`<GlassStack />`** | Stacked glass layers with `GlassStack.Layer` markers. |
+| **`<GlassBackdrop />`** | A bounded backdrop scope for iOS 16.4–25: glass inside it photographs scroll content in content coordinates, so a pane dragged over a list keeps refracting the right rows. A plain wrapper on every other tier, and a hint rather than a guarantee — sticky headers, parallax and nested scrollers fall back to fresh window captures. |
 
 **Wave 1 — the engine's controls** (Apple geometry and behaviour)
 
@@ -208,10 +210,7 @@ the old charts and AI surfaces are not.
 
 **Supporting components**
 
-`ActionSheet` · `Field` · `Banner` · `List` / `ListItem` / `ListSection` ·
-`ToastViewport` · `Menu` · `Drawer` · `FAB` / `FABGroup` · `SearchBar` ·
-`InputOTP` · `ButtonGroup` · `ColorPicker` · `Combobox` · `Calendar` ·
-`DatePicker` · `TimePicker`
+`ActionSheet` · `Field`
 
 ---
 

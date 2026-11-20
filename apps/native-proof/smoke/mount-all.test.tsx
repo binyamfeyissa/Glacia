@@ -147,26 +147,14 @@ const propsFor: Record<string, Record<string, unknown>> = {
   Progress: { value: 40 },
   // Feedback and display (57-59, 65).
   Toast: { visible: true, message: "Saved" },
-  Banner: { message: "A banner", tone: "info" },
-  List: { inset: true },
-  ListItem: { title: "Row", onPress: () => {} },
-  ListSection: { header: "Group" },
   Accordion: {
     sections: [{ value: "a", title: "Section", content: React.createElement("span", null, "body") }],
   },
   // Bars, buttons and navigation (60-64, 66-68).
-  SearchBar: { placeholder: "Search" },
   Chip: { label: "Chip", onPress: () => {} },
-  FAB: { accessibilityLabel: "FAB", onPress: () => {} },
   IconButton: { accessibilityLabel: "Icon", onPress: () => {}, icon: null },
-  AppBar: { title: "AppBar" },
-  Menu: {
-    trigger: React.createElement("span", null, "open"),
-    items: [{ label: "Item", onPress: () => {} }],
-  },
+  Toolbar: { title: "Toolbar" },
   Sheet: { open: true, title: "Sheet" },
-  Drawer: { open: true },
-  // Carousel (70-71).
   // Forms and pickers (69, 72-78).
   Stepper: { accessibilityLabel: "Count", defaultValue: 2 },
   Toggle: { accessibilityLabel: "Toggle", children: "Toggle" },
@@ -176,27 +164,11 @@ const propsFor: Record<string, Record<string, unknown>> = {
       { value: "b", label: "B" },
     ],
   },
-  InputOTP: { length: 6 },
-  ButtonGroup: { items: [{ label: "One", onPress: () => {} }] },
-  Calendar: { value: new Date(2025, 0, 15) },
-  DatePicker: { open: true },
-  TimePicker: { open: true },
   // Wave 3.
+  GlassBackdrop: {},
   GlassContainer: {
     spacing: 8,
-    children: React.createElement(Glacia.FAB, {
-      accessibilityLabel: "Inside container",
-      onPress: () => {},
-    }),
-  },
-  FABGroup: {
-    accessibilityLabel: "Create",
-    icon: null,
-    actions: [{ icon: null, label: "Photo", onPress: () => {} }],
-  },
-  ToastViewport: {
-    toasts: [{ id: "1", message: "Queued", duration: 0 }],
-    onDismiss: () => {},
+    children: React.createElement(Glacia.Button, { onPress: () => {} }, "Inside container"),
   },
   ColorPicker: { colors: ["#FF3B30", "#007AFF"], allowCustom: true },
   Combobox: {
@@ -223,17 +195,12 @@ describe("react-native-web smoke check", () => {
     //   - the Card family (#8): Card, CardHeader, CardTitle, CardDescription,
     //     CardContent, CardBody, CardFooter
     //   - DialogTrigger (#16, which renders Button)
-    //   - ListSection (#59, the grouped header around List)
-    //   - ListItem   (#59, the row inside a List)
-    //   - MessageBubble and MessageAttachment (#85, the pieces of a Message)
-    // And the data constants below are values, not components.
-    // So 101 capitalised exports less 4 values less 11 belonging to an existing
-    // number cover the 86 reviewed components.
+    //   - the values below are data, not components
     //
-    // 86, not 85: the brief numbers 79-85 as seven entries, but #85 (Message)
-    // shipped three pieces. The rebuild then removed the out-of-scope charts,
-    // the AI family, the table, the carousel and the leftover display pieces
-    // (master prompt §2.3) and added Wave 2, leaving 63 exported components.
+    // The rebuild removed everything it did not itself rebuild: the charts,
+    // the AI family, the table, the carousel, and (session 5) the old form,
+    // picker, overlay, feedback and bar components. What is left is the
+    // 46 reviewed components built in Waves 1–2.
     const SLOTS = [
       "CardHeader",
       "CardTitle",
@@ -242,10 +209,8 @@ describe("react-native-web smoke check", () => {
       "CardBody",
       "CardFooter",
       "DialogTrigger",
-      "ListSection",
-      "ListItem",
     ];
-    expect(names.length - SLOTS.length).toBe(63);
+    expect(names.length - SLOTS.length).toBe(49);
     // Every reviewed component is actually mounted by the tests below.
     for (const slot of SLOTS) expect(names).toContain(slot);
   });

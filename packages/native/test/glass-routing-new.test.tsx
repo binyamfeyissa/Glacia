@@ -153,19 +153,12 @@ function FakeLiquidGlassView(props: any) {
 
 import { resetGlassRouter } from "../src/internal/GlassView";
 import {
-  FAB,
   Toolbar,
   Sheet,
-  Drawer,
-  Menu,
   Toast,
   Chip,
   Progress,
-  DatePicker,
-  TimePicker,
   Button,
-  List,
-  ListItem,
 } from "../src";
 
 /** Any small node, so an overlay panel has content through both branches. */
@@ -196,38 +189,6 @@ function onFallback(element: any) {
   return rendered;
 }
 
-describe("FAB — the flagship glass circle", () => {
-  it("renders through Apple's glass on iOS 26+ and the fallback elsewhere", () => {
-    const native = onNativeGlass(
-      <FAB accessibilityLabel="Compose" onPress={() => {}} testID="fab" />,
-    );
-    expect(native.container.querySelector('[data-testid="fab"]')).toBeTruthy();
-    native.unmount();
-
-    const fallback = onFallback(<FAB accessibilityLabel="Compose" onPress={() => {}} testID="fab" />);
-    expect(fallback.container.querySelector('[data-testid="fab"]')).toBeTruthy();
-  });
-
-  it("fires onPress in both branches", () => {
-    const onPress = vi.fn();
-    const native = onNativeGlass(<FAB accessibilityLabel="Compose" onPress={onPress} />);
-    fireEvent.click(native.container.querySelector('[role="button"]')!);
-    expect(onPress).toHaveBeenCalledTimes(1);
-    native.unmount();
-
-    const onFallbackPress = vi.fn();
-    const fallback = onFallback(<FAB accessibilityLabel="Compose" onPress={onFallbackPress} />);
-    fireEvent.click(fallback.container.querySelector('[role="button"]')!);
-    expect(onFallbackPress).toHaveBeenCalledTimes(1);
-  });
-
-  it("marks the glass interactive, which is what makes the material respond", () => {
-    const native = onNativeGlass(<FAB accessibilityLabel="Compose" onPress={() => {}} />);
-    expect(
-      native.container.querySelector(`[${NATIVE_ATTR}]`)!.getAttribute("data-interactive"),
-    ).toBe("true");
-  });
-});
 
 describe("Toolbar", () => {
   const trailing = <Button accessibilityLabel="Settings" onPress={() => {}} />;
@@ -313,96 +274,7 @@ describe("Sheet", () => {
   });
 });
 
-describe("Drawer", () => {
-  it("renders its panel through Apple's glass on iOS 26+ and the fallback elsewhere", () => {
-    const native = onNativeGlass(
-      <Drawer open testID="drawer">
-        <ThemeProbe />
-      </Drawer>,
-    );
-    expect(native.container.querySelector('[data-testid="drawer"]')).toBeTruthy();
-    native.unmount();
 
-    const fallback = onFallback(
-      <Drawer open testID="drawer">
-        <ThemeProbe />
-      </Drawer>,
-    );
-    expect(fallback.container.querySelector('[data-testid="drawer"]')).toBeTruthy();
-  });
-
-  it("dismisses on a backdrop press in both branches", () => {
-    const onOpenChange = vi.fn();
-    const native = onNativeGlass(
-      <Drawer open onOpenChange={onOpenChange}>
-        <ThemeProbe />
-      </Drawer>,
-    );
-    fireEvent.click(native.container.querySelector('[aria-label="Close drawer"]')!);
-    expect(onOpenChange).toHaveBeenCalledWith(false);
-    native.unmount();
-
-    const onFallbackChange = vi.fn();
-    const fallback = onFallback(
-      <Drawer open onOpenChange={onFallbackChange}>
-        <ThemeProbe />
-      </Drawer>,
-    );
-    fireEvent.click(fallback.container.querySelector('[aria-label="Close drawer"]')!);
-    expect(onFallbackChange).toHaveBeenCalledWith(false);
-  });
-});
-
-describe("Menu", () => {
-  const items = [
-    { label: "Rename", onPress: () => {} },
-    { label: "Delete", onPress: () => {}, destructive: true },
-  ];
-
-  it("renders its popover through Apple's glass on iOS 26+ and the fallback elsewhere", () => {
-    const native = onNativeGlass(
-      <Menu trigger={<Button accessibilityLabel="More">…</Button>} items={items} open testID="menu" />,
-    );
-    expect(native.container.textContent).toContain("Rename");
-    native.unmount();
-
-    const fallback = onFallback(
-      <Menu trigger={<Button accessibilityLabel="More">…</Button>} items={items} open testID="menu" />,
-    );
-    expect(fallback.container.textContent).toContain("Rename");
-  });
-
-  it("selects an item and closes in both branches", () => {
-    const onRename = vi.fn();
-    const onOpenChange = vi.fn();
-    const native = onNativeGlass(
-      <Menu
-        trigger={<Button accessibilityLabel="More">…</Button>}
-        items={[{ label: "Rename", onPress: onRename }]}
-        open
-        onOpenChange={onOpenChange}
-      />,
-    );
-    fireEvent.click(native.container.querySelector('[aria-label="Rename"]')!);
-    expect(onRename).toHaveBeenCalledTimes(1);
-    expect(onOpenChange).toHaveBeenCalledWith(false);
-    native.unmount();
-
-    const onFallbackRename = vi.fn();
-    const onFallbackChange = vi.fn();
-    const fallback = onFallback(
-      <Menu
-        trigger={<Button accessibilityLabel="More">…</Button>}
-        items={[{ label: "Rename", onPress: onFallbackRename }]}
-        open
-        onOpenChange={onFallbackChange}
-      />,
-    );
-    fireEvent.click(fallback.container.querySelector('[aria-label="Rename"]')!);
-    expect(onFallbackRename).toHaveBeenCalledTimes(1);
-    expect(onFallbackChange).toHaveBeenCalledWith(false);
-  });
-});
 
 describe("Toast", () => {
   it("renders its pill through Apple's glass on iOS 26+ and the fallback elsewhere", () => {
@@ -494,58 +366,4 @@ describe("Progress — the track is glass", () => {
   });
 });
 
-describe("DatePicker and TimePicker — the pickers live in a glass Sheet", () => {
-  it("DatePicker renders its sheet through Apple's glass on iOS 26+ and the fallback elsewhere", () => {
-    const native = onNativeGlass(<DatePicker open isDark={false} />);
-    expect(native.container.textContent).toMatch(/\d{4}/); // the month/year heading
-    native.unmount();
 
-    const fallback = onFallback(<DatePicker open isDark={false} />);
-    expect(fallback.container.textContent).toMatch(/\d{4}/);
-  });
-
-  it("TimePicker renders its sheet through Apple's glass on iOS 26+ and the fallback elsewhere", () => {
-    const native = onNativeGlass(<TimePicker open isDark={false} />);
-    expect(native.container.textContent).toContain(":");
-    native.unmount();
-
-    const fallback = onFallback(<TimePicker open isDark={false} />);
-    expect(fallback.container.textContent).toContain(":");
-  });
-
-  it("DatePicker only commits on confirm, in both branches", () => {
-    const onConfirm = vi.fn();
-    const native = onNativeGlass(<DatePicker open onConfirm={onConfirm} isDark={false} />);
-    // Pick a day, then confirm.
-    const days = native.container.querySelectorAll('[aria-label]');
-    const aDay = Array.from(days).find((el) => /^\w{3} \w{3} \d{2} \d{4}$/.test(el.getAttribute("aria-label") ?? ""));
-    fireEvent.click(aDay!);
-    expect(onConfirm).not.toHaveBeenCalled();
-    fireEvent.click(native.container.querySelector('[aria-label="Confirm"]')!);
-    expect(onConfirm).toHaveBeenCalledTimes(1);
-    native.unmount();
-  });
-});
-
-describe("List and ListItem — non-glass surfaces render on both branches", () => {
-  it("presses a row in both branches", () => {
-    const onPress = vi.fn();
-    const native = onNativeGlass(
-      <List inset>
-        <ListItem title="Account" onPress={onPress} />
-      </List>,
-    );
-    fireEvent.click(native.container.querySelector('[role="button"]')!);
-    expect(onPress).toHaveBeenCalledTimes(1);
-    native.unmount();
-
-    const onFallbackPress = vi.fn();
-    const fallback = onFallback(
-      <List inset>
-        <ListItem title="Account" onPress={onFallbackPress} />
-      </List>,
-    );
-    fireEvent.click(fallback.container.querySelector('[role="button"]')!);
-    expect(onFallbackPress).toHaveBeenCalledTimes(1);
-  });
-});

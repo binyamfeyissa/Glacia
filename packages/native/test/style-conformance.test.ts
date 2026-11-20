@@ -25,11 +25,6 @@ const SRC = join(__dirname, "..", "src");
  */
 const NEW_COMPONENTS = [
   "Text.tsx",
-  "Feedback.tsx",
-  "Bars.tsx",
-  "Overlays.tsx",
-  "Forms2.tsx",
-  "Pickers.tsx",
   // Wave 1–2: the engine-dressed controls, one file per component.
   "Accordion.tsx",
   "ActionSheet.tsx",
@@ -145,7 +140,7 @@ describe("new components use the token system", () => {
     // A lens (`SelectedLens`, which paints `glassActive` plus the rim) and the
     // bare token are the two accepted forms: either is the same selection
     // language, and neither invents a colour.
-    const selectors = ["Chip.tsx", "ToggleGroup.tsx", "SegmentedControl.tsx", "TabBar.tsx", "Pickers.tsx"];
+    const selectors = ["Chip.tsx", "ToggleGroup.tsx", "SegmentedControl.tsx", "TabBar.tsx"];
     const usingActive = selectors.filter((file) => /glassActive|SelectedLens/.test(code(file)));
     expect(usingActive.length).toBe(selectors.length);
   });

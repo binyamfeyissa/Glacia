@@ -37,6 +37,11 @@ export interface LiquidGlassModule {
    */
   LiquidGlassProvider?: any;
   LiquidGlassStack?: any;
+  /**
+   * The iOS backdrop scope view (Metal tier). Absent on the Android and native builds; a scope
+   * there would only add a view.
+   */
+  NativeGlassBackdropView?: any;
   /** The engine's mount gate: native (iOS 26+), Metal (iOS 16.4–25), AGSL (Android 13+). */
   supportsGlass?: boolean;
   /** Legacy spelling of the mount gate, from the older bridge package. */
@@ -205,6 +210,42 @@ const ENGINE_CONTROLS: Record<string, string> = {
   MorphGroup: "LiquidGlassMorphGroup",
   Scrim: "LiquidGlassScrim",
 };
+
+/**
+ * The native backdrop scope, when the active tier is the Metal renderer.
+ *
+ * Only iOS 16.4–25 needs it: iOS 26+ reads the live window through Apple's own glass, and the
+ * Android renderer already has a provider contract of its own. Off that tier this is null and
+ * callers render a plain wrapper, so a `GlassBackdrop` never changes layout where it does
+ * nothing.
+ */
+let cachedBackdropScope: any | null | undefined;
+
+/**
+ * Resolves the scope for the active tier. An explicit module is used by tests, the same way
+ * `readCapabilities` takes one: the routing question must be answerable without a device.
+ */
+export function loadBackdropScope(module?: LiquidGlassModule | null): any | null {
+  if (module !== undefined) {
+    const capabilities = readCapabilities(module);
+    return capabilities.supported && !capabilities.native
+      ? (module as any)?.NativeGlassBackdropView ?? null
+      : null;
+  }
+  if (cachedBackdropScope !== undefined) return cachedBackdropScope;
+  const capabilities = readCapabilities();
+  const engine = requireEngineModule() as any;
+  cachedBackdropScope =
+    capabilities.supported && !capabilities.native
+      ? engine?.NativeGlassBackdropView ?? null
+      : null;
+  return cachedBackdropScope;
+}
+
+/** Clears the memoised backdrop route. Tests call this after flipping the module. */
+export function resetBackdropScope() {
+  cachedBackdropScope = undefined;
+}
 
 /** The Glacia names of every control the vendored engine carries. */
 export const ENGINE_CONTROL_NAMES: readonly string[] = Object.freeze(

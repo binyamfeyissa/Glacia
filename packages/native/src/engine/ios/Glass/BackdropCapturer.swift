@@ -156,7 +156,11 @@ final class BackdropCapturer {
         region: CGRect,
         scale: CGFloat,
         frameDuration: CFTimeInterval,
-        isUnderLoad: Bool
+        isUnderLoad: Bool,
+        // A strip-backed scope composites its content band from the ring, so the window capture
+        // only supplies the static bands. Those must not be gated by the movement margin: when
+        // the glass slides over content, that gate is what used to freeze the photograph.
+        ignoreMovementGate: Bool = false
     ) -> Bool {
         guard !region.isNull, !region.isEmpty,
               window.bounds.width > 0, window.bounds.height > 0
@@ -183,10 +187,10 @@ final class BackdropCapturer {
         let stride = staleCaptures >= Tuning.staleCapturesBeforeIdle
             ? Tuning.idleStride
             : strideFrames
-        let dueByCadence = !isMoving && frameCounter % stride == 0
+        let dueByCadence = ignoreMovementGate || (!isMoving && frameCounter % stride == 0)
         guard mustRefreshGeometry || dueByCadence else { return false }
 
-        let margin = isMoving ? Tuning.movementMargin : 0
+        let margin = (isMoving && !ignoreMovementGate) ? Tuning.movementMargin : 0
         let target = margin > 0
             ? clipped.insetBy(dx: -margin, dy: -margin).intersection(window.bounds)
             : clipped

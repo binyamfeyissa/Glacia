@@ -113,11 +113,20 @@ final class GlassFrameScheduler {
         frameIsPending = true
     }
 
+    /// Photographs the backdrop for this frame, in whichever scope the participants use.
+    ///
+    /// A participant inside a `GlassBackdrop` photographs the scroll content in content
+    /// coordinates and the static bands in window coordinates; everyone else keeps the
+    /// whole-window capture. When a strip is in service its scale owns the capture, because the
+    /// content band is composited into the capturer's texture with a blit and a blit cannot
+    /// resize.
     private func captureBackdrop() -> Bool {
 
         var region: CGRect = .null
         var window: UIWindow?
         var scale: CGFloat = 1
+        var stripScope: StripScope?
+
         for entry in participants {
             guard let participant = entry.value,
                   let frame = participant.glassRegionInWindow
@@ -127,16 +136,97 @@ final class GlassFrameScheduler {
             let padded = frame.insetBy(dx: -padding, dy: -padding)
             region = region.isNull ? padded : region.union(padded)
             scale = max(scale, participant.glassCaptureScale)
+
+            if stripScope == nil,
+               let view = participant as? UIView,
+               let provider = GlassBackdropRegistry.shared.nearestProvider(for: view),
+               let scroll = provider.resolveScrollView(),
+               let content = provider.resolveContentContainer(),
+               let cache = provider.stripCache(for: scroll) {
+                let offset = GlassFramePhase.presentedOffsetY(of: scroll)
+                if let served = cache.sync(
+                    scrollView: scroll,
+                    content: content,
+                    offsetY: offset,
+                    contentHeight: scroll.contentSize.height,
+                    scale: provider.stripScale
+                ) {
+                    stripScope = StripScope(
+                        cache: cache,
+                        provider: provider,
+                        scrollView: scroll,
+                        servedOffsetY: served
+                    )
+                    scale = cache.scale
+                } else {
+                    provider.reportUnusable(true)
+                }
+            }
         }
+
         guard !region.isNull, let window else { return false }
 
-        return BackdropCapturer.shared.capture(
-            window: window,
-            region: region,
-            scale: scale,
-            frameDuration: frameDuration,
-            isUnderLoad: isUnderLoad
+        let stripActive = stripScope != nil
+        if stripActive {
+            GlassFramePhase.beginTransactionalPresentation(in: window)
+        } else {
+            GlassFramePhase.endTransactionalPresentation(in: window)
+        }
+
+        let didCapture = GlassFramePhase.signpostResult("captureBackdrop") {
+            BackdropCapturer.shared.capture(
+                window: window,
+                region: region,
+                scale: scale,
+                frameDuration: frameDuration,
+                isUnderLoad: isUnderLoad,
+                // A strip only replaces the content band; the static bands above and below it
+                // must still be fresh, so their capture is not gated by the movement margin.
+                ignoreMovementGate: stripActive
+            )
+        }
+
+        guard let scope = stripScope, let texture = BackdropCapturer.shared.texture else {
+            return didCapture
+        }
+
+        let presented = GlassFramePhase.presentedFrame(of: scope.scrollView, in: window)
+        let composited = scope.cache.composite(
+            into: texture,
+            scrollFrame: presented,
+            capturedOrigin: BackdropCapturer.shared.capturedOrigin,
+            contentOffsetY: scope.servedOffsetY
         )
+
+        if composited {
+            scope.provider.reportUnusable(false)
+        } else {
+            // The ring could not serve the band. The capture that just ran holds the true band
+            // for this frame, so nothing is stale yet — but the next frame needs rows, so the
+            // cache re-seeds rather than continuing to composite a hole.
+            scope.cache.invalidateAll()
+        }
+
+        if didCapture {
+            scope.cache.validate(
+                against: texture,
+                scrollFrame: presented,
+                capturedOrigin: BackdropCapturer.shared.capturedOrigin,
+                contentOffsetY: scope.servedOffsetY
+            )
+        }
+
+        return didCapture
+    }
+
+    /// The one strip scope this frame serves. Only the first is tracked: two independently
+    /// scrolling documents under one glass is a nested-scroller case the strip model does not
+    /// claim, and the second scope keeps the window capture.
+    private struct StripScope {
+        let cache: StripCache
+        let provider: GlassBackdropView
+        let scrollView: UIScrollView
+        let servedOffsetY: CGFloat
     }
 
     private func gatherIfPending() {

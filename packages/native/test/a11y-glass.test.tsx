@@ -105,7 +105,7 @@ import { useSpring } from "../src/internal/motion";
 import { colors as tokenColors } from "../src/internal/tokens";
 import { GlassView, resetGlassRouter } from "../src/internal/GlassView";
 import * as indexExports from "../src/index";
-import { FAB, Sheet, TabBar } from "../src/index";
+import { Sheet, TabBar } from "../src/index";
 
 beforeEach(() => {
   globalThis.__glaciaSupported2 = false;
@@ -128,11 +128,7 @@ describe("GlassContainer (#79) — the merging surface", () => {
       createElement(
         GlassContainer,
         { spacing: 12, testID: "group" },
-        createElement(FAB, {
-          icon: createElement("span", null, "+"),
-          accessibilityLabel: "Compose",
-          onPress: () => {},
-        }),
+        createElement(GlassView, { effect: "regular" }, createElement("span", null, "Compose")),
       ),
     );
 
@@ -152,11 +148,7 @@ describe("GlassContainer (#79) — the merging surface", () => {
       createElement(
         GlassContainer,
         { spacing: 12, testID: "group", style: { flexDirection: "row" } },
-        createElement(FAB, {
-          icon: createElement("span", null, "+"),
-          accessibilityLabel: "Compose",
-          onPress: () => {},
-        }),
+        createElement(GlassView, { effect: "regular" }, createElement("span", null, "Compose")),
       ),
     );
 

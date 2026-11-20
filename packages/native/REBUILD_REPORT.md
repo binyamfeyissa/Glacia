@@ -10,83 +10,73 @@ peer` — the checkout method, not the result, is what changed.
 
 ## 1. Deviations first (Law 6)
 
-1. **§6 strip-cache is not started — the brief was not delivered.**
-   The session-4 prompt says `iOS_Below_26_Strip_Cache_Build_Brief.md`
-   accompanies it. It is not in `~/Downloads` (only
-   `iOS_Below_26_Backdrop_Problem_Brief.md` is) and not in the repo. Implementing
-   the strip cache from the problem statement alone would be inventing the
-   design the brief exists to specify, so no code was written.
-   *Restore path:* drop the brief into `~/Downloads`; `ScrollScreen.tsx` in the
-   proof app is ready as the test bed.
-2. **The old sheet's snap-point behaviour is gone, not ported.**
-   `Pickers.tsx` now presents inside the Wave 1 `Sheet` (the engine design), so
-   `Overlays.tsx`'s sheet is deleted. Behaviours only the old sheet had:
-   multiple `snapPoints`, `onSnapIndexChange`, `dismissOnSnapToBottom`, and the
-   haptic tick when crossing a snap point. The engine sheet is a single-height
-   sheet that dismisses by drag or dim tap. Six tests covering snap points were
-   removed with it (`test/interactions.test.tsx`).
+1. **The strip cache is implemented but has never run.** Session 5's brief arrived
+   as prompt text; the file it named (`iOS_Below_26_Strip_Cache_Build_Brief.md`)
+   does not exist in `~/Downloads` or the repo, so that text is the design of
+   record. Everything in §2 of the brief is written and typechecks against the
+   iOS 16.4 simulator SDK; nothing in it has executed on a device or a simulator,
+   so this report makes no tracking, alignment or cost claim (§5).
+   *Restore path:* Binyam's iOS 17 device run on the proof app's Scroll tab.
+2. **The §3 prototype order could not be followed.** Step 1 (profile with
+   `os_signpost` around the capture and the draw-request build) was not run: this
+   machine has Xcode 14.3.1 with the iOS 16.4 SDK only, no connected device, and
+   the proof app targets an SDK newer than that toolchain carries. The signposts
+   are in the code so the profile can be taken on a device in one run, but a
+   profile without numbers is not a step-1 result, and steps 2–3 were written
+   anyway. That is a deviation from "report each step before starting the next".
+3. **Rigid-unit tracking and the live-interior experiment are not started**
+   (step 4). Both are experimentation with a verdict to earn, and neither can be
+   judged without the step-1 numbers.
+4. **The old sheet's snap-point behaviour is still gone, not ported.**
+   `Pickers.tsx` was culled in this session (deviation 5), so the engine `Sheet`
+   is the only sheet. Behaviours only the old sheet had: multiple `snapPoints`,
+   `onSnapIndexChange`, `dismissOnSnapToBottom`, and the haptic tick when crossing
+   a snap point. The engine sheet is single-height and dismisses by drag or dim
+   tap.
    *Restore path:* reintroduce a snap layer in `src/Sheet.tsx` — deliberate work,
    not a rename.
-3. **The sheet's `title` and `footer` props are not part of the Wave 1 sheet.**
-   `Pickers` renders its own header and button row inside the sheet's children
-   (a `PickerSheet` wrapper in `Pickers.tsx`). Anything else that wants a titled
-   sheet must do the same.
-4. **Neither device build produced an artifact.**
-   - *Android:* the EAS preview build of this commit failed with
-     `EAS_BUILD_UNKNOWN_GRADLE_ERROR` ("Gradle build failed with unknown
-     error. See logs for the 'Run gradlew' phase") and produced no APK. A local
-     reproduction could not get further either: `expo prebuild` succeeded, then
-     Gradle aborted with `No space left on device` (2.8 GB free on this
-     machine). The cloud build page is the only place the Gradle error text
-     exists, and this session has no browser to read it.
-     *Restore path:* read the "Run gradlew" log on that build page (link in §6),
-     or free ~15 GB here and run `./gradlew assembleDebug`.
-   - *iOS:* Codemagic is not configured for this repository and no
-     `CODEGAMIC_API_TOKEN` exists, so the unsigned-IPA route cannot start. EAS
-     iOS signing would need an Apple Developer account, which Binyam does not
-     have and the prompt forbids asking for.
-     *Restore path:* bind the repo to Codemagic (or supply its API token); the
-     workflow itself is one YAML file.
-5. **Out-of-scope files were also removed beyond the ones named in the prompt.**
-   The instruction named `ai.tsx`, `Message.tsx`, `Display.tsx`, `Table.tsx`,
-   `Carousel.tsx` and the charts. Deleted in addition: `src/charts/` (the whole
-   directory), `test/ai.test.tsx`, `test/charts.test.tsx`,
-   `test/charts-advanced.test.tsx`, `test/table.test.tsx`, and the Rating/Image/
-   Message describes inside `test/part-c.test.tsx` (the file now covers only
-   ColorPicker and Combobox). `src/index.ts` lost 37 exports.
-   *Nothing was rescued from those files; no Wave 1/2 component depended on
-   them.* `NativeImage`'s placeholder logic is not used anywhere else.
-6. **Some old-package components remain because the instruction did not name
-   their files**: `Forms2.tsx` (InputOTP, ButtonGroup, ColorPicker, Combobox),
-   `Pickers.tsx` (Calendar, DatePicker, TimePicker), `Overlays.tsx` (Menu,
-   Drawer), `Feedback.tsx` (Banner, List, ListSection, ListItem, ToastViewport),
-   `Bars.tsx` (SearchBar, FAB, FABGroup, Toolbar) and `Form.tsx` (a compatibility
-   re-export shim). They are outside §2.3's named removals; a second cull is a
-   decision for Binyam, not something to do silently.
-7. **The proof app did not bundle for web before this session.** `expo export`
-   failed on `@react-native-community/blur`, whose shipped module imports
-   `./components/BlurView` while only `BlurView.ios.js` / `.android.js` exist.
-   Fixed by isolating the optional backend in `src/internal/blur-community.ts`
-   with a `.web.ts` twin, so the web bundle never resolves it. No public API
-   change; `test/` covers the resolver as before.
-8. **Workspace resolution is pinned to source.** A fresh clone previously
-   failed typecheck and tests because `glacia-tokens` (and, for the app,
-   `glacia-native`) resolved to unbuilt `dist`/`lib` output. The app's
-   typecheck reported those failures as `any`-typed parameters. `tsconfig`
-   paths and Vitest aliases now point at the packages' source; nothing in the
-   published API changed.
+5. **The never-rebuilt components were culled in this session, and the cull list
+   is larger than the prompt's.** Deleted: `src/Forms2.tsx`
+   (`InputOTP`, `ButtonGroup`, `ColorPicker`, `Combobox`), `src/Pickers.tsx`
+   (`Calendar`, `DatePicker`, `TimePicker`), `src/Overlays.tsx` (`Menu`,
+   `Drawer`), `src/Feedback.tsx` (`Banner`, `List`, `ListSection`, `ListItem`,
+   `ToastViewport`) and the `src/Form.tsx` compatibility shim.
+   `src/Bars.tsx` kept only the rebuild's `Chip`, `IconButton` and `Toolbar`
+   re-exports; `SearchBar`, `FAB` and `FABGroup` are gone. `ToastViewport` needed
+   nothing kept: the ported `Toast` (`src/Toast.tsx`) is self-contained and never
+   imported it. `src/index.ts` lost 17 exports; the README catalog now lists 49.
+   Tests were trimmed per component, not per file: `test/new-components.test.tsx`
+   keeps 15 describes and drops 11, `test/glass-routing-new.test.tsx` drops the
+   FAB/Drawer/Menu/DatePicker/TimePicker/List routing blocks,
+   `test/interactions.test.tsx` drops Drawer/ListItem-swipe/FABGroup/Toast-stack,
+   `test/selected-states.test.tsx` drops the culled rows,
+   `test/part-c.test.tsx` is deleted (its only two components were culled), and
+   `test/style-conformance.test.ts` no longer lists the deleted files.
+   *Nothing culled was load-bearing for a ported component; the build and the
+   tests prove it.*
+6. **Neither device build produced an artifact.** Unchanged from session 4:
+   - *Android:* EAS build `eb55e5ff` failed with `EAS_BUILD_UNKNOWN_GRADLE_ERROR`;
+     the local reproduction reached Gradle and died on `No space left on device`.
+   - *iOS:* Codemagic is not bound to this repository and no token exists; EAS iOS
+     signing needs an Apple Developer account. The new strip-cache code makes this
+     gap sharper: it is the one part of the package that cannot even be
+     typecheck-substituted by jsdom tests.
+   *Restore path:* the same two routes as before (§6), plus a real iOS 17 device.
+7. **Out-of-scope files were removed beyond the ones the earlier prompt named.**
+   `src/charts/`, the AI family, `Display.tsx`, `Table.tsx`, `Carousel.tsx` and
+   four test files went in session 4. `src/index.ts` lost 37 exports then, 17 more
+   now.
+8. **The proof app did not bundle for web before session 4.** Fixed by isolating
+   the optional `@react-native-community/blur` backend in
+   `src/internal/blur-community.ts` with a `.web.ts` twin.
 9. **No donor source was vendored.** §2.2 asks for React Native Reusables /
-   `@rn-primitives` source to be copied in with its MIT notice. The Wave 2
-   components were written directly against the behaviour (open/close, focus,
-   dismissal, screen-reader semantics) rather than copied and re-dressed, so
-   there is no donor source and no donor notice to carry. The engine's MIT
-   NOTICE is present at `src/engine/NOTICE`.
-   *Restore path:* vendor the donor files if Binyam wants their implementation
-   on record; it changes no public API.
-10. **`apps/native-proof` has a `tsconfig.json` in the tree.** Session 3's report
-   claimed a clean app typecheck while the claim could not be reproduced from the
-   pushed tree (the commit carrying it had not been pushed). The config and the
-   four checks are now committed and verified from a fresh clone (§7).
+   `@rn-primitives` source with its MIT notice. The Wave 2 components are written
+   against the behaviour, not copied and re-dressed, so there is no donor notice.
+   The engine's MIT NOTICE is at `src/engine/NOTICE`.
+10. **The Xcode on this machine cannot build the proof app.** 14.3.1 / iOS 16.4 is
+    the floor of the target range and below the Expo SDK's minimum; every
+    "simulator" label that would otherwise be available is therefore "not run".
+    Any future simulator claim needs a newer Xcode.
 
 ## 2. Renderer verdict table
 
@@ -119,7 +109,7 @@ known, and the mount-all smoke test mounts every export.
 | Input | yes | yes | `forms`, `fixes` |
 | Card (+ 6 pieces) | yes | n/a | `native`, `glass-routing-new` |
 | Toolbar | yes | yes | `interactions` |
-| Toast / ToastViewport | yes | yes | `interactions` |
+| Toast | yes | yes | `new-components` |
 | Sheet | yes | yes (dim tap, dismiss) | `glass-routing-new`, `new-components` |
 | Group, MorphGroup, Scrim | yes | yes | `glass-routing-new`, `wave2` |
 | Accordion, Collapsible | yes | yes | `wave2`, `new-components` |
@@ -174,13 +164,52 @@ on a raw colour literal or a bare radius.
 | `tabBar.height` | 49 (+ safe-area inset) | TabBar |
 | `durations.stepperRepeat` | 400 ms then 110 ms | Stepper |
 | `scales.pop` | 1.18 | Stepper |
-| `sheet.heights` | 540 (picker), 420 (default) | Sheet, Pickers |
+| `sheet.heights` | 540, 420 | Sheet |
 
 ## 5. §6 prototype results
 
-Not started. The build brief was not delivered (deviation 1). No profiling, no
-scroll spike, no band split, no rigid-unit tracking was written, and no
-"built-but-device-unverified" claim is made for any of the four steps.
+**Step 1 — profile: not run, no numbers.** No iOS 17+ SDK on this machine
+(Xcode 14.3.1, simulator SDK 16.4), no attached device, and the app was not
+launched anywhere. What exists instead of numbers: `os_signpost` intervals named
+`captureBackdrop` (window snapshot) and `stripSync` (ring update) under subsystem
+`com.glacia.glass`, so one Instruments run separates tree-walk/CPU cost from pixel
+cost. `MTLBuffer`-backed textures were already in the vendored capturer; the strip
+ring is `.shared` storage and uploaded with `replace(region:)` because its rows
+come from `CGContext`.
+
+**Step 2 — vertical-scroll spike: written, not run.** New files
+`src/engine/ios/Glass/GlassBackdrop.swift`, `StripCache.swift` and
+`GlassFramePhase.swift`; public JS surface `GlassBackdrop`
+(`src/internal/GlassBackdrop.tsx`, engine export `NativeGlassBackdropView`). The
+proof app's Scroll tab wraps its list and pinned bar in `GlassBackdrop`.
+Mechanics: a content-space ring of height
+`viewport + 2 × (48 pt refraction headroom + 1/60 s lookahead)`, clamped to
+512–4096 pt and to the content length; rows rasterised from the content
+container's layer (not the scroll view, whose clip would photograph the window
+band the cache exists to replace), uploaded at `fract(contentY / stripHeight)`;
+each frame the visible band is blitted from the ring into the capturer's
+window-space texture, so the lens shader and its `uvRect` are untouched.
+Frame phase: `presentsWithTransaction` on for windows with a strip in service,
+geometry read from `presentation()`, contents from model layers.
+Success would be: no snap on release and tracking through a fling, checked
+against a numbered grid in slow motion, on a real iOS 17 phone. **None of that was
+observed**; the only evidence is that the code typechecks.
+
+**Step 3 — three-band split, lookahead, validator: written, not run.**
+Static bands above and below the scroller come from the window capture (its
+movement gate is bypassed while a strip is active, since the content band no
+longer depends on it); the content band is overwritten from the ring; the
+lookahead is the 1/60 s term above. The validator compares mean luminance over a
+12 × 12 grid of the band against a settle capture (tolerance 0.12, distrust for
+1.0 s), and a structural fingerprint of the content subtree catches inserted
+rows and transformed layers between captures. Per-frame rasterisation is capped
+at 1,200 rows; past the cap only the visible band is redrawn, which is a cost
+ceiling rather than a correctness hole. Oversized bands, content-size changes and
+offset jumps larger than the ring force a re-seed and a window capture.
+
+**Step 4 — rigid units and live interior: not started.** No verdict is offered for
+the `UIVisualEffectView`-under-interior experiment, and the seam risk it carries
+is untested.
 
 ## 6. Build links
 
@@ -223,9 +252,9 @@ A fresh clone needs only `pnpm install`: both packages resolve
 
 | Check | Command | Result |
 | --- | --- | --- |
-| Package tests | `pnpm --filter glacia-native test` | `18 files, 280 tests passed` |
+| Package tests | `pnpm --filter glacia-native test` | `18 files, 210 tests passed` |
 | Package typecheck | `pnpm --filter glacia-native exec tsc --noEmit` | 0 errors |
-| Proof-app tests | `pnpm --filter glacia-native-proof test` | `1 file, 74 tests passed` |
+| Proof-app tests | `pnpm --filter glacia-native-proof test` | `1 file, 58 tests passed` |
 | Proof-app typecheck | `pnpm --filter glacia-native-proof exec tsc --noEmit` | 0 errors |
 | Web untouched | `git diff --stat origin/main -- packages/core packages/tokens apps/docs` | empty |
 | Proof app bundles | `npx expo export -c --platform web` | exported 3 files, exit 0 |
@@ -235,15 +264,21 @@ A fresh clone needs only `pnpm install`: both packages resolve
 
 - [x] `packages/native` rebuilt on `rebuild/native-v1`; web package untouched —
       `git diff --stat main -- packages/core packages/tokens apps/docs` is empty.
-- [x] Wave 1 + Wave 2 exported under Glacia names — 20 + 23 components, all in
-      `src/index.ts`; MIT notices in `LICENSE`/`NOTICE` and the vendored engine.
+- [x] Wave 1 + Wave 2 exported under Glacia names — 49 components including the
+      four new surface pieces, all in `src/index.ts`; MIT notices in
+      `LICENSE`/`NOTICE` and the vendored engine.
 - [x] Fallback floor renders every component with no glass available —
       `test/fallback-material.test.tsx` (every export, glass stubbed off).
 - [x] TabBar safe-area fix and Stack fix demonstrated in the proof app —
       `apps/native-proof/src/screens/ControlsScreen.tsx` (Stack repro) and the
       TabBar mounted with its bottom inset; package tests pin both.
-- [ ] Strip-cache steps reported in order / fling test on a real iOS 17 phone —
-      **not done**: brief missing (deviation 1). Reported as not run.
+- [x] Strip cache written for the Metal tier only: content-space ring, three-band
+      composite, frame phase, lookahead, validator and honest fallbacks
+      (deviations 1–3; §5).
+- [ ] Strip-cache steps reported in order, and a fling verified on a real iOS 17
+      phone — **not done**: no device, no newer SDK (deviations 1–2).
+- [x] Never-rebuilt old exports culled per component, README updated, nothing
+      load-bearing removed silently (deviation 5).
 - [x] Tests + typecheck green on both packages (§7); report delivered in §8
       order; nothing published to npm.
 - [ ] Device builds — **no artifact for either target** (§6, deviation 4):

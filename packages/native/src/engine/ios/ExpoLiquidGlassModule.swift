@@ -63,6 +63,11 @@ public class ExpoLiquidGlassModule: Module {
             }
         }
 
+        // The backdrop scope for the pre-iOS-26 renderer: glass inside it photographs the scroll
+        // content in content coordinates instead of the window. It has no props — the scroll view
+        // is discovered in the subtree — and it draws nothing itself.
+        View(GlassBackdropView.self) {}
+
         View(LiquidGlassContainerView.self) {
             Prop("spacing") { (view: LiquidGlassContainerView, value: Double?) in
                 view.spacing = value

@@ -11,6 +11,7 @@ export {
 export type { SurfaceProfile } from "./internal/material";
 export { GlassContainer, type NativeGlassContainerProps } from "./internal/GlassContainer";
 export { GlassProvider, type GlassProviderProps } from "./glass-provider";
+export { GlassBackdrop, type GlassBackdropProps } from "./internal/GlassBackdrop";
 export { GlassStack, type GlassStackProps } from "./glass-stack";
 export { Button, type ButtonProps } from "./Button";
 export { Switch, type SwitchProps } from "./Switch";
@@ -56,85 +57,26 @@ export { Badge, type BadgeProps } from "./Badge";
 export { Separator, type SeparatorProps } from "./Separator";
 export { Skeleton, type SkeletonProps } from "./Skeleton";
 export { Progress, type ProgressProps, type ProgressVariant } from "./Progress";
-// Feedback and display.
-export {
-  Banner,
-  List,
-  ListItem,
-  ListSection,
-  ToastViewport,
-  type BannerProps,
-  type ListProps,
-  type ListItemProps,
-  type ListSwipeAction,
-  type ListSectionProps,
-  type ToastAction,
-  type ToastItem,
-  type ToastViewportProps,
-} from "./Feedback";
 export { Toast, type ToastProps } from "./Toast";
 export { Accordion, type AccordionProps, type AccordionSection } from "./Accordion";
 // Bars, buttons and navigation.
 export {
-  SearchBar,
   Chip,
-  FAB,
   IconButton,
   Toolbar,
-  type SearchBarProps,
   type ChipProps,
-  type FABProps,
   type IconButtonProps,
   type ToolbarProps,
-  FABGroup,
-  type FABGroupProps,
-  type FABGroupAction,
 } from "./Bars";
 // Glass composition primitives ported from the engine this wave.
 export { Group, type GroupProps } from "./Group";
 export { MorphGroup, type MorphGroupProps, type MorphGroupItem } from "./MorphGroup";
 export { Scrim, type ScrimProps } from "./Scrim";
-// Overlays.
-export { Menu, Drawer, anchorPopover, type MenuProps, type MenuItem, type DrawerProps } from "./Overlays";
-// The engine-dressed sheet is the Wave 1 control; Overlays' sheet was the
-// pre-rebuild one and is no longer exported.
 export { Sheet, type SheetProps } from "./Sheet";
 // Forms and pickers.
 export { Stepper, type StepperProps } from "./Stepper";
 export { Toggle, type ToggleProps } from "./Toggle";
 export { ToggleGroup, type ToggleGroupProps, type ToggleGroupItem } from "./ToggleGroup";
-export {
-  InputOTP,
-  ButtonGroup,
-  type InputOTPProps,
-  type ButtonGroupProps,
-  type ButtonGroupItem,
-  ColorPicker,
-  DEFAULT_PALETTE,
-  hexToRgb,
-  rgbToHex,
-  hueGradientColors,
-  type ColorPickerProps,
-  Combobox,
-  type ComboboxProps,
-  type ComboboxOption,
-} from "./Forms2";
-export {
-  Calendar,
-  DatePicker,
-  TimePicker,
-  monthGrid,
-  startOfDay,
-  sameDay,
-  parseTime,
-  formatTime,
-  WEEKDAYS,
-  MONTHS,
-  type CalendarProps,
-  type CalendarCell,
-  type DatePickerProps,
-  type TimePickerProps,
-} from "./Pickers";
 export {
   colors,
   controlSizes,

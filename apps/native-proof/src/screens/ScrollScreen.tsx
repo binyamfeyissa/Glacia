@@ -7,7 +7,7 @@
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
-import { Glass, Toolbar } from "glacia-native";
+import { Glass, GlassBackdrop, Toolbar } from "glacia-native";
 
 import { Caption, Section } from "../ui";
 
@@ -20,8 +20,11 @@ const ROWS = Array.from({ length: 120 }, (_, index) => ({
 export function ScrollScreen() {
   const [offset, setOffset] = useState(0);
 
+  // The scope wraps the list AND the pinned bar: the glass is a sibling of the
+  // scroller, exactly as the engine requires, and both sit inside the one
+  // backdrop scope the strip cache photographs.
   return (
-    <View style={styles.root}>
+    <GlassBackdrop style={styles.root}>
       <ScrollView
         contentContainerStyle={styles.content}
         onScroll={(event) => setOffset(event.nativeEvent.contentOffset.y)}
@@ -53,7 +56,7 @@ export function ScrollScreen() {
           The pinned bar is a sibling of the list — the provider topology the engine requires on Android.
         </Caption>
       </View>
-    </View>
+    </GlassBackdrop>
   );
 }
 

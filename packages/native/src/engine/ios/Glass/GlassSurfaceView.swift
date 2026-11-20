@@ -418,6 +418,16 @@ final class GlassSurfaceView: UIView, GlassFrameParticipant {
         )
     }
 
+    /// True while this surface is inside a `GlassBackdrop` whose strip is in service. Geometry
+    /// then comes from the presentation layer: the capture and the glass pass run in the frame
+    /// before the commit, so model frames are one commit ahead during any animation.
+    private var usesStripBackdrop: Bool {
+        guard let provider = GlassBackdropRegistry.shared.nearestProvider(for: self) else {
+            return false
+        }
+        return provider.strip != nil && provider.stripIsUsable
+    }
+
     private func backdropUVRect(inset: CGFloat) -> SIMD4<Float>? {
         guard let window else { return nil }
 
@@ -426,7 +436,11 @@ final class GlassSurfaceView: UIView, GlassFrameParticipant {
         guard size.width > 0, size.height > 0 else { return nil }
 
         let origin = capturer.capturedOrigin
-        let frame = convert(bounds, to: window).insetBy(dx: inset, dy: inset)
+        let model = convert(bounds, to: window)
+        let resolved = usesStripBackdrop
+            ? GlassFramePhase.presentedFrame(of: self, in: window)
+            : model
+        let frame = resolved.insetBy(dx: inset, dy: inset)
 
         return SIMD4<Float>(
             Float((frame.minX - origin.x) / size.width),

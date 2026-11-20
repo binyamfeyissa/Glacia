@@ -4,6 +4,8 @@ export {
   LiquidGlassProvider,
   LiquidGlassStack,
 } from "../components";
+export { NativeGlassBackdropView } from "../views";
+
 export {
   supportsNativeGlass,
   supportsGlass,
