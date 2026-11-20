@@ -32,6 +32,32 @@ const NEW_COMPONENTS = [
   "Carousel.tsx",
   "Forms2.tsx",
   "Pickers.tsx",
+  // Wave 1–2: the engine-dressed controls, one file per component.
+  "Accordion.tsx",
+  "ActionSheet.tsx",
+  "Alert.tsx",
+  "AlertDialog.tsx",
+  "Avatar.tsx",
+  "Badge.tsx",
+  "Checkbox.tsx",
+  "Collapsible.tsx",
+  "ContextMenu.tsx",
+  "Dialog.tsx",
+  "DropdownMenu.tsx",
+  "Field.tsx",
+  "Input.tsx",
+  "Label.tsx",
+  "Popover.tsx",
+  "Progress.tsx",
+  "RadioGroup.tsx",
+  "Select.tsx",
+  "Separator.tsx",
+  "Skeleton.tsx",
+  "Stepper.tsx",
+  "Textarea.tsx",
+  "Toggle.tsx",
+  "ToggleGroup.tsx",
+  "Tooltip.tsx",
   // Wave 3: the interaction upgrades and the leftover components.
   "Message.tsx",
   "internal/GlassContainer.tsx",
@@ -122,7 +148,7 @@ describe("new components use the token system", () => {
     // A lens (`SelectedLens`, which paints `glassActive` plus the rim) and the
     // bare token are the two accepted forms: either is the same selection
     // language, and neither invents a colour.
-    const selectors = ["Display.tsx", "Chip.tsx", "Forms2.tsx", "Carousel.tsx", "Pickers.tsx"];
+    const selectors = ["Chip.tsx", "ToggleGroup.tsx", "SegmentedControl.tsx", "TabBar.tsx", "Pickers.tsx"];
     const usingActive = selectors.filter((file) => /glassActive|SelectedLens/.test(code(file)));
     expect(usingActive.length).toBe(selectors.length);
   });

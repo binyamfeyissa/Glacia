@@ -363,7 +363,7 @@ describe("accessibility standards", () => {
   });
 
   it("SegmentedControl marks the selected segment", () => {
-    const { container } = render(<SegmentedControl segments={["A", "B"]} selectedIndex={1} />);
+    const { container } = render(<SegmentedControl segments={["A", "B"]} selectedIndex={1} onChange={() => {}} />);
     const segments = Array.from(container.querySelectorAll('[role="tab"]'));
     expect(segments.map((s) => s.getAttribute("aria-selected"))).toEqual(["false", "true"]);
   });

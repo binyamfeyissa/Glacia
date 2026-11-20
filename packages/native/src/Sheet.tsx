@@ -95,6 +95,7 @@ export const Sheet = forwardRef<any, SheetProps>(function Sheet(
         variant={variant}
         style={style}
         contentStyle={contentStyle}
+        testID={testID}
       >
         {children}
       </EngineSheetComponent>

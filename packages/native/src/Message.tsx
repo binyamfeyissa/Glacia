@@ -1,7 +1,7 @@
 import { forwardRef, type ReactNode } from "react";
 import type { StyleProp, ViewStyle } from "react-native";
 
-import { Avatar } from "./Display";
+import { Avatar } from "./Avatar";
 import { Glass } from "./Glass";
 import { colors, radii } from "./internal/tokens";
 import { primitives } from "./internal/primitives";

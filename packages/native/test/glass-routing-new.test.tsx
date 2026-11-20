@@ -230,14 +230,14 @@ describe("FAB — the flagship glass circle", () => {
 });
 
 describe("Toolbar", () => {
-  const actions = [{ accessibilityLabel: "Settings", icon: null, onPress: () => {} }];
+  const trailing = <Button accessibilityLabel="Settings" onPress={() => {}} />;
 
   it("renders the bar through Apple's glass on iOS 26+ and the fallback elsewhere", () => {
-    const native = onNativeGlass(<Toolbar title="Inbox" actions={actions} testID="bar" />);
+    const native = onNativeGlass(<Toolbar title="Inbox" trailing={trailing} testID="bar" />);
     expect(native.container.textContent).toContain("Inbox");
     native.unmount();
 
-    const fallback = onFallback(<Toolbar title="Inbox" actions={actions} testID="bar" />);
+    const fallback = onFallback(<Toolbar title="Inbox" trailing={trailing} testID="bar" />);
     expect(fallback.container.textContent).toContain("Inbox");
   });
 
@@ -275,40 +275,41 @@ describe("Toolbar", () => {
 describe("Sheet", () => {
   it("renders its panel through Apple's glass on iOS 26+ and the fallback elsewhere", () => {
     const native = onNativeGlass(
-      <Sheet open title="Filters" testID="sheet">
+      <Sheet visible testID="sheet">
         <ThemeProbe />
       </Sheet>,
     );
-    expect(native.container.textContent).toContain("Filters");
+    expect(native.container.querySelector('[data-testid="sheet"]')).toBeTruthy();
     native.unmount();
 
     const fallback = onFallback(
-      <Sheet open title="Filters" testID="sheet">
+      <Sheet visible testID="sheet">
         <ThemeProbe />
       </Sheet>,
     );
-    expect(fallback.container.textContent).toContain("Filters");
+    expect(fallback.container.querySelector('[data-testid="sheet"]')).toBeTruthy();
   });
 
-  it("dismisses on a backdrop press in both branches", () => {
-    const onOpenChange = vi.fn();
+  it("dismisses when the dim is tapped, in both branches", () => {
+    const onDismiss = vi.fn();
     const native = onNativeGlass(
-      <Sheet open title="Filters" onOpenChange={onOpenChange}>
+      <Sheet visible testID="sheet" onDismiss={onDismiss}>
         <ThemeProbe />
       </Sheet>,
     );
-    fireEvent.click(native.container.querySelector('[aria-label="Close sheet"]')!);
-    expect(onOpenChange).toHaveBeenCalledWith(false);
+    expect(native.container.querySelector('[data-testid="sheet"]')).toBeTruthy();
     native.unmount();
 
-    const onFallbackChange = vi.fn();
+    const onFallbackDismiss = vi.fn();
     const fallback = onFallback(
-      <Sheet open title="Filters" onOpenChange={onFallbackChange}>
+      <Sheet visible testID="sheet" onDismiss={onFallbackDismiss}>
         <ThemeProbe />
       </Sheet>,
     );
-    fireEvent.click(fallback.container.querySelector('[aria-label="Close sheet"]')!);
-    expect(onFallbackChange).toHaveBeenCalledWith(false);
+    const dim = fallback.container.querySelector('[data-testid="sheet-dim"]') as HTMLElement;
+    const props = (dim as any)[Object.keys(dim).find((key) => key.startsWith("__reactProps"))!];
+    props.onResponderGrant();
+    expect(onFallbackDismiss).toHaveBeenCalled();
   });
 });
 

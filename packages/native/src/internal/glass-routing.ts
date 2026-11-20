@@ -148,10 +148,11 @@ export interface GlassCapabilities {
 /** Reads the capability verdicts from an explicit module, or from the engine. */
 export function readCapabilities(module?: LiquidGlassModule | null): GlassCapabilities {
   const resolved = module !== undefined ? module : loadLiquidGlass();
-  const supported = module !== undefined
-    ? Boolean(module.LiquidGlassView) && (module.supportsGlass ?? module.isLiquidGlassSupported ?? false) === true
-    : defaultRouter().supported;
-  const native = module !== undefined ? module.supportsNativeGlass === true : resolved?.supportsNativeGlass === true;
+  const supported =
+    resolved != null &&
+    Boolean(resolved.LiquidGlassView) &&
+    (resolved.supportsGlass ?? resolved.isLiquidGlassSupported ?? false) === true;
+  const native = resolved?.supportsNativeGlass === true;
   return { supported, native };
 }
 
@@ -204,6 +205,11 @@ const ENGINE_CONTROLS: Record<string, string> = {
   MorphGroup: "LiquidGlassMorphGroup",
   Scrim: "LiquidGlassScrim",
 };
+
+/** The Glacia names of every control the vendored engine carries. */
+export const ENGINE_CONTROL_NAMES: readonly string[] = Object.freeze(
+  Object.keys(ENGINE_CONTROLS),
+);
 
 /** Loads one of the vendored engine's control components by Glacia-facing name. */
 export function loadEngineControl(key: string): any | null {

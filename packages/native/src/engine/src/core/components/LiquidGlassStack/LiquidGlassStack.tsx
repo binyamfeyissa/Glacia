@@ -80,13 +80,17 @@ const LiquidGlassStackBase: React.FC<ILiquidGlassStackProps> = ({
   for (const child of React.Children.toArray(children)) {
     if (React.isValidElement(child) && child.type === LiquidGlassStackLayer) {
       layers.push(child.props as ILiquidGlassStackLayerProps);
-    } else {
+    } else if (React.isValidElement(child) || child != null) {
+      // A bare child is a layer without the marker. It is wrapped rather than
+      // dropped: silently losing a layer is what makes a stack look like the
+      // bug it is trying to avoid.
       devWarnOnce(
         "stack-non-layer-child",
-        "A direct child of <LiquidGlassStack> is not a <LiquidGlassStack.Layer>; it will not " +
-          "render. Wrap it in a Layer — including conditional ones: put the condition inside a " +
-          "Layer that always mounts.",
+        "A direct child of <LiquidGlassStack> is not a <LiquidGlassStack.Layer>; it is wrapped " +
+          "in one, bottom to top. Prefer an explicit Layer — including conditional ones: put the " +
+          "condition inside a Layer that always mounts.",
       );
+      layers.push({ children: child as React.ReactNode });
     }
   }
 
@@ -110,18 +114,32 @@ const LiquidGlassStackBase: React.FC<ILiquidGlassStackProps> = ({
   // internal; the registry only ever string-matches them.
   const providerIdFor = (k: number): string => `stack:${uid}:${k}`;
 
-  // Built bottom-up. The base layer is the flow child of the innermost provider (one flow child
-  // per provider — the F37 rule); every level above wraps [provider around everything below,
-  // overlay wrap carrying the context id]. Wrappers stay prop-minimal on purpose: they are
-  // flattenable layout-only views, matching the device-verified manual topology exactly.
+  // Built bottom-up. Every level is the *same* absolutely-positioned box inside the stack
+  // root, with an explicit z-order, rather than a re-derived flex box:
+  //
+  //   - the base layer used to sit in `flex: 1` flow while every layer above it was an
+  //     absolute overlay, so the base content was measured in a different box at every
+  //     nesting depth. Layers with padding, insets or uneven heights (the lab's stack demo)
+  //     then drew the same text once per depth, each copy at slightly different metrics —
+  //     the smeared, overlapping layers from the device photos.
+  //   - the flow box also let a layer overflow its parent, because nothing clipped it.
+  //
+  // Absolute boxes plus zIndex make each layer occupy the stack's box exactly once, in the
+  // order given, so a layer can never be laid out twice. The stack therefore needs its own
+  // size (a style with flex: 1 or a fixed height), which the README documents.
   let subtree: React.ReactElement = (
-    <View style={[styles.flow, base.style]}>{base.children}</View>
+    <View
+      pointerEvents="box-none"
+      style={[StyleSheet.absoluteFill, styles.layer, base.style, { zIndex: 0 }]}
+    >
+      {base.children}
+    </View>
   );
   for (let k = 1; k < layers.length; k++) {
     const layer = layers[k];
     if (layer === undefined) continue;
     subtree = (
-      <View style={styles.flow}>
+      <View style={[StyleSheet.absoluteFill, styles.layer, { zIndex: k }]}>
         <LiquidGlassProvider
           providerId={providerIdFor(k - 1)}
           style={StyleSheet.absoluteFill}
@@ -140,7 +158,7 @@ const LiquidGlassStackBase: React.FC<ILiquidGlassStackProps> = ({
     );
   }
 
-  return <View style={style}>{subtree}</View>;
+  return <View style={[styles.root, style]}>{subtree}</View>;
 };
 
 LiquidGlassStackBase.displayName = `${COMPONENT_NAMES.LIQUID_GLASS_STACK}Base`;
@@ -157,7 +175,10 @@ const LiquidGlassStack: TLiquidGlassStackComponent = Object.assign(
 LiquidGlassStack.displayName = COMPONENT_NAMES.LIQUID_GLASS_STACK;
 
 const styles = StyleSheet.create({
-  flow: { flex: 1 },
+  // The stack must own a box (flex: 1 or a fixed size) now that its layers are absolute;
+  // `overflow: hidden` keeps a rounded stack from spilling a layer's glass outside it.
+  root: { flex: 1, overflow: "hidden" },
+  layer: { overflow: "visible" },
 });
 
 export { LiquidGlassStack };

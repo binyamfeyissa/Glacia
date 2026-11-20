@@ -196,7 +196,7 @@ describe("#56 Progress", () => {
   });
 
   it("draws the ring variant with the same value", () => {
-    const { container } = render(<Progress variant="ring" value={50} />);
+    const { container } = render(<Progress variant="track" value={50} />);
     expect(container.querySelector('[role="progressbar"]')).toBeTruthy();
     expect(container.textContent).toBe("50%");
   });
@@ -543,36 +543,47 @@ describe("#66 Menu", () => {
 });
 
 describe("#67 Sheet", () => {
-  it("dismisses on a backdrop press", () => {
-    const onOpenChange = vi.fn();
-    const { container } = render(
-      <Sheet open title="Filters" onOpenChange={onOpenChange}>
+  it("renders its content only while visible", () => {
+    const { container, rerender } = render(
+      <Sheet visible testID="sheet">
         <Text>body</Text>
       </Sheet>,
     );
-    expect(container.textContent).toContain("Filters");
-    fireEvent.click(container.querySelector('[aria-label="Close sheet"]')!);
-    expect(onOpenChange).toHaveBeenCalledWith(false);
+    expect(container.textContent).toContain("body");
+    rerender(
+      <Sheet visible={false} testID="sheet">
+        <Text>body</Text>
+      </Sheet>,
+    );
+    expect(container.textContent).not.toContain("body");
   });
 
-  it("does not dismiss on the backdrop when that is turned off", () => {
-    const onOpenChange = vi.fn();
+  it("dismisses when the dim behind it is tapped", () => {
+    const onDismiss = vi.fn();
     const { container } = render(
-      <Sheet open title="Confirm" onOpenChange={onOpenChange} dismissOnBackdropPress={false}>
+      <Sheet visible onDismiss={onDismiss} testID="sheet">
         <Text>body</Text>
       </Sheet>,
     );
-    fireEvent.click(container.querySelector('[aria-label="Close sheet"]')!);
-    expect(onOpenChange).not.toHaveBeenCalled();
+    const dim = container.querySelector('[data-testid="sheet-dim"]') as HTMLElement;
+    const props = dim && (dim as any)[Object.keys(dim).find((key) => key.startsWith("__reactProps"))!];
+    // The dim is a responder surface, not a button: the sheet's own contract.
+    expect(typeof props.onResponderGrant).toBe("function");
+    props.onResponderGrant();
+    expect(onDismiss).toHaveBeenCalled();
   });
 
-  it("renders a footer when given one", () => {
+  it("does not dismiss on a dim tap when dismissOnTap is false", () => {
+    const onDismiss = vi.fn();
     const { container } = render(
-      <Sheet open title="Filters" footer={<Button accessibilityLabel="Apply">Apply</Button>}>
+      <Sheet visible dismissOnTap={false} onDismiss={onDismiss} testID="sheet">
         <Text>body</Text>
       </Sheet>,
     );
-    expect(container.textContent).toContain("Apply");
+    const dim = container.querySelector('[data-testid="sheet-dim"]') as HTMLElement;
+    const props = (dim as any)[Object.keys(dim).find((key) => key.startsWith("__reactProps"))!];
+    props.onResponderGrant();
+    expect(onDismiss).not.toHaveBeenCalled();
   });
 });
 

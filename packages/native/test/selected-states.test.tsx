@@ -15,11 +15,13 @@ import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { Banner, ListItem } from "../src/Feedback";
-import { ButtonGroup, ToggleGroup } from "../src/Forms2";
+import { ButtonGroup } from "../src/Forms2";
+import { ToggleGroup } from "../src/ToggleGroup";
 import { SegmentedControl } from "../src/SegmentedControl";
 import { TabBar } from "../src/TabBar";
 import { Select } from "../src/Form";
-import { Avatar, Progress } from "../src/Display";
+import { Avatar } from "../src/Avatar";
+import { Progress } from "../src/Progress";
 import { Toolbar, FAB, IconButton, SearchBar } from "../src/Bars";
 import { Drawer } from "../src/Overlays";
 import { NativeBarChart } from "../src/charts/BarChart";
@@ -98,7 +100,7 @@ describe("the selected lens", () => {
 describe("the sliding indicators keep their motion and gain the light", () => {
   it("paints a rim on the segmented control's thumb", () => {
     const { container } = render(
-      <SegmentedControl segments={["Day", "Week", "Month"]} selectedIndex={1} />,
+      <SegmentedControl segments={["Day", "Week", "Month"]} selectedIndex={1} onChange={() => {}} />,
     );
     // The rail and the thumb.
     expect(rimCount(container)).toBeGreaterThanOrEqual(2);

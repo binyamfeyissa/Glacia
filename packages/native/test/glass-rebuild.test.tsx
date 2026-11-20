@@ -72,3 +72,28 @@ describe("TabBar — safe-area fix (#7.1)", () => {
     expect(Number.parseFloat(bar.style.height)).toBe(40 + 34);
   });
 });
+
+describe("GlassStack — the layer fix (#7.2)", () => {
+  it("exposes a Layer marker even when the engine is unavailable", () => {
+    expect(typeof (GlassStack as any).Layer).toBe("function");
+  });
+
+  it("renders every layer once, bottom to top, and never duplicates content", () => {
+    const { container } = render(
+      <GlassStack testID="stack">
+        <GlassStack.Layer testID="base">Base Stack Layer Content</GlassStack.Layer>
+        <GlassStack.Layer testID="middle">Middle</GlassStack.Layer>
+        <GlassStack.Layer testID="top">Top</GlassStack.Layer>
+      </GlassStack>,
+    );
+    const text = container.textContent ?? "";
+    expect(text.match(/Base Stack Layer Content/g) ?? []).toHaveLength(1);
+    expect(text.indexOf("Base")).toBeLessThan(text.indexOf("Middle"));
+    expect(text.indexOf("Middle")).toBeLessThan(text.indexOf("Top"));
+  });
+
+  it("treats a bare child as a layer instead of dropping it", () => {
+    const { container } = render(<GlassStack testID="stack">bare child</GlassStack>);
+    expect(container.textContent).toContain("bare child");
+  });
+});

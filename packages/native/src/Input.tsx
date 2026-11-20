@@ -149,7 +149,7 @@ export const Input = forwardRef<any, InputProps>(function Input(
           flexDirection: "row",
           alignItems: multiline ? "flex-start" : "center",
           gap: 8,
-          borderRadius: multiline ? 18 : radii.pill,
+          borderRadius: multiline ? radii.xl : radii.pill,
           minHeight: multiline ? 84 : resolvedHeight,
           paddingHorizontal: 14,
           paddingVertical: multiline ? 10 : 0,
@@ -247,21 +247,3 @@ export const Input = forwardRef<any, InputProps>(function Input(
 function height_padding(size: "sm" | "md" | "lg") {
   return size === "sm" ? 4 : size === "lg" ? 10 : 7;
 }
-
-export interface TextareaProps extends Omit<InputProps, "size" | "multiline" | "minLines"> {
-  /** Visible height in text lines. */
-  rows?: number;
-}
-
-/**
- * A multi-line field.
- *
- * Separate from Input so `multiline` cannot silently turn off the single-line
- * sizing, and so callers get a `rows` prop instead of guessing a pixel height.
- */
-export const Textarea = forwardRef<any, TextareaProps>(function Textarea(
-  { rows = 4, ...props },
-  ref,
-) {
-  return <Input ref={ref} {...props} multiline minLines={rows} />;
-});

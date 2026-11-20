@@ -26,18 +26,63 @@
 Install `glacia-native` and its peer dependencies:
 
 ```bash
-npm install glacia-native glacia-tokens @callstack/liquid-glass
+npm install glacia-native glacia-tokens react-native-reanimated react-native-gesture-handler
 # or
-pnpm add glacia-native glacia-tokens @callstack/liquid-glass
-# or
-yarn add glacia-native glacia-tokens @callstack/liquid-glass
-# or
-bun add glacia-native glacia-tokens @callstack/liquid-glass
+pnpm add glacia-native glacia-tokens react-native-reanimated react-native-gesture-handler
 ```
+
+The glass engine is vendored inside this package (see `NOTICE`); there is no
+second glass dependency to install.
 
 ### Expo Projects
 
-If using Expo, ensure you are running in Expo Prebuild / Development Build (`npx expo run:ios` or `npx expo run:android`) to support the native iOS glass module.
+Use a development build (`npx expo run:ios` / `npx expo run:android`): the
+renderers are native. **In Expo Go every component renders the fallback floor** —
+the solid, fully designed surface described under
+[The fallback material](#the-fallback-material). That is expected, not a bug.
+
+Wrap the app root in `GestureHandlerRootView`, as the engine requires:
+
+```tsx
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+
+export default function App() {
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      {/* your app */}
+    </GestureHandlerRootView>
+  );
+}
+```
+
+### The Android provider rule
+
+On Android the backdrop is recorded by `GlassProvider`, so the glass views must
+be its **siblings**, never its descendants — a glass view inside the provider it
+reads would refract its own output. The provider takes **one direct child**: the
+content whose pixels the glass samples. Put the page background inside it.
+
+```tsx
+<View style={{ flex: 1 }}>
+  {/* One direct child: the content and its background. */}
+  <GlassProvider style={StyleSheet.absoluteFill}>
+    <ScrollView>{content}</ScrollView>
+  </GlassProvider>
+
+  {/* Glass views are siblings, drawn after the provider. */}
+  <TabBar items={items} />
+</View>
+```
+
+On iOS the provider is a plain view and the whole-window backdrop is the
+default, so the same tree works unchanged there.
+
+### Name clash
+
+The vendored engine registers the native views `LiquidGlassView`,
+`LiquidGlassContainer` and `LiquidGlassProvider`. An app that also installs
+`expo-liquid-glass-view` (which registers the same names) will collide at
+runtime. Use one or the other.
 
 ---
 
@@ -74,7 +119,7 @@ export function App() {
 
         <View style={styles.sliderContainer}>
           <Text style={styles.label}>Transmission: {sliderVal}%</Text>
-          <Slider value={sliderVal} onValueChange={setSliderVal} minimumValue={0} maximumValue={100} />
+          <Slider value={sliderVal} onValueChange={setSliderVal} min={0} max={100} accessibilityLabel="Transmission" />
         </View>
 
         <Button variant="glass" onPress={() => console.log("Pressed!")}>

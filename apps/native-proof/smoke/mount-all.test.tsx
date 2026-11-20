@@ -22,6 +22,9 @@ import { primitives } from "../../../packages/native/src/internal/primitives";
 
 const NON_COMPONENTS = new Set([
   "isGlassSupported",
+  "readCapabilities",
+  "loadEngineControl",
+  "ENGINE_CONTROL_NAMES",
   // Values and helpers, added in wave 3: not components, so not mountable.
   "DEFAULT_PALETTE",
   "WEEKDAYS",
@@ -66,7 +69,16 @@ const propsFor: Record<string, Record<string, unknown>> = {
   Button: { accessibilityLabel: "Button", onPress: () => {} },
   Switch: { accessibilityLabel: "Switch" },
   Slider: { accessibilityLabel: "Slider", defaultValue: 30 },
-  SegmentedControl: { values: ["A", "B", "C"] },
+  SegmentedControl: { segments: ["A", "B", "C"], selectedIndex: 0, onChange: () => {} },
+  MorphGroup: { items: [{ key: "a", label: "A" }, { key: "b", label: "B" }] },
+  ContextMenu: { trigger: "Item", items: [{ label: "Rename", onPress: () => {} }] },
+  DropdownMenu: { trigger: "Menu", items: [{ label: "Rename", onPress: () => {} }] },
+  Tooltip: { label: "Hint", children: "Hover" },
+  Popover: { trigger: "Open", children: "Panel" },
+  Collapsible: { trigger: "More", children: "Hidden" },
+  Alert: { title: "Heads up" },
+  Accordion: { sections: [{ value: "a", title: "A", content: "Body" }] },
+  ToggleGroup: { items: [{ value: "a", label: "A" }] },
   TabBar: {
     items: [
       { id: "a", label: "A" },
@@ -240,7 +252,7 @@ describe("react-native-web smoke check", () => {
     expect(primitives().isNative).toBe(true);
   });
 
-  it("mounts every one of the 86 reviewed components", () => {
+  it("mounts every one of the reviewed components", () => {
     // The library is counted in components, not exports. Some components ship
     // several exported pieces that belong to one numbered entry rather than
     // being separate entries:
@@ -256,7 +268,9 @@ describe("react-native-web smoke check", () => {
     //
     // 86, not 85: the brief numbers 79-85 as seven entries, but #85 (Message)
     // ships three pieces, so the reviewed *components* — as opposed to the
-    // numbered entries — total 86.
+    // numbered entries — total 86. The rebuild added Wave 2 (Alert,
+    // Collapsible, ContextMenu, DropdownMenu, Popover, Tooltip and the split-out
+    // Wave 2 pieces) for 100 exported components today.
     const SLOTS = [
       "CardHeader",
       "CardTitle",
@@ -270,7 +284,7 @@ describe("react-native-web smoke check", () => {
       "MessageBubble",
       "MessageAttachment",
     ];
-    expect(names.length - SLOTS.length).toBe(86);
+    expect(names.length - SLOTS.length).toBe(100);
     // Every reviewed component is actually mounted by the tests below.
     for (const slot of SLOTS) expect(names).toContain(slot);
   });

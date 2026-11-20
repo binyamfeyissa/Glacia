@@ -173,6 +173,15 @@ function resolve(): RNPrimitives {
         slider: "slider",
         adjustable: "slider",
         heading: "heading",
+        option: "option",
+        listbox: "listbox",
+        menu: "menu",
+        menuitem: "menuitem",
+        dialog: "dialog",
+        alertdialog: "alertdialog",
+        group: "group",
+        toolbar: "toolbar",
+        separator: "separator",
       };
       // "none" means presentational: emit no role rather than a misleading one.
       if (accessibilityRole && accessibilityRole !== "none") {

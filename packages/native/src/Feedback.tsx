@@ -2,7 +2,7 @@ import { createContext, forwardRef, useContext, useEffect, useMemo, useRef, useS
 import type { StyleProp, ViewStyle } from "react-native";
 
 import { Glass } from "./Glass";
-import { Separator } from "./Display";
+import { Separator } from "./Separator";
 import { colors, radii, toneColor, type Tone } from "./internal/tokens";
 import { primitives } from "./internal/primitives";
 import { useIsDark, useSpring } from "./internal/motion";

@@ -4,6 +4,8 @@ export {
   supportsGlass,
   supportsNativeGlass,
   readCapabilities,
+  loadEngineControl,
+  ENGINE_CONTROL_NAMES,
   type GlassCapabilities,
 } from "./internal/glass-routing";
 export type { SurfaceProfile } from "./internal/material";
@@ -30,37 +32,23 @@ export {
   type CardProps,
 } from "./Card";
 // Forms.
-export {
-  Input,
-  Textarea,
-  type InputProps,
-  type TextareaProps,
-} from "./Input";
-export {
-  Label,
-  Field,
-  Checkbox,
-  RadioGroup,
-  Select,
-  type LabelProps,
-  type FieldProps,
-  type CheckboxProps,
-  type RadioOption,
-  type RadioGroupProps,
-  type SelectOption,
-  type SelectProps,
-} from "./Form";
+export { Input, type InputProps } from "./Input";
+export { Textarea, type TextareaProps } from "./Textarea";
+export { Label, type LabelProps } from "./Label";
+export { Field, type FieldProps } from "./Field";
+export { Checkbox, type CheckboxProps } from "./Checkbox";
+export { RadioGroup, type RadioOption, type RadioGroupProps } from "./RadioGroup";
+export { Select, type SelectOption, type SelectProps } from "./Select";
 // Overlays.
-export {
-  Dialog,
-  DialogTrigger,
-  AlertDialog,
-  ActionSheet,
-  type DialogProps,
-  type AlertDialogProps,
-  type ActionSheetProps,
-  type ActionSheetOption,
-} from "./Dialog";
+export { Dialog, DialogTrigger, type DialogProps, type DialogTriggerProps } from "./Dialog";
+export { AlertDialog, type AlertDialogProps } from "./AlertDialog";
+export { Alert, type AlertProps, type AlertTone } from "./Alert";
+export { ActionSheet, type ActionSheetProps, type ActionSheetOption } from "./ActionSheet";
+export { Collapsible, type CollapsibleProps } from "./Collapsible";
+export { ContextMenu, type ContextMenuProps, type ContextMenuItem } from "./ContextMenu";
+export { DropdownMenu, type DropdownMenuProps, type DropdownMenuItem } from "./DropdownMenu";
+export { Popover, type PopoverProps } from "./Popover";
+export { Tooltip, type TooltipProps } from "./Tooltip";
 // AI conversation primitives.
 export {
   NativePlan,
@@ -100,47 +88,37 @@ export * from "./charts";
 // Basics.
 export { Text, type TextProps, type TextVariant } from "./Text";
 export {
-  Avatar,
-  Badge,
-  Separator,
-  Skeleton,
   Spinner,
-  Progress,
-  initialsOf,
-  type AvatarProps,
-  type AvatarSize,
-  type BadgeProps,
-  type SeparatorProps,
-  type SkeletonProps,
   type SpinnerProps,
   type SpinnerSize,
-  type ProgressProps,
-  type ProgressVariant,
   Rating,
   type RatingProps,
   NativeImage,
   type NativeImageProps,
 } from "./Display";
+export { Avatar, initialsOf, type AvatarProps, type AvatarSize } from "./Avatar";
+export { Badge, type BadgeProps } from "./Badge";
+export { Separator, type SeparatorProps } from "./Separator";
+export { Skeleton, type SkeletonProps } from "./Skeleton";
+export { Progress, type ProgressProps, type ProgressVariant } from "./Progress";
 // Feedback and display.
 export {
   Banner,
   List,
   ListItem,
   ListSection,
-  Accordion,
   ToastViewport,
   type BannerProps,
   type ListProps,
   type ListItemProps,
   type ListSwipeAction,
   type ListSectionProps,
-  type AccordionProps,
-  type AccordionSection,
   type ToastAction,
   type ToastItem,
   type ToastViewportProps,
 } from "./Feedback";
 export { Toast, type ToastProps } from "./Toast";
+export { Accordion, type AccordionProps, type AccordionSection } from "./Accordion";
 // Bars, buttons and navigation.
 export {
   SearchBar,
@@ -162,18 +140,10 @@ export { Group, type GroupProps } from "./Group";
 export { MorphGroup, type MorphGroupProps, type MorphGroupItem } from "./MorphGroup";
 export { Scrim, type ScrimProps } from "./Scrim";
 // Overlays.
-export {
-  Menu,
-  Sheet,
-  Drawer,
-  anchorPopover,
-  resolveSnapPoint,
-  nearestSnapPoint,
-  type MenuProps,
-  type MenuItem,
-  type SheetProps,
-  type DrawerProps,
-} from "./Overlays";
+export { Menu, Drawer, anchorPopover, resolveSnapPoint, nearestSnapPoint, type MenuProps, type MenuItem, type DrawerProps } from "./Overlays";
+// The engine-dressed sheet is the Wave 1 control; Overlays' sheet was the
+// pre-rebuild one and is no longer exported.
+export { Sheet, type SheetProps } from "./Sheet";
 // Carousel.
 export {
   Carousel,
@@ -182,16 +152,12 @@ export {
   type PageControlProps,
 } from "./Carousel";
 // Forms and pickers.
+export { Stepper, type StepperProps } from "./Stepper";
+export { Toggle, type ToggleProps } from "./Toggle";
+export { ToggleGroup, type ToggleGroupProps, type ToggleGroupItem } from "./ToggleGroup";
 export {
-  Stepper,
-  Toggle,
-  ToggleGroup,
   InputOTP,
   ButtonGroup,
-  type StepperProps,
-  type ToggleProps,
-  type ToggleGroupProps,
-  type ToggleGroupItem,
   type InputOTPProps,
   type ButtonGroupProps,
   type ButtonGroupItem,
