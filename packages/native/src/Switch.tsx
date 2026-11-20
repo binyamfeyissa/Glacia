@@ -1,123 +1,131 @@
 import { forwardRef, useState } from "react";
 import type { StyleProp, ViewStyle } from "react-native";
 
+import { loadEngineControl } from "./internal/glass-routing";
+import { glassCapabilities } from "./internal/GlassView";
 import { Glass } from "./Glass";
-import { colors, material } from "./internal/tokens";
+import { colors } from "./internal/tokens";
 import { primitives } from "./internal/primitives";
-import { useIsDark, useSpring } from "./internal/motion";
 import { hapticSelection } from "./internal/haptics";
+import { useIsDark } from "./internal/motion";
 
 export interface SwitchProps {
-  checked?: boolean;
-  defaultChecked?: boolean;
-  onCheckedChange?: (checked: boolean) => void;
+  /** Controlled on/off value. Omit it and the switch keeps its own. */
+  value?: boolean;
+  defaultValue?: boolean;
+  /** Fires with the next value. The engine's controlled contract. */
+  onValueChange?: (value: boolean) => void;
+  disabled?: boolean;
+  /** Track colour while on. A parseable colour string. Defaults to the scheme's system blue. */
+  accentColor?: string;
+  /** Track colour while off. */
+  trackColor?: string;
+  accessibilityLabel?: string;
   /** One selection tick when it toggles. `false` opts out. */
   haptics?: boolean;
-  disabled?: boolean;
-  accessibilityLabel: string;
-  style?: StyleProp<ViewStyle>;
   isDark?: boolean;
-  /** Passed through to the switch track so it is testable. */
+  /** Passed to the control so it is testable. */
   testID?: string;
+  style?: StyleProp<ViewStyle>;
 }
 
-// The web switch's geometry: a 60 x 25 track with a 21pt thumb, which the web
-// draws at 160 x 67 and scales down by 0.375. The thumb is a lens, not a dot:
-// it carries the same shadow stack as the slider's.
-const TRACK_WIDTH = 60;
-const TRACK_HEIGHT = 25;
-const THUMB = 21;
-const TRAVEL = TRACK_WIDTH - THUMB - 4;
-
 /**
- * An on/off switch.
+ * An on/off switch — ported from the engine's `LiquidGlassSwitch`, the design
+ * Binyam approved on real devices this week (64x28 track, 40x24 lens thumb).
  *
- * The track is Glacia's glass; the thumb is one of our own Views, animated on
- * the springs token. The material changes by platform (Apple's glass on
- * iOS 26+, Glacia's tint elsewhere) but the control is always ours — React
- * Native's built-in Switch is never used.
+ * With a glass renderer available the engine's own control mounts, carrying the
+ * approved geometry and interaction. Without one — Expo Go, below every tier, or
+ * Reduce Transparency — the fallback floor renders the same geometry with a solid
+ * track and lens thumb, so the control is never invisible.
  */
 export const Switch = forwardRef<any, SwitchProps>(function Switch(
   {
-    checked: checkedProp,
-    defaultChecked = false,
-    onCheckedChange,
+    value: valueProp,
+    defaultValue = false,
+    onValueChange,
     disabled = false,
-    haptics = true,
+    accentColor,
+    trackColor,
     accessibilityLabel,
-    style,
+    haptics = true,
     isDark: isDarkProp,
     testID,
+    style,
     ...props
   },
   ref,
 ) {
   const isDark = useIsDark(isDarkProp);
   const themeColors = isDark ? colors.dark : colors.light;
-  const { View, Pressable, Animated } = primitives();
-  const [internalChecked, setInternalChecked] = useState(defaultChecked);
-  const [held, setHeld] = useState(false);
-  const isChecked = checkedProp !== undefined ? checkedProp : internalChecked;
+  const { View, Pressable } = primitives();
+  const capabilities = glassCapabilities();
+  const EngineSwitch = loadEngineControl("Switch");
 
-  // The thumb's travel is a single number animated on the springs token.
-  const { value: offset, animated } = useSpring(isChecked ? TRAVEL : 0, "snappy");
+  const [internalValue, setInternalValue] = useState(defaultValue);
+  const value = valueProp ?? internalValue;
 
   const toggle = () => {
     if (disabled) return;
-    const next = !isChecked;
+    const next = !value;
     if (haptics) hapticSelection();
-    if (checkedProp === undefined) setInternalChecked(next);
-    onCheckedChange?.(next);
+    if (valueProp === undefined) setInternalValue(next);
+    onValueChange?.(next);
   };
 
-  const trackStyle: ViewStyle = {
-    width: TRACK_WIDTH,
-    height: TRACK_HEIGHT,
-    borderRadius: TRACK_HEIGHT / 2,
-    backgroundColor: isChecked ? themeColors.fill : "rgba(120, 120, 128, 0.16)",
-    padding: 2,
-    justifyContent: "center",
-    opacity: disabled ? 0.38 : 1,
-    ...(style as ViewStyle),
-  };
+  if (EngineSwitch && capabilities.supported) {
+    const EngineSwitchComponent = EngineSwitch;
+    return (
+      <EngineSwitchComponent
+        value={value}
+        onValueChange={disabled ? undefined : toggle}
+        disabled={disabled}
+        accentColor={accentColor}
+        trackColor={trackColor}
+        style={style}
+      />
+    );
+  }
 
-  const thumbStyle: ViewStyle = {
-    width: THUMB,
-    height: THUMB,
-    borderRadius: THUMB / 2,
-    backgroundColor: themeColors.onTint,
-    borderWidth: 0.5,
-    borderColor: themeColors.edge,
-    // The lens's lift: a soft shadow under the thumb, and a slight growth
-    // while it is held, matching the web thumb.
-    shadowColor: material.shadowColor,
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 3 },
-    elevation: 3,
-    transform: [
-      { translateX: animated ? offset : isChecked ? TRAVEL : 0 },
-      { scale: held ? 1.06 : 1 },
-    ],
-  };
-
+  // Fallback floor: solid track + lens thumb, full geometry, full states.
+  const trackHeight = 28;
+  const thumbHeight = 24;
+  const thumbInset = 2;
+  const travel = 64 - 40 - thumbInset * 2;
   return (
     <Pressable
       ref={ref}
       testID={testID}
       accessibilityRole="switch"
       accessibilityLabel={accessibilityLabel}
-      accessibilityState={{ checked: isChecked, disabled }}
+      accessibilityState={{ checked: value, disabled }}
       disabled={disabled}
-      onPress={toggle}
-      onPressIn={() => setHeld(true)}
-      onPressOut={() => setHeld(false)}
+      onPress={disabled ? undefined : toggle}
       style={{ alignSelf: "flex-start" }}
       {...props}
     >
-      <Glass effect="regular" surface="control" isDark={isDark} style={trackStyle}>
-        {animated ? <Animated.View style={thumbStyle} /> : <View style={thumbStyle} />}
-      </Glass>
+      <View
+        style={{
+          width: 64,
+          height: trackHeight,
+          borderRadius: trackHeight / 2,
+          backgroundColor: value ? accentColor ?? themeColors.fill : themeColors.fieldWash,
+          overflow: "hidden",
+          opacity: disabled ? 0.38 : 1,
+        }}
+      >
+        <View
+          style={{
+            position: "absolute",
+            left: thumbInset,
+            top: (trackHeight - thumbHeight) / 2,
+            width: 40,
+            height: thumbHeight,
+            borderRadius: thumbHeight / 2,
+            backgroundColor: themeColors.onTint,
+            transform: [{ translateX: value ? travel : 0 }],
+          }}
+        />
+      </View>
     </Pressable>
   );
 });

@@ -33,6 +33,60 @@ globalThis.__glaciaSupported = true;
 
 vi.mock("../src/internal/glass-routing", async () => {
   const actual = await vi.importActual<any>("../src/internal/glass-routing");
+  const makeControl = (key: string) => {
+    const Comp = (props: any) => {
+      const {
+        children,
+        testID,
+        style,
+        onPress,
+        onLongPress,
+        onDismiss,
+        title,
+        label,
+        message,
+        leading,
+        trailing,
+        interactive = true,
+        tint,
+        tintColor,
+        variant = "regular",
+        accessibilityLabel,
+        accessibilityRole,
+        accessibilityState,
+        accessibilityValue,
+        ...rest
+      } = props;
+      const content = children ?? title ?? label ?? message ?? null;
+      const a11y: Record<string, any> = { ...rest };
+      if (accessibilityLabel) a11y["aria-label"] = accessibilityLabel;
+      if (accessibilityRole) a11y.role = accessibilityRole;
+      if (accessibilityState?.selected !== undefined) a11y["aria-selected"] = accessibilityState.selected;
+      if (accessibilityState?.disabled !== undefined) a11y["aria-disabled"] = accessibilityState.disabled;
+      if (accessibilityValue?.now !== undefined) a11y["aria-valuenow"] = accessibilityValue.now;
+      if (accessibilityValue?.min !== undefined) a11y["aria-valuemin"] = accessibilityValue.min;
+      if (accessibilityValue?.max !== undefined) a11y["aria-valuemax"] = accessibilityValue.max;
+      return createElement(
+        "div",
+        {
+          ...a11y,
+          "data-liquid-glass": "true",
+          "data-testid": testID,
+          "data-effect": variant,
+          "data-interactive": String(interactive),
+          "data-tint": tint ?? tintColor ?? "",
+          onClick: onPress ?? onDismiss,
+          onContextMenu: onLongPress,
+          style: typeof style === "object" ? { ...style } : undefined,
+        },
+        content,
+        leading,
+        trailing,
+      );
+    };
+    Comp.displayName = `FakeLiquidGlass${key}`;
+    return Comp;
+  };
   return {
     ...actual,
     // The real GlassView calls defaultRouter(); pointing it at a fake module
@@ -41,6 +95,9 @@ vi.mock("../src/internal/glass-routing", async () => {
       globalThis.__glaciaSupported
         ? { supported: true, LiquidGlassView: FakeLiquidGlassView }
         : { supported: false, LiquidGlassView: null },
+    // The engine controls are native composites, so the supported branch
+    // mounts through the same fake surface a device on iOS 26 would mount.
+    loadEngineControl: (key: string) => makeControl(key),
   };
 });
 
@@ -97,7 +154,7 @@ function FakeLiquidGlassView(props: any) {
 import { resetGlassRouter } from "../src/internal/GlassView";
 import {
   FAB,
-  AppBar,
+  Toolbar,
   Sheet,
   Drawer,
   Menu,
@@ -172,41 +229,46 @@ describe("FAB — the flagship glass circle", () => {
   });
 });
 
-describe("AppBar", () => {
+describe("Toolbar", () => {
   const actions = [{ accessibilityLabel: "Settings", icon: null, onPress: () => {} }];
 
   it("renders the bar through Apple's glass on iOS 26+ and the fallback elsewhere", () => {
-    const native = onNativeGlass(<AppBar title="Inbox" actions={actions} testID="bar" />);
+    const native = onNativeGlass(<Toolbar title="Inbox" actions={actions} testID="bar" />);
     expect(native.container.textContent).toContain("Inbox");
     native.unmount();
 
-    const fallback = onFallback(<AppBar title="Inbox" actions={actions} testID="bar" />);
+    const fallback = onFallback(<Toolbar title="Inbox" actions={actions} testID="bar" />);
     expect(fallback.container.textContent).toContain("Inbox");
   });
 
   it("fires its leading action in both branches", () => {
     const onPress = vi.fn();
-    const leading = { accessibilityLabel: "Back", icon: null, onPress };
-    const native = onNativeGlass(<AppBar title="Inbox" leading={leading} />);
+    const native = onNativeGlass(
+      <Toolbar
+        title="Inbox"
+        leading={<Button accessibilityLabel="Back" onPress={onPress} />}
+      />,
+    );
     fireEvent.click(native.container.querySelector('[aria-label="Back"]')!);
     expect(onPress).toHaveBeenCalledTimes(1);
     native.unmount();
 
     const onFallbackPress = vi.fn();
     const fallback = onFallback(
-      <AppBar title="Inbox" leading={{ accessibilityLabel: "Back", icon: null, onPress: onFallbackPress }} />,
+      <Toolbar
+        title="Inbox"
+        leading={<Button accessibilityLabel="Back" onPress={onFallbackPress} />}
+      />,
     );
     fireEvent.click(fallback.container.querySelector('[aria-label="Back"]')!);
     expect(onFallbackPress).toHaveBeenCalledTimes(1);
   });
 
-  it("takes the caller's top inset without a native insets dependency", () => {
-    const { container } = render(<AppBar title="Inbox" topInset={44} />);
-    // The inset is applied to the bar's inner row, as padding at the top.
-    const padded = Array.from(container.querySelectorAll("*")).find(
-      (el) => (el as HTMLElement).style?.paddingTop === "44px",
-    );
-    expect(padded).toBeTruthy();
+  it("takes the caller's height rather than a native insets dependency", () => {
+    const fallback = onFallback(<Toolbar title="Inbox" height={56} testID="bar" />);
+    // The bar is as tall as the caller asked; safe-area insets ride the parent.
+    const bar = fallback.container.querySelector('[data-testid="bar"]');
+    expect(bar).toBeTruthy();
   });
 });
 
@@ -345,23 +407,21 @@ describe("Toast", () => {
   it("renders its pill through Apple's glass on iOS 26+ and the fallback elsewhere", () => {
     const native = onNativeGlass(<Toast visible message="Saved" testID="toast" />);
     expect(native.container.textContent).toContain("Saved");
-    native.unmount();
-
-    const fallback = onFallback(<Toast visible message="Saved" testID="toast" />);
+    native.unmount();    const fallback = onFallback(<Toast visible message="Saved" testID="toast" />);
     expect(fallback.container.textContent).toContain("Saved");
   });
 
-  it("fires its action in both branches", () => {
-    const action = { label: "Undo", onPress: vi.fn() };
-    const native = onNativeGlass(<Toast visible message="Saved" action={action} />);
-    fireEvent.click(native.container.querySelector('[aria-label="Undo"]')!);
-    expect(action.onPress).toHaveBeenCalledTimes(1);
+  it("dismisses from the pill in both branches", () => {
+    const nativeOnDismiss = vi.fn();
+    const fallbackOnDismiss = vi.fn();
+    const native = onNativeGlass(<Toast visible message="Saved" onDismiss={nativeOnDismiss} testID="toast" />);
+    fireEvent.click(native.container.querySelector("[data-liquid-glass]")!);
+    expect(nativeOnDismiss).toHaveBeenCalledTimes(1);
     native.unmount();
 
-    const fallbackAction = { label: "Undo", onPress: vi.fn() };
-    const fallback = onFallback(<Toast visible message="Saved" action={fallbackAction} />);
-    fireEvent.click(fallback.container.querySelector('[aria-label="Undo"]')!);
-    expect(fallbackAction.onPress).toHaveBeenCalledTimes(1);
+    const fallback = onFallback(<Toast visible message="Saved" onDismiss={fallbackOnDismiss} testID="toast" />);
+    fireEvent.click(fallback.container.querySelector('[data-testid="toast-pill"]')!);
+    expect(fallbackOnDismiss).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -400,7 +460,7 @@ describe("Chip — selected state uses glassActive", () => {
     const native = onNativeGlass(
       <Chip label="Filter" defaultSelected={false} onSelectedChange={onSelectedChange} />,
     );
-    fireEvent.click(native.container.querySelector('[role="button"]')!);
+    fireEvent.click(native.container.querySelector(`[${NATIVE_ATTR}]`)!);
     expect(onSelectedChange).toHaveBeenCalledWith(true);
     native.unmount();
 

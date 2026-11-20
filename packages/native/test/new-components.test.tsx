@@ -10,7 +10,6 @@ import { createElement } from "react";
 
 import {
   Accordion,
-  AppBar,
   Avatar,
   Badge,
   Banner,
@@ -40,6 +39,7 @@ import {
   Toast,
   Toggle,
   ToggleGroup,
+  Toolbar,
   formatTime,
   initialsOf,
   monthGrid,
@@ -238,13 +238,11 @@ describe("#57 Toast", () => {
     expect(onDismiss).not.toHaveBeenCalled();
   });
 
-  it("shows an action when there is one", () => {
-    const onPress = vi.fn();
-    const { container } = render(
-      <Toast visible message="Deleted" action={{ label: "Undo", onPress }} />,
-    );
-    fireEvent.click(container.querySelector('[aria-label="Undo"]')!);
-    expect(onPress).toHaveBeenCalledTimes(1);
+  it("dismisses from its pill", () => {
+    const onDismiss = vi.fn();
+    const { container } = render(<Toast visible message="Deleted" onDismiss={onDismiss} testID="toast" />);
+    fireEvent.click(container.querySelector('[data-testid="toast-pill"]')!);
+    expect(onDismiss).toHaveBeenCalledTimes(1);
   });
 
   it("renders nothing while hidden", () => {
@@ -414,11 +412,11 @@ describe("#61 Chip", () => {
     expect(onSelectedChange).toHaveBeenCalledWith(true);
   });
 
-  it("calls onClose when its close affordance is pressed", () => {
-    const onClose = vi.fn();
-    const { container } = render(<Chip label="Tag" onClose={onClose} />);
-    fireEvent.click(container.querySelector('[aria-label="Remove Tag"]')!);
-    expect(onClose).toHaveBeenCalledTimes(1);
+  it("calls onPress when its pill is pressed", () => {
+    const onPress = vi.fn();
+    const { container } = render(<Chip label="Tag" onPress={onPress} />);
+    fireEvent.click(container.querySelector('[role="button"]')!);
+    expect(onPress).toHaveBeenCalledTimes(1);
   });
 
   it("is a static tag when it has no interaction", () => {
@@ -468,23 +466,23 @@ describe("#63 IconButton", () => {
   });
 });
 
-describe("#64 AppBar", () => {
-  it("shows its title and runs its actions", () => {
-    const onSettings = vi.fn();
+describe("#64 Toolbar", () => {
+  it("shows its title and runs its leading action", () => {
+    const onBack = vi.fn();
     const { container } = render(
-      <AppBar
+      <Toolbar
         title="Inbox"
-        actions={[{ accessibilityLabel: "Settings", icon: <Text>*</Text>, onPress: onSettings }]}
+        leading={<Button accessibilityLabel="Back" onPress={onBack} />}
       />,
     );
     expect(container.textContent).toContain("Inbox");
-    fireEvent.click(container.querySelector('[aria-label="Settings"]')!);
-    expect(onSettings).toHaveBeenCalledTimes(1);
+    fireEvent.click(container.querySelector('[aria-label="Back"]')!);
+    expect(onBack).toHaveBeenCalledTimes(1);
   });
 
-  it("shows a subtitle under the title", () => {
-    const { container } = render(<AppBar title="Inbox" subtitle="12 unread" />);
-    expect(container.textContent).toContain("12 unread");
+  it("renders the title text under the title capsule", () => {
+    const { container } = render(<Toolbar title="Inbox" />);
+    expect(container.textContent).toContain("Inbox");
   });
 });
 

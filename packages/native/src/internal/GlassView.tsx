@@ -2,7 +2,7 @@ import { forwardRef, type ReactNode } from "react";
 import type { StyleProp, ViewStyle } from "react-native";
 
 import { FallbackGlassView } from "./fallback";
-import { defaultRouter } from "./glass-routing";
+import { defaultRouter, type GlassRouter, type GlassCapabilities } from "./glass-routing";
 import type { SurfaceProfile } from "./material";
 import { useIsDark } from "./motion";
 
@@ -57,6 +57,26 @@ function router(): ReturnType<typeof defaultRouter> {
 /** Clears the memoised decision. Only tests call this, to drive both branches. */
 export function resetGlassRouter() {
   cachedRouter = null;
+}
+
+/**
+ * The memoised routing decision — the package's single source of truth for
+ * which glass surface a component may mount. Read through the same router the
+ * surface itself uses, so a component and its surface can never disagree about
+ * the mount tier.
+ */
+export function glassDecision(): GlassRouter {
+  return router();
+}
+
+/**
+ * The capability verdicts the package switches on, read through the same
+ * memoised decision as the surface — the one place a component's engine branch
+ * and its fallback floor are chosen from.
+ */
+export function glassCapabilities(): GlassCapabilities {
+  const decision = router();
+  return { supported: decision.supported, native: decision.native === true };
 }
 
 /** Whether this build renders Apple's glass. */

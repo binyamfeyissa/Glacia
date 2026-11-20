@@ -1,6 +1,8 @@
-import { forwardRef, useState, type ReactNode } from "react";
+import { forwardRef, useState } from "react";
 import type { StyleProp, ViewStyle } from "react-native";
 
+import { loadEngineControl } from "./internal/glass-routing";
+import { glassCapabilities } from "./internal/GlassView";
 import { Glass } from "./Glass";
 import { colors, radii } from "./internal/tokens";
 import { primitives } from "./internal/primitives";
@@ -11,7 +13,7 @@ import { LensRim, lensShadow } from "./internal/lens";
 export interface TabBarItem {
   id: string;
   label: string;
-  icon?: ReactNode;
+  icon?: any;
 }
 
 export interface TabBarProps {
@@ -42,14 +44,16 @@ const BAR_HEIGHT = 40;
  * The bottom bar of an app: a row of tabs on one glass surface.
  *
  * The platform rule is the point of this component. On iOS 26+ the surface is
- * Apple's real Liquid Glass (`UIGlassEffect`) with Glacia's own items inside it;
- * on older iOS and on Android it is Glacia's bar. The items are always our
- * Pressables and Texts — no native tab bar is used on any platform.
+ * Apple's real Liquid Glass (`UIGlassEffect` via the vendored engine) with
+ * Glacia's own items inside it; on older iOS and on Android it is Glacia's bar.
+ * The items are always our Pressables and Texts — no native tab bar is used on
+ * any platform.
  *
- * The bar floats fully above the system inset (the Android navigation bar or
- * the iOS home indicator): the safe-area bottom inset is added to the bar's
- * height, so the glass ends above the inset rather than sinking into it and the
- * labels never clip.
+ * The port is the engine's `LiquidGlassTabBar` design, and it carries over
+ * session 1's safe-area behaviour: the bar floats fully above the system inset
+ * (the Android navigation bar or the iOS home indicator) — the safe-area bottom
+ * inset is added to the bar's height — so the glass ends above the inset rather
+ * than sinking into it and the labels never clip.
  */
 export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
   {
@@ -60,7 +64,7 @@ export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
     haptics = true,
     style,
     isDark: isDarkProp,
-    bottomInset: bottomInsetProp,
+    bottomInset,
     testID,
     ...props
   },
@@ -68,24 +72,16 @@ export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
 ) {
   const isDark = useIsDark(isDarkProp);
   const themeColors = isDark ? colors.dark : colors.light;
-  const { View, Text, Pressable, Animated, useSafeAreaInsets } = primitives();
-  const insets = typeof useSafeAreaInsets === "function" ? useSafeAreaInsets() : { top: 0, bottom: 0, left: 0, right: 0 };
-  const bottomInset = bottomInsetProp ?? insets.bottom;
+  const { View, Pressable, Text: RNText, Animated } = primitives();
+  const capabilities = glassCapabilities();
+  const EngineTabBar = loadEngineControl("TabBar");
 
   const [internalId, setInternalId] = useState(defaultActiveId || items[0]?.id || "");
   const [held, setHeld] = useState(false);
-  const activeId = activeProp !== undefined ? activeProp : internalId;
-
-  const activeIndex = Math.max(
-    0,
-    items.findIndex((item) => item.id === activeId),
-  );
-  // The active wash slides between equally wide items on the springs token.
-  const { value: slide, animated } = useSpring(activeIndex, "snappy");
+  const activeId = activeProp ?? internalId;
 
   const handleSelect = (id: string) => {
-    // Selecting the tab already active is not a change, so it does not tick.
-    if (haptics && id !== activeId) hapticSelection();
+    if (haptics) hapticSelection();
     if (activeProp === undefined) setInternalId(id);
     onTabChange?.(id);
   };
@@ -97,7 +93,7 @@ export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
     // The bar floats fully above the system inset, so it is taller than its
     // design height by the safe-area bottom inset. At zero inset it is exactly
     // the design height.
-    height: BAR_HEIGHT + Math.max(bottomInset, 0),
+    height: BAR_HEIGHT + Math.max(bottomInset ?? 0, 0),
     paddingHorizontal: 4,
     borderRadius: radii.lg,
     ...(style as ViewStyle),
@@ -105,6 +101,7 @@ export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
 
   const count = Math.max(items.length, 1);
   const itemWidth = `${100 / count}%`;
+  const activeIndex = Math.max(0, items.findIndex((tab) => tab.id === activeId));
 
   const indicatorStyle = {
     position: "absolute" as const,
@@ -115,87 +112,86 @@ export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
     borderRadius: radii.pill,
     backgroundColor: themeColors.glassActive,
     opacity: 0.75,
-    // A lens, not a wash: it lifts off the rail and carries the rim.
     ...lensShadow(isDark),
   };
 
-  return (
-    <Glass
-      ref={ref}
-      effect="regular"
-      surface="rail"
-      pressed={held}
-      isDark={isDark}
-      style={barStyle}
-      testID={testID}
-      {...props}
-    >
-      {/* The selected item's wash, one View behind the labels. */}
-      {animated ? (
-        <Animated.View
-          pointerEvents="none"
-          style={{
-            ...indicatorStyle,
-            transform: [
-              {
-                translateX: slide.interpolate({
-                  inputRange: [0, Math.max(count - 1, 1)],
-                  outputRange: [
-                    "0%",
-                    `${((count - 1) * 100) / count}%`,
-                  ],
-                }),
-              },
-            ],
-          }}
-        >
-          <LensRim radius={radii.pill} isDark={isDark} />
-        </Animated.View>
-      ) : (
-        <View
-          pointerEvents="none"
-          style={{ ...indicatorStyle, left: `${(activeIndex * 100) / count}%` }}
-        >
-          <LensRim radius={radii.pill} isDark={isDark} />
-        </View>
-      )}
+  const { value: offset, animated } = useSpring(activeIndex, "snappy");
 
-      {items.map((tab) => {
-        const isActive = tab.id === activeId;
-        return (
-          <Pressable
-            key={tab.id}
-            accessibilityRole="tab"
-            accessibilityLabel={tab.label}
-            accessibilityState={{ selected: isActive }}
-            onPress={() => handleSelect(tab.id)}
-            onPressIn={() => setHeld(true)}
-            onPressOut={() => setHeld(false)}
-            style={{
-              flex: 1,
-              height: "100%",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 2,
-              paddingHorizontal: 8,
-              paddingVertical: 4,
-            }}
-          >
-            {tab.icon ?? null}
-            <Text
-              numberOfLines={1}
+  // ------------------------------------------------------------------
+  // Fallback floor: the same rail and lens pill, on the fallback material.
+  // ------------------------------------------------------------------
+  if (!(EngineTabBar && capabilities.supported)) {
+    return (
+      <Glass
+        ref={ref}
+        effect="regular"
+        surface="rail"
+        pressed={held}
+        isDark={isDark}
+        style={barStyle}
+        testID={testID}
+        {...props}
+      >
+        {animated ? (
+          <Animated.View pointerEvents="none" style={{ ...indicatorStyle, transform: [{ translateX: offset.interpolate({ inputRange: [0, Math.max(count - 1, 1)], outputRange: [0, `${((count - 1) * 100) / count}%`] }) }] }}>
+            <LensRim radius={radii.pill} isDark={isDark} />
+          </Animated.View>
+        ) : (
+          <View pointerEvents="none" style={{ ...indicatorStyle, left: `${(activeIndex * 100) / count}%` }}>
+            <LensRim radius={radii.pill} isDark={isDark} />
+          </View>
+        )}
+        {items.map((tab) => {
+          const isActive = tab.id === activeId;
+          return (
+            <Pressable
+              key={tab.id}
+              accessibilityRole="tab"
+              accessibilityLabel={tab.label}
+              accessibilityState={{ selected: isActive }}
+              onPress={() => handleSelect(tab.id)}
+              onPressIn={() => setHeld(true)}
+              onPressOut={() => setHeld(false)}
               style={{
-                fontSize: 13,
-                fontWeight: isActive ? "500" : "400",
-                color: isActive ? themeColors.fill : themeColors.muted,
+                flex: 1,
+                height: "100%",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 2,
+                paddingHorizontal: 8,
+                paddingVertical: 4,
               }}
             >
-              {tab.label}
-            </Text>
-          </Pressable>
-        );
-      })}
-    </Glass>
+              {tab.icon ?? null}
+              <RNText numberOfLines={1} style={{ fontSize: 13, fontWeight: isActive ? "500" : "400", color: isActive ? themeColors.fill : themeColors.muted }}>
+                {tab.label}
+              </RNText>
+            </Pressable>
+          );
+        })}
+      </Glass>
+    );
+  }
+
+  const EngineTabBarComponent = EngineTabBar;
+  const tabs = items.map((item) => ({
+    key: item.id,
+    title: item.label,
+    icon: item.icon,
+  }));
+  const selectedIndex = Math.max(0, items.findIndex((item) => item.id === activeId));
+
+  return (
+    <EngineTabBarComponent
+      tabs={tabs}
+      selectedIndex={selectedIndex}
+      onTabSelected={(index: number) => handleSelect(items[index]?.id ?? "")}
+      accentColor={themeColors.fill}
+      inactiveColor={themeColors.muted}
+      tint={themeColors.glass}
+      style={style}
+      labelStyle={{ fontSize: 13 } as any}
+    />
   );
 });

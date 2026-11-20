@@ -20,7 +20,7 @@ import { SegmentedControl } from "../src/SegmentedControl";
 import { TabBar } from "../src/TabBar";
 import { Select } from "../src/Form";
 import { Avatar, Progress } from "../src/Display";
-import { AppBar, FAB, IconButton, SearchBar } from "../src/Bars";
+import { Toolbar, FAB, IconButton, SearchBar } from "../src/Bars";
 import { Drawer } from "../src/Overlays";
 import { NativeBarChart } from "../src/charts/BarChart";
 import {
@@ -98,7 +98,7 @@ describe("the selected lens", () => {
 describe("the sliding indicators keep their motion and gain the light", () => {
   it("paints a rim on the segmented control's thumb", () => {
     const { container } = render(
-      <SegmentedControl values={["Day", "Week", "Month"]} defaultIndex={1} />,
+      <SegmentedControl segments={["Day", "Week", "Month"]} selectedIndex={1} />,
     );
     // The rail and the thumb.
     expect(rimCount(container)).toBeGreaterThanOrEqual(2);
@@ -172,7 +172,7 @@ describe("profile routing, second pass", () => {
       render(
         <IconButton accessibilityLabel="More" icon={null} onPress={() => {}} />,
       ),
-      render(<AppBar title="Inbox" />),
+      render(<Toolbar title="Inbox" />),
       render(<Banner title="Heads up" message="Something happened." onDismiss={() => {}} />),
       render(<ButtonGroup items={[{ label: "One", onPress: () => {} }]} />),
       render(<Avatar name="Ada" />),
@@ -180,6 +180,8 @@ describe("profile routing, second pass", () => {
     ];
 
     for (const view of views) {
+      // Each is a Glass surface now: the fallback material and its rim exist
+      // at the root.
       expect(rimCount(view.container)).toBeGreaterThanOrEqual(1);
     }
   });

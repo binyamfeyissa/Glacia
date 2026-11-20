@@ -61,6 +61,13 @@ export interface GlassRouter {
   LiquidGlassProvider: any;
   /** The engine's stacked-glass primitive, or null. */
   LiquidGlassStack: any;
+  /**
+   * True when the active tier is Apple's own `UIGlassEffect` (iOS 26+) rather
+   * than the engine's Metal or AGSL renderer. Optional so a routing decision
+   * that only carries the mount gate — the test double, the fallback wrapper —
+   * can still be read as a tier.
+   */
+  native?: boolean;
 }
 
 /**
@@ -86,6 +93,7 @@ export function routerFor(module: LiquidGlassModule | null | undefined): GlassRo
     LiquidGlassContainerView: container,
     LiquidGlassProvider: provider,
     LiquidGlassStack: stack,
+    native: module?.supportsNativeGlass === true,
   };
 }
 
@@ -140,10 +148,11 @@ export interface GlassCapabilities {
 /** Reads the capability verdicts from an explicit module, or from the engine. */
 export function readCapabilities(module?: LiquidGlassModule | null): GlassCapabilities {
   const resolved = module !== undefined ? module : loadLiquidGlass();
-  const supported = Boolean(resolved?.LiquidGlassView)
-    ? (resolved?.supportsGlass ?? resolved?.isLiquidGlassSupported ?? false) === true
-    : false;
-  return { supported, native: resolved?.supportsNativeGlass === true };
+  const supported = module !== undefined
+    ? Boolean(module.LiquidGlassView) && (module.supportsGlass ?? module.isLiquidGlassSupported ?? false) === true
+    : defaultRouter().supported;
+  const native = module !== undefined ? module.supportsNativeGlass === true : resolved?.supportsNativeGlass === true;
+  return { supported, native };
 }
 
 /**
@@ -167,4 +176,40 @@ export function supportsGlass(module?: LiquidGlassModule | null): Promise<boolea
 export function supportsNativeGlass(module?: LiquidGlassModule | null): boolean {
   const resolved = module !== undefined ? module : loadLiquidGlass();
   return resolved?.supportsNativeGlass === true;
+}
+
+/**
+ * The vendored engine's control components, by the Glacia-facing name.
+ *
+ * Every Wave 1 control is the engine's own component mounted through the same
+ * capability verdict the glass surface uses, so an unsupported device (or Expo
+ * Go, or Reduce Transparency) takes the Glacia fallback floor instead of the
+ * engine's own degrade-to-plain-view.
+ */
+const ENGINE_CONTROLS: Record<string, string> = {
+  Button: "LiquidGlassButton",
+  IconButton: "LiquidGlassIconButton",
+  Chip: "LiquidGlassChip",
+  Switch: "LiquidGlassSwitch",
+  Slider: "LiquidGlassSlider",
+  Stepper: "LiquidGlassStepper",
+  SegmentedControl: "LiquidGlassSegmentedControl",
+  Input: "LiquidGlassTextInput",
+  Card: "LiquidGlassCard",
+  Toolbar: "LiquidGlassToolbar",
+  Toast: "LiquidGlassToast",
+  Sheet: "LiquidGlassSheet",
+  TabBar: "LiquidGlassTabBar",
+  Group: "LiquidGlassGroup",
+  MorphGroup: "LiquidGlassMorphGroup",
+  Scrim: "LiquidGlassScrim",
+};
+
+/** Loads one of the vendored engine's control components by Glacia-facing name. */
+export function loadEngineControl(key: string): any | null {
+  const engine = requireEngineModule() as any;
+  const engineName = ENGINE_CONTROLS[key];
+  if (!engine || !engineName) return null;
+  const control = engine[engineName];
+  return control ?? null;
 }

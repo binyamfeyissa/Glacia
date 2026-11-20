@@ -280,20 +280,23 @@ describe("interactions in both branches", () => {
         Surface,
         { effect: "regular" },
         createElement(SegmentedControl, {
-          values: ["Day", "Week"],
-          onValueChange: pickedNative,
+          segments: ["Day", "Week"],
+          selectedIndex: 0,
+          onChange: pickedNative,
         }),
       ),
     );
     const native = render(output);
     fireEvent.click(screen.getByText("Week"));
-    expect(pickedNative).toHaveBeenCalledWith("Week", 1);
+    expect(pickedNative).toHaveBeenCalledWith(1);
     native.unmount();
 
     const pickedOff = vi.fn();
-    const off = render(<SegmentedControl values={["Day", "Week"]} onValueChange={pickedOff} />);
+    const off = render(
+      createElement(SegmentedControl, { segments: ["Day", "Week"], selectedIndex: 0, onChange: pickedOff }),
+    );
     fireEvent.click(screen.getByText("Week"));
-    expect(pickedOff).toHaveBeenCalledWith("Week", 1);
+    expect(pickedOff).toHaveBeenCalledWith(1);
     off.unmount();
   });
 

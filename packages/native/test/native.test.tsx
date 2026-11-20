@@ -52,8 +52,9 @@ describe("Glacia Native Components", () => {
     render(
       <Switch
         accessibilityLabel="Dark mode switch"
-        onCheckedChange={(c) => {
-          checked = c;
+        value={false}
+        onValueChange={(next) => {
+          checked = next;
         }}
       />,
     );
@@ -83,20 +84,20 @@ describe("Glacia Native Components", () => {
   });
 
   it("renders SegmentedControl with options and handles selection", () => {
-    let selected = "Day";
+    let selectedIndex = 0;
     render(
       <SegmentedControl
-        values={["Day", "Week", "Month"]}
+        segments={["Day", "Week", "Month"]}
         selectedIndex={0}
-        onValueChange={(val) => {
-          selected = val;
+        onChange={(index) => {
+          selectedIndex = index;
         }}
       />,
     );
 
     const weekBtn = screen.getByText("Week");
     fireEvent.click(weekBtn);
-    expect(selected).toBe("Week");
+    expect(selectedIndex).toBe(1);
   });
 
   it("renders TabBar and switches active tabs", () => {

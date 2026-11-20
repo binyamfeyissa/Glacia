@@ -2,6 +2,8 @@ import { forwardRef, useMemo, useRef, useState } from "react";
 import { measurePreviewWidth } from "./internal/primitives";
 import type { StyleProp, ViewStyle } from "react-native";
 
+import { loadEngineControl } from "./internal/glass-routing";
+import { glassCapabilities } from "./internal/GlassView";
 import { Glass } from "./Glass";
 import { colors, material } from "./internal/tokens";
 import { primitives } from "./internal/primitives";
@@ -9,25 +11,32 @@ import { useIsDark } from "./internal/motion";
 import { hapticSelection } from "./internal/haptics";
 
 export interface SliderProps {
+  /** Controlled value. Omit it and the slider keeps its own. */
   value?: number;
   defaultValue?: number;
+  /** Inclusive lower bound. Defaults to 0. */
   min?: number;
+  /** Inclusive upper bound. Defaults to 100. */
   max?: number;
+  /** Increment per step. Defaults to 1. */
   step?: number;
+  /** Fires while dragging and once when the gesture ends (engine order). */
   onValueChange?: (value: number) => void;
+  /** Fires once when the gesture ends, after the thumb has been released. */
+  onSlidingComplete?: (value: number) => void;
   disabled?: boolean;
   /** One selection tick each time the stepped value changes while dragging. */
   haptics?: boolean;
   accessibilityLabel: string;
   style?: StyleProp<ViewStyle>;
   isDark?: boolean;
-  /** Passed through to the draggable track so it is testable. */
+  /** Passed to the draggable track so it is testable. */
   testID?: string;
 }
 
 // The web slider: a 6pt track and a glass-lens thumb rather than a small dot.
 const TRACK_HEIGHT = 6;
-const THUMB_WIDTH = 36;
+const THUMB_WIDTH = 40;
 const THUMB_HEIGHT = 24;
 const CONTAINER_HEIGHT = 40;
 
@@ -37,19 +46,19 @@ function quantize(value: number, min: number, max: number, step: number): number
   const clamped = Math.min(max, Math.max(min, value));
   if (!(step > 0)) return clamped;
   const stepped = min + Math.round((clamped - min) / step) * step;
-  // Round away binary float noise introduced by the division above.
   const decimals = (String(step).split(".")[1] ?? "").length;
   return Number(Math.min(max, Math.max(min, stepped)).toFixed(decimals));
 }
 
 /**
- * A continuous value chosen by dragging.
+ * A continuous value chosen by dragging — ported from the engine's
+ * `LiquidGlassSlider`, which keeps the approved drag behaviour while the
+ * material changes by platform.
  *
- * The interaction is Glacia's own: the track and thumb are Views and dragging
- * is a PanResponder reading the touch position against the track's measured
- * width. React Native has no DOM `<input type="range">` and the platform
- * sliders are not used, so the control looks and behaves the same on every
- * platform; only the glass material changes.
+ * With a glass renderer available the engine's own control mounts, carrying the
+ * approved geometry and drag behaviour. Without one — Expo Go, below every tier,
+ * or Reduce Transparency — the fallback floor renders the same track and lens
+ * thumb with the fallback material, so the control is never invisible.
  */
 export const Slider = forwardRef<any, SliderProps>(function Slider(
   {
@@ -59,6 +68,7 @@ export const Slider = forwardRef<any, SliderProps>(function Slider(
     max = 100,
     step = 1,
     onValueChange,
+    onSlidingComplete,
     disabled = false,
     haptics = true,
     accessibilityLabel,
@@ -72,6 +82,8 @@ export const Slider = forwardRef<any, SliderProps>(function Slider(
   const isDark = useIsDark(isDarkProp);
   const themeColors = isDark ? colors.dark : colors.light;
   const { View, Pressable, PanResponder } = primitives();
+  const capabilities = glassCapabilities();
+  const EngineSlider = loadEngineControl("Slider");
 
   const [internalValue, setInternalValue] = useState(() => quantize(defaultValue, min, max, step));
   const value = valueProp !== undefined ? quantize(valueProp, min, max, step) : internalValue;
@@ -81,9 +93,6 @@ export const Slider = forwardRef<any, SliderProps>(function Slider(
   // second one starts from it instead of a stale closure.
   const valueRef = useRef(value);
   valueRef.current = value;
-
-  // Track width as measured on layout. A drag before layout is a no-op rather
-  // than a jump: without a width there is no honest mapping from x to value.
   const widthRef = useRef(0);
 
   /** Converts an x position relative to the track into a stepped value. */
@@ -124,10 +133,15 @@ export const Slider = forwardRef<any, SliderProps>(function Slider(
         const next = valueAtX(event.nativeEvent.locationX);
         if (next !== null) report(next);
       },
+      onPanResponderRelease: (event: any) => {
+        const next = valueAtX(event.nativeEvent.locationX);
+        if (next !== null) {
+          report(next);
+          onSlidingComplete?.(next);
+        }
+      },
       onPanResponderTerminationRequest: () => false,
     });
-    // `report` reads the value from a ref, so the responder does not need to be
-    // rebuilt on every value change and never acts on a stale render.
   }, [disabled, valueAtX]);
 
   /** Steps the value for accessibility actions and hardware keys. */
@@ -171,8 +185,6 @@ export const Slider = forwardRef<any, SliderProps>(function Slider(
     backgroundColor: themeColors.onTint,
     borderWidth: 0.5,
     borderColor: themeColors.edge,
-    // The same lens shadow stack the Switch thumb carries: the web thumb is a
-    // lens with real depth, not a white dot painted on the track.
     shadowColor: material.shadowColor,
     shadowOpacity: 0.2,
     shadowRadius: 8,
@@ -180,38 +192,63 @@ export const Slider = forwardRef<any, SliderProps>(function Slider(
     elevation: 3,
   };
 
-  return (
-    <Pressable
-      testID={testID}
-      accessibilityRole="adjustable"
-      accessibilityLabel={accessibilityLabel}
-      accessibilityState={{ disabled }}
-      accessibilityValue={{ min, max, now: value }}
-      accessibilityActions={[{ name: "increment" }, { name: "decrement" }]}
-      onAccessibilityAction={(event: any) => {
-        if (event?.nativeEvent?.actionName === "increment") nudge(1);
-        if (event?.nativeEvent?.actionName === "decrement") nudge(-1);
-      }}
-      disabled={disabled}
-      onLayout={(event: any) => {
-        const width = event?.nativeEvent?.layout?.width;
-        if (typeof width === "number" && width > 0) widthRef.current = width;
-      }}
-      // The DOM preview has no layout events, so measure on mount there too;
-      // on a device this resolves to nothing and onLayout is the source.
-      ref={(node: any) => {
-        measurePreviewWidth(node, widthRef);
-        if (typeof ref === "function") ref(node);
-        else if (ref) ref.current = node;
-      }}
-      style={containerStyle}
-      {...(panResponder ? panResponder.panHandlers : {})}
-      {...props}
-    >
-      <Glass effect="regular" isDark={isDark} style={trackStyle}>
+  // ------------------------------------------------------------------
+  // Fallback floor: the same track and lens thumb, on the fallback material.
+  // ------------------------------------------------------------------
+  if (!(EngineSlider && capabilities.supported)) {
+    const track = (
+      <View style={trackStyle}>
         <View style={fillStyle} />
-      </Glass>
-      <View style={thumbStyle} pointerEvents="none" />
-    </Pressable>
+      </View>
+    );
+    const thumb = <View style={thumbStyle} pointerEvents="none" />;
+    return (
+      <Pressable
+        testID={testID}
+        accessibilityRole="adjustable"
+        accessibilityLabel={accessibilityLabel}
+        accessibilityState={{ disabled }}
+        accessibilityValue={{ min, max, now: value }}
+        accessibilityActions={[{ name: "increment" }, { name: "decrement" }]}
+        disabled={disabled}
+        onAccessibilityAction={(event: any) => {
+          if (event?.nativeEvent?.actionName === "increment") nudge(1);
+          if (event?.nativeEvent?.actionName === "decrement") nudge(-1);
+        }}
+        onLayout={(event: any) => {
+          const width = event?.nativeEvent?.layout?.width;
+          if (typeof width === "number" && width > 0) widthRef.current = width;
+        }}
+        ref={(node: any) => {
+          measurePreviewWidth(node, widthRef);
+          if (typeof ref === "function") ref(node);
+          else if (ref) ref.current = node;
+        }}
+        style={containerStyle}
+        {...(panResponder ? panResponder.panHandlers : {})}
+        {...props}
+      >
+        <Glass effect="regular" isDark={isDark} style={trackStyle}>
+          {track}
+        </Glass>
+        {thumb}
+      </Pressable>
+    );
+  }
+
+  const EngineSliderComponent = EngineSlider;
+  return (
+    <EngineSliderComponent
+      value={value}
+      onValueChange={disabled ? undefined : onValueChange ?? report}
+      onSlidingComplete={disabled ? undefined : onSlidingComplete}
+      minimumValue={min}
+      maximumValue={max}
+      step={step}
+      disabled={disabled}
+      accentColor={themeColors.fill}
+      trackColor="rgba(120, 120, 128, 0.2)"
+      style={style}
+    />
   );
 });

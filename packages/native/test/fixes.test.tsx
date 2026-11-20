@@ -327,7 +327,9 @@ describe("springs token is wired into motion", () => {
 
 describe("accessibility standards", () => {
   it("Switch exposes checked and disabled state", () => {
-    const { container } = render(<Switch accessibilityLabel="S" checked disabled />);
+    const { container } = render(
+      <Switch accessibilityLabel="S" value onValueChange={() => {}} disabled />,
+    );
     const el = container.querySelector('[role="switch"]')!;
     expect(el.getAttribute("aria-checked")).toBe("true");
     expect(el.getAttribute("aria-disabled")).toBe("true");
@@ -361,7 +363,7 @@ describe("accessibility standards", () => {
   });
 
   it("SegmentedControl marks the selected segment", () => {
-    const { container } = render(<SegmentedControl values={["A", "B"]} selectedIndex={1} />);
+    const { container } = render(<SegmentedControl segments={["A", "B"]} selectedIndex={1} />);
     const segments = Array.from(container.querySelectorAll('[role="tab"]'));
     expect(segments.map((s) => s.getAttribute("aria-selected"))).toEqual(["false", "true"]);
   });

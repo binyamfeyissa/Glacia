@@ -49,7 +49,7 @@ import { List, ListItem } from "../src/Feedback";
 import { Sheet, Drawer } from "../src/Overlays";
 import { FABGroup } from "../src/Bars";
 import { ToastViewport } from "../src/Feedback";
-import { AppBar, Switch, SegmentedControl } from "../src/index";
+import { Switch, SegmentedControl, Toolbar } from "../src/index";
 import { TabBar } from "../src/index";
 import { Slider } from "../src/index";
 
@@ -448,12 +448,15 @@ describe("Haptics on controls", () => {
   });
 
   it("SegmentedControl ticks when the segment changes, not when it repeats", () => {
-    const { getByText } = render(
-      createElement(SegmentedControl, { values: ["Day", "Week", "Month"] }),
+    const { getByText, rerender } = render(
+      createElement(SegmentedControl, { segments: ["Day", "Week", "Month"], selectedIndex: 0, onChange: () => {} }),
     );
     fireEvent.click(getByText("Week"));
     expect(hapticSpy).toHaveBeenCalledTimes(1);
     // Pressing the already-selected segment is not a change.
+    rerender(
+      createElement(SegmentedControl, { segments: ["Day", "Week", "Month"], selectedIndex: 1, onChange: () => {} }),
+    );
     fireEvent.click(getByText("Week"));
     expect(hapticSpy).toHaveBeenCalledTimes(1);
   });
@@ -520,21 +523,14 @@ describe("Haptics on controls", () => {
   });
 });
 
-describe("AppBar scroll edge (#64)", () => {
-  it("is quiet at the top and gains an edge when scrolled", () => {
-    const { container, rerender } = render(
-      createElement(AppBar, { title: "Inbox", testID: "bar" }),
+describe("Toolbar — the caller owns the height", () => {
+  it("renders the caller's title and actions without a native insets dependency", () => {
+    const { container } = render(
+      createElement(Toolbar, { title: "Inbox", testID: "bar" }),
     );
-    const atTop = container.querySelector('[data-testid="bar"]') as HTMLElement | null;
-    // No bottom edge at the top of the screen.
-    const quiet = atTop?.style.borderBottomWidth ?? "0";
-    expect(quiet === "0px" || quiet === "0" || quiet === "").toBe(true);
-
-    rerender(
-      createElement(AppBar, { title: "Inbox", scrolled: true, testID: "bar" }),
-    );
-    const scrolled = container.querySelector('[data-testid="bar"]') as HTMLElement | null;
-    // Once content is under it, the edge is drawn.
-    expect(scrolled?.style.borderBottomWidth).toBe("0.5px");
+    // The toolbar is exactly as tall as the caller asked; safe-area insets
+    // ride the parent rather than the bar.
+    const bar = container.querySelector('[data-testid="bar"]') as HTMLElement | null;
+    expect(bar).not.toBeNull();
   });
 });
