@@ -12,9 +12,14 @@
 // The routing fake lives on the global object because vi.mock is hoisted above
 // every top-level binding.
 
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { cleanup, fireEvent, render, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createElement } from "react";
+
+afterEach(() => {
+  cleanup();
+  vi.clearAllTimers();
+});
 
 const CONTAINER_ATTR = "data-liquid-glass-container";
 const GLASS_ATTR = "data-liquid-glass";
