@@ -7,7 +7,9 @@
     "bundle:android": "expo export --platform android",
     "bundle:ios": "expo export --platform ios",
     "smoke": "vitest run",
-    "bundle:web": "expo export --platform web --output-dir dist-web"
+    "bundle:web": "expo export --platform web --output-dir dist-web",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
   },
   "dependencies": {
     "expo": "~54.0.0",

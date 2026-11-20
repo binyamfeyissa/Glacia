@@ -2,8 +2,11 @@
 
 Branch `rebuild/native-v1`. Master prompt §8 order: deviations, renderer verdicts,
 component table, token mapping, §6 results, builds, then the §9 checklist.
-Every claim below is true of the **pushed** tree; the checks were re-run from a
-fresh clone of the pushed commit (commands and numbers in §7).
+Every claim below is true of the **pushed** tree. The checks in §7 were run in a
+clean checkout of the pushed commit (`git worktree` of `f0ac73b`, no uncommitted
+files, no build output, fresh `pnpm install`). A network clone of the repository
+was attempted first and failed twice with `Recv failure: Connection reset by
+peer` — the checkout method, not the result, is what changed.
 
 ## 1. Deviations first (Law 6)
 
@@ -28,13 +31,22 @@ fresh clone of the pushed commit (commands and numbers in §7).
    `Pickers` renders its own header and button row inside the sheet's children
    (a `PickerSheet` wrapper in `Pickers.tsx`). Anything else that wants a titled
    sheet must do the same.
-4. **iOS build blocked at the account layer; Android build produced.**
-   Codemagic is not configured for this repository and no `CODEGAMIC_API_TOKEN`
-   exists in the environment, so the unsigned-IPA route cannot be started from
-   this machine. EAS iOS signing needs an Apple Developer account, which
-   Binyam does not have and the prompt forbids asking for.
-   *Restore path:* a Codemagic project bound to this repo (or its API token) —
-   the workflow itself is one YAML file.
+4. **Neither device build produced an artifact.**
+   - *Android:* the EAS preview build of this commit failed with
+     `EAS_BUILD_UNKNOWN_GRADLE_ERROR` ("Gradle build failed with unknown
+     error. See logs for the 'Run gradlew' phase") and produced no APK. A local
+     reproduction could not get further either: `expo prebuild` succeeded, then
+     Gradle aborted with `No space left on device` (2.8 GB free on this
+     machine). The cloud build page is the only place the Gradle error text
+     exists, and this session has no browser to read it.
+     *Restore path:* read the "Run gradlew" log on that build page (link in §6),
+     or free ~15 GB here and run `./gradlew assembleDebug`.
+   - *iOS:* Codemagic is not configured for this repository and no
+     `CODEGAMIC_API_TOKEN` exists, so the unsigned-IPA route cannot start. EAS
+     iOS signing would need an Apple Developer account, which Binyam does not
+     have and the prompt forbids asking for.
+     *Restore path:* bind the repo to Codemagic (or supply its API token); the
+     workflow itself is one YAML file.
 5. **Out-of-scope files were also removed beyond the ones named in the prompt.**
    The instruction named `ai.tsx`, `Message.tsx`, `Display.tsx`, `Table.tsx`,
    `Carousel.tsx` and the charts. Deleted in addition: `src/charts/` (the whole
@@ -63,7 +75,15 @@ fresh clone of the pushed commit (commands and numbers in §7).
    typecheck reported those failures as `any`-typed parameters. `tsconfig`
    paths and Vitest aliases now point at the packages' source; nothing in the
    published API changed.
-9. **`apps/native-proof` has a `tsconfig.json` in the tree.** Session 3's report
+9. **No donor source was vendored.** §2.2 asks for React Native Reusables /
+   `@rn-primitives` source to be copied in with its MIT notice. The Wave 2
+   components were written directly against the behaviour (open/close, focus,
+   dismissal, screen-reader semantics) rather than copied and re-dressed, so
+   there is no donor source and no donor notice to carry. The engine's MIT
+   NOTICE is present at `src/engine/NOTICE`.
+   *Restore path:* vendor the donor files if Binyam wants their implementation
+   on record; it changes no public API.
+10. **`apps/native-proof` has a `tsconfig.json` in the tree.** Session 3's report
    claimed a clean app typecheck while the claim could not be reproduced from the
    pushed tree (the commit carrying it had not been pushed). The config and the
    four checks are now committed and verified from a fresh clone (§7).
@@ -166,19 +186,34 @@ scroll spike, no band split, no rigid-unit tracking was written, and no
 
 | Target | Status | Link |
 | --- | --- | --- |
-| Android APK (EAS, preview profile) | see §6 note | see below |
-| iOS unsigned IPA (Codemagic) | **blocked** | no Codemagic project or API token (deviation 4) |
+| Android APK (EAS, preview profile) | **no artifact — Gradle failure** | https://expo.dev/accounts/binapluto/projects/glacia-native-proof/builds/eb55e5ff-5481-4574-b109-0e873a676ca7 |
+| iOS unsigned IPA (Codemagic) | **blocked — no Codemagic project or token** | — |
 
-Android: `eas-cli 16.11.0`, project `@binapluto/glacia-native-proof`, profile
-`preview` (`distribution: internal`, `buildType: apk`). EAS generated the
-keystore on the first attempt (the project had none). The first build errored
-before producing an artifact; the upload below is the build of this commit:
+**Android.** `eas-cli 16.11.0`, project `@binapluto/glacia-native-proof`
+(created this session), profile `preview` (`distribution: internal`,
+`buildType: apk`), keystore generated by EAS. Two builds were run:
 
-https://expo.dev/accounts/binapluto/projects/glacia-native-proof/builds/893f99e1-522a-4ffa-a809-c3a4447cda17
+1. `893f99e1…` (commit `d3532a4`) — errored in the Bundle JavaScript phase.
+2. `eb55e5ff…` (commit `f0ac73b`, the code this report describes) — errored
+   with `EAS_BUILD_UNKNOWN_GRADLE_ERROR`: *"Gradle build failed with unknown
+   error. See logs for the 'Run gradlew' phase."* No artifact was produced.
 
-The build was still running when this commit was written; the link is the
-build's own page, and its status there is the authority, not this line. No
-device pass has happened.
+The cloud logs are behind the Expo web UI; this session has no browser access
+to them. A local reproduction was attempted instead: `expo prebuild --platform
+android` **succeeded** (the native project generates), then
+`./gradlew assembleDebug` aborted with `java.io.IOException: No space left on
+device` — this machine has 2.8 GB free of 346 GB, and the build needs the NDK
+plus Gradle transforms. The local build therefore did not reach the point where
+it would show the EAS failure, and no APK exists.
+
+*Restore path:* either free ~15 GB on this machine and run the local build, or
+open the EAS build page linked above and read the "Run gradlew" log — the fix
+depends on that error, which is not guessable from here.
+
+**iOS.** Codemagic is not configured for this repository and no
+`CODEGAMIC_API_TOKEN` is present, so the unsigned-IPA route could not be
+started. EAS iOS signing would need an Apple Developer account, which Binyam
+does not have and the prompt forbids asking for.
 
 ## 7. Checks (run from a fresh clone of the pushed commit)
 
@@ -211,5 +246,6 @@ A fresh clone needs only `pnpm install`: both packages resolve
       **not done**: brief missing (deviation 1). Reported as not run.
 - [x] Tests + typecheck green on both packages (§7); report delivered in §8
       order; nothing published to npm.
-- Device builds: Android in progress at the time of writing (§6); iOS blocked
-  (deviation 4); neither is a publish.
+- [ ] Device builds — **no artifact for either target** (§6, deviation 4):
+      EAS Android failed in Gradle, local Android blocked by disk space, iOS
+      blocked by the missing Codemagic binding. Neither is a publish.
