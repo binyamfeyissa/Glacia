@@ -44,7 +44,7 @@ describe("TimePicker", () => {
     const { container } = render(<TimePicker value="3:00 PM" onChange={onChange} />);
     const [, minuteWheel] = wheels(container);
     // A real scroll: the wheel's own offset is settable, as in a browser.
-    minuteWheel!.scrollTop = (15 + 2) * 40;
+    minuteWheel!.scrollTop = 15 * 40; // snap rest for item 15: i * ROW_HEIGHT (items snap-align centre)
     fireEvent.scroll(minuteWheel!);
 
     // Scrolling settles on a short debounce, so the Change is asynchronous.

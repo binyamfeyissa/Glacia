@@ -59,7 +59,13 @@ function Radial({
   }
 
   const outer = size / 2;
-  const hole = thickness == null ? 0 : Math.max(0, outer - thickness);
+  // A thickness of 0 (or one wider than the disc) means a full pie, not a
+  // ring of zero width: the hole only exists for a positive thickness that
+  // leaves part of the disc inside it.
+  const hole =
+    thickness == null || thickness <= 0 || thickness >= outer
+      ? 0
+      : Math.max(0, outer - thickness);
   const fmt = (value: number) => (format ? format(value) : formatValue(value, { compact: true }));
 
   let cursor = -Math.PI / 2;
@@ -154,7 +160,10 @@ export interface PieChartProps extends Omit<RadialProps, "thickness"> {}
 
 /** Proportional slices with no hole. */
 export function PieChart(props: PieChartProps) {
-  return <Radial {...props} thickness={0} />;
+  // No thickness prop at all: Radial reads an absent thickness as a full
+  // pie. Passing 0 here used to invert the maths — hole = outer − 0 = the
+  // full radius — and every slice collapsed to an invisible sliver.
+  return <Radial {...props} />;
 }
 
 export interface RingChartProps extends RadialProps {}

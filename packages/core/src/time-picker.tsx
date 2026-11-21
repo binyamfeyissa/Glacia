@@ -167,9 +167,12 @@ function Wheel({
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
-    // The spacer rows sit above the first item, so the centre of item `i`
-    // is (i + PAD_ROWS) rows down, not i.
-    const target = (selectedIndex + PAD_ROWS) * ROW_HEIGHT;
+    // Items snap with scroll-snap-align: center, so item `i` rests centred
+    // in the column at scrollTop = i * ROW_HEIGHT exactly: the spacer rows
+    // only exist so the first and last items can reach the centre at all.
+    // (This used to add PAD_ROWS, which parked every wheel two rows past
+    // its value — 9:41 AM displayed as 11:43 PM under the highlight band.)
+    const target = selectedIndex * ROW_HEIGHT;
     reported.current = selectedIndex;
     if (Math.abs(el.scrollTop - target) < 1) return;
     // `scrollTo` is missing in some non-browser DOMs (and in jsdom), so fall
@@ -184,7 +187,10 @@ function Wheel({
   const settle = useCallback(() => {
     const el = scrollRef.current;
     if (!el) return;
-    const index = Math.round(el.scrollTop / ROW_HEIGHT) - PAD_ROWS;
+    // Snap positions are i * ROW_HEIGHT (see the centring effect above), so
+    // the resting index is the scroll offset in whole rows, with no spacer
+    // adjustment.
+    const index = Math.round(el.scrollTop / ROW_HEIGHT);
     const clamped = Math.max(0, Math.min(items.length - 1, index));
     if (clamped === reported.current) return;
     reported.current = clamped;

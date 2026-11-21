@@ -93,10 +93,17 @@ export function LiveLineChart({
   const xAt = (i: number) =>
     series.length <= 1 ? plot.x : plot.x + (i / (series.length - 1)) * plot.width;
 
-  const yTicks = ticks(domain, 3).map((v) => ({
-    value: y(v),
-    label: format ? format(v) : formatValue(v, { compact: true }),
-  }));
+  const tickValues = ticks(domain, 3);
+  const yTicks = tickValues
+    // The big live value sits at the top-left of the plot; when the newest
+    // sample is near the maximum, the top axis tick repeats the same number
+    // directly beneath it and reads as a duplicated label. The value display
+    // replaces that tick.
+    .filter((v) => !(showValue && v === Math.max(...tickValues)))
+    .map((v) => ({
+      value: y(v),
+      label: format ? format(v) : formatValue(v, { compact: true }),
+    }));
 
   if (series.length === 0) {
     return (

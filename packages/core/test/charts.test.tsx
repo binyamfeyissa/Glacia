@@ -249,6 +249,15 @@ describe("charts render without NaN geometry", () => {
     );
     expect(container.querySelectorAll("svg path").length).toBe(2);
     expect(hasNaN(container)).toBe(false);
+    // Regression: PieChart once passed thickness={0}, which Radial read as a
+    // ring whose hole equalled the full radius — the paths existed but had
+    // zero area and the pie was invisible. A pie slice is a wedge from the
+    // centre (default size 200 → centre 100,100) with a single arc.
+    for (const path of container.querySelectorAll("svg path")) {
+      const d = path.getAttribute("d") ?? "";
+      expect(d.startsWith("M 100 100 L")).toBe(true);
+      expect(d.match(/A/g)?.length).toBe(1);
+    }
   });
 
   it("does not divide by zero when all slices are zero", () => {

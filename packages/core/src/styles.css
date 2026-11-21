@@ -3119,6 +3119,17 @@
   display: flex;
   gap: 8px;
   font-size: 11px;
+  /* Hidden until the component marks it visible. This base rule used to
+     paint the pill unconditionally, so any chart rendering its tooltip
+     outside a .gl-chart-wrap (funnel, radial, …) showed a permanent empty
+     grey bar at the top of the plot. */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
+}
+
+.gl-chart-tooltip[data-visible] {
+  opacity: 1;
 }
 
 .gl-chart-tooltip-label {
