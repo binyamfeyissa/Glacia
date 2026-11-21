@@ -8054,3 +8054,10 @@
     animation: none !important;
   }
 }
+
+.gl-chart-radar-label {
+  font-size: 11px;
+  font-weight: 500;
+  fill: var(--gl-foreground);
+  opacity: 0.75;
+}

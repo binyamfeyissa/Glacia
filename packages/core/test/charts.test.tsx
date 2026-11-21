@@ -265,3 +265,21 @@ describe("charts render without NaN geometry", () => {
     expect(screen.getByRole("status")).toBeTruthy();
   });
 });
+
+describe("RadarChart axis labels", () => {
+  it("draws each axis label as SVG text at its vertex, not as a list under the chart", async () => {
+    const { RadarChart } = await import("../src/charts/radar-chart");
+    const { container } = render(
+      <RadarChart
+        axes={["Speed", "Quality", "Cost"]}
+        series={[{ name: "Current", values: [70, 85, 60] }]}
+      />,
+    );
+    const texts = [...container.querySelectorAll("svg text.gl-chart-radar-label")].map(
+      (t) => t.textContent,
+    );
+    expect(texts).toEqual(["Speed", "Quality", "Cost"]);
+    // The old detached <ul> of axis names must not come back.
+    expect(container.querySelector("ul.gl-chart-axis-labels")).toBeNull();
+  });
+});

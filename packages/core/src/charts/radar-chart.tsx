@@ -53,7 +53,8 @@ export function RadarChart({
   }
 
   const centre = size / 2;
-  const radius = centre - 28;
+  // Room beyond the outer ring for the axis labels drawn at each vertex.
+  const radius = centre - 40;
 
   const highest = series.flatMap((s) => s.values).reduce((a, b) => Math.max(a, b), 0);
   const scaleMax = max ?? (highest || 1);
@@ -117,6 +118,30 @@ export function RadarChart({
             );
           })}
 
+          {/* Axis labels: one at each vertex, just outside the outer ring,
+              anchored by direction so they read around the chart. (They used
+              to be a plain list under the chart, detached from the axes.) */}
+          {axes.map((axis, i) => {
+            const angle = (i / axes.length) * TAU - Math.PI / 2;
+            const cos = Math.cos(angle);
+            const sin = Math.sin(angle);
+            const x = centre + cos * (radius + 14);
+            const y = centre + sin * (radius + 14);
+            const anchor = cos > 0.35 ? "start" : cos < -0.35 ? "end" : "middle";
+            const dy = sin < -0.35 ? -3 : sin > 0.35 ? 11 : 4;
+            return (
+              <text
+                key={`label-${axis}`}
+                x={x}
+                y={y + dy}
+                textAnchor={anchor}
+                className="gl-chart-radar-label"
+              >
+                {axis}
+              </text>
+            );
+          })}
+
           {/* Data */}
           {series.map((s, si) => {
             const color = s.color ?? seriesColor(si, palette);
@@ -161,12 +186,6 @@ export function RadarChart({
           )}
         </ChartTooltip>
       </div>
-
-      <ul className="gl-chart-axis-labels">
-        {axes.map((axis) => (
-          <li key={axis}>{axis}</li>
-        ))}
-      </ul>
     </div>
   );
 }

@@ -80,7 +80,7 @@ const chartCases: Record<string, () => React.ReactNode> = {
   ),
   "radar-chart": () => (
     <RadarChart
-      size={220}
+      size={300}
       axes={["Speed", "Quality", "Cost", "Support", "Uptime", "Docs"]}
       series={[
         { name: "Current", values: [78, 84, 66, 72, 94, 58] },

@@ -733,7 +733,7 @@ export function ComponentDemo({ slug }: { slug: string }) {
 
     case "scroll-area":
       return (
-        <ScrollArea style={{ height: 160, width: 280, borderRadius: 16, border: "1px solid var(--gl-separator)", padding: 16 }}>
+        <ScrollArea type="always" style={{ height: 160, width: 280, borderRadius: 16, border: "1px solid var(--gl-separator)", padding: 16 }}>
           <div className="space-y-3 text-sm">
             <p className="font-medium">Apple's Liquid Glass</p>
             <p>Real optical refraction on web and iOS from one API.</p>
@@ -1090,7 +1090,12 @@ export function ComponentDemo({ slug }: { slug: string }) {
               {["iPhone 16 Pro", "Apple Watch Ultra 2", "MacBook Pro M4"].map((title, i) => (
                 <CarouselItem key={i}>
                   <div className="p-8 border rounded-2xl text-center gl-glass">
-                    <span className="text-2xl mb-2 block"></span>
+                    <span className="mb-2 flex justify-center" aria-hidden>
+                      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                        <rect x="7" y="2.5" width="10" height="19" rx="2.5" />
+                        <line x1="10.5" y1="18.5" x2="13.5" y2="18.5" />
+                      </svg>
+                    </span>
                     <h4 className="font-semibold">{title}</h4>
                     <p className="text-xs opacity-70 mt-1">Engineered with Liquid Glass</p>
                   </div>
