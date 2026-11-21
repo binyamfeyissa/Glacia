@@ -46,6 +46,7 @@ const FILE_OVERRIDES = {
   "response": "ai/ai-primitives",
   "panelside": "ai/ai-primitives",
   "ai-input": "ai/ai-primitives",
+  "shimmer": "ai/ai-primitives",
   // Blocks
   "boarding-pass": "blocks/boarding-pass-block",
   "activity": "blocks/activity-block",
@@ -78,7 +79,7 @@ const COMPONENTS = [
   "bump-chart", "live-line-chart",
   // Wave 5 — AI conversation primitives
   "plan", "response",
-  "panelside", "ai-input",
+  "panelside", "ai-input", "shimmer",
   // Wave 5 — Composed blocks
   "boarding-pass", "activity",
 ];

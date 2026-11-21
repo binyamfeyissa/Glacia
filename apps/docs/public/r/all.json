@@ -101,6 +101,7 @@
     "/r/response.json",
     "/r/panelside.json",
     "/r/ai-input.json",
+    "/r/shimmer.json",
     "/r/boarding-pass.json",
     "/r/activity.json"
   ],

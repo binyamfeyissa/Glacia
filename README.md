@@ -18,7 +18,7 @@
   <a href="https://github.com/binyamfeyissa"><img src="https://img.shields.io/badge/Author-Binyam%20Feyissa-blueviolet.svg" alt="Author: Binyam Feyissa"></a>
   <a href="https://github.com/binyamfeyissa/Glacia/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
   <a href="https://glacia.binyamfeyissa.dev"><img src="https://img.shields.io/badge/Tests-501%20passing-brightgreen.svg" alt="Tests"></a>
-  <a href="https://glacia.binyamfeyissa.dev"><img src="https://img.shields.io/badge/Registry-97%20components-teal.svg" alt="Registry"></a>
+  <a href="https://glacia.binyamfeyissa.dev"><img src="https://img.shields.io/badge/Registry-98%20components-teal.svg" alt="Registry"></a>
   <a href="https://glacia.binyamfeyissa.dev"><img src="https://img.shields.io/badge/Docs-glacia.binyamfeyissa.dev-black.svg" alt="Documentation"></a>
 </p>
 
@@ -177,7 +177,7 @@ npx glacia add button
 # Add multiple components at once:
 npx glacia add dialog card tabs combobox calendar carousel chart
 
-# Add all 97 registry components:
+# Add all 98 registry components:
 npx glacia add all
 ```
 
@@ -185,7 +185,7 @@ npx glacia add all
 
 ---
 
-## Component Catalog (97 Items & 10 Blocks)
+## Component Catalog (98 Items & 10 Blocks)
 
 ### 1. Primitives & Surfaces
 - `Glass` — Base refractive lens surface with dynamic specular highlight and edge chromatic dispersion.

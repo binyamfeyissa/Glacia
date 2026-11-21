@@ -1,3 +1,5 @@
+import { componentSlugs } from "./component-slugs";
+
 // The two platforms Glacia documents.
 //
 // They are kept in one place because the doc site, the header switcher, the
@@ -55,12 +57,47 @@ export const platformFromPathname = (pathname: string): Platform | null => {
   return match ? (match[1] as Platform) : null;
 };
 
+/** Sections that exist as routes under both platforms. */
+const SHARED_SECTIONS = new Set([
+  "getting-started",
+  "installation",
+  "components",
+  "blocks",
+  "charts",
+  "hooks",
+  "theming",
+  "styling",
+  "sizing",
+  "performance",
+  "accessibility",
+  "troubleshooting",
+  "upgrading",
+]);
+
 /**
- * Swapping platform keeps the reader on the same page: /platform/web/getting-started
- * becomes /platform/mobile/getting-started. Sections that only exist on one
- * platform fall back to that platform's index.
+ * Swapping platform keeps the reader on the same page when that page exists
+ * on the other platform: /platform/web/getting-started becomes
+ * /platform/mobile/getting-started, and a component page swaps only when the
+ * other platform ships that component. Anything else falls back to the other
+ * platform's home or section index, so the switcher never links to a 404.
  */
 export const counterpartPath = (pathname: string, to: Platform): string => {
-  const rest = pathname.replace(/^\/platform\/(web|mobile)/, "");
-  return `/platform/${to}${rest || ""}`;
+  const home = `/platform/${to}`;
+  const targetSlugs = new Set(componentSlugs(to));
+
+  const componentPage = pathname.match(/^(?:\/platform\/(?:web|mobile))?\/components\/([a-z0-9-]+)$/);
+  if (componentPage) {
+    const slug = componentPage[1];
+    return targetSlugs.has(slug) ? `${home}/components/${slug}` : `${home}/components`;
+  }
+
+  const platformSection = pathname.match(/^\/platform\/(?:web|mobile)\/([a-z-]+)(\/.*)?$/);
+  if (platformSection && SHARED_SECTIONS.has(platformSection[1])) {
+    return `${home}/${platformSection[1]}${platformSection[2] ?? ""}`;
+  }
+
+  if (pathname === "/components") return `${home}/components`;
+  if (pathname === "/blocks" || pathname.startsWith("/blocks/")) return `${home}/blocks`;
+
+  return home;
 };
