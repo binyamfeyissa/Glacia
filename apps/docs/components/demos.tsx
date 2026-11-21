@@ -490,7 +490,7 @@ export function ComponentDemo({ slug }: { slug: string }) {
     case "select":
       return (
         <Select defaultValue="chromeweb">
-          <SelectTrigger className="w-56">
+          <SelectTrigger className="w-72">
             <SelectValue placeholder="Select platform" />
           </SelectTrigger>
           <SelectContent>

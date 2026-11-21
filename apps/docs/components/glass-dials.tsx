@@ -185,7 +185,7 @@ export function GlassDials() {
           </div>
 
           <div className="glass-dials-foot">
-            <span>Updates all 81 components live</span>
+            <span>Updates all 96 components live</span>
           </div>
         </div>
       )}

@@ -8,14 +8,18 @@
   RewriteEngine On
   RewriteBase /
 
-  # 1. If file or directory exists directly, serve it
+  # 1. Clean URLs first: /platform/web -> /platform/web.html when the .html
+  #    page exists. This must run before the directory check, because most
+  #    page paths also exist as directories (e.g. /platform/web/ holds the
+  #    section pages) and a directory has no index.html of its own — letting
+  #    the directory win returns a 404 for a page that exists.
+  RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+  RewriteRule ^(.*?)/?$ $1.html [L]
+
+  # 2. If a real file or directory exists directly, serve it
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
-
-  # 2. Support clean URLs: /components/button -> /components/button.html
-  RewriteCond %{DOCUMENT_ROOT}/$1.html -f
-  RewriteRule ^(.*?)/?$ $1.html [L]
 
   # 3. Support clean URLs if nested: %{REQUEST_FILENAME}.html
   RewriteCond %{REQUEST_FILENAME}.html -f

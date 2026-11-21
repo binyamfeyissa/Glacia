@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 import { ComponentPreview } from "../../../../../components/component-preview";
 import { ComponentDemo } from "../../../../../components/demos";
-import { NativeDemo } from "../../../../../components/native-demos";
+import { DevicePreview } from "../../../../../components/device-preview";
 import { PlatformPage } from "../../../../../components/platform-page";
 import { CopyBlock } from "../../../../../components/copy-block";
 import { COMPONENTS_DATA } from "../../../../../data/components-data";
@@ -207,7 +207,7 @@ export default async function PlatformComponentPage({
         ]}
       />
       <ComponentPreview name={component.name} slug={component.slug} code={component.codeSnippet}>
-        <NativeDemo slug={component.slug} />
+        <DevicePreview name={component.name} />
       </ComponentPreview>
 
       <section className="docs-section">

@@ -26,14 +26,14 @@ export const PACKAGES: Record<
     id: "glacia",
     name: "glacia",
     tag: "React & Next.js web",
-    summary: "All 81 liquid glass components for the web.",
+    summary: "All 96 liquid glass components for the web.",
     install: {
       npm: "npm install glacia",
       pnpm: "pnpm add glacia",
       yarn: "yarn add glacia",
       bun: "bun add glacia",
     },
-    includes: "81 components · ESM + CJS · TypeScript types · glacia/styles.css",
+    includes: "96 components · ESM + CJS · TypeScript types · glacia/styles.css",
     href: "https://www.npmjs.com/package/glacia",
   },
   "glacia-native": {

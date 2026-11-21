@@ -236,7 +236,7 @@ export function Header() {
           </div>
 
           <div className="search-dialog-foot">
-            <span>81 components · 10 blocks</span>
+            <span>96 components · 10 blocks</span>
             <span>
               <kbd>esc</kbd> to close
             </span>

@@ -1,434 +1,170 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import {
-  ArrowRightIcon,
-  ArrowUpRightIcon,
-  CheckIcon,
-  LayersIcon,
-  SparkIcon,
-  ShieldIcon,
-  CodeIcon,
-} from "../../components/icons";
+import { CheckIcon, ShieldIcon, SparkIcon } from "../../components/icons";
 
 interface TemplateItem {
   id: string;
   name: string;
   tagline: string;
   description: string;
-  category: string;
-  pageCount: number;
-  price: string;
-  badge?: string;
-  features: string[];
-  pages: string[];
-  accentColor: string;
+  platform: "Web" | "Mobile";
+  kind: "Free" | "Paid";
+  screens: string;
 }
 
 const TEMPLATES: TemplateItem[] = [
+  // The five free templates — deliberately minimal, built first.
   {
-    id: "nebula-cloud",
-    name: "Nebula Cloud OS",
-    tagline: "Next-gen infrastructure & cloud management platform",
+    id: "auth-kit",
+    name: "Auth Kit",
+    tagline: "Sign in, sign up, and account recovery for the web",
     description:
-      "A complete multi-tenant cloud control plane with server topology graphs, Kubernetes pod monitors, live logs streaming, IAM policy editor, and billing breakdowns.",
-    category: "DevOps & Cloud",
-    pageCount: 14,
-    price: "$10",
-    badge: "Bestseller",
-    accentColor: "#38bdf8",
-    features: [
-      "Real-time server topology graph",
-      "Kubernetes cluster & pod inspector",
-      "Granular IAM role editor & audit logs",
-      "Cost breakdown & anomaly alerts",
-      "Dark & light liquid glass surfaces",
-    ],
-    pages: [
-      "Cluster Overview",
-      "Workloads & Pods",
-      "Network & VPCs",
-      "Storage Volumes",
-      "Cloud Shell Console",
-      "IAM & Policies",
-      "Audit Trail",
-      "Metrics & Traces",
-      "Cost & Invoicing",
-      "Security Alerts",
-      "Team Management",
-      "API Credentials",
-      "Notification Webhooks",
-      "Workspace Settings",
-    ],
+      "The front door of the Admin Core dashboard: login, registration, password reset, and verification screens in Liquid Glass.",
+    platform: "Web",
+    kind: "Free",
+    screens: "6 screens",
   },
   {
-    id: "aura-capital",
-    name: "Aura Capital",
-    tagline: "Institutional fintech & wealth management suite",
+    id: "pricing-billing",
+    name: "Pricing + Billing",
+    tagline: "Pricing tables and a working billing settings flow",
     description:
-      "Full-spectrum financial operations: portfolio performance analytics, multi-currency crypto & fiat wallets, automated rebalancing, and compliance-ready statements.",
-    category: "Fintech & Banking",
-    pageCount: 12,
-    price: "$10",
-    badge: "Popular",
-    accentColor: "#34d399",
-    features: [
-      "Interactive candlestick & area charts",
-      "Multi-asset wallet (fiat, equity, crypto)",
-      "Instant ACH/wire payment transfer flow",
-      "Tax lot accounting & capital gains",
-      "Biometric passkey authentication UI",
-    ],
-    pages: [
-      "Executive Dashboard",
-      "Asset Holdings",
-      "Live Order Book",
-      "Transactions & Wires",
-      "Tax Harvesting",
-      "Multi-Currency Wallet",
-      "Scheduled Deposits",
-      "Monthly Statements",
-      "Risk Tolerances",
-      "KYC & Verification",
-      "Linked Bank Accounts",
-      "Security & Passkeys",
-    ],
+      "Plan comparison, checkout-ready pricing sections, and the billing pages every SaaS needs, built from Glacia components.",
+    platform: "Web",
+    kind: "Free",
+    screens: "5 screens",
   },
   {
-    id: "cortex-ai",
-    name: "Cortex Intelligence Studio",
-    tagline: "AI agent orchestrator & model fine-tuning console",
+    id: "landing-kit",
+    name: "Landing Kit",
+    tagline: "A minimal marketing page that shows the glass off",
     description:
-      "Production dashboard for managing LLM agents, vector embeddings, prompt playground with side-by-side model comparisons, and API token usage metering.",
-    category: "AI & Machine Learning",
-    pageCount: 11,
-    price: "$10",
-    badge: "New Release",
-    accentColor: "#c084fc",
-    features: [
-      "Multi-agent swarm execution graph",
-      "Prompt comparison playground",
-      "Vector database embeddings viewer",
-      "Token usage & cost heatmaps",
-      "Model fine-tuning progress tracker",
-    ],
-    pages: [
-      "Agent Swarm Orchestrator",
-      "Prompt Laboratory",
-      "Model Leaderboard",
-      "Vector Index Browser",
-      "Fine-Tuning Jobs",
-      "API Usage & Quotas",
-      "Evaluation Datasets",
-      "Safety Filters",
-      "Live Inference Logs",
-      "Billing & Cost Allocations",
-      "API Key Management",
-    ],
+      "Hero, features, and call-to-action sections with real Liquid Glass surfaces — the fastest way to feel the library.",
+    platform: "Web",
+    kind: "Free",
+    screens: "4 sections",
   },
   {
-    id: "solstice-commerce",
-    name: "Solstice Commerce",
-    tagline: "Modern luxury storefront & enterprise merchant backoffice",
+    id: "onboarding-flow",
+    name: "Onboarding Flow",
+    tagline: "First-run walkthrough screens for React Native",
     description:
-      "Dual-sided template featuring a sleek consumer storefront with liquid glass product showcases, and a robust merchant inventory and fulfillment hub.",
-    category: "E-Commerce",
-    pageCount: 13,
-    price: "$10",
-    accentColor: "#fb923c",
-    features: [
-      "Liquid glass product catalog & quick-view",
-      "Dynamic 3-step checkout drawer",
-      "Live stock & warehouse sync",
-      "Customer lifetime value analytics",
-      "Discount rule builder",
-    ],
-    pages: [
-      "Modern Storefront",
-      "Product Detail Page",
-      "Slide-out Cart & Checkout",
-      "Merchant Sales Overview",
-      "Product Catalog Grid",
-      "Inventory & Warehouses",
-      "Order Fulfillment",
-      "Customer Directory",
-      "Promo & Coupon Engine",
-      "Returns & Refunds",
-      "Shipping Methods",
-      "Analytics & Conversion",
-      "Store Settings",
-    ],
+      "Swipeable intro screens with glass cards and a clean finish into sign-in. The screen set every app rebuilds by hand.",
+    platform: "Mobile",
+    kind: "Free",
+    screens: "5 screens",
   },
   {
-    id: "pulse-health",
-    name: "Pulse Health OS",
-    tagline: "Clinical workflows & patient telehealth ecosystem",
+    id: "profile-settings",
+    name: "Profile + Settings",
+    tagline: "Profile, edit, notifications, and appearance for mobile",
     description:
-      "Designed for clinics and digital health startups: interactive patient charts, appointment calendar, live telehealth video room UI, and prescription refills.",
-    category: "Healthcare & Life Sciences",
-    pageCount: 12,
-    price: "$10",
-    accentColor: "#f43f5e",
-    features: [
-      "Longitudinal patient health timeline",
-      "Doctor appointment scheduling calendar",
-      "Telehealth video consultation mockup",
-      "e-Prescription and pharmacy routing",
-      "HIPAA-conscious privacy layout",
-    ],
-    pages: [
-      "Clinical Schedule",
-      "Patient Census Directory",
-      "Medical Chart & History",
-      "Telehealth Consultation Room",
-      "Lab & Diagnostic Results",
-      "Prescription Manager",
-      "Insurance & Claims",
-      "Secure Care Messaging",
-      "Vitals Monitoring",
-      "Provider Roster",
-      "Patient Portal Access",
-      "Compliance & Logs",
-    ],
+      "The settings stack nobody enjoys building: profile, edit profile, notification preferences, and appearance, in glass.",
+    platform: "Mobile",
+    kind: "Free",
+    screens: "6 screens",
   },
-  {
-    id: "aether-suite",
-    name: "Aether Project Suite",
-    tagline: "Collaborative product roadmaps & engineering sprint tracker",
-    description:
-      "High-speed issue tracking, interactive Kanban boards with spring physics, milestone Gantt views, code repo integration, and release velocity reports.",
-    category: "Productivity & SaaS",
-    pageCount: 10,
-    price: "$10",
-    accentColor: "#60a5fa",
-    features: [
-      "Fluid drag-and-drop Kanban columns",
-      "Sprint velocity & burndown charts",
-      "Milestone roadmap & dependencies",
-      "Git commit and branch linking",
-      "Keyboard-first command palette",
-    ],
-    pages: [
-      "Active Sprint Board",
-      "Product Roadmap",
-      "Issue Backlog",
-      "Sprint Retrospective",
-      "Team Workload Matrix",
-      "Repository Releases",
-      "Documentation Wiki",
-      "Velocity & Burndown",
-      "Custom Field Setup",
-      "Organization Settings",
-    ],
-  },
+  // Paid catalogue — in production now, sold at launch and after.
+  { id: "admin-core", name: "Glacia Admin Core", tagline: "SaaS analytics dashboard", description: "The flagship web dashboard: overview, analytics, users, and settings as a full routed Next.js app.", platform: "Web", kind: "Paid", screens: "14 screens" },
+  { id: "admin-suite", name: "Glacia Admin Suite", tagline: "Full admin app — mail, chat, kanban, calendar", description: "The complete admin: dashboards plus mail, chat, kanban, calendar, and file screens in one app.", platform: "Web", kind: "Paid", screens: "30 screens" },
+  { id: "storefront", name: "Glacia Storefront", tagline: "E-commerce storefront", description: "Catalogue, product, cart, and checkout flows with glass product surfaces throughout.", platform: "Web", kind: "Paid", screens: "28 screens" },
+  { id: "crm", name: "Glacia CRM", tagline: "Customer relationship dashboard", description: "Pipeline, contacts, deals, and activity timelines built for daily sales work.", platform: "Web", kind: "Paid", screens: "22 screens" },
+  { id: "ai-console", name: "Glacia AI Console", tagline: "AI chat and SaaS console", description: "Chat-first product shell with model pickers, usage metering, and team settings.", platform: "Web", kind: "Paid", screens: "16 screens" },
+  { id: "finance-web", name: "Glacia Finance", tagline: "Banking and finance dashboard", description: "Accounts, cards, transfers, and statements — the fintech layout set, in glass.", platform: "Web", kind: "Paid", screens: "20 screens" },
+  { id: "launch", name: "Glacia Launch", tagline: "SaaS marketing site kit", description: "A complete marketing site: landing, pricing, blog, and docs shells that match the product.", platform: "Web", kind: "Paid", screens: "18 screens" },
+  { id: "commerce-admin", name: "Glacia Commerce Admin", tagline: "E-commerce admin", description: "Orders, products, inventory, and customers for running a store day to day.", platform: "Web", kind: "Paid", screens: "24 screens" },
+  { id: "academy", name: "Glacia Academy", tagline: "Course platform", description: "Course catalogue, player, progress, and instructor views for learning products.", platform: "Web", kind: "Paid", screens: "22 screens" },
+  { id: "docs", name: "Glacia Docs", tagline: "Documentation site", description: "A docs site shell with search, navigation, and article layouts — like this one, in glass.", platform: "Web", kind: "Paid", screens: "12 screens" },
+  { id: "bank", name: "Glacia Bank", tagline: "Mobile banking app", description: "Accounts, cards, transfers, and statements as a complete React Native app.", platform: "Mobile", kind: "Paid", screens: "24 screens" },
+  { id: "food", name: "Glacia Food", tagline: "Food delivery app", description: "Browse, order, track: the full delivery flow with glass order surfaces.", platform: "Mobile", kind: "Paid", screens: "22 screens" },
+  { id: "shop", name: "Glacia Shop", tagline: "Mobile commerce app", description: "Catalogue, product, cart, and checkout for a phone-first store.", platform: "Mobile", kind: "Paid", screens: "20 screens" },
+  { id: "fit", name: "Glacia Fit", tagline: "Fitness tracking app", description: "Workouts, activity rings, and history with glass stat surfaces.", platform: "Mobile", kind: "Paid", screens: "18 screens" },
+  { id: "wallet", name: "Glacia Wallet", tagline: "Payments wallet app", description: "Balances, send and request flows, and transaction history in glass.", platform: "Mobile", kind: "Paid", screens: "18 screens" },
+  { id: "chat", name: "Glacia Chat", tagline: "Messaging app", description: "Conversations, threads, and media messages with glass bubbles and bars.", platform: "Mobile", kind: "Paid", screens: "16 screens" },
+  { id: "grocery", name: "Glacia Grocery", tagline: "Grocery delivery app", description: "Aisles, lists, and scheduled delivery flows for grocery products.", platform: "Mobile", kind: "Paid", screens: "18 screens" },
+  { id: "travel", name: "Glacia Travel", tagline: "Travel booking app", description: "Search, stays, and itinerary screens for travel products.", platform: "Mobile", kind: "Paid", screens: "20 screens" },
+  { id: "social", name: "Glacia Social", tagline: "Social app shell", description: "Feed, profile, and post composer — the social starter set in glass.", platform: "Mobile", kind: "Paid", screens: "18 screens" },
+  { id: "spend", name: "Glacia Spend", tagline: "Expense tracking app", description: "Budgets, categories, and spending insights for personal finance.", platform: "Mobile", kind: "Paid", screens: "16 screens" },
 ];
 
+const FILTERS = ["All", "Free", "Web", "Mobile"] as const;
+
 export default function TemplatesPage() {
-  const [selectedTemplate, setSelectedTemplate] = useState<TemplateItem | null>(null);
-  const [activeCategory, setActiveCategory] = useState<string>("All");
-  const [checkoutModalOpen, setCheckoutModalOpen] = useState(false);
-  const [purchasedTemplate, setPurchasedTemplate] = useState<TemplateItem | null>(null);
-
-  const categories = ["All", ...Array.from(new Set(TEMPLATES.map((t) => t.category)))];
-
-  const filteredTemplates =
-    activeCategory === "All"
-      ? TEMPLATES
-      : TEMPLATES.filter((t) => t.category === activeCategory);
-
-  const handleBuyClick = (tmpl: TemplateItem) => {
-    setPurchasedTemplate(tmpl);
-    setCheckoutModalOpen(true);
-  };
+  const [filter, setFilter] = useState<(typeof FILTERS)[number]>("All");
+  const shown = TEMPLATES.filter((t) =>
+    filter === "All" ? true : filter === "Free" ? t.kind === "Free" : t.platform === filter,
+  );
 
   return (
     <div className="templates-page">
-      {/* Background aurora */}
-      <div className="site-aurora" aria-hidden="true" />
-
-      {/* Hero Header */}
       <section className="templates-hero">
         <div className="templates-hero-inner">
-          <div className="templates-eyebrow">
-            <span className="status-dot ok" />
-            <span>Official Application Templates</span>
-          </div>
-
-          <h1 className="templates-title">
-            Complete Applications.
-            <br />
-            <span className="templates-title-accent">Built on Liquid Glass.</span>
-          </h1>
-
-          <p className="templates-sub">
-            Skip months of design and front-end engineering. Every template is a production-grade,
-            10+ page application suite featuring Glacia’s optical glass materials, responsive layouts,
-            clean Next.js 15 App Router architecture, and full source code.
+          <span className="templates-eyebrow">
+            <SparkIcon width={14} height={14} />
+            Template store
+          </span>
+          <h1 className="templates-title">Full apps, built with Glacia.</h1>
+          <p className="templates-subtitle">
+            Every template is a real, runnable app assembled from the same Glacia components
+            documented on this site — no mockups, no placeholder screens. The store opens at
+            launch: five templates are free, and the paid catalogue follows the same day.
           </p>
-
           <div className="templates-meta-badges">
             <span className="meta-badge">
               <CheckIcon width={14} height={14} />
-              10+ Full Pages Each
+              5 free templates at launch
             </span>
             <span className="meta-badge">
               <CheckIcon width={14} height={14} />
-              Next.js 15 & React 19
+              20+ web and 20+ mobile on the way
             </span>
             <span className="meta-badge">
               <CheckIcon width={14} height={14} />
-              TypeScript & Tailwind
+              Next.js, React Native &amp; Expo
             </span>
             <span className="meta-badge">
-              <CheckIcon width={14} height={14} />
-              Only $10 Instant Download
+              <ShieldIcon width={14} height={14} />
+              Delivered privately by email
             </span>
           </div>
         </div>
       </section>
 
-      {/* Category Filter */}
       <div className="templates-filter-wrap">
         <div className="templates-filters">
-          {categories.map((cat) => (
+          {FILTERS.map((f) => (
             <button
-              key={cat}
+              key={f}
               type="button"
-              className={`filter-btn ${activeCategory === cat ? "active" : ""}`}
-              onClick={() => setActiveCategory(cat)}
+              className={`filter-btn ${filter === f ? "active" : ""}`}
+              onClick={() => setFilter(f)}
             >
-              {cat}
+              {f}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Templates Grid */}
       <section className="templates-grid-section">
         <div className="templates-grid">
-          {filteredTemplates.map((template) => (
+          {shown.map((template) => (
             <article key={template.id} className="template-card">
-              {/* Card visual mockup window */}
-              <div className="template-preview-window">
-                <div className="preview-top-bar">
-                  <div className="preview-dots">
-                    <span className="dot red" />
-                    <span className="dot yellow" />
-                    <span className="dot green" />
-                  </div>
-                  <span className="preview-url">glacia://app/{template.id}</span>
-                  <span className="preview-tag">{template.category}</span>
-                </div>
-
-                <div className="preview-canvas">
-                  {/* Glass Dashboard Simulation */}
-                  <div className="preview-mini-sidebar">
-                    <div className="mini-avatar" style={{ background: template.accentColor }} />
-                    <div className="mini-nav-item active" />
-                    <div className="mini-nav-item" />
-                    <div className="mini-nav-item" />
-                    <div className="mini-nav-item" />
-                  </div>
-
-                  <div className="preview-mini-main">
-                    <div className="preview-mini-header">
-                      <div className="mini-title-bar" />
-                      <div className="mini-pill" />
-                    </div>
-
-                    <div className="preview-mini-cards">
-                      <div className="mini-card mini-glass">
-                        <div className="mini-line w-60" />
-                        <div
-                          className="mini-stat"
-                          style={{ color: template.accentColor }}
-                        >
-                          $482.9k
-                        </div>
-                        <div className="mini-chart-bar" />
-                      </div>
-                      <div className="mini-card mini-glass">
-                        <div className="mini-line w-40" />
-                        <div className="mini-stat">99.98%</div>
-                        <div className="mini-chart-bar filled" />
-                      </div>
-                      <div className="mini-card mini-glass">
-                        <div className="mini-line w-50" />
-                        <div className="mini-stat">1,420</div>
-                        <div className="mini-chart-bar" />
-                      </div>
-                    </div>
-
-                    <div className="preview-mini-table mini-glass">
-                      <div className="mini-table-row head" />
-                      <div className="mini-table-row" />
-                      <div className="mini-table-row" />
-                    </div>
-                  </div>
-                </div>
-
-                {template.badge && (
-                  <span className="template-badge">{template.badge}</span>
-                )}
-                <span className="template-pages-pill">{template.pageCount} Pages</span>
-              </div>
-
-              {/* Card Information */}
               <div className="template-card-body">
                 <div className="template-title-row">
                   <h2 className="template-name">{template.name}</h2>
-                  <div className="template-price-pill">{template.price}</div>
-                </div>
-
-                <p className="template-tagline">{template.tagline}</p>
-                <p className="template-desc">{template.description}</p>
-
-                {/* Included features */}
-                <div className="template-features">
-                  {template.features.slice(0, 4).map((feat, i) => (
-                    <div key={i} className="template-feature-item">
-                      <CheckIcon width={13} height={13} className="feature-check" />
-                      <span>{feat}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Included pages tags */}
-                <div className="template-pages-preview">
-                  <span className="pages-label">Included views ({template.pageCount}):</span>
-                  <div className="pages-chips">
-                    {template.pages.slice(0, 6).map((pageName, idx) => (
-                      <span key={idx} className="page-chip">
-                        {pageName}
-                      </span>
-                    ))}
-                    {template.pages.length > 6 && (
-                      <span className="page-chip more">
-                        +{template.pages.length - 6} more
-                      </span>
-                    )}
+                  <div className="template-price-pill">
+                    {template.kind === "Free" ? "Free" : "Paid"}
                   </div>
                 </div>
-
-                {/* Action buttons */}
-                <div className="template-card-actions">
-                  <button
-                    type="button"
-                    className="btn btn-primary buy-btn"
-                    onClick={() => handleBuyClick(template)}
-                  >
-                    <span>Get Template</span>
-                    <span className="buy-price">{template.price}</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    className="btn btn-glass preview-btn"
-                    onClick={() => setSelectedTemplate(template)}
-                  >
-                    Page Directory
-                  </button>
+                <p className="template-tagline">{template.tagline}</p>
+                <p className="template-desc">{template.description}</p>
+                <div className="template-pages-preview">
+                  <div className="pages-chips">
+                    <span className="page-chip">{template.platform}</span>
+                    <span className="page-chip">{template.screens}</span>
+                    <span className="page-chip more">In production — available at launch</span>
+                  </div>
                 </div>
               </div>
             </article>
@@ -436,171 +172,34 @@ export default function TemplatesPage() {
         </div>
       </section>
 
-      {/* Pages inspection modal */}
-      {selectedTemplate && (
-        <div className="modal-backdrop" onClick={() => setSelectedTemplate(null)}>
-          <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-head">
-              <div>
-                <h3 className="modal-title">{selectedTemplate.name}</h3>
-                <p className="modal-sub">
-                  Complete directory of all {selectedTemplate.pageCount} views included for{" "}
-                  {selectedTemplate.price}
-                </p>
-              </div>
-              <button
-                type="button"
-                className="modal-close"
-                onClick={() => setSelectedTemplate(null)}
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="modal-pages-list">
-              {selectedTemplate.pages.map((p, idx) => (
-                <div key={idx} className="modal-page-row">
-                  <span className="page-num">{String(idx + 1).padStart(2, "0")}</span>
-                  <span className="page-title">{p}</span>
-                  <span className="page-status">Complete · Next.js 15</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="modal-foot">
-              <button
-                type="button"
-                className="btn btn-quiet"
-                onClick={() => setSelectedTemplate(null)}
-              >
-                Close
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => {
-                  setSelectedTemplate(null);
-                  handleBuyClick(selectedTemplate);
-                }}
-              >
-                Buy {selectedTemplate.name} · {selectedTemplate.price}
-              </button>
-            </div>
-          </div>
+      <section className="templates-faq">
+        <h3>How buying works</h3>
+        <div className="faq-item">
+          <h4>How do I get a template after paying?</h4>
+          <p>
+            Checkout sends you an email with your order confirmation and a private download
+            link. Paid templates are never posted publicly — the link in your email is the
+            only copy.
+          </p>
         </div>
-      )}
-
-      {/* Instant Checkout Demo Modal */}
-      {checkoutModalOpen && purchasedTemplate && (
-        <div className="modal-backdrop" onClick={() => setCheckoutModalOpen(false)}>
-          <div className="modal-dialog checkout-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-head">
-              <div>
-                <h3 className="modal-title">Purchase {purchasedTemplate.name}</h3>
-                <p className="modal-sub">
-                  Instant repository access & full source code · One-time $10
-                </p>
-              </div>
-              <button
-                type="button"
-                className="modal-close"
-                onClick={() => setCheckoutModalOpen(false)}
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="checkout-body">
-              <div className="checkout-summary-card">
-                <div className="summary-left">
-                  <h4>{purchasedTemplate.name}</h4>
-                  <p>{purchasedTemplate.pageCount}+ Responsive Application Views · Full Source</p>
-                  <span className="summary-license">Commercial License Included</span>
-                </div>
-                <div className="summary-right">
-                  <div className="summary-amount">$10.00</div>
-                  <span className="summary-terms">One-time payment</span>
-                </div>
-              </div>
-
-              <div className="checkout-features-list">
-                <div className="feature-line">
-                  <CheckIcon width={14} height={14} className="feature-check" />
-                  <span>Immediate GitHub repository access & full .zip bundle</span>
-                </div>
-                <div className="feature-line">
-                  <CheckIcon width={14} height={14} className="feature-check" />
-                  <span>All 81 Glacia components & design tokens pre-configured</span>
-                </div>
-                <div className="feature-line">
-                  <CheckIcon width={14} height={14} className="feature-check" />
-                  <span>Next.js 15 App Router, React 19, TypeScript, Tailwind</span>
-                </div>
-                <div className="feature-line">
-                  <CheckIcon width={14} height={14} className="feature-check" />
-                  <span>Lifetime updates and unlimited client projects</span>
-                </div>
-              </div>
-
-              <div className="checkout-action-box">
-                <a
-                  href="https://github.com/binyamfeyissa/Glacia"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn btn-primary checkout-confirm-btn"
-                >
-                  Download Source Code · $10
-                  <ArrowRightIcon className="arrow" />
-                </a>
-                <p className="checkout-guarantee">
-                  30-day money-back guarantee · Secure payment processing
-                </p>
-              </div>
-            </div>
-          </div>
+        <div className="faq-item">
+          <h4>What can I build with a template?</h4>
+          <p>
+            Unlimited personal and commercial projects of your own. The one rule: do not
+            redistribute or resell the template itself.
+          </p>
         </div>
-      )}
-
-      {/* FAQ Section */}
-      <section className="templates-faq-section">
-        <div className="section-head">
-          <span className="section-kicker">Questions & Answers</span>
-          <h2 className="section-title">Everything you need to know.</h2>
+        <div className="faq-item">
+          <h4>What if it is not for me?</h4>
+          <p>Every paid template carries a 14-day refund, no questions asked.</p>
         </div>
-
-        <div className="templates-faq-grid">
-          <div className="faq-card">
-            <h3>What is included in each $10 template?</h3>
-            <p>
-              You receive the complete production source code (Next.js 15, TypeScript, Tailwind CSS)
-              with 10+ fully implemented pages, mock data generators, responsive navigation, dark/light
-              mode switching, and all custom Glacia liquid glass components.
-            </p>
-          </div>
-
-          <div className="faq-card">
-            <h3>Can I use the template for client or commercial projects?</h3>
-            <p>
-              Yes! Every template comes with a perpetual commercial license. You can build SaaS products,
-              internal company portals, or client deliverables with zero royalties or recurring fees.
-            </p>
-          </div>
-
-          <div className="faq-card">
-            <h3>How do I receive updates?</h3>
-            <p>
-              Once you purchase, you receive direct access to the GitHub repository branches with
-              regular updates for new Next.js and Glacia releases.
-            </p>
-          </div>
-
-          <div className="faq-card">
-            <h3>Can I customize the liquid glass styling?</h3>
-            <p>
-              Absolutely. All surface tokens, refraction strengths, specular highlights, and color palettes
-              are customizable via simple Tailwind classes or Glacia design tokens.
-            </p>
-          </div>
+        <div className="faq-item">
+          <h4>When does the store open?</h4>
+          <p>
+            At the Glacia launch, with the five free templates ready to download and the
+            first paid templates on sale. The rest of the catalogue lands in the days after,
+            in the order shown above.
+          </p>
         </div>
       </section>
     </div>
