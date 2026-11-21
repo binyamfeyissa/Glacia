@@ -86,3 +86,14 @@ describe("Chart", () => {
     expect(paths.length).toBeGreaterThanOrEqual(2);
   });
 });
+
+describe("Chart tooltip visibility contract", () => {
+  it("marks the hover tooltip data-visible (the stylesheet hides it otherwise)", async () => {
+    const { fireEvent } = await import("@testing-library/react");
+    const { container } = render(<Chart data={A} />);
+    fireEvent.mouseEnter(bars(container)[0]!);
+    const tip = container.querySelector(".gl-chart-tooltip");
+    expect(tip).not.toBeNull();
+    expect(tip!.hasAttribute("data-visible")).toBe(true);
+  });
+});

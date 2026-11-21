@@ -283,3 +283,29 @@ describe("RadarChart axis labels", () => {
     expect(container.querySelector("ul.gl-chart-axis-labels")).toBeNull();
   });
 });
+
+describe("LiveLineChart top tick", () => {
+  it("keeps the top axis tick when the latest value is mid-range", async () => {
+    const { LiveLineChart } = await import("../src/charts/live-line-chart");
+    const { container } = render(
+      <LiveLineChart initialValues={[30, 10, 20]} showValue running={false} />,
+    );
+    const tickTexts = [...container.querySelectorAll(".gl-chart-axis-y span")].map(
+      (t) => t.textContent,
+    );
+    expect(tickTexts).toContain("30");
+  });
+
+  it("drops the top tick only when the latest value is that tick", async () => {
+    const { LiveLineChart } = await import("../src/charts/live-line-chart");
+    const { container } = render(
+      <LiveLineChart initialValues={[10, 20, 30]} showValue running={false} />,
+    );
+    const tickTexts = [...container.querySelectorAll(".gl-chart-axis-y span")].map(
+      (t) => t.textContent,
+    );
+    expect(tickTexts).not.toContain("30");
+    // The number still appears once: as the big live value.
+    expect(container.querySelector(".gl-chart-live-value")?.textContent).toBe("30");
+  });
+});

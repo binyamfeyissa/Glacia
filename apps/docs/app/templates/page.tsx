@@ -107,8 +107,9 @@ export default function TemplatesPage() {
           <h1 className="templates-title">Full apps, built with Glacia.</h1>
           <p className="templates-subtitle">
             Every template is a real, runnable app assembled from the same Glacia components
-            documented on this site — no mockups, no placeholder screens. The store opens at
-            launch: five templates are free, and the paid catalogue follows the same day.
+            documented on this site — no mockups, no placeholder screens. The five free
+            templates are finished; the paid catalogue is in production now, and the store
+            opens at launch.
           </p>
           <div className="templates-meta-badges">
             <span className="meta-badge">

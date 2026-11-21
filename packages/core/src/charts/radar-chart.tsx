@@ -54,7 +54,9 @@ export function RadarChart({
 
   const centre = size / 2;
   // Room beyond the outer ring for the axis labels drawn at each vertex.
-  const radius = centre - 40;
+  // Long labels may still extend past the viewBox on small sizes, so the
+  // svg below allows visible overflow rather than clipping them.
+  const radius = centre - 46;
 
   const highest = series.flatMap((s) => s.values).reduce((a, b) => Math.max(a, b), 0);
   const scaleMax = max ?? (highest || 1);
@@ -75,6 +77,7 @@ export function RadarChart({
           width={size}
           height={size}
           viewBox={`0 0 ${size} ${size}`}
+          style={{ overflow: "visible" }}
           role="img"
           aria-label={
             ariaLabel ?? `Radar chart across ${axes.length} axes: ${series.map((s) => s.name).join(", ")}`

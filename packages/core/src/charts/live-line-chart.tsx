@@ -94,12 +94,22 @@ export function LiveLineChart({
     series.length <= 1 ? plot.x : plot.x + (i / (series.length - 1)) * plot.width;
 
   const tickValues = ticks(domain, 3);
+  const latestSample = series[series.length - 1];
   const yTicks = tickValues
-    // The big live value sits at the top-left of the plot; when the newest
-    // sample is near the maximum, the top axis tick repeats the same number
-    // directly beneath it and reads as a duplicated label. The value display
-    // replaces that tick.
-    .filter((v) => !(showValue && v === Math.max(...tickValues)))
+    // The big live value sits at the top-left of the plot. Only when the
+    // newest sample IS the top tick does that tick repeat the same number
+    // directly beneath it and read as a duplicated label — drop the tick
+    // in exactly that case, and never otherwise (a mid-range latest value
+    // must not cost the axis its top label).
+    .filter(
+      (v) =>
+        !(
+          showValue &&
+          latestSample !== undefined &&
+          v === Math.max(...tickValues) &&
+          v === latestSample
+        ),
+    )
     .map((v) => ({
       value: y(v),
       label: format ? format(v) : formatValue(v, { compact: true }),

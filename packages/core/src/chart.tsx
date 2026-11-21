@@ -95,7 +95,7 @@ export const Chart: ForwardRefExoticComponent<
         aria-label={`${label}, ${data.length} points`}
       >
         {hovered && (
-          <div className="gl-chart-tooltip" aria-hidden>
+          <div className="gl-chart-tooltip" data-visible="" aria-hidden>
             <span className="gl-chart-tooltip-label">{hovered.label}</span>
             <span className="gl-chart-tooltip-value">
               {valuePrefix}
