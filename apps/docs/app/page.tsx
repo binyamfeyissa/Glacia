@@ -154,7 +154,7 @@ export default function HomePage() {
 
           <div className="hero-actions">
             <Link href="/components/button" className="btn btn-primary">
-              Explore 81 components
+              Explore {COMPONENTS_DATA.length} components
               <ArrowRightIcon className="arrow" />
             </Link>
             <a href="#material" className="btn btn-glass">

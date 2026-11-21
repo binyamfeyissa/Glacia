@@ -24,6 +24,17 @@ const nextConfig = {
       ...config.resolve.alias,
       "react-native$": false,
       "react-native-svg$": false,
+      // The blur package ships only platform-suffixed files (BlurView.ios.js /
+      // BlurView.android.js) that webpack cannot resolve; glacia-native's
+      // engine already treats the package as optional and falls back when it
+      // is absent, which is the behaviour the docs want in a browser.
+      "@react-native-community/blur$": false,
+      // Same reasoning for expo-blur: an optional engine backend whose
+      // React Native internals cannot resolve in a web build.
+      "expo-blur$": false,
+      // Optional haptics backend, likewise resolved lazily by the engine
+      // and absent by design in the docs.
+      "expo-haptics$": false,
     };
     return config;
   },

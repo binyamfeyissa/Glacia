@@ -4,7 +4,10 @@ node_modules
 
 # Production & Build Outputs
 dist
-lib
+# Scoped to the packages: a bare `lib` also ignored apps/docs/lib, which is
+# source (lib/seo.ts) — that is why the docs site could not build from a
+# fresh clone until the file was restored.
+packages/*/lib
 build
 .next
 out
