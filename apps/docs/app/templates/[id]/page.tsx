@@ -84,10 +84,15 @@ export default async function TemplateDetailPage({
             <div className="template-buy-price">
               {t.kind === "Free" ? "Free" : `$${t.price}`}
             </div>
+            {t.checkoutUrl ? (
+              <a className="btn btn-primary template-buy-btn" href={t.checkoutUrl} target="_blank" rel="noreferrer">
+                {`Buy now — $${t.price}`}
+              </a>
+            ) : null}
             <p className="template-buy-note">
               {t.kind === "Free"
                 ? "Free download when the store opens at launch. An email address is all it takes."
-                : "On sale when the store opens at launch. Delivered by email right after checkout — order confirmation plus a download link."}
+                : "Secure checkout via Dodo Payments. Delivered by email right after checkout — order confirmation plus a download link."}
             </p>
             <ul className="template-buy-points">
               <li>

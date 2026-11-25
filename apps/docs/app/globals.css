@@ -6724,6 +6724,11 @@ a.template-card {
   -webkit-backdrop-filter: blur(20px);
 }
 
+.template-buy-btn {
+  width: 100%;
+  margin: 16px 0 4px;
+}
+
 .template-buy-price {
   font-size: 34px;
   font-weight: 700;
