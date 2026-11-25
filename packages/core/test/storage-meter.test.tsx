@@ -36,9 +36,23 @@ test("shows a legend by default and hides it on request", () => {
   const { rerender } = render(<StorageMeter segments={segments} total={100} />);
   expect(screen.getByText("Photos")).toBeTruthy();
   expect(screen.getByText("Videos")).toBeTruthy();
-  expect(screen.getByText("25")).toBeTruthy();
+  expect(screen.getByText("25 / 100")).toBeTruthy();
+  expect(screen.getByText("50 / 100")).toBeTruthy();
   rerender(<StorageMeter segments={segments} total={100} showLegend={false} />);
   expect(screen.queryByText("Photos")).toBeNull();
+});
+
+test("renders duplicate labels without dropping a segment or legend row", () => {
+  const dupes = [
+    { label: "Photos", value: 25, tint: "fill" as const },
+    { label: "Photos", value: 10, tint: "on" as const },
+  ];
+  render(<StorageMeter segments={dupes} total={100} />);
+  const meter = screen.getByRole("meter", { name: "Storage used" });
+  expect(meter.querySelectorAll(".gl-storage-meter-segment")).toHaveLength(2);
+  expect(screen.getAllByText("Photos")).toHaveLength(2);
+  expect(screen.getByText("25 / 100")).toBeTruthy();
+  expect(screen.getByText("10 / 100")).toBeTruthy();
 });
 
 test("defaults a segment tint to fill", () => {

@@ -3,7 +3,7 @@
   "name": "card",
   "type": "registry:ui",
   "dependencies": [
-    "glacia@^0.3.1"
+    "glacia@^0.6.0"
   ],
   "registryDependencies": [
     "/r/glass.json"

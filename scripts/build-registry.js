@@ -137,7 +137,7 @@ for (const name of COMPONENTS) {
     $schema: "https://ui.shadcn.com/schema/registry-item.json",
     name,
     type: "registry:ui",
-    dependencies: ["glacia@^0.3.1"],
+    dependencies: ["glacia@^0.6.0"],
     registryDependencies: [`${BASE_URL}/glass.json`],
     files: [
       {
@@ -156,7 +156,7 @@ for (const name of COMPONENTS) {
   registryIndex.push({
     name,
     type: "registry:ui",
-    dependencies: ["glacia@^0.3.1"],
+    dependencies: ["glacia@^0.6.0"],
     registryDependencies: [`${BASE_URL}/glass.json`],
   });
 }
@@ -166,12 +166,15 @@ const allItem = {
   $schema: "https://ui.shadcn.com/schema/registry-item.json",
   name: "all",
   type: "registry:ui",
-  dependencies: ["glacia@^0.3.1"],
+  dependencies: ["glacia@^0.6.0"],
   registryDependencies: COMPONENTS.map((name) => `${BASE_URL}/${name}.json`),
   files: [],
 };
 for (const target of [registryDir, docsPublicRDir]) {
   fs.writeFileSync(path.join(target, "all.json"), JSON.stringify(allItem, null, 2), "utf-8");
+}
+if (fs.existsSync(packageRegistryDir)) {
+  fs.writeFileSync(path.join(packageRegistryDir, "all.json"), JSON.stringify(allItem, null, 2), "utf-8");
 }
 
 // base.json — the shared stylesheet
@@ -179,12 +182,15 @@ const baseItem = {
   $schema: "https://ui.shadcn.com/schema/registry-item.json",
   name: "base",
   type: "registry:style",
-  dependencies: ["glacia@^0.3.1"],
+  dependencies: ["glacia@^0.6.0"],
   registryDependencies: [],
   files: [],
 };
 for (const target of [registryDir, docsPublicRDir]) {
   fs.writeFileSync(path.join(target, "base.json"), JSON.stringify(baseItem, null, 2), "utf-8");
+}
+if (fs.existsSync(packageRegistryDir)) {
+  fs.writeFileSync(path.join(packageRegistryDir, "base.json"), JSON.stringify(baseItem, null, 2), "utf-8");
 }
 
 const fullRegistry = {

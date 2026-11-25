@@ -9302,11 +9302,10 @@
 
 /* --- SuccessState (success-state) --- */
 
-/* --- SuccessState (success-state.css) ---------------------------------------
-   Merge into packages/core/src/styles.css (integration step; do not edit
-   styles.css directly). Reuses the .gl-empty layout classes — only the
-   success tone below is new. Uses ONLY existing --gl-* tokens; no new
-   tokens. ------------------------------------------------------------------ */
+/* Success tone: the icon plate is tinted green (--gl-on) instead of the
+   neutral --gl-highlight Empty uses, so the state reads as done, not empty.
+   Reuses the .gl-empty layout classes — only the success tone below is new.
+   Uses ONLY existing --gl-* tokens; no new tokens. */
 
 /* Success tone: the icon plate is tinted green (--gl-on) instead of the
    neutral --gl-highlight Empty uses, so the state reads as done, not empty. */
@@ -9317,13 +9316,10 @@
 
 /* --- TicketEntry (ticket-entry) --- */
 
-/* --- TicketEntry (ticket-entry.css) -----------------------------------------
-   Merge into packages/core/src/styles.css (integration step; do not edit
-   styles.css directly). Reuses .gl-message-avatar and .gl-message-timestamp
-   from the Message family; only the entry layout and status tint below are
-   new. Uses ONLY existing --gl-* tokens; no new tokens. No bubble tail,
-   no side alignment — a full-width thread row, not a chat message.
-   -------------------------------------------------------------------------- */
+/* Reuses .gl-message-avatar and .gl-message-timestamp from the Message
+   family; only the entry layout and status tint below are new. Uses ONLY
+   existing --gl-* tokens; no new tokens. No bubble tail, no side
+   alignment — a full-width thread row, not a chat message. */
 
 .gl-ticket-entry {
   display: flex;
@@ -9392,12 +9388,8 @@
 
 /* --- Stepper value (stepper-value.css) --- */
 
-/* --- Stepper value (stepper-value.css) --------------------------------------
-   Merge into packages/core/src/styles.css alongside the existing
-   .gl-stepper rules (integration step; do not edit styles.css directly).
-   Styles the .gl-stepper-value element added by the Stepper value fix.
-   Uses ONLY existing --gl-* tokens; no new tokens.
-   -------------------------------------------------------------------------- */
+/* Styles the .gl-stepper-value element added by the Stepper value fix.
+   Uses ONLY existing --gl-* tokens; no new tokens. */
 
 .gl-stepper-value {
   display: flex;

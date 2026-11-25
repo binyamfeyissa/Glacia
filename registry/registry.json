@@ -7,7 +7,7 @@
       "name": "glass",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -17,7 +17,7 @@
       "name": "button",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -27,7 +27,7 @@
       "name": "text",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -37,7 +37,7 @@
       "name": "input",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -47,7 +47,7 @@
       "name": "textarea",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -57,7 +57,7 @@
       "name": "label",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -67,7 +67,7 @@
       "name": "card",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -77,7 +77,7 @@
       "name": "badge",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -87,7 +87,7 @@
       "name": "avatar",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -97,7 +97,7 @@
       "name": "separator",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -107,7 +107,7 @@
       "name": "skeleton",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -117,7 +117,7 @@
       "name": "spinner",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -127,7 +127,7 @@
       "name": "progress",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -137,7 +137,7 @@
       "name": "switch",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -147,7 +147,7 @@
       "name": "slider",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -157,7 +157,7 @@
       "name": "search-field",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -167,7 +167,7 @@
       "name": "checkbox",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -177,7 +177,7 @@
       "name": "radio-group",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -187,7 +187,7 @@
       "name": "select",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -197,7 +197,7 @@
       "name": "tabs",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -207,7 +207,7 @@
       "name": "segmented-control",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -217,7 +217,7 @@
       "name": "tab-bar",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -227,7 +227,7 @@
       "name": "accordion",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -237,7 +237,7 @@
       "name": "dialog",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -247,7 +247,7 @@
       "name": "alert-dialog",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -257,7 +257,7 @@
       "name": "popover",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -267,7 +267,7 @@
       "name": "dropdown-menu",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -277,7 +277,7 @@
       "name": "menu",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -287,7 +287,7 @@
       "name": "tooltip",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -297,7 +297,7 @@
       "name": "sonner",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -307,7 +307,7 @@
       "name": "table",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -317,7 +317,7 @@
       "name": "sidebar",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -327,7 +327,7 @@
       "name": "scroll-area",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -337,7 +337,7 @@
       "name": "button-group",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -347,7 +347,7 @@
       "name": "toggle",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -357,7 +357,7 @@
       "name": "input-group",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -367,7 +367,7 @@
       "name": "field",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -377,7 +377,7 @@
       "name": "form",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -387,7 +387,7 @@
       "name": "combobox",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -397,7 +397,7 @@
       "name": "calendar",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -407,7 +407,7 @@
       "name": "chart",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -417,7 +417,7 @@
       "name": "empty",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -427,7 +427,7 @@
       "name": "item",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -437,7 +437,7 @@
       "name": "hover-card",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -447,7 +447,7 @@
       "name": "context-menu",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -457,7 +457,7 @@
       "name": "drawer",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -467,7 +467,7 @@
       "name": "sheet",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -477,7 +477,7 @@
       "name": "toast",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -487,7 +487,7 @@
       "name": "breadcrumb",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -497,7 +497,7 @@
       "name": "navigation-menu",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -507,7 +507,7 @@
       "name": "pagination",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -517,7 +517,7 @@
       "name": "collapsible",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -527,7 +527,7 @@
       "name": "data-table",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -537,7 +537,7 @@
       "name": "toggle-group",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -547,7 +547,7 @@
       "name": "input-otp",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -557,7 +557,7 @@
       "name": "command",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -567,7 +567,7 @@
       "name": "carousel",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -577,7 +577,7 @@
       "name": "kbd",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -587,7 +587,7 @@
       "name": "code-block",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -597,7 +597,7 @@
       "name": "marker",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -607,7 +607,7 @@
       "name": "menubar",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -617,7 +617,7 @@
       "name": "message",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -627,7 +627,7 @@
       "name": "bubble",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -637,7 +637,7 @@
       "name": "message-scroller",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -647,7 +647,7 @@
       "name": "attachment",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -657,7 +657,7 @@
       "name": "questionnaire",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -667,7 +667,7 @@
       "name": "direction",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -677,7 +677,7 @@
       "name": "action-sheet",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -687,7 +687,7 @@
       "name": "color-picker",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -697,7 +697,7 @@
       "name": "list",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -707,7 +707,7 @@
       "name": "page-control",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -717,7 +717,7 @@
       "name": "popup-button",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -727,7 +727,7 @@
       "name": "stepper",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -737,7 +737,7 @@
       "name": "time-picker",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -747,7 +747,7 @@
       "name": "toolbar",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -757,7 +757,7 @@
       "name": "widget",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -767,7 +767,7 @@
       "name": "line-chart",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -777,7 +777,7 @@
       "name": "bar-chart",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -787,7 +787,7 @@
       "name": "area-chart",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -797,7 +797,7 @@
       "name": "mirror-area-chart",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -807,7 +807,7 @@
       "name": "pie-chart",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -817,7 +817,7 @@
       "name": "funnel-chart",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -827,7 +827,7 @@
       "name": "heatmap-chart",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -837,7 +837,7 @@
       "name": "radar-chart",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -847,7 +847,7 @@
       "name": "waterfall-chart",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -857,7 +857,7 @@
       "name": "candlestick-chart",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -867,7 +867,7 @@
       "name": "hex-chart",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -877,7 +877,7 @@
       "name": "polar-area-chart",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -887,7 +887,7 @@
       "name": "plot-chart",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -897,7 +897,7 @@
       "name": "bump-chart",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -907,7 +907,7 @@
       "name": "live-line-chart",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -917,7 +917,7 @@
       "name": "plan",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -927,7 +927,7 @@
       "name": "response",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -937,7 +937,7 @@
       "name": "panelside",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -947,7 +947,7 @@
       "name": "ai-input",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -957,7 +957,7 @@
       "name": "shimmer",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -967,7 +967,7 @@
       "name": "boarding-pass",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -977,7 +977,7 @@
       "name": "activity",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -987,7 +987,7 @@
       "name": "icon-button",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -997,7 +997,7 @@
       "name": "banner",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -1007,7 +1007,7 @@
       "name": "backdrop-switcher",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -1017,7 +1017,7 @@
       "name": "link-card",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -1027,7 +1027,7 @@
       "name": "cover-plate",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -1037,7 +1037,7 @@
       "name": "search-trigger",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -1047,7 +1047,7 @@
       "name": "folder-tree",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -1057,7 +1057,7 @@
       "name": "file-tile",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -1067,7 +1067,7 @@
       "name": "dropzone",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -1077,7 +1077,7 @@
       "name": "storage-meter",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -1087,7 +1087,7 @@
       "name": "kanban",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -1097,7 +1097,7 @@
       "name": "gantt",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -1107,7 +1107,7 @@
       "name": "uptime-strip",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -1117,7 +1117,7 @@
       "name": "coin-tile",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -1127,7 +1127,7 @@
       "name": "slot-cell",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -1137,7 +1137,7 @@
       "name": "lesson-list-row",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -1147,7 +1147,7 @@
       "name": "date-block",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -1157,7 +1157,7 @@
       "name": "timeline",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -1167,7 +1167,7 @@
       "name": "org-chart",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -1177,7 +1177,7 @@
       "name": "success-state",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -1187,7 +1187,7 @@
       "name": "ticket-entry",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json"
@@ -1198,7 +1198,7 @@
       "name": "base",
       "type": "registry:style",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [],
       "files": []
@@ -1208,7 +1208,7 @@
       "name": "all",
       "type": "registry:ui",
       "dependencies": [
-        "glacia@^0.3.1"
+        "glacia@^0.6.0"
       ],
       "registryDependencies": [
         "/r/glass.json",

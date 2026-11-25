@@ -1,12 +1,13 @@
 import {
   forwardRef,
   type ForwardRefExoticComponent,
+  type HTMLAttributes,
   type ReactNode,
   type RefAttributes,
 } from "react";
 import { cx } from "./internal/cx";
 
-export interface LessonListRowProps {
+export interface LessonListRowProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
   /** Lesson number shown in the leading badge (1-based). */
   index: number;
   /** Lesson title. */
@@ -19,7 +20,6 @@ export interface LessonListRowProps {
   locked?: boolean;
   /** Called when the row is tapped. Omitted for a non-interactive row. */
   onSelect?: () => void;
-  className?: string;
 }
 
 /**
@@ -33,7 +33,7 @@ export const LessonListRow: ForwardRefExoticComponent<
   LessonListRowProps & RefAttributes<HTMLDivElement>
 > = /* @__PURE__ */ forwardRef<HTMLDivElement, LessonListRowProps>(
   function LessonListRow(
-    { index, title, duration, completed, locked, onSelect, className },
+    { index, title, duration, completed, locked, onSelect, className, ...props },
     forwardedRef,
   ) {
     // Mirrors ListItem: a row may or may not be interactive, and mixing the
@@ -65,6 +65,7 @@ export const LessonListRow: ForwardRefExoticComponent<
           locked && "gl-list-item-disabled",
           className,
         )}
+        {...props}
       >
         <span className="gl-list-leading" aria-hidden>
           {locked ? (

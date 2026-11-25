@@ -68,6 +68,20 @@ test("also composes from GanttRow and GanttBar children", () => {
   expect(bar.style.left).toBe("75%");
 });
 
+test("an explicit aria-label names a bar with a non-string label", () => {
+  render(
+    <GanttBar
+      label={<span>Custom</span>}
+      start={0}
+      end={0.5}
+      aria-label="Custom bar: 0% to 50%"
+    />,
+  );
+  const bar = screen.getByRole("img", { name: "Custom bar: 0% to 50%" });
+  expect(bar.style.left).toBe("0%");
+  expect(bar.style.width).toBe("50%");
+});
+
 test("forwards refs on the chart, a row and a bar", () => {
   const ganttRef = createRef<HTMLDivElement>();
   const rowRef = createRef<HTMLDivElement>();

@@ -2424,8 +2424,8 @@ export default function WidgetDemo() {
 export default function IconButtonDemo() {
   return (
     <div className="flex gap-3">
-      <IconButton icon={<ShareIcon />} aria-label="Share" />
-      <IconButton icon={<TrashIcon />} aria-label="Delete" variant="filled" destructive />
+      <IconButton icon="↗" aria-label="Share" />
+      <IconButton icon="✕" aria-label="Delete" variant="filled" destructive />
     </div>
   );
 }`,
@@ -2473,7 +2473,7 @@ export default function BannerDemo() {
       { name: "value", type: "BackdropValue | null", description: "The selected backdrop ('dark' | 'light' | 'image'), or null for none." },
       { name: "defaultValue", type: "BackdropValue | null", description: "Uncontrolled initial backdrop." },
       { name: "onValueChange", type: "(value: BackdropValue) => void", description: "Called with the newly selected backdrop." },
-      { name: "items", type: "SegmentedControlItem[]", description: "Override the three backdrop options. Defaults to Dark / Light / Image." },
+      { name: "items", type: "SegmentedControlItem[]", description: "Override the three backdrop options. Defaults to Dark / Light / Image. Custom items widen onValueChange to their value type." },
     ],
     codeSnippet: `import { BackdropSwitcher } from "glacia";
 
@@ -2530,11 +2530,13 @@ export default function LinkCardDemo() {
 
 export default function CoverPlateDemo() {
   return (
-    <CoverPlate
-      media={<img src="/tahoe.jpg" alt="Lake Tahoe at dusk" />}
-      title="Tahoe"
-      description="The image backdrop."
-    />
+    <div className="w-full max-w-sm">
+      <CoverPlate
+        media={<img src="/hero/tahoe-dark.jpg" alt="Lake Tahoe at dusk" />}
+        title="Tahoe"
+        description="The image backdrop."
+      />
+    </div>
   );
 }`,
   },
@@ -2556,7 +2558,7 @@ export default function CoverPlateDemo() {
     codeSnippet: `import { SearchTrigger } from "glacia";
 
 export default function SearchTriggerDemo() {
-  return <SearchTrigger onClick={() => setOpen(true)} />;
+  return <SearchTrigger onClick={() => {}} />;
 }`,
   },
   {
@@ -2685,15 +2687,15 @@ export default function StorageMeterDemo() {
   {
     slug: "kanban",
     name: "Kanban",
-    description: "Kanban board: a horizontal row of glass columns holding selectable glass cards.",
+    description: "Kanban board: a horizontal row of glass columns holding selectable glass cards. Selection (onSelectCard / selectedCardId) applies in columns mode only; with KanbanColumn children, pass onSelect / selected to each KanbanCard directly.",
     category: "Navigation & Layout",
     appleStatus: "Glacia extension",
     nativeStatus: "Web only",
     wave: 5,
     props: [
       { name: "columns", type: "KanbanColumnData[]", description: "Columns to render. When omitted, render `KanbanColumn` children." },
-      { name: "onSelectCard", type: "(id: string, card: KanbanCardData) => void", description: "Called when a card is selected." },
-      { name: "selectedCardId", type: "string", description: "Controlled id of the selected card." },
+      { name: "onSelectCard", type: "(id: string, card: KanbanCardData) => void", description: "Called when a card is selected. Columns mode only — with KanbanColumn children, pass onSelect to each KanbanCard directly." },
+      { name: "selectedCardId", type: "string", description: "Controlled id of the selected card. Columns mode only — with KanbanColumn children, pass selected to each KanbanCard directly." },
     ],
     codeSnippet: `import { Kanban } from "glacia";
 
@@ -2937,12 +2939,20 @@ export default function OrgChartDemo() {
       { name: "description", type: "string", default: "—", description: "Secondary description explaining what happened or what comes next." },
       { name: "action", type: "ReactNode", default: "—", description: "Optional call-to-action button or interactive elements." },
     ],
-    codeSnippet: `<SuccessState
-  icon={<CheckIcon />}
-  title="Payment sent"
-  description="Your invoice was paid and the receipt is on its way."
-  action={<Button>View receipt</Button>}
-/>`,
+    codeSnippet: `import { SuccessState, Button } from "glacia";
+
+export default function SuccessStateDemo() {
+  return (
+    <div className="w-full max-w-sm">
+      <SuccessState
+        icon="✓"
+        title="Payment sent"
+        description="Your invoice was paid and the receipt is on its way."
+        action={<Button>View receipt</Button>}
+      />
+    </div>
+  );
+}`,
   },
   {
     slug: "ticket-entry",
@@ -2959,13 +2969,21 @@ export default function OrgChartDemo() {
       { name: "status", type: "\"open\" | \"pending\" | \"resolved\" | \"closed\"", default: "\"open\"", description: "Ticket status shown as a tinted label." },
       { name: "body", type: "ReactNode", default: "—", description: "The entry body. children is used when body is not given." },
     ],
-    codeSnippet: `<TicketEntry
-  author="Maya Chen"
-  avatar="MC"
-  timestamp="Tue 10:41"
-  status="resolved"
->
-  Your refund has been issued — it should reach your card within 5 days.
-</TicketEntry>`,
+    codeSnippet: `import { TicketEntry } from "glacia";
+
+export default function TicketEntryDemo() {
+  return (
+    <div className="w-full max-w-md">
+      <TicketEntry
+        author="Maya Chen"
+        avatar="MC"
+        timestamp="Tue 10:41"
+        status="resolved"
+      >
+        Your refund has been issued — it should reach your card within 5 days.
+      </TicketEntry>
+    </div>
+  );
+}`,
   },
 ];

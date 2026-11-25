@@ -67,3 +67,21 @@ test("forwards its ref", () => {
   );
   expect(ref.current?.className).toContain("gl-lesson-list-row extra");
 });
+
+test("passes data-*, aria-* and style props through to the row", () => {
+  render(
+    <LessonListRow
+      index={1}
+      title="Passthrough lesson"
+      data-track="lesson-1"
+      aria-label="Lesson 1: Refraction basics"
+      style={{ color: "red" }}
+    />,
+  );
+  const row = screen.getByText("Passthrough lesson").closest(
+    ".gl-lesson-list-row",
+  ) as HTMLElement;
+  expect(row.dataset.track).toBe("lesson-1");
+  expect(row.getAttribute("aria-label")).toBe("Lesson 1: Refraction basics");
+  expect(row.style.color).toBe("red");
+});

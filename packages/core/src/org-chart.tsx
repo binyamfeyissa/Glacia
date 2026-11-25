@@ -52,9 +52,8 @@ export const OrgChart: ForwardRefExoticComponent<
   },
 );
 
-export interface OrgChartNodeProps {
+export interface OrgChartNodeProps extends HTMLAttributes<HTMLLIElement> {
   node: OrgChartNodeData;
-  className?: string;
 }
 
 /** One person in the chart, with their reports nested below. */
@@ -63,7 +62,7 @@ export const OrgChartNode: ForwardRefExoticComponent<
 > = /* @__PURE__ */ forwardRef<HTMLLIElement, OrgChartNodeProps>(
   // Inner name differs from the component: this component renders itself
   // recursively, and a same-named inner function would shadow the component.
-  function OrgChartNodeInner({ node, className }, forwardedRef) {
+  function OrgChartNodeInner({ node, className, ...props }, forwardedRef) {
     const ref = useRef<HTMLLIElement>(null);
     useImperativeHandle(forwardedRef, () => ref.current!);
     const cardRef = useRef<HTMLDivElement>(null);
@@ -72,7 +71,7 @@ export const OrgChartNode: ForwardRefExoticComponent<
     const children = node.children ?? [];
 
     return (
-      <li ref={ref} className={cx("gl-org-chart-node", className)}>
+      <li ref={ref} className={cx("gl-org-chart-node", className)} {...props}>
         <div
           ref={cardRef}
           className="gl-glass gl-org-chart-card"

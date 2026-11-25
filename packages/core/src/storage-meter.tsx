@@ -58,9 +58,9 @@ export const StorageMeter: ForwardRefExoticComponent<
         aria-valuenow={used}
         aria-label="Storage used"
       >
-        {segments.map((segment) => (
+        {segments.map((segment, index) => (
           <div
-            key={segment.label}
+            key={index}
             className="gl-storage-meter-segment"
             data-tint={segment.tint ?? "fill"}
             style={{ width: `${total > 0 ? (segment.value / total) * 100 : 0}%` }}
@@ -69,15 +69,17 @@ export const StorageMeter: ForwardRefExoticComponent<
       </div>
       {showLegend && (
         <ul className="gl-storage-meter-legend">
-          {segments.map((segment) => (
-            <li key={segment.label} className="gl-storage-meter-legend-item">
+          {segments.map((segment, index) => (
+            <li key={index} className="gl-storage-meter-legend-item">
               <span
                 className="gl-storage-meter-swatch"
                 data-tint={segment.tint ?? "fill"}
                 aria-hidden
               />
               <span className="gl-storage-meter-legend-label">{segment.label}</span>
-              <span className="gl-storage-meter-legend-value">{segment.value}</span>
+              <span className="gl-storage-meter-legend-value">
+                {segment.value} / {total}
+              </span>
             </li>
           ))}
         </ul>

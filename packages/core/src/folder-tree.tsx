@@ -82,6 +82,10 @@ export const FolderTree: ForwardRefExoticComponent<FolderTreeProps & RefAttribut
     const [selected, setSelected] = useControllable(selectedId, defaultSelectedId ?? "", (id) => {
       if (id) onSelect?.(id, findItem(items, id)!);
     });
+    // Roving tabindex: exactly one enabled row is in the tab order.
+    const [focusedId, setFocusedId] = useState<string>(
+      () => selected || items[0]?.id || "",
+    );
     const [internalExpanded, setInternalExpanded] = useState<Set<string>>(() => {
       const seed = collectExpanded(items);
       for (const id of defaultExpandedIds ?? []) seed.add(id);
@@ -110,6 +114,39 @@ export const FolderTree: ForwardRefExoticComponent<FolderTreeProps & RefAttribut
     const select = (item: FolderTreeItemData) => {
       if (item.disabled) return;
       setSelected(item.id);
+      setFocusedId(item.id);
+    };
+
+    // Visible rows in DOM order, for roving tabindex and arrow-key moves.
+    const visibleItems = (nodes: FolderTreeItemData[]): FolderTreeItemData[] => {
+      const out: FolderTreeItemData[] = [];
+      for (const item of nodes) {
+        out.push(item);
+        if (item.children?.length && isExpanded(item)) {
+          out.push(...visibleItems(item.children));
+        }
+      }
+      return out;
+    };
+    const visible = visibleItems(items);
+    // The tab stop follows the focused row; if it was hidden by a collapse,
+    // fall back to the selected row, then the first visible row.
+    const activeId = visible.some((item) => item.id === focusedId)
+      ? focusedId
+      : (visible.find((item) => item.id === selected)?.id ?? visible[0]?.id ?? "");
+
+    const focusRow = (id: string) => {
+      setFocusedId(id);
+      ref.current
+        ?.querySelector<HTMLElement>(`[role="treeitem"][data-id="${id}"]`)
+        ?.focus();
+    };
+
+    const moveFocus = (item: FolderTreeItemData, delta: number) => {
+      const enabled = visible.filter((candidate) => !candidate.disabled);
+      const index = enabled.findIndex((candidate) => candidate.id === item.id);
+      const next = enabled[index + delta];
+      if (next) focusRow(next.id);
     };
 
     const renderItems = (nodes: FolderTreeItemData[], depth: number): ReactNode =>
@@ -121,7 +158,9 @@ export const FolderTree: ForwardRefExoticComponent<FolderTreeProps & RefAttribut
           <div key={item.id}>
             <div
               role="treeitem"
-              tabIndex={item.disabled ? undefined : 0}
+              data-id={item.id}
+              tabIndex={item.disabled ? undefined : activeId === item.id ? 0 : -1}
+              aria-level={depth + 1}
               aria-expanded={hasChildren ? expanded : undefined}
               aria-selected={isSelected ? true : undefined}
               aria-disabled={item.disabled ? true : undefined}
@@ -134,6 +173,7 @@ export const FolderTree: ForwardRefExoticComponent<FolderTreeProps & RefAttribut
               )}
               style={{ paddingLeft: 16 + depth * 20 }}
               onClick={() => select(item)}
+              onFocus={() => setFocusedId(item.id)}
               onKeyDown={(event) => {
                 if (item.disabled) return;
                 if (event.key === "Enter" || event.key === " ") {
@@ -145,6 +185,12 @@ export const FolderTree: ForwardRefExoticComponent<FolderTreeProps & RefAttribut
                 } else if (event.key === "ArrowLeft" && hasChildren && expanded) {
                   event.preventDefault();
                   toggle(item);
+                } else if (event.key === "ArrowDown") {
+                  event.preventDefault();
+                  moveFocus(item, 1);
+                } else if (event.key === "ArrowUp") {
+                  event.preventDefault();
+                  moveFocus(item, -1);
                 }
               }}
             >
@@ -183,6 +229,7 @@ export const FolderTree: ForwardRefExoticComponent<FolderTreeProps & RefAttribut
       <div
         ref={ref}
         role="tree"
+        aria-label="Folder tree"
         className={cx("gl-glass gl-list gl-folder-tree", className)}
         {...props}
       >

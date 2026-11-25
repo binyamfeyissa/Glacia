@@ -23,6 +23,21 @@ test("marks the drag-over state while a file is dragged over it", () => {
   expect(zone.hasAttribute("data-dragging")).toBe(false);
 });
 
+test("moving between child elements does not flicker the drag-over state", () => {
+  render(<Dropzone label="Drop files here" description="or click to browse" />);
+  const zone = screen.getByRole("button", { name: /Drop files here/ });
+  const label = screen.getByText("Drop files here");
+  fireEvent.dragEnter(zone);
+  expect(zone.dataset.dragging).toBe("");
+  // Entering a child fires another dragenter; leaving it fires dragleave
+  // while the pointer is still inside the zone — the state must hold.
+  fireEvent.dragEnter(label);
+  fireEvent.dragLeave(label);
+  expect(zone.dataset.dragging).toBe("");
+  fireEvent.dragLeave(zone);
+  expect(zone.hasAttribute("data-dragging")).toBe(false);
+});
+
 test("reports dropped files to onDrop and onFiles", () => {
   const onDrop = vi.fn();
   const onFiles = vi.fn();

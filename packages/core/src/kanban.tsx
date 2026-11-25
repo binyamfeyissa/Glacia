@@ -38,9 +38,15 @@ export interface KanbanColumnData {
 export interface KanbanProps extends HTMLAttributes<HTMLDivElement> {
   /** Columns to render. When omitted, render `KanbanColumn` children. */
   columns?: KanbanColumnData[];
-  /** Called when a card is selected. */
+  /**
+   * Called when a card is selected. Columns mode only: with `KanbanColumn`
+   * children, selection is not injected — pass `onSelect` / `selected` to
+   * each `KanbanCard` directly. (Injection would need an `id` on
+   * `KanbanCard`, which it has no prop for, so the parent cannot report
+   * which card was tapped.)
+   */
   onSelectCard?: (id: string, card: KanbanCardData) => void;
-  /** Controlled id of the selected card. */
+  /** Controlled id of the selected card. Columns mode only, as above. */
   selectedCardId?: string;
 }
 

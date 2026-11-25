@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { createRef } from "react";
 import { expect, test } from "vitest";
 
-import { OrgChart } from "../src/org-chart";
+import { OrgChart, OrgChartNode } from "../src/org-chart";
 
 const nodes = [
   {
@@ -56,4 +56,23 @@ test("forwards its ref and props", () => {
   render(<OrgChart ref={ref} nodes={nodes} className="extra" />);
   expect(ref.current).toBe(document.querySelector(".gl-org-chart"));
   expect(ref.current?.className).toBe("gl-org-chart extra");
+});
+
+test("a node passes data-*, aria-* and style props through to its <li>", () => {
+  // OrgChartNode used directly, as a caller composing a chart would.
+  const { container } = render(
+    <ul>
+      <OrgChartNode
+        node={{ name: "Solo", role: "Lead" }}
+        data-track="node-solo"
+        aria-label="Solo, Lead"
+        style={{ color: "red" }}
+      />
+    </ul>,
+  );
+  const node = container.querySelector(".gl-org-chart-node") as HTMLElement;
+  expect(node.tagName).toBe("LI");
+  expect(node.dataset.track).toBe("node-solo");
+  expect(node.getAttribute("aria-label")).toBe("Solo, Lead");
+  expect(node.style.color).toBe("red");
 });

@@ -59,6 +59,24 @@ test("also composes from KanbanColumn and KanbanCard children", () => {
   expect(screen.getByText("1")).toBeTruthy();
 });
 
+test("children mode: selection is wired per card with onSelect/selected", () => {
+  // onSelectCard/selectedCardId do not inject into KanbanColumn children
+  // (documented limitation) — wire each card directly instead.
+  const onSelect = vi.fn();
+  render(
+    <Kanban>
+      <KanbanColumn title="Review">
+        <KanbanCard title="Check the copy" selected onSelect={onSelect} />
+      </KanbanColumn>
+    </Kanban>,
+  );
+  const card = screen.getByText("Check the copy").closest(".gl-kanban-card") as HTMLElement;
+  expect(card.dataset.selected).toBe("");
+  expect(card.getAttribute("aria-pressed")).toBe("true");
+  fireEvent.click(card);
+  expect(onSelect).toHaveBeenCalledTimes(1);
+});
+
 test("forwards refs on the board, a column and a card", () => {
   const boardRef = createRef<HTMLDivElement>();
   const columnRef = createRef<HTMLDivElement>();

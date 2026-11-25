@@ -66,3 +66,48 @@ test("forwards its ref", () => {
   expect(ref.current).toBe(screen.getByRole("tree"));
   expect(ref.current?.className).toBe("gl-glass gl-list gl-folder-tree extra");
 });
+
+test("roving tabindex: exactly one row is tabbable, and focus moves the tab stop", () => {
+  render(<FolderTree items={items} defaultExpandedIds={["docs"]} />);
+  const rows = screen.getAllByRole("treeitem");
+  expect(rows).toHaveLength(4);
+  expect(rows.filter((row) => row.getAttribute("tabindex") === "0")).toHaveLength(1);
+  expect(rows[0]!.getAttribute("tabindex")).toBe("0");
+  expect(rows.slice(1).map((row) => row.getAttribute("tabindex"))).toEqual([
+    "-1",
+    "-1",
+    "-1",
+  ]);
+  // Focusing another row moves the tab stop to it.
+  fireEvent.focus(rows[2]!);
+  expect(rows[0]!.getAttribute("tabindex")).toBe("-1");
+  expect(rows[2]!.getAttribute("tabindex")).toBe("0");
+  expect(rows.filter((row) => row.getAttribute("tabindex") === "0")).toHaveLength(1);
+});
+
+test("arrow keys move focus between visible rows", () => {
+  render(<FolderTree items={items} defaultExpandedIds={["docs"]} />);
+  const rows = screen.getAllByRole("treeitem");
+  fireEvent.keyDown(rows[0]!, { key: "ArrowDown" });
+  expect(document.activeElement).toBe(rows[1]);
+  expect(rows[1]!.getAttribute("tabindex")).toBe("0");
+  fireEvent.keyDown(rows[1]!, { key: "ArrowUp" });
+  expect(document.activeElement).toBe(rows[0]);
+});
+
+test("each row carries its nesting level and the tree has an accessible name", () => {
+  render(<FolderTree items={items} defaultExpandedIds={["docs"]} />);
+  expect(screen.getByRole("tree", { name: "Folder tree" })).toBeTruthy();
+  const rows = screen.getAllByRole("treeitem");
+  expect(rows.map((row) => row.getAttribute("aria-level"))).toEqual([
+    "1",
+    "2",
+    "2",
+    "1",
+  ]);
+});
+
+test("a caller-provided aria-label overrides the default tree name", () => {
+  render(<FolderTree items={items} aria-label="Project files" />);
+  expect(screen.getByRole("tree", { name: "Project files" })).toBeTruthy();
+});

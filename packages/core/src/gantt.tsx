@@ -131,7 +131,7 @@ export interface GanttBarProps extends Omit<HTMLAttributes<HTMLDivElement>, "chi
 
 export const GanttBar: ForwardRefExoticComponent<GanttBarProps & RefAttributes<HTMLDivElement>> =
   /* @__PURE__ */ forwardRef<HTMLDivElement, GanttBarProps>(function GanttBar(
-    { label, start, end, tint = "fill", className, children, ...props },
+    { label, start, end, tint = "fill", className, children, "aria-label": ariaLabel, ...props },
     forwardedRef,
   ) {
     const ref = useRef<HTMLDivElement>(null);
@@ -145,9 +145,13 @@ export const GanttBar: ForwardRefExoticComponent<GanttBarProps & RefAttributes<H
         ref={ref}
         role="img"
         aria-label={
-          typeof label === "string"
+          // An explicit label wins; otherwise a string label names the bar
+          // with its range. A non-string label with no aria-label leaves the
+          // bar unnamed, so pass aria-label for rich labels.
+          ariaLabel ??
+          (typeof label === "string"
             ? `${label}: ${Math.round(clampedStart * 100)}% to ${Math.round(clampedEnd * 100)}%`
-            : undefined
+            : undefined)
         }
         className={cx("gl-gantt-bar", className)}
         data-tint={tint === "fill" ? undefined : tint}

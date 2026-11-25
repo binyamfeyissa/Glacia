@@ -55,6 +55,10 @@ export const Dropzone: ForwardRefExoticComponent<DropzoneProps & RefAttributes<H
     useRefraction(ref);
     const inputRef = useRef<HTMLInputElement>(null);
     const [dragging, setDragging] = useState(false);
+    // Drag events fire per child element, so a plain onDragLeave would clear
+    // the state while the pointer is still inside (moving between children).
+    // Count enters/leaves instead: only the last leave clears the state.
+    const dragCount = useRef(0);
 
     const openPicker = () => {
       if (!disabled) inputRef.current?.click();
@@ -63,6 +67,7 @@ export const Dropzone: ForwardRefExoticComponent<DropzoneProps & RefAttributes<H
     const handleDrop = (event: DragEvent<HTMLDivElement>) => {
       event.preventDefault();
       if (disabled) return;
+      dragCount.current = 0;
       setDragging(false);
       const files = Array.from(event.dataTransfer.files);
       if (files.length === 0) return;
@@ -88,13 +93,18 @@ export const Dropzone: ForwardRefExoticComponent<DropzoneProps & RefAttributes<H
         }}
         onDragEnter={(event) => {
           event.preventDefault();
-          if (!disabled) setDragging(true);
+          if (disabled) return;
+          dragCount.current += 1;
+          setDragging(true);
         }}
         onDragOver={(event) => {
           event.preventDefault();
           if (!disabled) setDragging(true);
         }}
-        onDragLeave={() => setDragging(false)}
+        onDragLeave={() => {
+          dragCount.current = Math.max(0, dragCount.current - 1);
+          if (dragCount.current === 0) setDragging(false);
+        }}
         onDrop={handleDrop}
         className={cx("gl-glass gl-card gl-dropzone", disabled && "gl-dropzone-disabled", className)}
         // The refraction engine writes data-rim and data-refracting from

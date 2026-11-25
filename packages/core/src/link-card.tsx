@@ -20,7 +20,7 @@ export interface LinkCardProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
  * A Card that is a link: an `<a>` carrying the Card glass classes
  * (`gl-glass gl-card`), composed with Card's own Header / Title /
  * Description / Content / Footer slots. Keyboard accessible like any link;
- * focus is the kit's standard `var(--gl-ring)` outline (see link-card.css).
+ * focus is the kit's standard `var(--gl-ring)` outline (see styles.css).
  */
 export const LinkCard: ForwardRefExoticComponent<
   LinkCardProps & RefAttributes<HTMLAnchorElement>

@@ -51,3 +51,22 @@ test("accepts an items override", () => {
   expect(screen.getAllByRole("radio")).toHaveLength(2);
   expect(screen.queryByRole("radio", { name: "Image" })).toBeNull();
 });
+
+test("custom items widen onValueChange to their value type", () => {
+  // If the generic did not widen, this mock's parameter type would not
+  // satisfy onValueChange and tsc would fail the test file.
+  const onValueChange = vi.fn<(value: "sepia" | "mono") => void>();
+  render(
+    <BackdropSwitcher
+      aria-label="Backdrop"
+      items={[
+        { value: "sepia", label: "Sepia" },
+        { value: "mono", label: "Mono" },
+      ]}
+      defaultValue="mono"
+      onValueChange={onValueChange}
+    />,
+  );
+  fireEvent.click(screen.getByRole("radio", { name: "Sepia" }));
+  expect(onValueChange).toHaveBeenCalledWith("sepia");
+});
