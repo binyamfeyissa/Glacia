@@ -151,6 +151,13 @@ export function shotPath(t: TemplateItem, n: number): string {
   return `/template-shots/${t.shotId ?? t.id}/${n}.jpg`;
 }
 
+/** Label for a gallery shot: 1–3 dark, 4 light, 5 image background. */
+export function shotLabel(n: number): string {
+  if (n === 4) return "Light";
+  if (n === 5) return "Image";
+  return `Dark ${n}`;
+}
+
 export function stackLine(t: TemplateItem): string {
   return t.platform === "Web"
     ? "Next.js 15 · React 19 · TypeScript · glacia"

@@ -5,6 +5,7 @@ import path from "path";
 import {
   TEMPLATES,
   getTemplate,
+  shotLabel,
   shotPath,
   stackLine,
   type TemplateItem,
@@ -35,7 +36,7 @@ export async function generateMetadata({
 /** Screenshots that actually exist for this template (checked at build time). */
 function existingShots(t: TemplateItem): number[] {
   const out: number[] = [];
-  for (const n of [1, 2, 3]) {
+  for (const n of [1, 2, 3, 4, 5]) {
     const p = path.join(process.cwd(), "public", "template-shots", t.shotId ?? t.id, `${n}.jpg`);
     if (existsSync(p)) out.push(n);
   }
@@ -105,13 +106,25 @@ export default async function TemplateDetailPage({
         {shots.length > 0 && (
           <section className={`template-shots template-shots-${t.platform.toLowerCase()}`}>
             {shots.map((n) => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <figure
                 key={n}
-                src={shotPath(t, n)}
-                alt={`${t.name} screenshot ${n}`}
-                loading={n === 1 ? "eager" : "lazy"}
-              />
+                style={
+                  t.platform === "Mobile"
+                    ? { margin: 0, flex: "1 1 220px", maxWidth: 300 }
+                    : { margin: 0 }
+                }
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={shotPath(t, n)}
+                  alt={`${t.name} screenshot ${n} (${shotLabel(n)})`}
+                  loading={n === 1 ? "eager" : "lazy"}
+                  style={{ maxWidth: "100%" }}
+                />
+                <figcaption style={{ fontSize: "12.5px", color: "var(--text-3)", marginTop: 6 }}>
+                  {shotLabel(n)}
+                </figcaption>
+              </figure>
             ))}
           </section>
         )}
