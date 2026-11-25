@@ -37,7 +37,7 @@
     "@react-native-community/blur": ">=4"
   },
   "dependencies": {
-    "glacia-tokens": "workspace:*"
+    "glacia-tokens": "0.5.2"
   },
   "devDependencies": {
     "@testing-library/react": "^16.3.3",

@@ -1,4 +1,5 @@
 import { forwardRef, useState } from "react";
+import type { ReactNode } from "react";
 import type { StyleProp, ViewStyle } from "react-native";
 
 import { loadEngineControl } from "./internal/glass-routing";
@@ -13,7 +14,11 @@ import { LensRim, lensShadow } from "./internal/lens";
 export interface TabBarItem {
   id: string;
   label: string;
-  icon?: any;
+  /**
+   * A render function — the engine calls it with the tab's state, so a plain
+   * element cannot be used here. The fallback floor calls it the same way.
+   */
+  icon?: (opts: { focused: boolean; color: string; size: number }) => ReactNode;
 }
 
 export interface TabBarProps {
@@ -36,9 +41,10 @@ export interface TabBarProps {
   testID?: string;
 }
 
-// The web bar: a 40pt rail (32pt tabs in a 4pt inset) with a 20pt radius, a
-// glass lens filling the active slot, and 13pt labels at 500/400 weight.
-const BAR_HEIGHT = 40;
+// The web bar: a 64pt rail (56pt pill in a 4pt inset) with a 20pt radius, a
+// glass lens filling the active slot, and 12pt labels at 500/400 weight —
+// the same height as the engine bar (64dp), so icon + label fit on both paths.
+const BAR_HEIGHT = 64;
 
 /**
  * The bottom bar of an app: a row of tabs on one glass surface.
@@ -102,6 +108,8 @@ export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
   const count = Math.max(items.length, 1);
   const itemWidth = `${100 / count}%`;
   const activeIndex = Math.max(0, items.findIndex((tab) => tab.id === activeId));
+  // Active tab: blue in light mode, white in dark mode (the bottom-bar rule).
+  const activeColor = isDark ? themeColors.foreground : themeColors.fill;
 
   const indicatorStyle = {
     position: "absolute" as const,
@@ -143,6 +151,13 @@ export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
         )}
         {items.map((tab) => {
           const isActive = tab.id === activeId;
+          const tabColor = isActive ? activeColor : themeColors.muted;
+          // The icon is a render function on both paths; a plain element is
+          // still rendered as-is so older call sites do not crash.
+          const iconNode =
+            typeof tab.icon === "function"
+              ? tab.icon({ focused: isActive, color: tabColor, size: 24 })
+              : tab.icon ?? null;
           return (
             <Pressable
               key={tab.id}
@@ -159,12 +174,14 @@ export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
                 alignItems: "center",
                 justifyContent: "center",
                 gap: 2,
-                paddingHorizontal: 8,
+                // Tight side padding: at 390pt a 5-tab bar gives each tab ~70pt,
+                // and "Accounts" at 12pt needs ~54pt — 8pt padding truncated it.
+                paddingHorizontal: 2,
                 paddingVertical: 4,
               }}
             >
-              {tab.icon ?? null}
-              <RNText numberOfLines={1} style={{ fontSize: 13, fontWeight: isActive ? "500" : "400", color: isActive ? themeColors.fill : themeColors.muted }}>
+              {iconNode}
+              <RNText numberOfLines={1} style={{ fontSize: 12, fontWeight: isActive ? "500" : "400", color: tabColor }}>
                 {tab.label}
               </RNText>
             </Pressable>
@@ -187,11 +204,11 @@ export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
       tabs={tabs}
       selectedIndex={selectedIndex}
       onTabSelected={(index: number) => handleSelect(items[index]?.id ?? "")}
-      accentColor={themeColors.fill}
+      accentColor={activeColor}
       inactiveColor={themeColors.muted}
       tint={themeColors.glass}
       style={style}
-      labelStyle={{ fontSize: 13 } as any}
+      labelStyle={{ fontSize: 12 } as any}
     />
   );
 });

@@ -140,6 +140,8 @@ export const Button = forwardRef<any, ButtonProps>(function Button(
       variant={variant}
       tint={tint ?? themeColors.fill}
       onPress={onPress}
+      style={style}
+      contentStyle={contentStyle}
     >
       {children}
     </FallbackButton>
@@ -184,7 +186,7 @@ const GhostButton = forwardRef<any, GhostButtonProps>(function GhostButton(
       >
         <View style={{ height: height - 8, justifyContent: "center", alignItems: "center", flex: 1 }}>
           {typeof children === "string" ? (
-            <RNText style={{ fontSize: 14, fontWeight: "400" }}>{children}</RNText>
+            <RNText style={{ fontSize: 14, fontWeight: "400", color: themeColors.foreground }}>{children}</RNText>
           ) : (
             children
           )}
@@ -204,11 +206,13 @@ export interface FallbackButtonProps {
   variant?: "glass" | "filled" | "ghost";
   tint?: string;
   onPress?: () => void;
+  style?: StyleProp<ViewStyle>;
+  contentStyle?: StyleProp<ViewStyle>;
   children?: ReactNode;
 }
 
 const FallbackButton = forwardRef<any, FallbackButtonProps>(function FallbackButton(
-  { accessibilityLabel, disabled = false, height = ENGINE_BUTTON_SIZES.md, isDark, testID, variant = "glass", tint, onPress, children },
+  { accessibilityLabel, disabled = false, height = ENGINE_BUTTON_SIZES.md, isDark, testID, variant = "glass", tint, onPress, style, contentStyle, children },
   ref,
 ) {
   const themeColors = isDark ? colors.dark : colors.light;
@@ -224,6 +228,7 @@ const FallbackButton = forwardRef<any, FallbackButtonProps>(function FallbackBut
       accessibilityState={{ disabled }}
       disabled={disabled}
       onPress={disabled ? undefined : onPress}
+      style={style}
     >
       <View
         style={{
@@ -235,7 +240,7 @@ const FallbackButton = forwardRef<any, FallbackButtonProps>(function FallbackBut
           justifyContent: "center",
         }}
       >
-        <View style={{ height: height - 8, justifyContent: "center", alignItems: "center", flex: 1 }}>
+        <View style={[{ height: height - 8, justifyContent: "center", alignItems: "center", flex: 1 }, contentStyle]}>
           {typeof children === "string" ? (
             <RNText style={{ fontSize: 14, fontWeight: "400", color: themeColors.onTint }}>{children}</RNText>
           ) : (

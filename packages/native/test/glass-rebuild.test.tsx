@@ -67,9 +67,10 @@ describe("TabBar — safe-area fix (#7.1)", () => {
     );
     const bar = container.querySelector('[data-testid="bar"]') as HTMLElement;
     expect(bar).toBeTruthy();
-    // The design height (40) plus the safe-area inset the bar must clear, so
-    // the glass ends above the home indicator / nav bar rather than sinking in.
-    expect(Number.parseFloat(bar.style.height)).toBe(40 + 34);
+    // The design height (64, matching the engine bar) plus the safe-area inset
+    // the bar must clear, so the glass ends above the home indicator / nav bar
+    // rather than sinking in.
+    expect(Number.parseFloat(bar.style.height)).toBe(64 + 34);
   });
 });
 

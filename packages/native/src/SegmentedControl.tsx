@@ -102,6 +102,10 @@ export const SegmentedControl = forwardRef<any, SegmentedControlProps>(function 
 
   // Fallback floor: the sliding lens pill on a solid track, full selection
   // behaviour, so the selected segment reads exactly as it does in glass.
+  // The track stretches to its parent like the engine path (no alignSelf), and
+  // every segment takes an equal share of the track — a fixed cell width
+  // computed from the height (11pt for 3 segments at height 40) collapsed the
+  // track and piled the labels on top of each other ("D L P", run 8).
   const fallback = (
     <Glass
       effect="regular"
@@ -112,7 +116,7 @@ export const SegmentedControl = forwardRef<any, SegmentedControlProps>(function 
         position: "relative",
         flexDirection: "row",
         alignItems: "center",
-        alignSelf: "flex-start",
+        height,
         padding: 3,
         borderRadius: radii.pill,
         backgroundColor: themeColors.fieldWash,
@@ -162,16 +166,15 @@ export const SegmentedControl = forwardRef<any, SegmentedControlProps>(function 
       )}
       {segments.map((segment, index) => {
         const isSelected = index === selected;
-        const cell = (height - 6) / Math.max(segments.length, 1);
         return (
-          <View key={segment} style={{ width: cell, height: height - 6, position: "relative" }}>
+          <View key={segment} style={{ flex: 1, height: height - 6, position: "relative" }}>
             {isSelected ? (
               <View
                 style={{
                   position: "absolute",
                   top: 0,
                   left: 0,
-                  width: cell,
+                  width: "100%",
                   height: height - 6,
                   borderRadius: (height - 6) / 2,
                   backgroundColor: themeColors.glassActive,
@@ -192,11 +195,14 @@ export const SegmentedControl = forwardRef<any, SegmentedControlProps>(function 
               style={{ width: "100%", height, alignItems: "center", justifyContent: "center" }}
             >
               <RNText
+                numberOfLines={1}
                 style={[
                   {
                     fontSize: 14,
                     fontWeight: isSelected ? "600" : "500",
-                    color: isSelected ? themeColors.onTint : themeColors.muted,
+                    // Foreground, like the engine path's label colour — onTint
+                    // (white) is unreadable on the light-mode pill.
+                    color: isSelected ? themeColors.foreground : themeColors.muted,
                   },
                   textStyle,
                 ]}

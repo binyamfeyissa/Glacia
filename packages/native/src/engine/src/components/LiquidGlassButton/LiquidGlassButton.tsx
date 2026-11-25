@@ -313,7 +313,14 @@ const LiquidGlassButtonBase: React.FC<ILiquidGlassButtonProps> = ({
           style,
         ]}
       >
-        <Animated.View style={pressStyle}>
+        {/* The press wrapper fills the Pressable's width, so the glass pane
+            (absoluteFill inside it) is a full-width capsule, not a ~height
+            circle: a stretched child is not guaranteed here — the wrapper
+            sizes to its content unless it is told to fill — which is why
+            bank's 4-button row rendered ~46pt circles with overflowing
+            labels. The content does the same, so its label truncates
+            inside the pane instead of overflowing it. */}
+        <Animated.View style={[pressStyle, styles.pressWrap]}>
           {/* The pane is its own layer under the content so a merge can fade it without touching
               the label — which stays legible on top of whichever pane is drawing. */}
           <Animated.View pointerEvents="none" style={[styles.pane, paneStyle]}>
@@ -359,7 +366,7 @@ const LiquidGlassButtonBase: React.FC<ILiquidGlassButtonProps> = ({
               {
                 height,
                 paddingHorizontal: circular ? 0 : sizing.paddingHorizontal,
-                width: circular ? height : undefined,
+                width: circular ? height : "100%",
               },
               contentStyle,
             ]}
@@ -381,6 +388,11 @@ const LiquidGlassButtonBase: React.FC<ILiquidGlassButtonProps> = ({
 };
 
 const styles = StyleSheet.create({
+  // Fills the Pressable so the pane (absoluteFill) is full-width — see L3.
+  pressWrap: {
+    alignSelf: "stretch",
+    width: "100%",
+  },
   pane: {
     ...ABSOLUTE_FILL,
   },

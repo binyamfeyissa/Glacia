@@ -119,8 +119,8 @@ describe("Haptics on controls", () => {
     const { getByLabelText } = render(
       createElement(TabBar, {
         items: [
-          { id: "a", label: "A", icon: createElement("span", null, "A") },
-          { id: "b", label: "B", icon: createElement("span", null, "B") },
+          { id: "a", label: "A", icon: () => createElement("span", null, "A") },
+          { id: "b", label: "B", icon: () => createElement("span", null, "B") },
         ],
         defaultActiveId: "a",
       }),
@@ -133,8 +133,8 @@ describe("Haptics on controls", () => {
     const { getByLabelText } = render(
       createElement(TabBar, {
         items: [
-          { id: "a", label: "A", icon: createElement("span", null, "A") },
-          { id: "b", label: "B", icon: createElement("span", null, "B") },
+          { id: "a", label: "A", icon: () => createElement("span", null, "A") },
+          { id: "b", label: "B", icon: () => createElement("span", null, "B") },
         ],
         defaultActiveId: "a",
         haptics: false,
