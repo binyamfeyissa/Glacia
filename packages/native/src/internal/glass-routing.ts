@@ -111,14 +111,15 @@ export function routerFor(module: LiquidGlassModule | null | undefined): GlassRo
  * reads the native module and answers true only on iOS 26+, its Android build
  * answers for the AGSL tier — so loading it is how the verdict is learned.
  */
-const ENGINE_MODULE_ID = "../engine";
-
 function requireEngineModule(): any | null {
-  const scope = globalThis as any;
-  const req = typeof require === "function" ? require : scope.require;
-  if (typeof req !== "function") return null;
+  if (typeof require !== "function") return null;
   try {
-    const module = req(ENGINE_MODULE_ID);
+    // Metro only bundles calls spelled literally require("<string>"): the
+    // callee must be the `require` identifier AND the argument a string
+    // literal. A call through a local alias or with a variable module id
+    // is never collected, so the engine would be missing from the bundle
+    // (UnknownModuleError at launch).
+    const module = require("../engine");
     return module ?? null;
   } catch {
     // The engine (or its native module) is not resolvable here: unsupported.
