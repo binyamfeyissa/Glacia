@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "coin-tile",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/coin-tile.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — coin-tile\n// Copied with `npx glacia add coin-tile`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  useImperativeHandle,\n  useRef,\n  type ForwardRefExoticComponent,\n  type HTMLAttributes,\n  type ReactNode,\n  type RefAttributes,\n} from \"react\";\nimport { cx } from \"glacia/internal/cx\";\nimport { useRefraction } from \"glacia/internal/refraction\";\n\nexport interface CoinTileProps extends HTMLAttributes<HTMLDivElement> {\n  /** Coin icon or logo. */\n  icon?: ReactNode;\n  /** Background tint colour for the icon squircle badge (copies Item's iconTint). */\n  iconTint?: string;\n  /** Ticker symbol, e.g. \"BTC\". */\n  symbol: string;\n  /** Full coin name, e.g. \"Bitcoin\". */\n  name: string;\n  /** Current price, already formatted (e.g. \"$67,432.10\"). */\n  price: ReactNode;\n  /** 24h change in percent. Positive tints `--gl-on`, negative `--gl-destructive`. */\n  change?: number;\n}\n\n/**\n * A Liquid Glass coin tile — icon, symbol, name, price and 24h change.\n * Reference is Card (glass surface, useRefraction) laid out like Item\n * (icon badge, title + description, trailing accessory).\n *\n * No sparkline: the kit has no sparkline primitive. Its charts (LineChart\n * and friends in src/charts) are full-size charts, not inline sparklines,\n * so none is embedded here.\n */\nexport const CoinTile: ForwardRefExoticComponent<\n  CoinTileProps & RefAttributes<HTMLDivElement>\n> = /* @__PURE__ */ forwardRef<HTMLDivElement, CoinTileProps>(\n  function CoinTile(\n    { icon, iconTint, symbol, name, price, change, className, children, ...props },\n    forwardedRef,\n  ) {\n    const ref = useRef<HTMLDivElement>(null);\n    useImperativeHandle(forwardedRef, () => ref.current!);\n    useRefraction(ref);\n\n    const direction = change == null ? undefined : change >= 0 ? \"up\" : \"down\";\n\n    return (\n      <div\n        ref={ref}\n        className={cx(\"gl-glass gl-coin-tile\", className)}\n        suppressHydrationWarning\n        {...props}\n      >\n        {icon && (\n          <div\n            className=\"gl-coin-tile-icon\"\n            style={iconTint ? { backgroundColor: iconTint } : undefined}\n            aria-hidden\n          >\n            {icon}\n          </div>\n        )}\n        <div className=\"gl-coin-tile-body\">\n          <div className=\"gl-coin-tile-symbol\">{symbol}</div>\n          <div className=\"gl-coin-tile-name\">{name}</div>\n        </div>\n        <div className=\"gl-coin-tile-values\">\n          <div className=\"gl-coin-tile-price\">{price}</div>\n          {change != null && (\n            <div className=\"gl-coin-tile-change\" data-direction={direction}>\n              {change >= 0 ? \"+\" : \"\"}\n              {change.toFixed(2)}%\n            </div>\n          )}\n        </div>\n        {children}\n      </div>\n    );\n  },\n);\n",
+      "type": "registry:ui"
+    }
+  ]
+}

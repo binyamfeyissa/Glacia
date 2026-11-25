@@ -406,6 +406,74 @@ export {
   type PageDotsProps,
 } from "./page-control";
 
+// 9c. Wave 5 — 0.6.0 additions
+export { IconButton, type IconButtonProps } from "./icon-button";
+export { Banner, type BannerProps, type BannerTone } from "./banner";
+export {
+  BackdropSwitcher,
+  type BackdropSwitcherProps,
+  type BackdropValue,
+  defaultBackdropItems,
+} from "./backdrop-switcher";
+export { LinkCard, type LinkCardProps } from "./link-card";
+export { CoverPlate, type CoverPlateProps } from "./cover-plate";
+export { SearchTrigger, type SearchTriggerProps } from "./search-trigger";
+export { FolderTree, type FolderTreeProps, type FolderTreeItemData } from "./folder-tree";
+export { FileTile, type FileTileProps } from "./file-tile";
+export { Dropzone, type DropzoneProps } from "./dropzone";
+export {
+  StorageMeter,
+  type StorageMeterProps,
+  type StorageMeterSegment,
+  type StorageMeterTint,
+} from "./storage-meter";
+export {
+  Kanban,
+  type KanbanProps,
+  KanbanColumn,
+  type KanbanColumnProps,
+  KanbanCard,
+  type KanbanCardProps,
+  type KanbanColumnData,
+  type KanbanCardData,
+} from "./kanban";
+export {
+  Gantt,
+  type GanttProps,
+  GanttRow,
+  type GanttRowProps,
+  GanttBar,
+  type GanttBarProps,
+  type GanttRowData,
+  type GanttBarData,
+  type GanttBarTint,
+} from "./gantt";
+export {
+  UptimeStrip,
+  type UptimeStripProps,
+  type UptimeSegment,
+  type UptimeStatus,
+} from "./uptime-strip";
+export { CoinTile, type CoinTileProps } from "./coin-tile";
+export { SlotCell, type SlotCellProps } from "./slot-cell";
+export { LessonListRow, type LessonListRowProps } from "./lesson-list-row";
+export { DateBlock, type DateBlockProps } from "./date-block";
+export {
+  Timeline,
+  type TimelineProps,
+  type TimelineItem,
+  type TimelineItemState,
+} from "./timeline";
+export {
+  OrgChart,
+  type OrgChartProps,
+  OrgChartNode,
+  type OrgChartNodeProps,
+  type OrgChartNodeData,
+} from "./org-chart";
+export { SuccessState, type SuccessStateProps } from "./success-state";
+export { TicketEntry, type TicketEntryProps, type TicketStatus } from "./ticket-entry";
+
 // 10. Ready-Made Page Blocks
 export { LoginPage, type LoginPageProps } from "./blocks/login-page";
 export { AdminDashboard, type AdminDashboardProps } from "./blocks/admin-dashboard";

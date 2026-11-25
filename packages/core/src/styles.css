@@ -2199,7 +2199,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  border-radius: 0 20px 20px 0;
+  border-radius: 20px;
   transition: width 250ms ease, transform 250ms ease;
 }
 
@@ -8060,4 +8060,1353 @@
   font-weight: 500;
   fill: var(--gl-foreground);
   opacity: 0.75;
+}
+
+/* ==========================================================================
+   Wave 5 — 0.6.0 additions
+   Merged from library-19-work fragments; each block keeps its own header.
+   Sidebar radius: .gl-sidebar is now 20px on all four corners (was
+   0 20px 20px 0) — see the in-place change near line 2195.
+   ========================================================================== */
+
+/* --- IconButton (icon-button) --- */
+
+/* --- IconButton (icon-button.css) --------------------------------------- */
+/* No new CSS. IconButton renders Button with icon-only children, so it is
+   styled entirely by the existing `.gl-button` rules (including
+   `[data-icon="only"]` for the circle, sizes, variants, destructive and
+   tint). This fragment exists only so the merge step has nothing to miss. */
+
+/* --- Banner (banner) --- */
+
+/* --- Banner (banner.css) ------------------------------------------------ */
+/* Banner tones reuse the kit's existing tokens only: info `--gl-fill`,
+   success `--gl-on`, danger `--gl-destructive`. Warning reuses the kit's
+   only existing warning treatment, the `#ff9f0a` of `.gl-error-badge-warning`
+   — there is no `--gl-warning` token, and none is added. Easing, radius and
+   type sizes copy Card / Empty. */
+
+.gl-banner {
+  /* The tone accent; `info` is the default and sets no data-tone. */
+  --gl-banner-tone: var(--gl-fill);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 20px;
+  color: var(--gl-foreground);
+}
+
+.gl-banner[data-tone="success"] {
+  --gl-banner-tone: var(--gl-on);
+}
+
+.gl-banner[data-tone="warning"] {
+  --gl-banner-tone: #ff9f0a;
+}
+
+.gl-banner[data-tone="danger"] {
+  --gl-banner-tone: var(--gl-destructive);
+}
+
+/* Tinted disc, as Empty draws its icon plate. */
+.gl-banner-icon {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--gl-banner-tone) 14%, transparent);
+  color: var(--gl-banner-tone);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gl-banner-icon > svg {
+  width: 16px;
+  height: 16px;
+}
+
+.gl-banner-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gl-banner-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--gl-foreground);
+}
+
+.gl-banner-description {
+  margin: 0;
+  font-size: 13px;
+  color: var(--gl-muted);
+  line-height: 1.4;
+}
+
+.gl-banner-action {
+  flex: none;
+  align-self: center;
+  display: inline-flex;
+}
+
+.gl-banner-dismiss {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--gl-muted);
+  cursor: pointer;
+  transition: background-color 200ms var(--gl-ease), color 200ms var(--gl-ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gl-banner-dismiss:hover {
+    background-color: var(--gl-highlight);
+    color: var(--gl-foreground);
+  }
+}
+
+/* --- BackdropSwitcher (backdrop-switcher) --- */
+
+/* --- BackdropSwitcher (backdrop-switcher.css) --------------------------- */
+/* No new CSS. BackdropSwitcher renders SegmentedControl unchanged, so it is
+   styled entirely by the existing `.gl-segmented` rules (track, thumb, lens
+   and glass). This fragment exists only so the merge step has nothing to miss. */
+
+/* --- LinkCard (link-card) --- */
+
+/* --- LinkCard (link-card.css) ------------------------------------------- */
+/* LinkCard carries the Card classes (`gl-glass gl-card`), so its surface,
+   padding and slots come from `.gl-card`. Only link behaviour is added:
+   no underline, inherited text colour, a pointer, and the kit's standard
+   focus outline (copied from `.gl-button:focus-visible`). */
+
+.gl-link-card {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.gl-link-card:focus-visible {
+  outline: 2px solid var(--gl-ring);
+  outline-offset: 2px;
+}
+
+/* --- CoverPlate (cover-plate) --- */
+
+/* --- CoverPlate (cover-plate.css) --------------------------------------- */
+/* CoverPlate is Card glass with a media area on top and a body below.
+   Radius, title and description sizes copy `.gl-card` / `.gl-card-title` /
+   `.gl-card-description`; the media sits flush at the top, as a card image
+   does in the reference kit. */
+
+.gl-cover-plate {
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--gl-foreground);
+}
+
+.gl-cover-plate-media {
+  flex: none;
+}
+
+.gl-cover-plate-media > :is(img, video) {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.gl-cover-plate-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 20px 24px 24px;
+}
+
+.gl-cover-plate-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.gl-cover-plate-description {
+  margin: 0;
+  font-size: 13px;
+  color: var(--gl-muted);
+}
+
+.gl-cover-plate-action {
+  display: inline-flex;
+  margin-top: 12px;
+}
+
+/* --- SearchTrigger (search-trigger) --- */
+
+/* --- SearchTrigger (search-trigger.css) ---------------------------------- */
+/* SearchTrigger is a Button (glass, Button sizes), so its surface, height
+   and press behaviour come from `.gl-button`. Only the trigger layout is
+   added: label left, shortcut badge pushed to the right end, label in the
+   kit's muted tone. */
+
+.gl-search-trigger {
+  justify-content: flex-start;
+}
+
+.gl-search-trigger-label {
+  color: var(--gl-muted);
+}
+
+.gl-search-trigger > .gl-kbd {
+  margin-left: auto;
+}
+
+/* --- FolderTree (folder-tree) --- */
+
+/* --- FolderTree (folder-tree.css) --------------------------------------- */
+/* Rows copy ListItem: same `gl-list-item` boxes, separators, selected
+   background (`--gl-selection` via `.gl-list-item-selected`) and 15px
+   label. The chevron copies Accordion's chevron svg (16px, `--gl-muted`);
+   it points right when collapsed and down when open, rotating with
+   `--gl-ease`. Indentation is inline `paddingLeft` (20px per depth) so the
+   List separator stays aligned. Only existing `--gl-*` tokens are used. */
+
+.gl-folder-tree {
+  overflow: hidden;
+}
+
+.gl-folder-tree-row {
+  /* ListItem already sets the row box; the tree only adds the chevron. */
+  gap: 8px;
+}
+
+.gl-folder-tree-chevron {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--gl-muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-90deg);
+  transition: transform 200ms var(--gl-ease);
+}
+
+.gl-folder-tree-chevron > svg {
+  width: 16px;
+  height: 16px;
+}
+
+.gl-folder-tree-chevron[data-expanded] {
+  transform: rotate(0deg);
+}
+
+.gl-folder-tree-chevron-spacer {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+/* --- FileTile (file-tile) --- */
+
+/* --- FileTile (file-tile.css) ------------------------------------------- */
+/* A Card surface (20px radius, 24px padding) holding an Item-style icon
+   plate, name and meta. The icon plate copies Empty's icon plate
+   (`--gl-highlight` disc, `--gl-foreground` glyph); the thumb is a plain
+   rounded media area above the name. Selected state copies ListItem's
+   selected background (`--gl-lens`). Only existing `--gl-*` tokens. */
+
+.gl-file-tile {
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  padding: 20px 16px;
+  width: 160px;
+}
+
+.gl-file-tile-interactive {
+  cursor: pointer;
+}
+
+.gl-file-tile-interactive:focus-visible {
+  outline: 2px solid var(--gl-fill);
+  outline-offset: 2px;
+}
+
+.gl-file-tile[data-selected] {
+  background-color: var(--gl-lens);
+}
+
+.gl-file-tile-disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.gl-file-tile-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: var(--gl-highlight);
+  color: var(--gl-foreground);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.gl-file-tile-icon > svg {
+  width: 22px;
+  height: 22px;
+}
+
+.gl-file-tile-thumb {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--gl-highlight);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gl-file-tile-thumb > * {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gl-file-tile-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  width: 100%;
+}
+
+.gl-file-tile-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gl-foreground);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gl-file-tile-meta {
+  font-size: 12px;
+  color: var(--gl-muted);
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gl-file-tile-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* --- Dropzone (dropzone) --- */
+
+/* --- Dropzone (dropzone.css) -------------------------------------------- */
+/* A Card surface (20px radius, 24px padding) used as-is: no dashed border
+   is added. The kit's only dashed rule is the boarding-pass seam
+   (`1px dashed var(--gl-surface-edge)`), a perforation, not a drop-target
+   border, so it is not borrowed here. The drag-over state is a
+   `data-dragging` hook that lifts the surface the way ListItem's
+   `:active` state does (`--gl-selection`). Only existing `--gl-*` tokens. */
+
+.gl-dropzone {
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  cursor: pointer;
+  min-height: 160px;
+}
+
+.gl-dropzone:focus-visible {
+  outline: 2px solid var(--gl-fill);
+  outline-offset: 2px;
+}
+
+.gl-dropzone[data-dragging] {
+  background-color: var(--gl-selection);
+}
+
+.gl-dropzone-disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.gl-dropzone-input {
+  /* The native picker is hidden; the Dropzone surface is the control. */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.gl-dropzone-label {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--gl-foreground);
+}
+
+.gl-dropzone-description {
+  font-size: 13px;
+  color: var(--gl-muted);
+  line-height: 1.4;
+}
+
+/* --- StorageMeter (storage-meter) --- */
+
+/* --- StorageMeter (storage-meter.css) ----------------------------------- */
+/* The track copies Progress exactly (8px, `--gl-selection` track,
+   9999px radius); segments are the Progress fill, split into widths of
+   `value / total`. Tints use existing tokens only: `fill` → `--gl-fill`,
+   `on` → `--gl-on`, `destructive` → `--gl-destructive`,
+   `muted` → `--gl-muted`. The legend swatch is a 10px disc in the same
+   tint. Segment widths animate with `--gl-ease`, as Progress does. */
+
+.gl-storage-meter {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.gl-storage-meter-track {
+  display: flex;
+  overflow: hidden;
+}
+
+.gl-storage-meter-segment {
+  flex: none;
+  height: 100%;
+  background-color: var(--gl-fill);
+  transition: width 300ms var(--gl-ease);
+}
+
+.gl-storage-meter-segment[data-tint="on"] {
+  background-color: var(--gl-on);
+}
+
+.gl-storage-meter-segment[data-tint="destructive"] {
+  background-color: var(--gl-destructive);
+}
+
+.gl-storage-meter-segment[data-tint="muted"] {
+  background-color: var(--gl-muted);
+}
+
+.gl-storage-meter-segment:first-child {
+  border-start-start-radius: inherit;
+  border-end-start-radius: inherit;
+}
+
+.gl-storage-meter-segment:last-child {
+  border-start-end-radius: inherit;
+  border-end-end-radius: inherit;
+}
+
+.gl-storage-meter-legend {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gl-storage-meter-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--gl-foreground);
+}
+
+.gl-storage-meter-swatch {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background-color: var(--gl-fill);
+}
+
+.gl-storage-meter-swatch[data-tint="on"] {
+  background-color: var(--gl-on);
+}
+
+.gl-storage-meter-swatch[data-tint="destructive"] {
+  background-color: var(--gl-destructive);
+}
+
+.gl-storage-meter-swatch[data-tint="muted"] {
+  background-color: var(--gl-muted);
+}
+
+.gl-storage-meter-legend-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gl-storage-meter-legend-value {
+  color: var(--gl-muted);
+}
+
+/* --- Kanban (kanban) --- */
+
+/* --- Kanban (kanban.css) ------------------------------------------------- */
+/* The board is a horizontal row of Card surfaces (20px radius, 24px
+   padding, `--gl-foreground` titles at Card's 18px/600). Columns scroll
+   sideways; each column is 280px wide. Cards are smaller glass tiles
+   (16px radius, 12px padding) with an Item-style title (14px/500) and
+   muted description (12px), selected with ListItem's `--gl-lens`
+   background. The count reuses the Badge class. Only existing tokens. */
+
+.gl-kanban {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.gl-kanban-column {
+  flex: none;
+  width: 280px;
+  gap: 12px;
+}
+
+.gl-kanban-column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.gl-kanban-column-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--gl-foreground);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gl-kanban-count {
+  flex: none;
+}
+
+.gl-kanban-column-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gl-kanban-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  color: var(--gl-foreground);
+}
+
+.gl-kanban-card-interactive {
+  cursor: pointer;
+}
+
+.gl-kanban-card-interactive:focus-visible {
+  outline: 2px solid var(--gl-fill);
+  outline-offset: 2px;
+}
+
+.gl-kanban-card[data-selected] {
+  background-color: var(--gl-lens);
+}
+
+.gl-kanban-card-disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.gl-kanban-card-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gl-foreground);
+}
+
+.gl-kanban-card-description {
+  font-size: 12px;
+  color: var(--gl-muted);
+  line-height: 1.35;
+}
+
+.gl-kanban-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--gl-muted);
+}
+
+/* --- Gantt (gantt) --- */
+
+/* --- Gantt (gantt.css) --------------------------------------------------- */
+/* A Card surface of labelled rows. The track copies Progress (8px-high
+   `--gl-selection` track, 9999px radius) widened to a 16px lane so the
+   bar label fits; bars are the Progress fill, positioned by `start`/`end`
+   fractions, with the same tints as StorageMeter (`fill` → `--gl-fill`,
+   `on` → `--gl-on`, `destructive` → `--gl-destructive`,
+   `muted` → `--gl-muted`). In the `workload` variant each bar gets its
+   own lane, so overlapping bars stack instead of colliding. Bar widths
+   animate with `--gl-ease`, as Progress does. Only existing tokens. */
+
+.gl-gantt {
+  gap: 12px;
+}
+
+.gl-gantt-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.gl-gantt-label {
+  flex: none;
+  width: 120px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gl-foreground);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gl-gantt-track {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  height: 16px;
+  border-radius: 9999px;
+  background-color: var(--gl-selection);
+}
+
+.gl-gantt-lanes {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gl-gantt-lane {
+  position: relative;
+  height: 16px;
+  border-radius: 9999px;
+  background-color: var(--gl-selection);
+}
+
+.gl-gantt-bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  min-width: 8px;
+  border-radius: 9999px;
+  background-color: var(--gl-fill);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  transition:
+    left 300ms var(--gl-ease),
+    width 300ms var(--gl-ease);
+}
+
+.gl-gantt-bar[data-tint="on"] {
+  background-color: var(--gl-on);
+}
+
+.gl-gantt-bar[data-tint="destructive"] {
+  background-color: var(--gl-destructive);
+}
+
+.gl-gantt-bar[data-tint="muted"] {
+  background-color: var(--gl-muted);
+}
+
+.gl-gantt-bar-label {
+  padding: 0 8px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- UptimeStrip (uptime-strip) --- */
+
+/* --- UptimeStrip (uptime-strip.css) --------------------------------------- */
+/* Reference is Progress: a row of tinted segments on a glass surface. Tints
+   use existing tokens only — up `--gl-on`, degraded the kit's amber
+   `--gl-chart-3` (the same #ff9f0a `.gl-error-badge-warning` hardcodes, but
+   read through the existing `:root` token instead), down
+   `--gl-destructive`. Easing and radius copy Progress / Card. */
+
+.gl-uptime-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 20px;
+  color: var(--gl-foreground);
+}
+
+.gl-uptime-strip-bar {
+  display: flex;
+  gap: 2px;
+  height: 24px;
+}
+
+.gl-uptime-strip-segment {
+  flex: 1;
+  min-width: 0;
+  border-radius: 2px;
+  background: var(--gl-selection);
+  transition: background-color 200ms var(--gl-ease);
+}
+
+.gl-uptime-strip-segment[data-status="up"] {
+  background: var(--gl-on);
+}
+
+.gl-uptime-strip-segment[data-status="degraded"] {
+  background: var(--gl-chart-3);
+}
+
+.gl-uptime-strip-segment[data-status="down"] {
+  background: var(--gl-destructive);
+}
+
+.gl-uptime-strip-overall {
+  font-size: 13px;
+  color: var(--gl-muted);
+}
+
+.gl-uptime-strip-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--gl-foreground);
+}
+
+/* --- CoinTile (coin-tile) --- */
+
+/* --- CoinTile (coin-tile.css) ------------------------------------------------ */
+/* Reference is Card (glass surface, 20px radius) laid out like Item: a
+   32px icon squircle badge, title + muted description, trailing values.
+   Change tints use existing tokens only — up `--gl-on`, down
+   `--gl-destructive`. No new tokens. */
+
+.gl-coin-tile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 20px;
+  color: var(--gl-foreground);
+}
+
+.gl-coin-tile-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #fff;
+  background: var(--gl-fill);
+  flex-shrink: 0;
+}
+
+.gl-coin-tile-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gl-coin-tile-symbol {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.gl-coin-tile-name {
+  font-size: 13px;
+  color: var(--gl-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gl-coin-tile-values {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.gl-coin-tile-price {
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.gl-coin-tile-change {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.gl-coin-tile-change[data-direction="up"] {
+  color: var(--gl-on);
+}
+
+.gl-coin-tile-change[data-direction="down"] {
+  color: var(--gl-destructive);
+}
+
+/* --- SlotCell (slot-cell) --- */
+
+/* --- SlotCell (slot-cell.css) ------------------------------------------------ */
+/* Reference is Button: same glass surface, same size scale (sm 32px, md
+   40px, lg 48px), same press behaviour. `selected` copies the selected
+   treatment of Card's selectable patterns — a `--gl-fill` tint wash with a
+   lit `--gl-fill` rim — and uses existing tokens only. No new tokens. */
+
+.gl-slot-cell {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  min-height: var(--gl-control-md);
+  padding: 6px 14px;
+  border-radius: var(--gl-pill);
+  color: var(--gl-foreground);
+  font-size: 14px;
+  line-height: 1.25;
+  cursor: pointer;
+  transition: background-color 200ms var(--gl-ease);
+}
+
+.gl-slot-cell[data-size="sm"] {
+  min-height: var(--gl-control-sm);
+  padding: 4px 10px;
+  font-size: 13px;
+}
+
+.gl-slot-cell[data-size="lg"] {
+  min-height: var(--gl-control-lg);
+  padding: 8px 18px;
+  font-size: 15px;
+}
+
+.gl-slot-cell-label {
+  font-weight: 600;
+}
+
+.gl-slot-cell-time {
+  font-size: 12px;
+  color: var(--gl-muted);
+}
+
+.gl-slot-cell[data-selected] {
+  background-color: color-mix(in srgb, var(--gl-fill) 18%, transparent);
+  box-shadow: inset 0 0 0 1px var(--gl-fill);
+}
+
+.gl-slot-cell[data-selected] .gl-slot-cell-label {
+  color: var(--gl-fill);
+}
+
+.gl-slot-cell:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.gl-slot-cell:focus-visible {
+  outline: 2px solid var(--gl-fill);
+  outline-offset: 2px;
+}
+
+/* --- LessonListRow (lesson-list-row) --- */
+
+/* --- LessonListRow (lesson-list-row.css) ------------------------------------- */
+/* Reference is ListItem: the row itself reuses `gl-list-item` (layout, inset
+   separator, interactive and disabled treatments) — this fragment only styles
+   the leading badge. The index is a muted numeral; completed is a `--gl-on`
+   check; locked is a muted lock. No new tokens. */
+
+.gl-lesson-list-row-index {
+  font-size: 15px;
+  color: var(--gl-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.gl-lesson-list-row-check {
+  width: 18px;
+  height: 18px;
+  color: var(--gl-on);
+}
+
+.gl-lesson-list-row-lock {
+  width: 16px;
+  height: 16px;
+  color: var(--gl-muted);
+}
+
+.gl-lesson-list-row[data-completed] .gl-list-title {
+  color: var(--gl-muted);
+}
+
+/* --- DateBlock (date-block) --- */
+
+/* --- DateBlock (date-block.css) ------------------------------------------------ */
+/* Reference is Card (glass surface, 20px radius) sized like Badge: a small
+   stacked block, weekday muted on top, day numeral large, month muted below.
+   Type sizes copy CardTitle / CardDescription. No new tokens. */
+
+.gl-date-block {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  min-width: 56px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  color: var(--gl-foreground);
+  text-align: center;
+}
+
+.gl-date-block[data-size="sm"] {
+  min-width: 44px;
+  padding: 6px 8px;
+  border-radius: 12px;
+}
+
+.gl-date-block[data-size="lg"] {
+  min-width: 72px;
+  padding: 14px 16px;
+  border-radius: 20px;
+}
+
+.gl-date-block-weekday {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--gl-muted);
+}
+
+.gl-date-block-day {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.gl-date-block[data-size="sm"] .gl-date-block-day {
+  font-size: 18px;
+}
+
+.gl-date-block[data-size="lg"] .gl-date-block-day {
+  font-size: 32px;
+}
+
+.gl-date-block-month {
+  font-size: 12px;
+  color: var(--gl-muted);
+}
+
+.gl-date-block[data-size="lg"] .gl-date-block-month {
+  font-size: 13px;
+}
+
+/* --- Timeline (timeline) --- */
+
+/* --- Timeline (timeline.css) ------------------------------------------------ */
+/* Reference is Stepper / List: the dot copies Stepper's filled marker, the
+   connector line copies the List separator (`--gl-separator`), and the text
+   copies ListItem's title + subtitle stack. The root carries no glass of its
+   own — like Stepper, it is a layout primitive that sits inside a Card.
+   States use existing tokens only: done `--gl-on`, current `--gl-fill`,
+   upcoming `--gl-muted`. No new tokens. */
+
+.gl-timeline {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--gl-foreground);
+}
+
+.gl-timeline-item {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  padding-bottom: 20px;
+}
+
+.gl-timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+/* The connector line runs down from the dot to the next item, in the List
+   separator token. */
+.gl-timeline-item:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 5.5px;
+  top: 16px;
+  bottom: 2px;
+  width: 1px;
+  background: var(--gl-separator);
+}
+
+.gl-timeline-dot {
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  margin-top: 3px;
+  border-radius: 999px;
+  background: var(--gl-muted);
+  transition: background-color 200ms var(--gl-ease);
+}
+
+.gl-timeline-item[data-state="done"] .gl-timeline-dot {
+  background: var(--gl-on);
+}
+
+.gl-timeline-item[data-state="current"] .gl-timeline-dot {
+  background: var(--gl-fill);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--gl-fill) 20%, transparent);
+}
+
+.gl-timeline-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gl-timeline-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.gl-timeline-title {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.gl-timeline-time {
+  flex-shrink: 0;
+  font-size: 13px;
+  color: var(--gl-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.gl-timeline-description {
+  margin: 0;
+  font-size: 13px;
+  color: var(--gl-muted);
+  line-height: 1.4;
+}
+
+.gl-timeline-item[data-state="upcoming"] .gl-timeline-title {
+  color: var(--gl-muted);
+  font-weight: 500;
+}
+
+/* --- OrgChart (org-chart) --- */
+
+/* --- OrgChart (org-chart.css) ------------------------------------------------ */
+/* Reference is List / Accordion nesting: the node card copies Card's glass
+   surface and Item's avatar + title layout; the connector lines are the
+   classic nested-list org chart, drawn only with the existing separator
+   token (`--gl-separator`) — no new line style, no new tokens. */
+
+.gl-org-chart {
+  overflow-x: auto;
+  color: var(--gl-foreground);
+}
+
+.gl-org-chart-level {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+  padding: 20px 0 0;
+  list-style: none;
+  position: relative;
+}
+
+/* The root level starts flush — no connector space above the top nodes. */
+.gl-org-chart > .gl-org-chart-level {
+  padding-top: 0;
+}
+
+/* The vertical drop from a parent card to the horizontal bar of its reports. */
+.gl-org-chart-level .gl-org-chart-level::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 20px;
+  background: var(--gl-separator);
+}
+
+.gl-org-chart-node {
+  position: relative;
+  padding: 20px 4px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Horizontal bar across siblings, plus the vertical stub down to this card. */
+.gl-org-chart-node::before,
+.gl-org-chart-node::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 50%;
+  width: 50%;
+  height: 20px;
+  border-top: 1px solid var(--gl-separator);
+}
+
+.gl-org-chart-node::after {
+  right: auto;
+  left: 50%;
+  border-left: 1px solid var(--gl-separator);
+}
+
+/* A single child needs no horizontal bar — the parent's drop line runs
+   straight into it. */
+.gl-org-chart-node:only-child::before,
+.gl-org-chart-node:only-child::after {
+  display: none;
+}
+
+.gl-org-chart-node:first-child::before,
+.gl-org-chart-node:last-child::after {
+  border: 0 none;
+}
+
+.gl-org-chart-node:last-child::before {
+  border-right: 1px solid var(--gl-separator);
+}
+
+.gl-org-chart-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  color: var(--gl-foreground);
+}
+
+.gl-org-chart-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--gl-highlight);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.gl-org-chart-avatar > * {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gl-org-chart-identity {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.gl-org-chart-name {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.gl-org-chart-role {
+  font-size: 12px;
+  color: var(--gl-muted);
+  white-space: nowrap;
+}
+
+/* --- SuccessState (success-state) --- */
+
+/* --- SuccessState (success-state.css) ---------------------------------------
+   Merge into packages/core/src/styles.css (integration step; do not edit
+   styles.css directly). Reuses the .gl-empty layout classes — only the
+   success tone below is new. Uses ONLY existing --gl-* tokens; no new
+   tokens. ------------------------------------------------------------------ */
+
+/* Success tone: the icon plate is tinted green (--gl-on) instead of the
+   neutral --gl-highlight Empty uses, so the state reads as done, not empty. */
+.gl-success-state .gl-empty-icon-plate {
+  background: color-mix(in srgb, var(--gl-on) 16%, var(--gl-highlight));
+  color: var(--gl-on);
+}
+
+/* --- TicketEntry (ticket-entry) --- */
+
+/* --- TicketEntry (ticket-entry.css) -----------------------------------------
+   Merge into packages/core/src/styles.css (integration step; do not edit
+   styles.css directly). Reuses .gl-message-avatar and .gl-message-timestamp
+   from the Message family; only the entry layout and status tint below are
+   new. Uses ONLY existing --gl-* tokens; no new tokens. No bubble tail,
+   no side alignment — a full-width thread row, not a chat message.
+   -------------------------------------------------------------------------- */
+
+.gl-ticket-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 16px;
+  border-radius: var(--gl-stack-radius);
+}
+
+.gl-ticket-entry-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.gl-ticket-entry-author {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--gl-foreground);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The Message timestamp is a block under a bubble; in the header row it
+   sits inline next to the author. */
+.gl-ticket-entry .gl-message-timestamp {
+  margin-top: 0;
+  flex-shrink: 0;
+}
+
+.gl-ticket-entry-status {
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: 3px 8px;
+  border-radius: var(--gl-pill);
+  background: var(--gl-highlight);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--gl-fill);
+  transition: color 140ms var(--gl-ease);
+}
+
+.gl-ticket-entry-status[data-status="pending"] {
+  color: var(--gl-foreground);
+}
+
+.gl-ticket-entry-status[data-status="resolved"] {
+  color: var(--gl-on);
+}
+
+.gl-ticket-entry-status[data-status="closed"] {
+  color: var(--gl-muted);
+}
+
+.gl-ticket-entry-body {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--gl-foreground);
+  overflow-wrap: anywhere;
+}
+
+/* --- Stepper value (stepper-value.css) --- */
+
+/* --- Stepper value (stepper-value.css) --------------------------------------
+   Merge into packages/core/src/styles.css alongside the existing
+   .gl-stepper rules (integration step; do not edit styles.css directly).
+   Styles the .gl-stepper-value element added by the Stepper value fix.
+   Uses ONLY existing --gl-* tokens; no new tokens.
+   -------------------------------------------------------------------------- */
+
+.gl-stepper-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  padding: 0 8px;
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--gl-foreground);
 }

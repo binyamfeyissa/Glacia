@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "uptime-strip",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/uptime-strip.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — uptime-strip\n// Copied with `npx glacia add uptime-strip`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  useImperativeHandle,\n  useRef,\n  type ForwardRefExoticComponent,\n  type HTMLAttributes,\n  type RefAttributes,\n} from \"react\";\nimport { cx } from \"glacia/internal/cx\";\nimport { useRefraction } from \"glacia/internal/refraction\";\n\nexport type UptimeStatus = \"up\" | \"degraded\" | \"down\";\n\nexport interface UptimeSegment {\n  /** Health of this slice of time. */\n  status: UptimeStatus;\n  /** Label for the slice, shown as its tooltip (e.g. \"Nov 24 — all systems normal\"). */\n  label?: string;\n}\n\nexport interface UptimeStripProps extends HTMLAttributes<HTMLDivElement> {\n  /** One segment per day (e.g. 45 days), oldest first. */\n  segments: UptimeSegment[];\n  /** Overall uptime percentage. When omitted it is computed from the segments. */\n  overall?: number;\n  /** Label shown next to the percentage (default \"uptime\"). */\n  overallLabel?: string;\n}\n\n/**\n * A Liquid Glass uptime strip — the segmented bar of daily health shown on\n * status pages. Reference is Progress: a row of tinted segments on a glass\n * surface, up `--gl-on`, degraded the kit's amber `--gl-chart-3`, down\n * `--gl-destructive`.\n */\nexport const UptimeStrip: ForwardRefExoticComponent<\n  UptimeStripProps & RefAttributes<HTMLDivElement>\n> = /* @__PURE__ */ forwardRef<HTMLDivElement, UptimeStripProps>(\n  function UptimeStrip(\n    { segments, overall, overallLabel = \"uptime\", className, ...props },\n    forwardedRef,\n  ) {\n    const ref = useRef<HTMLDivElement>(null);\n    useImperativeHandle(forwardedRef, () => ref.current!);\n    useRefraction(ref);\n\n    const computed =\n      segments.length === 0\n        ? 100\n        : (segments.filter((segment) => segment.status === \"up\").length /\n            segments.length) *\n          100;\n    const value = overall ?? computed;\n\n    return (\n      <div\n        ref={ref}\n        className={cx(\"gl-glass gl-uptime-strip\", className)}\n        role=\"img\"\n        aria-label={`${value.toFixed(1)}% ${overallLabel} over ${segments.length} days`}\n        suppressHydrationWarning\n        {...props}\n      >\n        <div className=\"gl-uptime-strip-bar\" aria-hidden>\n          {segments.map((segment, index) => (\n            <span\n              key={index}\n              className=\"gl-uptime-strip-segment\"\n              data-status={segment.status}\n              title={segment.label}\n            />\n          ))}\n        </div>\n        <span className=\"gl-uptime-strip-overall\">\n          <span className=\"gl-uptime-strip-value\">{value.toFixed(1)}%</span>{\" \"}\n          {overallLabel}\n        </span>\n      </div>\n    );\n  },\n);\n",
+      "type": "registry:ui"
+    }
+  ]
+}

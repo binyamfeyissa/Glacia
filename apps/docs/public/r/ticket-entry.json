@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "ticket-entry",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/ticket-entry.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — ticket-entry\n// Copied with `npx glacia add ticket-entry`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ForwardRefExoticComponent,\n  type HTMLAttributes,\n  type ReactNode,\n  type RefAttributes,\n} from \"react\";\nimport { cx } from \"glacia/internal/cx\";\n\n/**\n * TicketEntry — one entry in a support-ticket thread.\n *\n * Reference: the Message family (src/message.tsx) — author header,\n * timestamp and status reuse the Message classes, and the avatar reuses\n * `gl-message-avatar`. Adapted, NOT chat-shaped: there is no bubble tail,\n * no side alignment and no `gl-message-user` / `gl-message-assistant`\n * split. The entry is a full-width glass row: header (avatar, author,\n * timestamp, status) above the body.\n */\nexport type TicketStatus = \"open\" | \"pending\" | \"resolved\" | \"closed\";\n\nconst STATUS_LABELS: Record<TicketStatus, string> = {\n  open: \"Open\",\n  pending: \"Pending\",\n  resolved: \"Resolved\",\n  closed: \"Closed\",\n};\n\nexport interface TicketEntryProps extends HTMLAttributes<HTMLElement> {\n  /** Who wrote this entry (name or richer header content). */\n  author: ReactNode;\n  /** Avatar content (initials, icon, or image) shown before the author. */\n  avatar?: ReactNode;\n  /** When the entry was posted, e.g. \"Tue 10:41\". */\n  timestamp?: string;\n  /** Ticket status shown as a tinted label (default \"open\"). */\n  status?: TicketStatus;\n  /** The entry body. `children` is used when `body` is not given. */\n  body?: ReactNode;\n}\n\nexport const TicketEntry: ForwardRefExoticComponent<\n  TicketEntryProps & RefAttributes<HTMLElement>\n> = /* @__PURE__ */ forwardRef<HTMLElement, TicketEntryProps>(\n  function TicketEntry(\n    { author, avatar, timestamp, status = \"open\", body, className, children, ...props },\n    ref,\n  ) {\n    return (\n      <article\n        ref={ref}\n        className={cx(\"gl-glass gl-ticket-entry\", className)}\n        data-status={status}\n        {...props}\n      >\n        <div className=\"gl-ticket-entry-header\">\n          {avatar && <div className=\"gl-message-avatar gl-glass\">{avatar}</div>}\n          <span className=\"gl-ticket-entry-author\">{author}</span>\n          {timestamp && <span className=\"gl-message-timestamp\">{timestamp}</span>}\n          <span className=\"gl-ticket-entry-status\" data-status={status}>\n            {STATUS_LABELS[status]}\n          </span>\n        </div>\n        <div className=\"gl-ticket-entry-body\">{body ?? children}</div>\n      </article>\n    );\n  },\n);\n",
+      "type": "registry:ui"
+    }
+  ]
+}

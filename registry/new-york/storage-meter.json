@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "storage-meter",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/storage-meter.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — storage-meter\n// Copied with `npx glacia add storage-meter`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  useImperativeHandle,\n  useRef,\n  type ForwardRefExoticComponent,\n  type HTMLAttributes,\n  type RefAttributes,\n} from \"react\";\n\nimport { cx } from \"glacia/internal/cx\";\n\n/** Tint for a segment. Maps to the kit's existing tokens only. */\nexport type StorageMeterTint = \"fill\" | \"on\" | \"destructive\" | \"muted\";\n\nexport interface StorageMeterSegment {\n  /** Legend label for the segment. */\n  label: string;\n  /** Amount of storage used, in the same units as `total`. */\n  value: number;\n  /** Tint of the segment; defaults to `fill` (`--gl-fill`). */\n  tint?: StorageMeterTint;\n}\n\nexport interface StorageMeterProps extends HTMLAttributes<HTMLDivElement> {\n  /** Stacked segments. Their widths are `value / total`. */\n  segments: StorageMeterSegment[];\n  /** Total capacity, in the same units as the segment values. */\n  total: number;\n  /** Show the legend under the meter. Defaults to true. */\n  showLegend?: boolean;\n}\n\n/**\n * A stacked horizontal storage meter — a Progress track split into\n * tinted segments, with an optional legend. Segment widths copy\n * Progress's track/fill pattern; tints use existing tokens only:\n * `fill` → `--gl-fill`, `on` → `--gl-on`,\n * `destructive` → `--gl-destructive`, `muted` → `--gl-muted`.\n */\nexport const StorageMeter: ForwardRefExoticComponent<\n  StorageMeterProps & RefAttributes<HTMLDivElement>\n> = /* @__PURE__ */ forwardRef<HTMLDivElement, StorageMeterProps>(function StorageMeter(\n  { segments, total, showLegend = true, className, ...props },\n  forwardedRef,\n) {\n  const ref = useRef<HTMLDivElement>(null);\n  useImperativeHandle(forwardedRef, () => ref.current!);\n\n  const used = segments.reduce((sum, segment) => sum + segment.value, 0);\n\n  return (\n    <div ref={ref} className={cx(\"gl-storage-meter\", className)} {...props}>\n      <div\n        className=\"gl-glass gl-progress gl-storage-meter-track\"\n        role=\"meter\"\n        aria-valuemin={0}\n        aria-valuemax={total}\n        aria-valuenow={used}\n        aria-label=\"Storage used\"\n      >\n        {segments.map((segment) => (\n          <div\n            key={segment.label}\n            className=\"gl-storage-meter-segment\"\n            data-tint={segment.tint ?? \"fill\"}\n            style={{ width: `${total > 0 ? (segment.value / total) * 100 : 0}%` }}\n          />\n        ))}\n      </div>\n      {showLegend && (\n        <ul className=\"gl-storage-meter-legend\">\n          {segments.map((segment) => (\n            <li key={segment.label} className=\"gl-storage-meter-legend-item\">\n              <span\n                className=\"gl-storage-meter-swatch\"\n                data-tint={segment.tint ?? \"fill\"}\n                aria-hidden\n              />\n              <span className=\"gl-storage-meter-legend-label\">{segment.label}</span>\n              <span className=\"gl-storage-meter-legend-value\">{segment.value}</span>\n            </li>\n          ))}\n        </ul>\n      )}\n    </div>\n  );\n});\n",
+      "type": "registry:ui"
+    }
+  ]
+}

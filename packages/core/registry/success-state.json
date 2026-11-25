@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "success-state",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/success-state.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — success-state\n// Copied with `npx glacia add success-state`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  type ForwardRefExoticComponent,\n  type HTMLAttributes,\n  type ReactNode,\n  type RefAttributes,\n} from \"react\";\nimport { cx } from \"glacia/internal/cx\";\n\n/**\n * SuccessState — a success confirmation built on the Empty layout.\n *\n * Reference: Empty (src/empty.tsx) — same structure (icon plate, title,\n * description, action), same `gl-empty` layout classes. It is a success\n * state, NOT an empty state: it never renders Empty itself, and the\n * `gl-success-state` hook tints the icon plate with the success tone\n * (`--gl-on`) instead of the neutral `--gl-highlight`.\n */\nexport interface SuccessStateProps extends HTMLAttributes<HTMLDivElement> {\n  /** Icon or illustration displayed in the glass squircle badge. */\n  icon?: ReactNode;\n  /** Primary headline confirming the success. */\n  title: string;\n  /** Secondary description explaining what happened or what comes next. */\n  description?: string;\n  /** Optional call-to-action button or interactive elements. */\n  action?: ReactNode;\n}\n\nexport const SuccessState: ForwardRefExoticComponent<\n  SuccessStateProps & RefAttributes<HTMLDivElement>\n> = /* @__PURE__ */ forwardRef<HTMLDivElement, SuccessStateProps>(\n  function SuccessState(\n    { icon, title, description, action, className, children, ...props },\n    ref,\n  ) {\n    return (\n      <div\n        ref={ref}\n        role=\"status\"\n        className={cx(\"gl-glass gl-empty gl-success-state\", className)}\n        {...props}\n      >\n        {icon && <div className=\"gl-empty-icon-plate\">{icon}</div>}\n        <h3 className=\"gl-empty-title\">{title}</h3>\n        {description && <p className=\"gl-empty-description\">{description}</p>}\n        {action && <div className=\"gl-empty-action\">{action}</div>}\n        {children}\n      </div>\n    );\n  },\n);\n",
+      "type": "registry:ui"
+    }
+  ]
+}

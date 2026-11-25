@@ -984,6 +984,216 @@
       ]
     },
     {
+      "name": "icon-button",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "banner",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "backdrop-switcher",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "link-card",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "cover-plate",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "search-trigger",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "folder-tree",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "file-tile",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "dropzone",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "storage-meter",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "kanban",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "gantt",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "uptime-strip",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "coin-tile",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "slot-cell",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "lesson-list-row",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "date-block",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "timeline",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "org-chart",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "success-state",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
+      "name": "ticket-entry",
+      "type": "registry:ui",
+      "dependencies": [
+        "glacia@^0.3.1"
+      ],
+      "registryDependencies": [
+        "/r/glass.json"
+      ]
+    },
+    {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
       "name": "base",
       "type": "registry:style",
@@ -1098,7 +1308,28 @@
         "/r/ai-input.json",
         "/r/shimmer.json",
         "/r/boarding-pass.json",
-        "/r/activity.json"
+        "/r/activity.json",
+        "/r/icon-button.json",
+        "/r/banner.json",
+        "/r/backdrop-switcher.json",
+        "/r/link-card.json",
+        "/r/cover-plate.json",
+        "/r/search-trigger.json",
+        "/r/folder-tree.json",
+        "/r/file-tile.json",
+        "/r/dropzone.json",
+        "/r/storage-meter.json",
+        "/r/kanban.json",
+        "/r/gantt.json",
+        "/r/uptime-strip.json",
+        "/r/coin-tile.json",
+        "/r/slot-cell.json",
+        "/r/lesson-list-row.json",
+        "/r/date-block.json",
+        "/r/timeline.json",
+        "/r/org-chart.json",
+        "/r/success-state.json",
+        "/r/ticket-entry.json"
       ],
       "files": []
     }

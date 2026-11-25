@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "icon-button",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/icon-button.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — icon-button\n// Copied with `npx glacia add icon-button`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  useImperativeHandle,\n  useRef,\n  type ForwardRefExoticComponent,\n  type ReactNode,\n  type RefAttributes,\n} from \"react\";\n\nimport { Button, type ButtonProps } from \"glacia\";\n\nexport interface IconButtonProps extends Omit<ButtonProps, \"icon\" | \"children\"> {\n  /** The icon. IconButton never has a label: `aria-label` is required. */\n  icon: ReactNode;\n  /** Required: the accessible name, since there is no visible label. */\n  \"aria-label\": string;\n}\n\n/**\n * A Button with icon-only children, typed so it can only be used that way:\n * an icon is required and so is an `aria-label`. Renders exactly what\n * Button renders for icon-only children (a circle, `data-icon=\"only\"`),\n * with the same glass / filled / ghost variants, sizes, destructive tint\n * and refraction — no new visuals.\n */\nexport const IconButton: ForwardRefExoticComponent<\n  IconButtonProps & RefAttributes<HTMLButtonElement>\n> = /* @__PURE__ */ forwardRef<HTMLButtonElement, IconButtonProps>(\n  function IconButton(\n    { icon, variant = \"glass\", size = \"md\", destructive, tint, ...props },\n    forwardedRef,\n  ) {\n    const ref = useRef<HTMLButtonElement>(null);\n    useImperativeHandle(forwardedRef, () => ref.current!);\n\n    return (\n      <Button\n        ref={ref}\n        icon={icon}\n        variant={variant}\n        size={size}\n        destructive={destructive}\n        tint={tint}\n        {...props}\n      />\n    );\n  },\n);\n",
+      "type": "registry:ui"
+    }
+  ]
+}

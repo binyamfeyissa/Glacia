@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slot-cell",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/slot-cell.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — slot-cell\n// Copied with `npx glacia add slot-cell`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  useImperativeHandle,\n  useRef,\n  type ButtonHTMLAttributes,\n  type ForwardRefExoticComponent,\n  type ReactNode,\n  type RefAttributes,\n} from \"react\";\nimport { cx } from \"glacia/internal/cx\";\nimport { usePress } from \"glacia/internal/press\";\nimport { useRefraction } from \"glacia/internal/refraction\";\n\nexport interface SlotCellProps\n  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, \"onSelect\"> {\n  /** Primary label, e.g. the service or the slot name. */\n  label: ReactNode;\n  /** Time shown under the label, e.g. \"09:30\". */\n  time?: ReactNode;\n  /** Slot size: 'sm' (32px), 'md' (40px, default), 'lg' (48px) — copies Button. */\n  size?: \"sm\" | \"md\" | \"lg\";\n  /** Marks this slot as the chosen one (aria-pressed). */\n  selected?: boolean;\n  /** Called when the slot is tapped. */\n  onSelect?: () => void;\n}\n\n/**\n * A selectable time-slot cell — a glass button with a label and a time,\n * for booking pickers. Reference is Button: same sizes, same press and\n * refraction behaviour, same `gl-glass` surface; `selected` is the\n * pressed state from Card's selectable patterns, exposed as aria-pressed.\n */\nexport const SlotCell: ForwardRefExoticComponent<\n  SlotCellProps & RefAttributes<HTMLButtonElement>\n> = /* @__PURE__ */ forwardRef<HTMLButtonElement, SlotCellProps>(\n  function SlotCell(\n    {\n      label,\n      time,\n      size = \"md\",\n      selected,\n      disabled,\n      onSelect,\n      className,\n      children,\n      ...props\n    },\n    forwardedRef,\n  ) {\n    const ref = useRef<HTMLButtonElement>(null);\n    useImperativeHandle(forwardedRef, () => ref.current!);\n    usePress(ref);\n    useRefraction(ref);\n\n    return (\n      <button\n        ref={ref}\n        type=\"button\"\n        className={cx(\"gl-glass gl-slot-cell\", className)}\n        data-size={size === \"md\" ? undefined : size}\n        data-selected={selected ? \"\" : undefined}\n        aria-pressed={selected ? true : undefined}\n        disabled={disabled}\n        onClick={onSelect}\n        // The refraction engine writes data-rim and data-refracting from measured\n        // geometry after hydration; those writes are intentional.\n        suppressHydrationWarning\n        {...props}\n      >\n        <span className=\"gl-slot-cell-label\">{label}</span>\n        {time && <span className=\"gl-slot-cell-time\">{time}</span>}\n        {children}\n      </button>\n    );\n  },\n);\n",
+      "type": "registry:ui"
+    }
+  ]
+}

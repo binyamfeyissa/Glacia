@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "search-trigger",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/search-trigger.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — search-trigger\n// Copied with `npx glacia add search-trigger`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  useImperativeHandle,\n  useRef,\n  type ForwardRefExoticComponent,\n  type RefAttributes,\n} from \"react\";\n\nimport { Button, type ButtonProps } from \"glacia\";\nimport { cx } from \"glacia/internal/cx\";\nimport { Kbd } from \"glacia\";\n\nexport interface SearchTriggerProps\n  extends Omit<ButtonProps, \"icon\" | \"children\" | \"variant\"> {\n  /** Label shown in the trigger. Defaults to \"Search\". */\n  label?: string;\n  /** Keyboard hint shown in a Kbd badge. Defaults to \"⌘K\". */\n  shortcut?: string;\n  /** Button size: 'sm' (32px), 'md' (40px, default), 'lg' (48px). */\n  size?: \"sm\" | \"md\" | \"lg\";\n}\n\n/**\n * The glass button that opens the command palette: a Button with Command's\n * search icon, a label and a Kbd shortcut hint. Glass variant, Button sizes,\n * Button press / refraction behaviour — no new visuals. Wire `onClick` to\n * open a CommandDialog.\n */\nexport const SearchTrigger: ForwardRefExoticComponent<\n  SearchTriggerProps & RefAttributes<HTMLButtonElement>\n> = /* @__PURE__ */ forwardRef<HTMLButtonElement, SearchTriggerProps>(\n  function SearchTrigger(\n    { label = \"Search\", shortcut = \"⌘K\", size = \"md\", className, ...props },\n    forwardedRef,\n  ) {\n    const ref = useRef<HTMLButtonElement>(null);\n    useImperativeHandle(forwardedRef, () => ref.current!);\n\n    return (\n      <Button\n        ref={ref}\n        variant=\"glass\"\n        size={size}\n        className={cx(\"gl-search-trigger\", className)}\n        icon={\n          <svg\n            width=\"16\"\n            height=\"16\"\n            viewBox=\"0 0 24 24\"\n            fill=\"none\"\n            stroke=\"currentColor\"\n            strokeWidth=\"2\"\n            strokeLinecap=\"round\"\n            strokeLinejoin=\"round\"\n            aria-hidden=\"true\"\n          >\n            <circle cx=\"11\" cy=\"11\" r=\"8\" />\n            <line x1=\"21\" y1=\"21\" x2=\"16.65\" y2=\"16.65\" />\n          </svg>\n        }\n        {...props}\n      >\n        <span className=\"gl-search-trigger-label\">{label}</span>\n        <Kbd size={size}>{shortcut}</Kbd>\n      </Button>\n    );\n  },\n);\n",
+      "type": "registry:ui"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "date-block",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/date-block.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — date-block\n// Copied with `npx glacia add date-block`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  useImperativeHandle,\n  useRef,\n  type ForwardRefExoticComponent,\n  type HTMLAttributes,\n  type RefAttributes,\n} from \"react\";\nimport { cx } from \"glacia/internal/cx\";\nimport { useRefraction } from \"glacia/internal/refraction\";\n\nconst MONTHS = [\n  \"Jan\",\n  \"Feb\",\n  \"Mar\",\n  \"Apr\",\n  \"May\",\n  \"Jun\",\n  \"Jul\",\n  \"Aug\",\n  \"Sep\",\n  \"Oct\",\n  \"Nov\",\n  \"Dec\",\n] as const;\n\nconst WEEKDAYS = [\"Sun\", \"Mon\", \"Tue\", \"Wed\", \"Thu\", \"Fri\", \"Sat\"] as const;\n\nexport interface DateBlockProps extends HTMLAttributes<HTMLDivElement> {\n  /** The date to show. Day numeral, month and weekday are derived from it. */\n  date?: Date;\n  /** Day numeral override, e.g. 25. Defaults to the date's day. */\n  day?: number | string;\n  /** Month override, e.g. \"Nov\". Defaults to the date's month. */\n  month?: string;\n  /** Weekday override, e.g. \"Tue\". Defaults to the date's weekday. */\n  weekday?: string;\n  /** Block size: 'sm' (compact), 'md' (default), 'lg' (large). */\n  size?: \"sm\" | \"md\" | \"lg\";\n}\n\n/**\n * A compact glass date block — day numeral, month, weekday — the kind\n * shown on calendar and event cards. Reference is Card (glass surface,\n * useRefraction) sized like Badge: small, stacked, tabular numerals.\n */\nexport const DateBlock: ForwardRefExoticComponent<\n  DateBlockProps & RefAttributes<HTMLDivElement>\n> = /* @__PURE__ */ forwardRef<HTMLDivElement, DateBlockProps>(\n  function DateBlock(\n    { date, day, month, weekday, size = \"md\", className, children, ...props },\n    forwardedRef,\n  ) {\n    const ref = useRef<HTMLDivElement>(null);\n    useImperativeHandle(forwardedRef, () => ref.current!);\n    useRefraction(ref);\n\n    const dayValue = day ?? date?.getDate();\n    const monthValue = month ?? (date ? MONTHS[date.getMonth()] : undefined);\n    const weekdayValue = weekday ?? (date ? WEEKDAYS[date.getDay()] : undefined);\n\n    return (\n      <div\n        ref={ref}\n        className={cx(\"gl-glass gl-date-block\", className)}\n        data-size={size === \"md\" ? undefined : size}\n        suppressHydrationWarning\n        {...props}\n      >\n        {weekdayValue && <span className=\"gl-date-block-weekday\">{weekdayValue}</span>}\n        {dayValue != null && <span className=\"gl-date-block-day\">{dayValue}</span>}\n        {monthValue && <span className=\"gl-date-block-month\">{monthValue}</span>}\n        {children}\n      </div>\n    );\n  },\n);\n",
+      "type": "registry:ui"
+    }
+  ]
+}

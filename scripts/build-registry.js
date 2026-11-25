@@ -82,6 +82,12 @@ const COMPONENTS = [
   "panelside", "ai-input", "shimmer",
   // Wave 5 — Composed blocks
   "boarding-pass", "activity",
+  // Wave 5 — 0.6.0 additions
+  "icon-button", "banner", "backdrop-switcher", "link-card", "cover-plate",
+  "search-trigger", "folder-tree", "file-tile", "dropzone", "storage-meter",
+  "kanban", "gantt", "uptime-strip", "coin-tile", "slot-cell",
+  "lesson-list-row", "date-block", "timeline", "org-chart",
+  "success-state", "ticket-entry",
 ];
 
 /**

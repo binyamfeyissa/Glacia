@@ -12,7 +12,7 @@ export interface ComponentMeta {
   category: "Buttons & Actions" | "Text & Forms" | "Showing Things" | "Navigation & Layout" | "Popups & Menus" | "Chat & AI" | "Charts";
   appleStatus: "Apple-faithful" | "Glacia extension";
   nativeStatus: "Yes" | "Web only" | "Web first";
-  wave: 1 | 2 | 3 | 4;
+  wave: 1 | 2 | 3 | 4 | 5;
   props: PropItem[];
   codeSnippet: string;
 }
@@ -785,7 +785,7 @@ export default function TableDemo() {
   {
     slug: "sidebar",
     name: "Sidebar",
-    description: "iPad/macOS-style floating glass sidebar with trigger toggle and navigation items.",
+    description: "iPad/macOS-style floating glass sidebar with trigger toggle and navigation items. Since 0.6.0 the sidebar is rounded on all four corners by default (was right corners only); give it margins — the floating pattern — rather than pinning it to the window edge.",
     category: "Navigation & Layout",
     appleStatus: "Apple-faithful",
     nativeStatus: "Web first",
@@ -2401,5 +2401,571 @@ export default function WidgetDemo() {
     codeSnippet: `import { AIInput } from "glacia";
 
 <AIInput onSubmit={(prompt) => send(prompt)} hint="Model: Glacia 1" />`,
+  },
+  {
+    slug: "icon-button",
+    name: "IconButton",
+    description: "Circular icon-only button with the Button's glass variants, sizes and press physics; icon and aria-label are required.",
+    category: "Buttons & Actions",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web only",
+    wave: 5,
+    props: [
+      { name: "icon", type: "ReactNode", description: "The icon. Required; IconButton never has a visible label." },
+      { name: "aria-label", type: "string", description: "Accessible name. Required, since there is no visible label." },
+      { name: "variant", type: "'glass' | 'filled' | 'ghost'", default: "'glass'", description: "Visual hierarchy variant." },
+      { name: "size", type: "'sm' | 'md' | 'lg'", default: "'md'", description: "Size preset controlling height and padding." },
+      { name: "destructive", type: "boolean", default: "false", description: "Styles button with destructive tint." },
+      { name: "tint", type: "string", description: "Any CSS colour. Tints a glass button's label, or a filled button's fill." },
+      { name: "disabled", type: "boolean", default: "false", description: "Prevents interaction and lowers opacity." },
+    ],
+    codeSnippet: `import { IconButton } from "glacia";
+
+export default function IconButtonDemo() {
+  return (
+    <div className="flex gap-3">
+      <IconButton icon={<ShareIcon />} aria-label="Share" />
+      <IconButton icon={<TrashIcon />} aria-label="Delete" variant="filled" destructive />
+    </div>
+  );
+}`,
+  },
+  {
+    slug: "banner",
+    name: "Banner",
+    description: "Inline glass banner / alert with a tinted icon plate, title, description, action and optional dismiss.",
+    category: "Showing Things",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web only",
+    wave: 5,
+    props: [
+      { name: "tone", type: "'info' | 'success' | 'warning' | 'danger'", default: "'info'", description: "Accent tone; info uses --gl-fill, success --gl-on, danger --gl-destructive, warning the kit's #ff9f0a." },
+      { name: "icon", type: "ReactNode", description: "Icon shown in the tinted plate. Omit for a text-only banner." },
+      { name: "title", type: "string", description: "Primary headline for the banner." },
+      { name: "description", type: "ReactNode", description: "Secondary description." },
+      { name: "action", type: "ReactNode", description: "Optional call-to-action button or interactive elements." },
+      { name: "dismissible", type: "boolean", default: "false", description: "Shows a dismiss button." },
+      { name: "onDismiss", type: "() => void", description: "Called when the dismiss button is pressed." },
+    ],
+    codeSnippet: `import { Banner } from "glacia";
+
+export default function BannerDemo() {
+  return (
+    <Banner
+      tone="success"
+      title="Saved"
+      description="Your changes are live."
+      dismissible
+      onDismiss={() => {}}
+    />
+  );
+}`,
+  },
+  {
+    slug: "backdrop-switcher",
+    name: "BackdropSwitcher",
+    description: "Segmented control fixed to the three backdrops a template can sit on: dark, light and image.",
+    category: "Navigation & Layout",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web only",
+    wave: 5,
+    props: [
+      { name: "value", type: "BackdropValue | null", description: "The selected backdrop ('dark' | 'light' | 'image'), or null for none." },
+      { name: "defaultValue", type: "BackdropValue | null", description: "Uncontrolled initial backdrop." },
+      { name: "onValueChange", type: "(value: BackdropValue) => void", description: "Called with the newly selected backdrop." },
+      { name: "items", type: "SegmentedControlItem[]", description: "Override the three backdrop options. Defaults to Dark / Light / Image." },
+    ],
+    codeSnippet: `import { BackdropSwitcher } from "glacia";
+
+export default function BackdropSwitcherDemo() {
+  return (
+    <BackdropSwitcher
+      aria-label="Backdrop"
+      defaultValue="dark"
+      onValueChange={(value) => console.log(value)}
+    />
+  );
+}`,
+  },
+  {
+    slug: "link-card",
+    name: "LinkCard",
+    description: "A Card that is a link: an anchor carrying the Card glass classes, composed with Card's Header, Title, Description, Content and Footer slots.",
+    category: "Showing Things",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web only",
+    wave: 5,
+    props: [
+      { name: "href", type: "string", description: "Destination. Required: a card that goes nowhere is a Card, not a link." },
+      { name: "variant", type: "'glass' | 'clear'", default: "'glass'", description: "Glass opacity style, as on Card." },
+    ],
+    codeSnippet: `import { LinkCard, CardHeader, CardTitle, CardDescription } from "glacia";
+
+export default function LinkCardDemo() {
+  return (
+    <LinkCard href="/templates/admin-suite">
+      <CardHeader>
+        <CardTitle>Admin Suite</CardTitle>
+        <CardDescription>A dashboard template.</CardDescription>
+      </CardHeader>
+    </LinkCard>
+  );
+}`,
+  },
+  {
+    slug: "cover-plate",
+    name: "CoverPlate",
+    description: "Card with a media area on top and a title, description and action below, on the Card glass.",
+    category: "Showing Things",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web only",
+    wave: 5,
+    props: [
+      { name: "media", type: "ReactNode", description: "Media shown flush at the top of the card: an image, video or element." },
+      { name: "title", type: "string", description: "Primary headline, below the media." },
+      { name: "description", type: "ReactNode", description: "Secondary description." },
+      { name: "action", type: "ReactNode", description: "Optional call-to-action button or interactive elements." },
+    ],
+    codeSnippet: `import { CoverPlate } from "glacia";
+
+export default function CoverPlateDemo() {
+  return (
+    <CoverPlate
+      media={<img src="/tahoe.jpg" alt="Lake Tahoe at dusk" />}
+      title="Tahoe"
+      description="The image backdrop."
+    />
+  );
+}`,
+  },
+  {
+    slug: "search-trigger",
+    name: "SearchTrigger",
+    description: "Glass button that opens the command palette: Command's search icon, a label and a Kbd shortcut hint, in Button sizes.",
+    category: "Buttons & Actions",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web only",
+    wave: 5,
+    props: [
+      { name: "label", type: "string", default: "'Search'", description: "Label shown in the trigger." },
+      { name: "shortcut", type: "string", default: "'⌘K'", description: "Keyboard hint shown in a Kbd badge." },
+      { name: "size", type: "'sm' | 'md' | 'lg'", default: "'md'", description: "Button size: 'sm' (32px), 'md' (40px, default), 'lg' (48px)." },
+      { name: "onClick", type: "() => void", description: "Opens the CommandDialog." },
+      { name: "disabled", type: "boolean", default: "false", description: "Prevents interaction and lowers opacity." },
+    ],
+    codeSnippet: `import { SearchTrigger } from "glacia";
+
+export default function SearchTriggerDemo() {
+  return <SearchTrigger onClick={() => setOpen(true)} />;
+}`,
+  },
+  {
+    slug: "folder-tree",
+    name: "FolderTree",
+    description: "Nested file-browser tree: List rows with expand/collapse chevrons, indentation per depth, and selection.",
+    category: "Showing Things",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web only",
+    wave: 5,
+    props: [
+      { name: "items", type: "FolderTreeItemData[]", description: "Nested items to render." },
+      { name: "selectedId", type: "string", default: "—", description: "Controlled id of the selected item." },
+      { name: "defaultSelectedId", type: "string", description: "Initial selected id (uncontrolled)." },
+      { name: "onSelect", type: "(id: string, item: FolderTreeItemData) => void", description: "Called when an item is selected." },
+      { name: "expandedIds", type: "string[]", description: "Controlled list of expanded folder ids." },
+      { name: "defaultExpandedIds", type: "string[]", description: "Initial expanded folder ids (uncontrolled)." },
+      { name: "onToggle", type: "(id: string, expanded: boolean, item: FolderTreeItemData) => void", description: "Called when a folder is expanded or collapsed." },
+    ],
+    codeSnippet: `import { FolderTree } from "glacia";
+
+export default function FolderTreeDemo() {
+  return (
+    <FolderTree
+      items={[
+        {
+          id: "docs",
+          label: "Documents",
+          defaultExpanded: true,
+          children: [{ id: "resume", label: "Resume.pdf" }],
+        },
+      ]}
+      onSelect={(id) => {}}
+    />
+  );
+}`,
+  },
+  {
+    slug: "file-tile",
+    name: "FileTile",
+    description: "Compact glass tile for one file: icon plate or thumbnail, name, meta, and actions.",
+    category: "Showing Things",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web only",
+    wave: 5,
+    props: [
+      { name: "icon", type: "ReactNode", description: "Leading icon, shown in the icon plate when no thumb is given." },
+      { name: "thumb", type: "ReactNode", description: "Thumbnail shown above the name. Wins over `icon`." },
+      { name: "name", type: "ReactNode", description: "File name." },
+      { name: "meta", type: "ReactNode", description: "Secondary line under the name (size, date, kind)." },
+      { name: "actions", type: "ReactNode", description: "Trailing actions. Clicks on actions do not select the tile." },
+      { name: "selected", type: "boolean", default: "false", description: "Marks the tile as selected." },
+      { name: "disabled", type: "boolean", default: "false", description: "Disables selection." },
+      { name: "onSelect", type: "() => void", description: "Called when the tile is tapped." },
+    ],
+    codeSnippet: `import { FileTile } from "glacia";
+
+export default function FileTileDemo() {
+  return (
+    <FileTile
+      name="Resume.pdf"
+      meta="2.1 MB · Today"
+      selected
+      onSelect={() => {}}
+    />
+  );
+}`,
+  },
+  {
+    slug: "dropzone",
+    name: "Dropzone",
+    description: "Glass drop target: opens the file picker on tap and accepts dropped files, with a drag-over state.",
+    category: "Showing Things",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web only",
+    wave: 5,
+    props: [
+      { name: "label", type: "ReactNode", description: "Primary label, e.g. \"Drop files here\"." },
+      { name: "description", type: "ReactNode", description: "Secondary description, e.g. \"or click to browse\"." },
+      { name: "accept", type: "string", description: "Accepted file types, passed to the file input (e.g. \"image/*\")." },
+      { name: "multiple", type: "boolean", default: "false", description: "Allow picking more than one file." },
+      { name: "disabled", type: "boolean", default: "false", description: "Disables picking and dropping." },
+      { name: "onFiles", type: "(files: File[]) => void", description: "Called with the picked or dropped files." },
+      { name: "onDrop", type: "(files: File[]) => void", description: "Called with the dropped files (drop only, not the file picker)." },
+    ],
+    codeSnippet: `import { Dropzone } from "glacia";
+
+export default function DropzoneDemo() {
+  return (
+    <Dropzone
+      label="Drop files here"
+      description="or click to browse"
+      multiple
+      onFiles={(files) => {}}
+    />
+  );
+}`,
+  },
+  {
+    slug: "storage-meter",
+    name: "StorageMeter",
+    description: "Stacked horizontal storage meter: tinted segments sized by value over total, with an optional legend.",
+    category: "Showing Things",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web only",
+    wave: 5,
+    props: [
+      { name: "segments", type: "StorageMeterSegment[]", description: "Stacked segments. Their widths are `value / total`." },
+      { name: "total", type: "number", description: "Total capacity, in the same units as the segment values." },
+      { name: "showLegend", type: "boolean", default: "true", description: "Show the legend under the meter." },
+    ],
+    codeSnippet: `import { StorageMeter } from "glacia";
+
+export default function StorageMeterDemo() {
+  return (
+    <StorageMeter
+      total={100}
+      segments={[
+        { label: "Photos", value: 25, tint: "fill" },
+        { label: "Videos", value: 50, tint: "on" },
+      ]}
+    />
+  );
+}`,
+  },
+  {
+    slug: "kanban",
+    name: "Kanban",
+    description: "Kanban board: a horizontal row of glass columns holding selectable glass cards.",
+    category: "Navigation & Layout",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web only",
+    wave: 5,
+    props: [
+      { name: "columns", type: "KanbanColumnData[]", description: "Columns to render. When omitted, render `KanbanColumn` children." },
+      { name: "onSelectCard", type: "(id: string, card: KanbanCardData) => void", description: "Called when a card is selected." },
+      { name: "selectedCardId", type: "string", description: "Controlled id of the selected card." },
+    ],
+    codeSnippet: `import { Kanban } from "glacia";
+
+export default function KanbanDemo() {
+  return (
+    <Kanban
+      columns={[
+        {
+          id: "todo",
+          title: "To do",
+          cards: [{ id: "a", title: "Design the board" }],
+        },
+      ]}
+      onSelectCard={(id) => {}}
+    />
+  );
+}`,
+  },
+  {
+    slug: "gantt",
+    name: "Gantt",
+    description: "Gantt chart: labelled rows with bars positioned by start/end fractions, plus a stacked workload variant.",
+    category: "Navigation & Layout",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web only",
+    wave: 5,
+    props: [
+      { name: "rows", type: "GanttRowData[]", description: "Rows to render." },
+      { name: "variant", type: "'timeline' | 'workload'", default: "'timeline'", description: "`timeline` puts a row's bars on one lane; `workload` stacks each bar on its own lane." },
+    ],
+    codeSnippet: `import { Gantt } from "glacia";
+
+export default function GanttDemo() {
+  return (
+    <Gantt
+      rows={[
+        {
+          label: "Design",
+          bars: [{ label: "Research", start: 0, end: 0.25 }],
+        },
+      ]}
+    />
+  );
+}`,
+  },
+  {
+    slug: "uptime-strip",
+    name: "UptimeStrip",
+    description: "Segmented daily-health bar for status pages, with an overall uptime percentage.",
+    category: "Charts",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web only",
+    wave: 5,
+    props: [
+      { name: "segments", type: "UptimeSegment[]", description: "One segment per day, oldest first." },
+      { name: "overall", type: "number", description: "Overall uptime percentage. When omitted it is computed from the segments." },
+      { name: "overallLabel", type: "string", default: "'uptime'", description: "Label shown next to the percentage." },
+    ],
+    codeSnippet: `import { UptimeStrip } from "glacia";
+
+export default function UptimeStripDemo() {
+  return (
+    <UptimeStrip
+      segments={[
+        { status: "up", label: "Nov 23 — all systems normal" },
+        { status: "degraded", label: "Nov 24 — elevated latency" },
+        { status: "down", label: "Nov 25 — outage" },
+      ]}
+      overall={99.9}
+    />
+  );
+}`,
+  },
+  {
+    slug: "coin-tile",
+    name: "CoinTile",
+    description: "Glass tile for a cryptocurrency: icon, symbol, name, price and 24h change.",
+    category: "Showing Things",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web only",
+    wave: 5,
+    props: [
+      { name: "icon", type: "ReactNode", description: "Coin icon or logo." },
+      { name: "iconTint", type: "string", description: "Background tint colour for the icon squircle badge (copies Item's iconTint)." },
+      { name: "symbol", type: "string", description: "Ticker symbol, e.g. \"BTC\"." },
+      { name: "name", type: "string", description: "Full coin name, e.g. \"Bitcoin\"." },
+      { name: "price", type: "ReactNode", description: "Current price, already formatted (e.g. \"$67,432.10\")." },
+      { name: "change", type: "number", description: "24h change in percent. Positive tints --gl-on, negative --gl-destructive." },
+    ],
+    codeSnippet: `import { CoinTile } from "glacia";
+
+export default function CoinTileDemo() {
+  return (
+    <CoinTile
+      icon={<span>₿</span>}
+      iconTint="#f7931a"
+      symbol="BTC"
+      name="Bitcoin"
+      price="$67,432.10"
+      change={2.4}
+    />
+  );
+}`,
+  },
+  {
+    slug: "slot-cell",
+    name: "SlotCell",
+    description: "Selectable glass time-slot cell for booking pickers, with label, time and pressed state.",
+    category: "Showing Things",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web only",
+    wave: 5,
+    props: [
+      { name: "label", type: "ReactNode", description: "Primary label, e.g. the service or the slot name." },
+      { name: "time", type: "ReactNode", description: "Time shown under the label, e.g. \"09:30\"." },
+      { name: "size", type: "'sm' | 'md' | 'lg'", default: "'md'", description: "Slot size: 'sm' (32px), 'md' (40px, default), 'lg' (48px) — copies Button." },
+      { name: "selected", type: "boolean", description: "Marks this slot as the chosen one (aria-pressed)." },
+      { name: "disabled", type: "boolean", description: "Disable the slot." },
+      { name: "onSelect", type: "() => void", description: "Called when the slot is tapped." },
+    ],
+    codeSnippet: `import { SlotCell } from "glacia";
+
+export default function SlotCellDemo() {
+  return (
+    <SlotCell label="Morning" time="09:30" selected onSelect={() => {}} />
+  );
+}`,
+  },
+  {
+    slug: "lesson-list-row",
+    name: "LessonListRow",
+    description: "Course lesson row: index, title and duration, with completed and locked states.",
+    category: "Showing Things",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web only",
+    wave: 5,
+    props: [
+      { name: "index", type: "number", description: "Lesson number shown in the leading badge (1-based)." },
+      { name: "title", type: "ReactNode", description: "Lesson title." },
+      { name: "duration", type: "ReactNode", description: "Length shown as the trailing accessory, e.g. \"12:04\"." },
+      { name: "completed", type: "boolean", description: "Lesson already watched — shows a check in the leading badge." },
+      { name: "locked", type: "boolean", description: "Lesson not yet available — shows a lock, disables the row." },
+      { name: "onSelect", type: "() => void", description: "Called when the row is tapped. Omitted for a non-interactive row." },
+    ],
+    codeSnippet: `import { LessonListRow } from "glacia";
+
+export default function LessonListRowDemo() {
+  return (
+    <>
+      <LessonListRow index={1} title="Refraction basics" duration="12:04" completed />
+      <LessonListRow index={2} title="Frost and tint" duration="08:31" onSelect={() => {}} />
+      <LessonListRow index={3} title="Shipping 0.6.0" duration="15:00" locked />
+    </>
+  );
+}`,
+  },
+  {
+    slug: "date-block",
+    name: "DateBlock",
+    description: "Compact glass date block: weekday, day numeral and month for calendar and event cards.",
+    category: "Showing Things",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web only",
+    wave: 5,
+    props: [
+      { name: "date", type: "Date", description: "The date to show. Day numeral, month and weekday are derived from it." },
+      { name: "day", type: "number | string", description: "Day numeral override, e.g. 25. Defaults to the date's day." },
+      { name: "month", type: "string", description: "Month override, e.g. \"Nov\". Defaults to the date's month." },
+      { name: "weekday", type: "string", description: "Weekday override, e.g. \"Tue\". Defaults to the date's weekday." },
+      { name: "size", type: "'sm' | 'md' | 'lg'", default: "'md'", description: "Block size: 'sm' (compact), 'md' (default), 'lg' (large)." },
+    ],
+    codeSnippet: `import { DateBlock } from "glacia";
+
+export default function DateBlockDemo() {
+  return <DateBlock date={new Date(2026, 10, 25)} />;
+}`,
+  },
+  {
+    slug: "timeline",
+    name: "Timeline",
+    description: "Vertical timeline: dot and connector line per event, with title, time and description.",
+    category: "Navigation & Layout",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web only",
+    wave: 5,
+    props: [
+      { name: "items", type: "TimelineItem[]", description: "Events in order, top to bottom." },
+    ],
+    codeSnippet: `import { Timeline } from "glacia";
+
+export default function TimelineDemo() {
+  return (
+    <Timeline
+      items={[
+        { title: "Order placed", time: "09:30", description: "Payment confirmed.", state: "done" },
+        { title: "Shipped", time: "12:15", state: "current" },
+        { title: "Delivered", time: "Tomorrow", state: "upcoming" },
+      ]}
+    />
+  );
+}`,
+  },
+  {
+    slug: "org-chart",
+    name: "OrgChart",
+    description: "Nested organisation chart: glass node cards joined by connector lines.",
+    category: "Navigation & Layout",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web only",
+    wave: 5,
+    props: [
+      { name: "nodes", type: "OrgChartNodeData[]", description: "Top-level nodes (usually one root)." },
+    ],
+    codeSnippet: `import { OrgChart } from "glacia";
+
+export default function OrgChartDemo() {
+  return (
+    <OrgChart
+      nodes={[
+        {
+          name: "Bezawit",
+          role: "CEO",
+          children: [{ name: "Binyam", role: "CTO" }],
+        },
+      ]}
+    />
+  );
+}`,
+  },
+  {
+    slug: "success-state",
+    name: "SuccessState",
+    description: "A success confirmation with a green-tinted icon plate, title, description, and action — the Empty layout in a success tone.",
+    category: "Showing Things",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web only",
+    wave: 5,
+    props: [
+      { name: "icon", type: "ReactNode", default: "—", description: "Icon or illustration displayed in the glass squircle badge." },
+      { name: "title", type: "string", default: "—", description: "Primary headline confirming the success. Required." },
+      { name: "description", type: "string", default: "—", description: "Secondary description explaining what happened or what comes next." },
+      { name: "action", type: "ReactNode", default: "—", description: "Optional call-to-action button or interactive elements." },
+    ],
+    codeSnippet: `<SuccessState
+  icon={<CheckIcon />}
+  title="Payment sent"
+  description="Your invoice was paid and the receipt is on its way."
+  action={<Button>View receipt</Button>}
+/>`,
+  },
+  {
+    slug: "ticket-entry",
+    name: "TicketEntry",
+    description: "One entry in a support-ticket thread: author header with avatar, timestamp and status above the body. A full-width glass row, not a chat bubble.",
+    category: "Chat & AI",
+    appleStatus: "Glacia extension",
+    nativeStatus: "Web only",
+    wave: 5,
+    props: [
+      { name: "author", type: "ReactNode", default: "—", description: "Who wrote this entry (name or richer header content). Required." },
+      { name: "avatar", type: "ReactNode", default: "—", description: "Avatar content (initials, icon, or image) shown before the author." },
+      { name: "timestamp", type: "string", default: "—", description: "When the entry was posted, e.g. \"Tue 10:41\"." },
+      { name: "status", type: "\"open\" | \"pending\" | \"resolved\" | \"closed\"", default: "\"open\"", description: "Ticket status shown as a tinted label." },
+      { name: "body", type: "ReactNode", default: "—", description: "The entry body. children is used when body is not given." },
+    ],
+    codeSnippet: `<TicketEntry
+  author="Maya Chen"
+  avatar="MC"
+  timestamp="Tue 10:41"
+  status="resolved"
+>
+  Your refund has been issued — it should reach your card within 5 days.
+</TicketEntry>`,
   },
 ];

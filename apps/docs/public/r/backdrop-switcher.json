@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "backdrop-switcher",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/backdrop-switcher.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — backdrop-switcher\n// Copied with `npx glacia add backdrop-switcher`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport type { JSX } from \"react\";\n\nimport {\n  SegmentedControl,\n  type SegmentedControlItem,\n  type SegmentedControlProps,\n} from \"glacia\";\n\nexport type BackdropValue = \"dark\" | \"light\" | \"image\";\n\nexport const defaultBackdropItems: SegmentedControlItem[] = [\n  { value: \"dark\", label: \"Dark\" },\n  { value: \"light\", label: \"Light\" },\n  { value: \"image\", label: \"Image\" },\n];\n\nexport interface BackdropSwitcherProps\n  extends Omit<\n    SegmentedControlProps,\n    \"items\" | \"value\" | \"defaultValue\" | \"onValueChange\"\n  > {\n  /** The three backdrop options. Defaults to Dark / Light / Image. */\n  items?: SegmentedControlItem[];\n  /** The selected backdrop, or `null` for none. */\n  value?: BackdropValue | null;\n  defaultValue?: BackdropValue | null;\n  onValueChange?: (value: BackdropValue) => void;\n}\n\n/**\n * A SegmentedControl fixed to the three backdrops a template can sit on:\n * dark graphite, broken white, and the image backdrop. A thin typed wrapper\n * — the thumb, lens and glass all come from SegmentedControl unchanged.\n */\nexport function BackdropSwitcher({\n  items = defaultBackdropItems,\n  value,\n  defaultValue,\n  onValueChange,\n  ...props\n}: BackdropSwitcherProps): JSX.Element {\n  return (\n    <SegmentedControl\n      {...props}\n      items={items}\n      value={value}\n      defaultValue={defaultValue}\n      onValueChange={\n        onValueChange ? (next) => onValueChange(next as BackdropValue) : undefined\n      }\n    />\n  );\n}\n",
+      "type": "registry:ui"
+    }
+  ]
+}

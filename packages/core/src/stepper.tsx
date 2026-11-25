@@ -23,6 +23,8 @@ export interface StepperProps {
   step?: number;
   /** Disable both buttons. */
   disabled?: boolean;
+  /** Show the current value between the − and + buttons (default true). */
+  showValue?: boolean;
   className?: string;
 }
 
@@ -30,7 +32,7 @@ export const Stepper: ForwardRefExoticComponent<StepperProps & RefAttributes<HTM
   HTMLDivElement,
   StepperProps
 >(function Stepper(
-  { value = 0, onValueChange, min = 0, max = 100, step = 1, disabled, className },
+  { value = 0, onValueChange, min = 0, max = 100, step = 1, disabled, showValue = true, className },
   forwardedRef,
 ) {
   const ref = useRef<HTMLDivElement>(null);
@@ -51,7 +53,16 @@ export const Stepper: ForwardRefExoticComponent<StepperProps & RefAttributes<HTM
       <StepperButton onClick={stepDown} disabled={disabled || isMin} aria-label="Decrease">
         <span className="gl-stepper-sign">−</span>
       </StepperButton>
-      <div className="gl-stepper-divider" aria-hidden />
+      {showValue && (
+        <>
+          <div className="gl-stepper-divider" aria-hidden />
+          <span className="gl-stepper-value" aria-live="polite">
+            {value}
+          </span>
+          <div className="gl-stepper-divider" aria-hidden />
+        </>
+      )}
+      {!showValue && <div className="gl-stepper-divider" aria-hidden />}
       <StepperButton onClick={stepUp} disabled={disabled || isMax} aria-label="Increase">
         <span className="gl-stepper-sign">+</span>
       </StepperButton>

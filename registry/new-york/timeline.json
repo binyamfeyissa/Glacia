@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "timeline",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/timeline.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — timeline\n// Copied with `npx glacia add timeline`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  useImperativeHandle,\n  useRef,\n  type ForwardRefExoticComponent,\n  type HTMLAttributes,\n  type ReactNode,\n  type RefAttributes,\n} from \"react\";\nimport { cx } from \"glacia/internal/cx\";\n\nexport type TimelineItemState = \"done\" | \"current\" | \"upcoming\";\n\nexport interface TimelineItem {\n  /** Headline for the event. */\n  title: ReactNode;\n  /** When it happened or happens, e.g. \"09:30\" or \"Nov 25\". */\n  time?: ReactNode;\n  /** Extra detail under the title. */\n  description?: ReactNode;\n  /** State of the event: done `--gl-on`, current `--gl-fill`, upcoming `--gl-muted`. */\n  state?: TimelineItemState;\n}\n\nexport interface TimelineProps extends HTMLAttributes<HTMLOListElement> {\n  /** Events in order, top to bottom. */\n  items: TimelineItem[];\n}\n\n/**\n * A vertical timeline — dot + connector line, title, time, description.\n * Reference is Stepper / List: the dot copies Stepper's current-value\n * treatment (a filled marker on a track), the connector line copies the\n * List separator (`--gl-separator`), and the text copies ListItem's\n * title + subtitle stack.\n */\nexport const Timeline: ForwardRefExoticComponent<\n  TimelineProps & RefAttributes<HTMLOListElement>\n> = /* @__PURE__ */ forwardRef<HTMLOListElement, TimelineProps>(\n  function Timeline({ items, className, ...props }, forwardedRef) {\n    const ref = useRef<HTMLOListElement>(null);\n    useImperativeHandle(forwardedRef, () => ref.current!);\n\n    return (\n      <ol\n        ref={ref}\n        className={cx(\"gl-timeline\", className)}\n        {...props}\n      >\n        {items.map((item, index) => (\n          <li\n            key={index}\n            className=\"gl-timeline-item\"\n            data-state={item.state ?? \"upcoming\"}\n          >\n            <span className=\"gl-timeline-dot\" aria-hidden />\n            <div className=\"gl-timeline-body\">\n              <div className=\"gl-timeline-head\">\n                <span className=\"gl-timeline-title\">{item.title}</span>\n                {item.time && <span className=\"gl-timeline-time\">{item.time}</span>}\n              </div>\n              {item.description && (\n                <p className=\"gl-timeline-description\">{item.description}</p>\n              )}\n            </div>\n          </li>\n        ))}\n      </ol>\n    );\n  },\n);\n",
+      "type": "registry:ui"
+    }
+  ]
+}

@@ -201,6 +201,27 @@ import {
   Toolbar,
   Widget,
   DirectionProvider,
+  IconButton,
+  Banner,
+  BackdropSwitcher,
+  LinkCard,
+  CoverPlate,
+  SearchTrigger,
+  FolderTree,
+  FileTile,
+  Dropzone,
+  StorageMeter,
+  Kanban,
+  Gantt,
+  UptimeStrip,
+  CoinTile,
+  SlotCell,
+  LessonListRow,
+  DateBlock,
+  Timeline,
+  OrgChart,
+  SuccessState,
+  TicketEntry,
 } from "glacia";
 import { ChartDemo, CHART_SLUGS } from "./chart-demos";
 import { AIDemo, AI_SLUGS } from "./ai-demos";
@@ -1313,6 +1334,241 @@ export function ComponentDemo({ slug }: { slug: string }) {
             <span style={{ fontSize: 26, fontWeight: 600 }}>10</span>
             <span className="text-xs opacity-70">3 events</span>
           </Widget>
+        </div>
+      );
+
+
+    case "icon-button":
+      return (
+        <div className="flex gap-3">
+          <IconButton icon="↗" aria-label="Share" />
+          <IconButton icon="✕" aria-label="Delete" variant="filled" destructive />
+        </div>
+      );
+
+    case "banner":
+      return (
+        <Banner
+          tone="success"
+          title="Saved"
+          description="Your changes are live."
+          dismissible
+          onDismiss={() => {}}
+        />
+      );
+
+    case "backdrop-switcher":
+      return (
+        <BackdropSwitcher
+          aria-label="Backdrop"
+          defaultValue="dark"
+          onValueChange={() => {}}
+        />
+      );
+
+    case "link-card":
+      return (
+        <LinkCard href="/templates/admin-suite">
+          <CardHeader>
+            <CardTitle>Admin Suite</CardTitle>
+            <CardDescription>A dashboard template.</CardDescription>
+          </CardHeader>
+        </LinkCard>
+      );
+
+    case "cover-plate":
+      return (
+        <div className="w-full max-w-sm">
+          <CoverPlate
+            media={<img src="/hero/tahoe-dark.jpg" alt="Lake Tahoe at dusk" />}
+            title="Tahoe"
+            description="The image backdrop."
+          />
+        </div>
+      );
+
+    case "search-trigger":
+      return <SearchTrigger onClick={() => {}} />;
+
+    case "folder-tree":
+      return (
+        <div className="w-full max-w-sm">
+          <FolderTree
+            items={[
+              {
+                id: "docs",
+                label: "Documents",
+                defaultExpanded: true,
+                children: [{ id: "resume", label: "Resume.pdf" }],
+              },
+            ]}
+            onSelect={() => {}}
+          />
+        </div>
+      );
+
+    case "file-tile":
+      return (
+        <div className="w-full max-w-sm">
+          <FileTile
+            name="Resume.pdf"
+            meta="2.1 MB · Today"
+            selected
+            onSelect={() => {}}
+          />
+        </div>
+      );
+
+    case "dropzone":
+      return (
+        <div className="w-full max-w-sm">
+          <Dropzone
+            label="Drop files here"
+            description="or click to browse"
+            multiple
+            onFiles={() => {}}
+          />
+        </div>
+      );
+
+    case "storage-meter":
+      return (
+        <div className="w-full max-w-sm">
+          <StorageMeter
+            total={100}
+            segments={[
+              { label: "Photos", value: 25, tint: "fill" },
+              { label: "Videos", value: 50, tint: "on" },
+            ]}
+          />
+        </div>
+      );
+
+    case "kanban":
+      return (
+        <Kanban
+          columns={[
+            {
+              id: "todo",
+              title: "To do",
+              cards: [{ id: "a", title: "Design the board" }],
+            },
+          ]}
+          onSelectCard={() => {}}
+        />
+      );
+
+    case "gantt":
+      return (
+        <div className="w-full max-w-md">
+          <Gantt
+            rows={[
+              {
+                label: "Design",
+                bars: [{ label: "Research", start: 0, end: 0.25 }],
+              },
+            ]}
+          />
+        </div>
+      );
+
+    case "uptime-strip":
+      return (
+        <div className="w-full max-w-md">
+          <UptimeStrip
+            segments={[
+              { status: "up", label: "Nov 23 — all systems normal" },
+              { status: "degraded", label: "Nov 24 — elevated latency" },
+              { status: "down", label: "Nov 25 — outage" },
+            ]}
+            overall={99.9}
+          />
+        </div>
+      );
+
+    case "coin-tile":
+      return (
+        <div className="w-full max-w-sm">
+          <CoinTile
+            icon={<span>₿</span>}
+            iconTint="#f7931a"
+            symbol="BTC"
+            name="Bitcoin"
+            price="$67,432.10"
+            change={2.4}
+          />
+        </div>
+      );
+
+    case "slot-cell":
+      return (
+        <div className="flex gap-3">
+          <SlotCell label="Morning" time="09:30" selected onSelect={() => {}} />
+          <SlotCell label="Afternoon" time="14:00" onSelect={() => {}} />
+        </div>
+      );
+
+    case "lesson-list-row":
+      return (
+        <div className="w-full max-w-sm">
+          <LessonListRow index={1} title="Refraction basics" duration="12:04" completed />
+          <LessonListRow index={2} title="Frost and tint" duration="08:31" onSelect={() => {}} />
+          <LessonListRow index={3} title="Shipping 0.6.0" duration="15:00" locked />
+        </div>
+      );
+
+    case "date-block":
+      return <DateBlock date={new Date(2026, 10, 25)} />;
+
+    case "timeline":
+      return (
+        <div className="w-full max-w-sm">
+          <Timeline
+            items={[
+              { title: "Order placed", time: "09:30", description: "Payment confirmed.", state: "done" },
+              { title: "Shipped", time: "12:15", state: "current" },
+              { title: "Delivered", time: "Tomorrow", state: "upcoming" },
+            ]}
+          />
+        </div>
+      );
+
+    case "org-chart":
+      return (
+        <OrgChart
+          nodes={[
+            {
+              name: "Bezawit",
+              role: "CEO",
+              children: [{ name: "Binyam", role: "CTO" }],
+            },
+          ]}
+        />
+      );
+
+    case "success-state":
+      return (
+        <div className="w-full max-w-sm">
+          <SuccessState
+            icon="✓"
+            title="Payment sent"
+            description="Your invoice was paid and the receipt is on its way."
+            action={<Button>View receipt</Button>}
+          />
+        </div>
+      );
+
+    case "ticket-entry":
+      return (
+        <div className="w-full max-w-md">
+          <TicketEntry
+            author="Maya Chen"
+            avatar="MC"
+            timestamp="Tue 10:41"
+            status="resolved"
+          >
+            Your refund has been issued — it should reach your card within 5 days.
+          </TicketEntry>
         </div>
       );
 

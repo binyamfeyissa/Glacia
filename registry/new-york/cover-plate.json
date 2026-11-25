@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "cover-plate",
+  "type": "registry:ui",
+  "dependencies": [
+    "glacia@^0.3.1"
+  ],
+  "registryDependencies": [
+    "/r/glass.json"
+  ],
+  "files": [
+    {
+      "path": "components/ui/cover-plate.tsx",
+      "content": "import \"glacia/styles.css\";\n// Glacia — cover-plate\n// Copied with `npx glacia add cover-plate`. Edit freely; it is yours.\n// Shared helpers come from the `glacia` package, which must be installed.\n\nimport {\n  forwardRef,\n  useImperativeHandle,\n  useRef,\n  type ForwardRefExoticComponent,\n  type HTMLAttributes,\n  type ReactNode,\n  type RefAttributes,\n} from \"react\";\n\nimport { cx } from \"glacia/internal/cx\";\nimport { useRefraction } from \"glacia/internal/refraction\";\n\nexport interface CoverPlateProps extends HTMLAttributes<HTMLDivElement> {\n  /** Media shown flush at the top of the card: an image, video or element. */\n  media?: ReactNode;\n  /** Primary headline, below the media. */\n  title: string;\n  /** Secondary description. */\n  description?: ReactNode;\n  /** Optional call-to-action button or interactive elements. */\n  action?: ReactNode;\n}\n\n/**\n * A Card with a media area on top and a body below — the Card glass, the\n * Card title / description sizes, nothing else new. Same structure as Card\n * + Empty: media, title, description, action.\n */\nexport const CoverPlate: ForwardRefExoticComponent<\n  CoverPlateProps & RefAttributes<HTMLDivElement>\n> = /* @__PURE__ */ forwardRef<HTMLDivElement, CoverPlateProps>(\n  function CoverPlate(\n    { media, title, description, action, className, children, ...props },\n    forwardedRef,\n  ) {\n    const ref = useRef<HTMLDivElement>(null);\n    useImperativeHandle(forwardedRef, () => ref.current!);\n    useRefraction(ref);\n\n    return (\n      <div\n        ref={ref}\n        className={cx(\"gl-glass gl-cover-plate\", className)}\n        // The refraction engine writes data-rim and data-refracting from measured\n        // geometry after hydration; those writes are intentional.\n        suppressHydrationWarning\n        {...props}\n      >\n        {media && <div className=\"gl-cover-plate-media\">{media}</div>}\n        <div className=\"gl-cover-plate-body\">\n          <h3 className=\"gl-cover-plate-title\">{title}</h3>\n          {description && (\n            <p className=\"gl-cover-plate-description\">{description}</p>\n          )}\n          {action && <div className=\"gl-cover-plate-action\">{action}</div>}\n          {children}\n        </div>\n      </div>\n    );\n  },\n);\n",
+      "type": "registry:ui"
+    }
+  ]
+}
