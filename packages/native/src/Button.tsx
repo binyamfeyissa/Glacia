@@ -15,6 +15,15 @@ import { useIsDark } from "./internal/motion";
  */
 const ENGINE_BUTTON_SIZES = { sm: 28, md: 34, lg: 44 } as const;
 
+/**
+ * The same names in the engine's vocabulary (`small` / `regular` / `large`).
+ * `Button` used to keep `size` to itself — it only set the capsule height —
+ * so the engine always rendered the regular label and `size="sm"` could not
+ * shrink a label into a narrow capsule (bank's 4-button row: "Request" needs
+ * ~61pt of text at 17pt, so it truncated to "Reque…" inside its ~80pt capsule).
+ */
+const ENGINE_SIZE_NAMES = { sm: "small", md: "regular", lg: "large" } as const;
+
 export interface ButtonProps {
   variant?: "glass" | "filled" | "ghost";
   size?: "sm" | "md" | "lg";
@@ -114,12 +123,20 @@ export const Button = forwardRef<any, ButtonProps>(function Button(
         adaptive={adaptive}
         tint={tint ?? (variant === "filled" ? themeColors.fill : undefined)}
         height={height_}
+        size={ENGINE_SIZE_NAMES[size]}
         icon={icon}
         accessibilityLabel={accessibilityLabel}
         accessibilityState={{ disabled, ...accessibilityState }}
         style={style}
-        contentStyle={contentStyle}
-        textStyle={textStyle}
+        // `size="sm"` has to fit a ~80pt capsule (bank's 4-button row): the
+        // engine's small size alone (15pt label, 14pt/side padding) still needs
+        // ~83pt for "Request" — measured 50.7pt at 14pt regular in run-8 shot 01,
+        // scaled to 15pt semibold — so sm tightens the label to 14pt and the
+        // side padding to 12pt here: ~76pt all-in, inside the capsule with room
+        // to spare. The engine's own small table is untouched (chips use it
+        // directly). Caller styles still win: they merge after these defaults.
+        contentStyle={size === "sm" ? [{ paddingHorizontal: 12 }, contentStyle] : contentStyle}
+        textStyle={size === "sm" ? [{ fontSize: 14 }, textStyle] : textStyle}
         variant={variant === "filled" ? "regular" : "regular"}
         shape={shape}
       >
