@@ -326,8 +326,8 @@ importers:
         specifier: '>=12'
         version: 15.0.8(expo@54.0.38(@babel/core@7.29.13(supports-color@8.1.1))(react-native@0.81.4(@babel/core@7.29.13(supports-color@8.1.1))(@react-native/metro-config@0.88.1(@babel/core@7.29.13(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.3.0)(react@19.3.1)(supports-color@8.1.1))(react@19.3.1)(supports-color@8.1.1)(typescript@5.9.3))(react-native@0.81.4(@babel/core@7.29.13(supports-color@8.1.1))(@react-native/metro-config@0.88.1(@babel/core@7.29.13(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.3.0)(react@19.3.1)(supports-color@8.1.1))(react@19.3.1)
       glacia-tokens:
-        specifier: workspace:*
-        version: link:../tokens
+        specifier: 0.5.2
+        version: 0.5.2
       react-native:
         specifier: '>=0.80'
         version: 0.81.4(@babel/core@7.29.13(supports-color@8.1.1))(@react-native/metro-config@0.88.1(@babel/core@7.29.13(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.3.0)(react@19.3.1)(supports-color@8.1.1)
@@ -3820,6 +3820,9 @@ packages:
   getenv@2.0.0:
     resolution: {integrity: sha512-VilgtJj/ALgGY77fiLam5iD336eSWi96Q15JSAG1zi8NRBysm3LXKdGnHb4m5cuyxvOLQQKWpBZAT6ni4FI2iQ==}
     engines: {node: '>=6'}
+
+  glacia-tokens@0.5.2:
+    resolution: {integrity: sha512-YNE+hiMsndHYeC7OcDR7x2RdiHMcgh2AthCFdqUSZfoJRgwuIssoexKpVvHLvWGA5fdbNAVACxp8M9DfQeYNIA==}
 
   glob@13.0.7:
     resolution: {integrity: sha512-wfsFgXQ8A3SEI9XGf7Nl3Y9l7ffSrGh7SUCT7vU/2CzYPep9kjxAn1S40F9OPKxAMGCVl7HtNlJhrCJUeUq83g==}
@@ -9530,6 +9533,8 @@ snapshots:
       resolve-pkg-maps: 1.0.0
 
   getenv@2.0.0: {}
+
+  glacia-tokens@0.5.2: {}
 
   glob@13.0.7:
     dependencies:
