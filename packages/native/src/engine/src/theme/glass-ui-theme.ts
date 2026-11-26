@@ -40,6 +40,16 @@ interface IGlassUIPalette {
    * white pill*: opaque enough to be a surface in either scheme, still translucent enough that
    * the frost shows through and the grab, which fades it out, reads as the chip going clear.
    *
+   * **0.6.5: the dark wash is back to 0.20.** The 0.30 wash over a blur-only pill read on device
+   * as a solid grey chip, not a selection. The pill now carries its own rest lens (amount 5 over
+   * a 14dp band), so the edge the wash used to supply comes from refraction instead — 0.20 plus
+   * the lens holds the selection without the chip going solid. That 0.20 was also the rejected
+   * first-round value is not a contradiction: the pill then had no lens at all, so the wash was
+   * the only thing separating it from the bar.
+   * Light stays 0.55: the light-mode pill was not reported solid, and a white wash on a light
+   * bar needs the weight. Shared value — the segmented control's and stepper's thumb tints
+   * default to this too, and their thumbs lighten with it.
+   *
    * **Lightens in both schemes**, which is a deliberate departure from the reference: Kyant sinks
    * the light-theme pill with `Color.Black.copy(0.1f)` and lifts the dark-theme one with
    * `Color.White.copy(0.1f)`. Measured on device, sinking it reads as a hole punched through the
@@ -76,7 +86,7 @@ const GLASS_UI_PALETTE: Record<"light" | "dark", IGlassUIPalette> = {
     switchTrack: "rgba(120,120,128,0.36)",
     tabBarSurface: "rgba(18,18,18,0.4)",
     tabBarSurfaceClear: "rgba(18,18,18,0.12)",
-    tabIndicatorSurface: "rgba(255,255,255,0.30)",
+    tabIndicatorSurface: "rgba(255,255,255,0.20)",
   },
 };
 

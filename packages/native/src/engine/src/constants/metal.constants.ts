@@ -129,9 +129,14 @@ const GLASS_BAR_CLEAR_METAL: GlassMetalOptions = {
 };
 
 /**
- * The tab pill at rest: every effect off. The reference's `lens()` early-returns when both
- * arguments are zero, so no render effect is attached at all and the pill becomes a literal
- * clipped window onto its backdrop.
+ * The tab pill at rest: a mild lens, not an effect-off window. The reference's `lens()`
+ * early-returns when both arguments are zero, so no render effect is attached at all and the
+ * pill becomes a literal clipped window onto its backdrop — and on device that read as a solid
+ * grey chip: two solid fills (the 30%-white resting wash under the glyph, the bar's own surface
+ * behind it) over a blur-only glass. The resting pill now bends a little — amount 5 over a 14dp
+ * band, a cubic profile (`power: 3`) and `depth: 1` exactly matching the dragged metal, so the
+ * `lerpMetal` rest→dragged blend stays smooth and the lens is already there as the grab lands —
+ * with a small dispersion (amount 4, reach 14, riding the lens's own band) so the rim reads.
  *
  * This is the `from` end of a blend, not a state to be swapped to — see {@link lerpMetal} and the
  * tab bar's `pillProps`. Every field it names is a field the grab animates, and it names them at
@@ -139,20 +144,19 @@ const GLASS_BAR_CLEAR_METAL: GlassMetalOptions = {
  */
 const GLASS_PILL_METAL: GlassMetalOptions = {
   refraction: {
-    amount: 0,
-    width: 0,
-    height: 0,
-    depth: 0,
+    amount: 5,
+    width: 14,
+    height: 14,
+    depth: 1,
     swirl: 0,
-    curve: CURVE,
+    curve: { power: 3, bias: 0 },
   },
-  dispersion: { amount: 0, reach: 10, quadrant: 0 },
-  // No refraction of its own at rest, ever — the resting pill is a window onto the bar as it
-  // already renders. On Android the accent clone it reads through *is* the bar's recipe (lens,
-  // blur, vibrancy), so the pill adds nothing; on iOS the window capture excludes every glass
-  // view, so the pill would otherwise be a sharp, unwashed hole in a blurred bar. There it
-  // carries the bar's blur and vibrancy itself (its lens cannot follow: it would bend at the
-  // pill's rim, not the bar's) and melts them away as the grab lands.
+  dispersion: { amount: 4, reach: 14, quadrant: 0 },
+  // The mild lens does not carry the bar's blur: on Android the accent clone it reads through
+  // *is* the bar's recipe (lens, blur, vibrancy), so the pill adds nothing; on iOS the window
+  // capture excludes every glass view, so the pill would otherwise be a sharp, unwashed hole in
+  // a blurred bar. There it carries the bar's blur and vibrancy itself (its lens cannot follow:
+  // it would bend at the pill's rim, not the bar's) and melts them away as the grab lands.
   blurRadius: Platform.OS === "ios" ? 8 : 0,
   frost: 0,
   saturation: Platform.OS === "ios" ? 1.5 : 1,
@@ -218,17 +222,23 @@ const GLASS_PILL_DRAGGED_METAL: GlassMetalOptions = {
   android: { quality: "high" },
 };
 
-/** The toggle thumb at rest: an 8dp frost under an opaque white fill — `blur(8dp * (1 - p))`. */
+/**
+ * The toggle thumb at rest: an 8dp frost under an opaque white fill — `blur(8dp * (1 - p))` —
+ * with a mild lens already in it (amount 4 over a 10dp band). Blur-only at rest read as a flat
+ * lozenge on device, and the lens was invisible until the press had already landed; the rest
+ * lens is there as the white fill starts fading, so the thumb bends instead of merely un-blurring.
+ * The small dispersion (amount 2, reach 10) rides the lens's own band.
+ */
 const GLASS_THUMB_METAL: GlassMetalOptions = {
   refraction: {
-    amount: 0,
-    width: 5,
-    height: 5,
+    amount: 4,
+    width: 10,
+    height: 10,
     depth: 0,
     swirl: 0,
     curve: CURVE,
   },
-  dispersion: { amount: 0, reach: 5 },
+  dispersion: { amount: 2, reach: 10 },
   blurRadius: 8,
   frost: 0,
   saturation: 1,
@@ -242,64 +252,76 @@ const GLASS_THUMB_METAL: GlassMetalOptions = {
 };
 
 /**
- * The toggle thumb held: `lens(5dp, 10dp, chromaticAberration = true)` with **zero** blur.
+ * The toggle thumb held: `lens(14dp, 12dp, chromaticAberration = true)` with **zero** blur.
  *
  * That inversion — the moving element being the *least*-processed surface — is a deliberate,
  * repeated rule in the reference. The pill does it, the slider thumb does it, this does it.
+ *
+ * The band is wider than the reference's 5dp: a 5dp lens over the solid green track behind the
+ * thumb had almost nothing to refract and read on device as a dark blurry blob. At 14dp the
+ * band reaches past the thumb's 12dp half-height, so the lens covers the whole face and pulls
+ * in the track's edge as well as its body. The lightened lens (`light` is the shader's
+ * whole-surface brighten, `color * (1 + light)`) and the raised highlight keep the held thumb
+ * from sinking into a dark backdrop.
  */
 const GLASS_THUMB_PRESSED_METAL: GlassMetalOptions = {
   refraction: {
-    amount: 10,
-    width: 5,
-    height: 5,
+    amount: 12,
+    width: 14,
+    height: 14,
     depth: 0,
     swirl: 0,
     curve: CURVE,
   },
-  dispersion: { amount: 4, reach: 5 },
+  dispersion: { amount: 5, reach: 14 },
   blurRadius: 0,
   frost: 0,
   saturation: 1,
   noise: 0,
-  light: 0,
+  light: 0.15,
   opacity: 1,
-  // `Highlight.Ambient` scaled to 1/1.5 for the small thumb.
-  highlight: { intensity: 0.38, angle: 45, width: 0.33, falloff: 1 },
+  // `Highlight.Ambient` scaled to 1/1.5 for the small thumb, raised from 0.38 so the held lens
+  // reads against a dark backdrop.
+  highlight: { intensity: 0.5, angle: 45, width: 0.33, falloff: 1 },
   border: { width: 1, opacity: 0.28 },
   // `InnerShadow(radius = 4dp * progress, alpha = progress)` — the thumbs' thinner lip.
   innerShadow: { radius: 4, opacity: 0.15 },
   android: { quality: "medium" },
 };
 
-/** The slider thumb at rest — identical frost, deeper lens waiting behind it. */
+/** The slider thumb at rest — identical frost, deeper lens waiting behind it. The rest lens is
+ *  amount 5 over a 12dp band (wider than the toggle's 10dp: the slider thumb is dragged for
+ *  seconds at a time, so its resting glass is on show longer), dispersion riding the band. */
 const GLASS_SLIDER_THUMB_METAL: GlassMetalOptions = {
   ...GLASS_THUMB_METAL,
   refraction: {
-    amount: 0,
-    width: 10,
-    height: 10,
+    amount: 5,
+    width: 12,
+    height: 12,
     depth: 0,
     swirl: 0,
     curve: CURVE,
   },
-  dispersion: { amount: 0, reach: 10 },
+  dispersion: { amount: 2, reach: 12 },
 };
 
 /**
- * The slider thumb held: `lens(10dp, 14dp)` — it bends harder than the toggle's 5/10 because it
- * has a whole track's worth of colour to pull through.
+ * The slider thumb held: `lens(16dp, 16dp)` — it bends harder than the toggle's 14/12 because
+ * it has a whole track's worth of colour to pull through, and the band is wider than its 12dp
+ * rest band for the same reason as the toggle's: a narrow lens over a solid track reads as a
+ * dark blob. Highlight and `light` come from the toggle's pressed metal via the spread.
  */
 const GLASS_SLIDER_THUMB_PRESSED_METAL: GlassMetalOptions = {
   ...GLASS_THUMB_PRESSED_METAL,
   refraction: {
-    amount: 14,
-    width: 10,
-    height: 10,
+    amount: 16,
+    width: 16,
+    height: 16,
     depth: 0,
     swirl: 0,
     curve: CURVE,
   },
-  dispersion: { amount: 5, reach: 10 },
+  dispersion: { amount: 6, reach: 16 },
 };
 
 /**

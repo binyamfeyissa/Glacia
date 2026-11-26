@@ -199,6 +199,15 @@ export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
   }));
   const selectedIndex = Math.max(0, items.findIndex((item) => item.id === activeId));
 
+  // The bar's wash is the engine's own `tabBarSurface` (dark
+  // `rgba(18, 18, 18, 0.4)` / light `rgba(250, 250, 250, 0.42)`, from the
+  // engine's `GLASS_UI_PALETTE`), resolved here from the template's theme —
+  // not Glacia's theme glass (dark `rgba(40, 40, 40, 0.62)` flattened the
+  // bar to uniformly dark on device) and not the engine's default either
+  // (its `useGlassUITheme` follows the phone's OS scheme, so a light-mode
+  // template on a dark phone would get a dark bar — the same class of bug
+  // the Card/Glass theme fix addresses).
+  const barTint = isDark ? "rgba(18,18,18,0.4)" : "rgba(250,250,250,0.42)";
   return (
     <EngineTabBarComponent
       tabs={tabs}
@@ -206,7 +215,7 @@ export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
       onTabSelected={(index: number) => handleSelect(items[index]?.id ?? "")}
       accentColor={activeColor}
       inactiveColor={themeColors.muted}
-      tint={themeColors.glass}
+      tint={barTint}
       style={style}
       labelStyle={{ fontSize: 12 } as any}
     />

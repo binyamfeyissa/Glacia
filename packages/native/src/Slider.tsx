@@ -240,8 +240,14 @@ export const Slider = forwardRef<any, SliderProps>(function Slider(
   return (
     <EngineSliderComponent
       value={value}
-      onValueChange={disabled ? undefined : onValueChange ?? report}
-      onSlidingComplete={disabled ? undefined : onSlidingComplete}
+      onValueChange={disabled ? undefined : (v: number) => report(quantize(v, min, max, step))}
+      onSlidingComplete={
+        disabled
+          ? undefined
+          : onSlidingComplete
+            ? (v: number) => onSlidingComplete(quantize(v, min, max, step))
+            : undefined
+      }
       minimumValue={min}
       maximumValue={max}
       step={step}

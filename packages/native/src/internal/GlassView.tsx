@@ -5,6 +5,7 @@ import { FallbackGlassView } from "./fallback";
 import { defaultRouter, type GlassRouter, type GlassCapabilities } from "./glass-routing";
 import type { SurfaceProfile } from "./material";
 import { useIsDark } from "./motion";
+import { colors } from "./tokens";
 
 export interface NativeGlassProps {
   effect?: "clear" | "regular" | "none";
@@ -159,6 +160,7 @@ export const GlassView = forwardRef<any, NativeGlassProps>(function GlassView(
   ref,
 ) {
   const isDark = useIsDark(isDarkProp);
+  const themeColors = isDark ? colors.dark : colors.light;
   const decision = router();
 
   // A deliberate "no surface here" (a ghost button) never mounts a material:
@@ -184,7 +186,7 @@ export const GlassView = forwardRef<any, NativeGlassProps>(function GlassView(
         {...props}
         ref={ref}
         variant={variant}
-        tint={tintColor}
+        tint={tintColor ?? themeColors.glass}
         interactive={interactive}
         glow={glow}
         cornerRadius={cornerRadius}
