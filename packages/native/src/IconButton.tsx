@@ -26,6 +26,22 @@ export interface IconButtonProps {
 const SIZES = { sm: 32, md: 38, lg: 44 } as const;
 
 /**
+ * The glyph size a render-function icon is handed, per button size — the
+ * engine's own small / regular / large icon sizes (18 / 22 / 24), so the
+ * fallback hands a function the same size the engine does.
+ */
+const ICON_SIZES = { sm: 18, md: 22, lg: 24 } as const;
+
+/**
+ * The same names in the engine's vocabulary (`small` / `regular` / `large`).
+ * The engine reads BUTTON_SIZES[size] with no fallback, so passing the
+ * library's `sm` / `md` / `lg` straight through resolves to undefined and
+ * throws the moment the engine mounts. The fallback never saw this because
+ * the engine never mounted — 0.6.3 mounts it, so the map is load-bearing.
+ */
+const ENGINE_SIZE_NAMES = { sm: "small", md: "regular", lg: "large" } as const;
+
+/**
  * An icon button on Glacia's glass — ported from the engine's
  * `LiquidGlassIconButton`, which extends the engine button's design with a
  * required accessibility label (a bare circle of glass has no text to read).
@@ -65,7 +81,7 @@ export const IconButton = forwardRef<any, IconButtonProps>(function IconButton(
         accessibilityLabel={accessibilityLabel}
         accessibilityState={{ disabled, ...accessibilityState }}
         style={style}
-        size={size}
+        size={ENGINE_SIZE_NAMES[size]}
       >
         {children}
       </EngineIconButtonComponent>
@@ -73,7 +89,17 @@ export const IconButton = forwardRef<any, IconButtonProps>(function IconButton(
   }
 
   // Fallback floor: solid circle, full geometry, on the fallback material.
+  // The icon renders centred in the circle. A render function is handed the
+  // same { color, size } the engine hands it — white on a tint, the scheme's
+  // foreground otherwise, at the button's glyph size. A plain element renders
+  // as given. (The circle used to be self-closing, so the icon never painted:
+  // the solid blue circles with no glyphs.)
   const radius = dimension / 2;
+  const iconColor = tint != null ? themeColors.onTint : themeColors.foreground;
+  const iconNode =
+    typeof icon === "function"
+      ? icon({ color: iconColor, size: ICON_SIZES[size] })
+      : icon;
   return (
     <Glass
       effect="regular"
@@ -103,7 +129,9 @@ export const IconButton = forwardRef<any, IconButtonProps>(function IconButton(
             alignItems: "center",
             justifyContent: "center",
           }}
-        />
+        >
+          {iconNode}
+        </View>
       </Pressable>
     </Glass>
   );
