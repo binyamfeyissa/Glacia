@@ -142,6 +142,54 @@ describe("IconButton fallback — the icon renders", () => {
   });
 });
 
+describe("IconButton fallback — the shell is a circle", () => {
+  it("gives the glass shell the circle radius (19 for md)", () => {
+    const { container } = render(
+      <IconButton
+        accessibilityLabel="C"
+        testID="B"
+        onPress={() => {}}
+        icon={<Text>*</Text>}
+      />,
+    );
+    const shell = container.querySelector('div[data-testid="B"]') as HTMLElement;
+    expect(shell).toBeTruthy();
+    expect(shell.style.borderRadius).toBe("19px");
+  });
+
+  it("sizes the shell radius per button size", () => {
+    const radii: Record<string, string> = {};
+    for (const size of ["sm", "md", "lg"] as const) {
+      const { container } = render(
+        <IconButton
+          accessibilityLabel="S"
+          size={size}
+          testID="B"
+          onPress={() => {}}
+          icon={<Text>*</Text>}
+        />,
+      );
+      const shell = container.querySelector('div[data-testid="B"]') as HTMLElement;
+      radii[size] = shell.style.borderRadius;
+    }
+    expect(radii).toEqual({ sm: "16px", md: "19px", lg: "22px" });
+  });
+
+  it("lets a caller-passed borderRadius win over the circle default", () => {
+    const { container } = render(
+      <IconButton
+        accessibilityLabel="S"
+        testID="B"
+        style={{ borderRadius: 8 }}
+        onPress={() => {}}
+        icon={<Text>*</Text>}
+      />,
+    );
+    const shell = container.querySelector('div[data-testid="B"]') as HTMLElement;
+    expect(shell.style.borderRadius).toBe("8px");
+  });
+});
+
 describe("IconButton engine branch — the engine's size names", () => {
   it("maps sm/md/lg to small/regular/large", () => {
     globalThis.__glaciaIconButtonSupported = true;

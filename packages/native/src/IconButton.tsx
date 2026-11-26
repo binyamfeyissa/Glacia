@@ -94,6 +94,11 @@ export const IconButton = forwardRef<any, IconButtonProps>(function IconButton(
   // foreground otherwise, at the button's glyph size. A plain element renders
   // as given. (The circle used to be self-closing, so the icon never painted:
   // the solid blue circles with no glyphs.)
+  // The shell is a circle, like the fill inside it: the Glass style carries
+  // borderRadius = dimension/2, so the shell's corner arc and the fill's edge
+  // are the same curve. Without it the shell defaulted to radii.md (14) — a
+  // rounded square around a circle — and its corners stuck out past the fill
+  // at the diagonals (the halo). A caller's own borderRadius still wins.
   const radius = dimension / 2;
   const iconColor = tint != null ? themeColors.onTint : themeColors.foreground;
   const iconNode =
@@ -106,7 +111,7 @@ export const IconButton = forwardRef<any, IconButtonProps>(function IconButton(
       surface="control"
       isDark={isDark}
       tintColor={tint}
-      style={style}
+      style={[{ borderRadius: radius }, style]}
       testID={testID}
     >
       <Pressable

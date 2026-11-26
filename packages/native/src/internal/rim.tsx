@@ -10,7 +10,7 @@
 // and share the same resolver: no new native dependency, and it works
 // identically on iOS and Android.
 
-import { useId, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 
 import { primitives } from "./primitives";
 import { material } from "./tokens";
@@ -56,15 +56,81 @@ export interface GlassRimProps {
  * shape in SVG. Before layout the raw radius is used (one frame); off-device
  * (tests, web preview) there is no layout, so the raw radius is used exactly
  * as before.
+ *
+ * The rects are sized the same way — in absolute pixels from the measured
+ * box. They used to be `width="99%"`, meant as a 0.5px inset, but 1% of a
+ * 342px card is 3.4px, so the rim sat ~2px inside the border on the right
+ * and bottom and drew a second line there. The wrapper measures on a device
+ * through onLayout and in the web preview through a DOM ref, so the mirror
+ * gets the fix too.
  */
 export function GlassRim({ radius, rim, highlight }: GlassRimProps) {
-  const { Svg, Defs, Rect, LinearGradient, Stop, View, isNative } = primitives();
+  const { Svg, Defs, Rect, LinearGradient, Stop, View } = primitives();
   const key = useId().replace(/[^a-zA-Z0-9_-]/g, "");
   const rimId = `rim-${key}`;
   const highlightId = `top-${key}`;
   const [size, setSize] = useState<{ width: number; height: number } | null>(null);
   const effective = size ? effectiveGlassRadius(radius, size.width, size.height) : radius;
   const rx = Math.max(0, effective - 0.5);
+
+  // The rects are sized in absolute pixels from the measured box, not in
+  // percentages. width="99%" was meant as a 0.5px inset, but 1% of a 342px
+  // card is 3.4px, so the rim sat ~2px inside the border on the right and
+  // bottom and drew a second line there — while the left and top, which
+  // start at 0.5 and overlap the border, read as one clean line. Before any
+  // measurement there is no box, so the percentage rects are the first frame.
+  const rimWidth = size ? Math.max(0, size.width - 1) : "99%";
+  const rimHeight = size ? Math.max(0, size.height - 1) : "99%";
+  const highlightWidth = size ? Math.max(0, size.width - 2) : "98%";
+  const highlightHeight = size ? Math.round(size.height * 0.4 * 10) / 10 : "40%";
+
+  const applySize = useCallback((width: number, height: number) => {
+    if (width > 0 && height > 0) {
+      setSize((prev) =>
+        prev && prev.width === width && prev.height === height ? prev : { width, height },
+      );
+    }
+  }, []);
+
+  /**
+   * DOM measurement for the web mirror / preview.
+   *
+   * The native path measures through onLayout below. Off-device there is no
+   * layout event — the DOM stand-in drops onLayout — so the rim measures its
+   * own box the way Slider does: a ref on the wrapper, getBoundingClientRect
+   * on mount, and a ResizeObserver for later resizes. Without this the mirror
+   * would keep the percentage rects (and the double line) forever, because
+   * the mirror never fires a layout event. The guard is what keeps this a
+   * no-op on a device: a native view has no getBoundingClientRect.
+   */
+  const observerRef = useRef<any>(null);
+  const measureRef = useCallback(
+    (node: any) => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+        observerRef.current = null;
+      }
+      if (!node || typeof node.getBoundingClientRect !== "function") return;
+      const rect = node.getBoundingClientRect();
+      applySize(rect.width, rect.height);
+      if (typeof ResizeObserver !== "undefined") {
+        const observer = new ResizeObserver(() => {
+          const next = node.getBoundingClientRect();
+          applySize(next.width, next.height);
+        });
+        observer.observe(node);
+        observerRef.current = observer;
+      }
+    },
+    [applySize],
+  );
+
+  useEffect(
+    () => () => {
+      if (observerRef.current) observerRef.current.disconnect();
+    },
+    [],
+  );
 
   const svg = (
     <Svg width="100%" height="100%" style={fill} pointerEvents="none">
@@ -82,8 +148,8 @@ export function GlassRim({ radius, rim, highlight }: GlassRimProps) {
       <Rect
         x={0.5}
         y={0.5}
-        width="99%"
-        height="99%"
+        width={rimWidth}
+        height={rimHeight}
         rx={rx}
         ry={rx}
         fill="none"
@@ -93,8 +159,8 @@ export function GlassRim({ radius, rim, highlight }: GlassRimProps) {
       <Rect
         x={1}
         y={1}
-        width="98%"
-        height="40%"
+        width={highlightWidth}
+        height={highlightHeight}
         rx={Math.max(0, rx - 1)}
         ry={Math.max(0, rx - 1)}
         fill={`url(#${highlightId})`}
@@ -102,16 +168,17 @@ export function GlassRim({ radius, rim, highlight }: GlassRimProps) {
     </Svg>
   );
 
-  if (!isNative) return svg;
+  // One wrapper for both paths: onLayout measures on a device (the DOM
+  // stand-in drops onLayout), the ref measures in the web preview. The
+  // wrapper is an absolute fill either way, so it changes no layout.
   return (
     <View
       style={fill}
       pointerEvents="none"
+      ref={measureRef}
       onLayout={(event: any) => {
         const { width, height } = event.nativeEvent.layout;
-        setSize((prev) =>
-          prev && prev.width === width && prev.height === height ? prev : { width, height },
-        );
+        applySize(width, height);
       }}
     >
       {svg}

@@ -49,11 +49,29 @@ function fireLayout(width: number, height: number) {
   });
 }
 
-function rimRx(container: HTMLElement): string | null {
-  const stroked = Array.from(container.querySelectorAll("rect")).find((rect) =>
+function rimRect(container: HTMLElement): Element | undefined {
+  return Array.from(container.querySelectorAll("rect")).find((rect) =>
     (rect.getAttribute("stroke") ?? "").startsWith("url(#"),
   );
-  return stroked?.getAttribute("rx") ?? null;
+}
+
+function highlightRect(container: HTMLElement): Element | undefined {
+  return Array.from(container.querySelectorAll("rect")).find((rect) =>
+    (rect.getAttribute("fill") ?? "").startsWith("url(#"),
+  );
+}
+
+function rimRx(container: HTMLElement): string | null {
+  return rimRect(container)?.getAttribute("rx") ?? null;
+}
+
+function rectSize(container: HTMLElement): { rim: string[]; highlight: string[] } {
+  const rim = rimRect(container);
+  const highlight = highlightRect(container);
+  return {
+    rim: [rim?.getAttribute("width") ?? "", rim?.getAttribute("height") ?? ""],
+    highlight: [highlight?.getAttribute("width") ?? "", highlight?.getAttribute("height") ?? ""],
+  };
 }
 
 describe("GlassRim measures its box", () => {
@@ -84,5 +102,34 @@ describe("GlassRim measures its box", () => {
     );
     fireLayout(30, 40);
     expect(rimRx(container)).toBe("14.5");
+  });
+
+  it("sizes the rects in absolute pixels once the box is known (not 99%)", () => {
+    const { container } = render(
+      createElement(GlassRim, { radius: 24, rim: 0.5, highlight: 0.3 }),
+    );
+    // Before layout there is no box: the percentage rects are the first frame.
+    expect(rectSize(container)).toEqual({
+      rim: ["99%", "99%"],
+      highlight: ["98%", "40%"],
+    });
+    // The accounts card: 342 wide, 230 tall. The rim is a 0.5px inset in
+    // absolute pixels (341 x 229), not 1% inside (which would be ~339).
+    fireLayout(342, 230);
+    expect(rectSize(container)).toEqual({
+      rim: ["341", "229"],
+      highlight: ["340", "92"],
+    });
+  });
+
+  it("sizes the rects absolutely on a wide pill too", () => {
+    const { container } = render(
+      createElement(GlassRim, { radius: 9999, rim: 0.5, highlight: 0.3 }),
+    );
+    fireLayout(350, 34);
+    expect(rectSize(container)).toEqual({
+      rim: ["349", "33"],
+      highlight: ["348", "13.6"],
+    });
   });
 });
