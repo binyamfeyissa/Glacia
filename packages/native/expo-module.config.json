@@ -1,0 +1,19 @@
+{
+  "android": {
+    "gradlePath": "src/engine/android/build.gradle",
+    "modules": [
+      "expo.modules.liquidglass.ExpoLiquidGlassModule"
+    ],
+    "path": "src/engine/android"
+  },
+  "apple": {
+    "modules": [
+      "ExpoLiquidGlassModule"
+    ],
+    "podspecPath": "src/engine/ios/ExpoLiquidGlass.podspec"
+  },
+  "platforms": [
+    "apple",
+    "android"
+  ]
+}

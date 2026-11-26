@@ -82,6 +82,52 @@ export function glassCapabilities(): GlassCapabilities {
 /** Whether this build renders Apple's glass. */
 export const isGlassSupported = defaultRouter().supported;
 
+/** Merges a style prop into one object; a function style is not resolvable here. */
+function flattenStyle(style: any): ViewStyle {
+  if (!style) return {};
+  if (Array.isArray(style)) {
+    return style.reduce<ViewStyle>((acc, entry) => ({ ...acc, ...flattenStyle(entry) }), {});
+  }
+  if (typeof style === "function") return {};
+  return style as ViewStyle;
+}
+
+/**
+ * The corner radius the engine's shader should refract with, read from the
+ * style the container already paints with — the one shape source for the
+ * engine branch. The native view defaults `cornerRadius` to 0 (a rectangle),
+ * so without this a pill container would refract as a rectangle while its
+ * outline is a pill. A raw pill radius (9999) is safe to pass: the native
+ * side clamps it to half the shorter side, the same clamp the container
+ * uses. Per-corner radii pass through as an object; an explicit `cornerRadius`
+ * prop from the caller is read by the caller of this helper, not here.
+ */
+function resolveCornerRadius(
+  style: StyleProp<ViewStyle>,
+): number | { topLeft: number; topRight: number; bottomRight: number; bottomLeft: number } | undefined {
+  const flat = flattenStyle(style);
+  const tl = (flat as any).borderTopLeftRadius;
+  const tr = (flat as any).borderTopRightRadius;
+  const br = (flat as any).borderBottomRightRadius;
+  const bl = (flat as any).borderBottomLeftRadius;
+  const base = typeof flat.borderRadius === "number" ? flat.borderRadius : 0;
+  if (
+    typeof tl === "number" ||
+    typeof tr === "number" ||
+    typeof br === "number" ||
+    typeof bl === "number"
+  ) {
+    return {
+      topLeft: typeof tl === "number" ? tl : base,
+      topRight: typeof tr === "number" ? tr : base,
+      bottomRight: typeof br === "number" ? br : base,
+      bottomLeft: typeof bl === "number" ? bl : base,
+    };
+  }
+  if (typeof flat.borderRadius === "number") return flat.borderRadius;
+  return undefined;
+}
+
 /**
  * Platform Glass View — the single place a glass surface is chosen:
  * - iOS 26+: Real `UIGlassEffect` via the vendored engine's native view
@@ -124,6 +170,11 @@ export const GlassView = forwardRef<any, NativeGlassProps>(function GlassView(
     const LiquidGlassView = decision.LiquidGlassView;
     const variant = effect === "clear" ? "clear" : "regular";
     const glow = pressed === undefined ? props.glow : { progress: pressed ? 1 : 0, lens: true };
+    // The engine's shader, content clip and border all refract with the
+    // `cornerRadius` prop (default 0 = rectangle). Pass the radius the style
+    // already paints, so the glass and the container share one shape. An
+    // explicit `cornerRadius` prop from the caller wins.
+    const cornerRadius = (props as any).cornerRadius ?? resolveCornerRadius(style);
 
     // The engine owns the material; Glacia's own surface parameters stop at
     // the branch. Everything else (accessibility contract, provider pairing,
@@ -136,6 +187,7 @@ export const GlassView = forwardRef<any, NativeGlassProps>(function GlassView(
         tint={tintColor}
         interactive={interactive}
         glow={glow}
+        cornerRadius={cornerRadius}
         style={style}
         testID={testID}
         children={children}

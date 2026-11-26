@@ -19,7 +19,8 @@
   "react-native": "src/index.ts",
   "files": [
     "lib",
-    "src"
+    "src",
+    "expo-module.config.json"
   ],
   "scripts": {
     "build": "tsc --project tsconfig.build.json",

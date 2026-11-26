@@ -10,12 +10,22 @@
 // and share the same resolver: no new native dependency, and it works
 // identically on iOS and Android.
 
-import { useId } from "react";
+import { useId, useState } from "react";
 
 import { primitives } from "./primitives";
 import { material } from "./tokens";
 
 const fill = { position: "absolute", top: 0, left: 0, right: 0, bottom: 0 } as const;
+
+/**
+ * The corner radius a surface actually shows, from the radius it was given
+ * and the box it was laid out in. React Native clamps `borderRadius` to half
+ * the shorter side; this is the same clamp, so the rim and the container
+ * agree on one shape. A pill radius (9999) on a 350x34 field is 17, not 9999.
+ */
+export function effectiveGlassRadius(radius: number, width: number, height: number): number {
+  return Math.min(radius, width / 2, height / 2);
+}
 
 export interface GlassRimProps {
   /** The surface's corner radius, so the rim follows the shape. */
@@ -32,16 +42,31 @@ export interface GlassRimProps {
  * Both are stacked stops of a vertical gradient in the same colour: the eye
  * reads the brightest edge as a lit curve and the falloff as the curve turning
  * away from the light.
+ *
+ * One shape, one radius. The container's corner is a true pill/semicircle:
+ * React Native clamps `borderRadius` to half the shorter side. SVG does NOT
+ * clamp that way — it clamps `rx` to half the WIDTH and `ry` to half the
+ * HEIGHT independently — so a raw pill radius (9999) drew a wide flat ellipse
+ * (rx ~ half the width) inside a pill container. That is the oval the owner
+ * saw inside the search field. The rim measures the surface it paints and
+ * uses the same effective radius the container shows — `min(radius, half the
+ * shorter side)` — so the rim and the container share one shape. Measuring
+ * here fixes every caller (the fallback glass, the tab-bar lens, the
+ * segmented-control lens) because the rim is the only layer that drew its
+ * shape in SVG. Before layout the raw radius is used (one frame); off-device
+ * (tests, web preview) there is no layout, so the raw radius is used exactly
+ * as before.
  */
 export function GlassRim({ radius, rim, highlight }: GlassRimProps) {
-  const { Svg, Defs, Rect, LinearGradient, Stop } = primitives();
+  const { Svg, Defs, Rect, LinearGradient, Stop, View, isNative } = primitives();
   const key = useId().replace(/[^a-zA-Z0-9_-]/g, "");
   const rimId = `rim-${key}`;
   const highlightId = `top-${key}`;
-  // SVG clamps rx/ry to half the side, so a pill radius simply becomes a pill.
-  const rx = Math.max(0, radius - 0.5);
+  const [size, setSize] = useState<{ width: number; height: number } | null>(null);
+  const effective = size ? effectiveGlassRadius(radius, size.width, size.height) : radius;
+  const rx = Math.max(0, effective - 0.5);
 
-  return (
+  const svg = (
     <Svg width="100%" height="100%" style={fill} pointerEvents="none">
       <Defs>
         <LinearGradient id={rimId} x1="0" y1="0" x2="0" y2="1">
@@ -75,5 +100,21 @@ export function GlassRim({ radius, rim, highlight }: GlassRimProps) {
         fill={`url(#${highlightId})`}
       />
     </Svg>
+  );
+
+  if (!isNative) return svg;
+  return (
+    <View
+      style={fill}
+      pointerEvents="none"
+      onLayout={(event: any) => {
+        const { width, height } = event.nativeEvent.layout;
+        setSize((prev) =>
+          prev && prev.width === width && prev.height === height ? prev : { width, height },
+        );
+      }}
+    >
+      {svg}
+    </View>
   );
 }
