@@ -41,11 +41,16 @@ interface IGlassUIPalette {
    * the frost shows through and the grab, which fades it out, reads as the chip going clear.
    *
    * **0.6.5: the dark wash is back to 0.20.** The 0.30 wash over a blur-only pill read on device
-   * as a solid grey chip, not a selection. The pill now carries its own rest lens (amount 5 over
-   * a 14dp band), so the edge the wash used to supply comes from refraction instead — 0.20 plus
-   * the lens holds the selection without the chip going solid. That 0.20 was also the rejected
-   * first-round value is not a contradiction: the pill then had no lens at all, so the wash was
-   * the only thing separating it from the bar.
+   * as a solid grey chip, not a selection. The pill now carries its own rest lens, so the edge
+   * the wash used to supply comes from refraction instead — 0.20 plus the lens holds the
+   * selection without the chip going solid. That 0.20 was also the rejected first-round value
+   * is not a contradiction: the pill then had no lens at all, so the wash was the only thing
+   * separating it from the bar.
+   *
+   * **0.6.6: the dark wash is 0.12.** The 0.20 wash still read on device as a solid grey oval
+   * (the owner's photo of the bank bar): the wash over the bar's dark tint made a grey chip.
+   * The pill's rest lens is stronger now (amount 8 over an 18dp band) and it carries a glossy
+   * highlight, so the selection reads through refraction and sheen instead of a solid wash.
    * Light stays 0.55: the light-mode pill was not reported solid, and a white wash on a light
    * bar needs the weight. Shared value — the segmented control's and stepper's thumb tints
    * default to this too, and their thumbs lighten with it.
@@ -86,7 +91,7 @@ const GLASS_UI_PALETTE: Record<"light" | "dark", IGlassUIPalette> = {
     switchTrack: "rgba(120,120,128,0.36)",
     tabBarSurface: "rgba(18,18,18,0.4)",
     tabBarSurfaceClear: "rgba(18,18,18,0.12)",
-    tabIndicatorSurface: "rgba(255,255,255,0.20)",
+    tabIndicatorSurface: "rgba(255,255,255,0.12)",
   },
 };
 

@@ -92,16 +92,17 @@ const ITEMS = [
 ];
 
 describe("TabBar — the engine's own surface, resolved from the template theme", () => {
-  it("passes the engine's dark surface in dark mode, not Glacia's opaque glass", () => {
+  it("passes the light-blue glass tint in dark mode, not Glacia's opaque glass", () => {
     render(createElement(TabBar, { items: ITEMS, defaultActiveId: "home", isDark: true }));
     expect(globalThis.__lastEngineTabBarProps).not.toBeNull();
-    expect(globalThis.__lastEngineTabBarProps.tint).toBe("rgba(18,18,18,0.4)");
+    // 0.6.6: the Revolut target — a cool pale-blue tint, not the engine's dark surface.
+    expect(globalThis.__lastEngineTabBarProps.tint).toBe("rgba(140,170,255,0.25)");
   });
 
-  it("passes the engine's light surface in light mode, not the phone's dark scheme", () => {
+  it("passes the light-blue glass tint in light mode, not the phone's dark scheme", () => {
     render(createElement(TabBar, { items: ITEMS, defaultActiveId: "home", isDark: false }));
     expect(globalThis.__lastEngineTabBarProps).not.toBeNull();
-    expect(globalThis.__lastEngineTabBarProps.tint).toBe("rgba(250,250,250,0.42)");
+    expect(globalThis.__lastEngineTabBarProps.tint).toBe("rgba(200,225,255,0.35)");
   });
 
   it("still hands the bar its tabs, selection and colours", () => {
@@ -116,9 +117,11 @@ describe("TabBar — the engine's own surface, resolved from the template theme"
 
 describe("GLASS_PILL_METAL — a mild rest lens, matching the dragged metal", () => {
   it("refracts at rest instead of being effect-off", () => {
-    expect(GLASS_PILL_METAL.refraction?.amount).toBeGreaterThan(0);
-    expect(GLASS_PILL_METAL.refraction?.width).toBe(14);
-    expect(GLASS_PILL_METAL.refraction?.height).toBe(14);
+    // 0.6.6: the rest lens is stronger (5/14 -> 8/18) — the target pill bends
+    // the background visibly at rest.
+    expect(GLASS_PILL_METAL.refraction?.amount).toBe(8);
+    expect(GLASS_PILL_METAL.refraction?.width).toBe(18);
+    expect(GLASS_PILL_METAL.refraction?.height).toBe(18);
   });
 
   it("shares the dragged metal's depth and cubic curve, so the blend stays smooth", () => {
@@ -136,7 +139,8 @@ describe("GLASS_PILL_METAL — a mild rest lens, matching the dragged metal", ()
 
   it("keeps the bar's blur on iOS, so the pill is not a sharp hole in the bar", () => {
     // jsdom runs the iOS branch of the Platform check in this package's tests.
-    expect(GLASS_PILL_METAL.blurRadius).toBe(8);
+    // 0.6.6: the bar's blur is 1dp now, so the pill carries 1dp.
+    expect(GLASS_PILL_METAL.blurRadius).toBe(1);
   });
 });
 
@@ -188,8 +192,10 @@ describe("thumb metals — a mild rest lens, a wider lightened pressed lens", ()
 });
 
 describe("tabIndicatorSurface — the dark pill wash comes down now the lens carries the edge", () => {
-  it("is 0.20 white in dark mode", () => {
-    expect(GLASS_UI_PALETTE.dark.tabIndicatorSurface).toBe("rgba(255,255,255,0.20)");
+  it("is 0.12 white in dark mode", () => {
+    // 0.6.6: 0.20 still read as a solid grey oval on device; the stronger rest
+    // lens + glossy highlight carry the selection now, so the wash comes down.
+    expect(GLASS_UI_PALETTE.dark.tabIndicatorSurface).toBe("rgba(255,255,255,0.12)");
   });
 
   it("is unchanged in light mode", () => {

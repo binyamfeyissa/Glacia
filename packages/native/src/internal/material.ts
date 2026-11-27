@@ -52,8 +52,15 @@ export interface ResolvedMaterial {
   elevation: number;
 }
 
-/** The reference profile: the panel is the base lens the others scale from. */
-const BASE_BLUR = 24;
+/**
+ * The reference profile: the panel is the base lens the others scale from.
+ *
+ * 0.6.6: the owner wants the glass almost clear, "like 1 px" — the fallback's
+ * backdrop blur is 1 (expo-blur's 0–100 scale) on every surface, so content
+ * behind the glass stays sharp and readable. The tint, rim and highlight
+ * still mark the surface; only the frosting is gone.
+ */
+const BASE_BLUR = 1;
 const BASE_DOME = webProfiles.panel.dome;
 const BASE_DEPTH = webProfiles.panel.depth;
 
@@ -74,7 +81,9 @@ export function materialFor(
   const rimBase = isDark ? material.rim.dark : material.rim.light;
 
   return {
-    blur: Math.round(BASE_BLUR * (lens.bend / webProfiles.panel.bend) * thin),
+    // Clamped at 1: without it the faintest profiles would round to 0 (no blur
+    // at all) instead of the ~1px the clear glass wants everywhere.
+    blur: Math.max(1, Math.round(BASE_BLUR * (lens.bend / webProfiles.panel.bend) * thin)),
     rim: rimBase * (lens.dome / BASE_DOME) * thin,
     highlight: material.highlight * (lens.depth / BASE_DEPTH) * thin,
     // The web drops every surface by 1px; overlays carry their own, deeper

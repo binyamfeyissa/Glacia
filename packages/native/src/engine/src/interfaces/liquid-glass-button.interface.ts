@@ -46,7 +46,7 @@ interface ILiquidGlassButtonProps {
   /** Surface wash over the glass. String children default to white text when a tint is set. */
   tint?: ColorValue;
   variant?: LiquidGlassViewProps["variant"];
-  /** The button's glass. Static by design; defaults to `vibrancy + blur(2dp) + lens(12dp, 24dp)`. */
+  /** The button's glass. Static by design; defaults to `vibrancy + blur(1dp) + lens(12dp, 24dp)`. (0.6.6: blur was 2dp.) */
   metal?: GlassMetalOptions;
   /** Android only — which `LiquidGlassProvider` supplies the backdrop. */
   providerId?: string | string[];

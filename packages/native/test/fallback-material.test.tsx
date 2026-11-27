@@ -65,23 +65,30 @@ describe("surface profiles — the web's lens table, in fallback terms", () => {
     // The point of the profiles is that a dialog and a badge stop sharing one
     // recipe. If these collapsed to a single material, the layer table would be
     // decorative rather than real.
-    const distinctBlur = new Set(resolved.map((material) => material.blur));
+    // 0.6.6: the blur is 1 on every profile now (the owner wants the glass
+    // almost clear, "like 1 px"), so the profiles separate on the rim, not
+    // on the blur.
     const distinctRim = new Set(resolved.map((material) => material.rim));
-    expect(distinctBlur.size).toBeGreaterThan(1);
+    expect(resolved.every((material) => material.blur === 1)).toBe(true);
     expect(distinctRim.size).toBeGreaterThan(1);
   });
 
-  it("gives the control family the strongest blur and the hint family the faintest", () => {
+  it("blurs every family at ~1 now, and the rim still separates control from hint", () => {
     const control = materialFor("control", "regular", false);
     const hint = materialFor("hint", "regular", false);
-    expect(control.blur).toBeGreaterThan(hint.blur);
+    // 0.6.6: blur is 1 everywhere — the families separate on the rim now.
+    expect(control.blur).toBe(1);
+    expect(hint.blur).toBe(1);
     expect(control.rim).toBeGreaterThan(hint.rim);
   });
 
   it("thins the lens on the clear effect, as the web does", () => {
     const regular = materialFor("overlay", "regular", false);
     const clear = materialFor("overlay", "clear", false);
-    expect(clear.blur).toBeLessThan(regular.blur);
+    // 0.6.6: blur is 1 on both now (clamped at 1) — the clear effect thins
+    // the rim instead.
+    expect(clear.blur).toBe(1);
+    expect(clear.blur).toBeLessThanOrEqual(regular.blur);
     expect(clear.rim).toBeLessThan(regular.rim);
   });
 

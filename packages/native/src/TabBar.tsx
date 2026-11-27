@@ -199,15 +199,16 @@ export const TabBar = forwardRef<any, TabBarProps>(function TabBar(
   }));
   const selectedIndex = Math.max(0, items.findIndex((item) => item.id === activeId));
 
-  // The bar's wash is the engine's own `tabBarSurface` (dark
-  // `rgba(18, 18, 18, 0.4)` / light `rgba(250, 250, 250, 0.42)`, from the
-  // engine's `GLASS_UI_PALETTE`), resolved here from the template's theme —
-  // not Glacia's theme glass (dark `rgba(40, 40, 40, 0.62)` flattened the
-  // bar to uniformly dark on device) and not the engine's default either
-  // (its `useGlassUITheme` follows the phone's OS scheme, so a light-mode
-  // template on a dark phone would get a dark bar — the same class of bug
-  // the Card/Glass theme fix addresses).
-  const barTint = isDark ? "rgba(18,18,18,0.4)" : "rgba(250,250,250,0.42)";
+  // The bar's wash is a light blue glass (0.6.6, the Revolut target): dark
+  // `rgba(140, 170, 255, 0.25)` / light `rgba(200, 225, 255, 0.35)` — a cool,
+  // pale-blue tint over the refracted backdrop, so the bar reads as clear
+  // blue glass instead of a dark frosted slab. Resolved here from the
+  // template's theme — not Glacia's theme glass (dark `rgba(40, 40, 40, 0.62)`
+  // flattened the bar to uniformly dark on device) and not the engine's
+  // default either (its `useGlassUITheme` follows the phone's OS scheme, so
+  // a light-mode template on a dark phone would get a dark bar — the same
+  // class of bug the Card/Glass theme fix addresses).
+  const barTint = isDark ? "rgba(140,170,255,0.25)" : "rgba(200,225,255,0.35)";
   return (
     <EngineTabBarComponent
       tabs={tabs}

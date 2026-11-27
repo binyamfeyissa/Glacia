@@ -12,7 +12,7 @@ interface ILiquidGlassSwitchProps {
   accentColor?: string;
   /** Track color when off. Same string constraint. */
   trackColor?: string;
-  /** The thumb's glass at rest — an 8dp frost under an opaque white fill. */
+  /** The thumb's glass at rest — a 1dp frost under an opaque white fill. (0.6.6: was 8dp.) */
   thumbMetal?: GlassMetalOptions;
   /** The thumb's glass while held: bare `lens(5dp, 10dp)` with dispersion, and no blur at all. */
   thumbPressedMetal?: GlassMetalOptions;

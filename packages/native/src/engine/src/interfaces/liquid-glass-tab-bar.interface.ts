@@ -61,8 +61,8 @@ interface ILiquidGlassTabBarProps {
   /**
    * The bar's blur, dp — the one dial most apps want without rewriting `barMetal`. The accent
    * clone the pill reads through takes the bar's whole recipe, this included, so the resting
-   * pill stays the same frost as the bar around it. Defaults to the reference's 8. An explicit
-   * `barMetal` still wins.
+   * pill stays the same frost as the bar around it. Defaults to the bar metal's blur (1dp
+   * since 0.6.6). An explicit `barMetal` still wins.
    */
   blurRadius?: number;
   /**

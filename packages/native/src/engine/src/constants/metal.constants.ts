@@ -38,7 +38,10 @@ import type { GlassMetalOptions } from "../core";
 const CURVE = { power: 1, bias: 0 } as const;
 
 /**
- * The bottom bar: `vibrancy() -> blur(8dp) -> lens(24dp, 24dp)`, permanently on.
+ * The bottom bar: `vibrancy() -> blur(1dp) -> lens(24dp, 24dp)`, permanently on.
+ *
+ * 0.6.6: blur 8 -> 1 — the owner wants the glass almost clear, "like 1 px": the
+ * tint and rim still mark the surface, but the frosting is gone.
  *
  * `refractionAmount == refractionHeight` is deliberate — where they are equal the band samples the
  * same source range twice, mirrored, which is the inverted sliver seen at a thick glass rim. This
@@ -57,18 +60,21 @@ const GLASS_BAR_METAL: GlassMetalOptions = {
     curve: CURVE,
   },
   dispersion: { amount: 0, reach: 24 },
-  blurRadius: 8,
+  blurRadius: 1,
   frost: 0,
   saturation: 1.5,
   noise: 0,
   light: 0,
   opacity: 1,
-  highlight: { intensity: 0.3, angle: 45, width: 0.5, falloff: 1 },
+  // 0.6.6: glossy highlight (0.3 -> 0.6, wider) — the target (Revolut) bar carries
+  // a bright specular band across its top; with the blur gone, the highlight is
+  // what still says "glass" at a glance. Shared with panels (Card/Sheet).
+  highlight: { intensity: 0.6, angle: 45, width: 0.75, falloff: 1 },
   border: { width: 1, opacity: 0.28 },
   android: { quality: "medium" },
 };
 
-/** `LiquidButton`: `vibrancy() -> blur(2dp) -> lens(12dp, 24dp)`. Static — nothing here animates. */
+/** `LiquidButton`: `vibrancy() -> blur(1dp) -> lens(12dp, 24dp)`. Static — nothing here animates. (0.6.6: blur was 2dp.) */
 const GLASS_BUTTON_METAL: GlassMetalOptions = {
   refraction: {
     amount: 24,
@@ -79,7 +85,7 @@ const GLASS_BUTTON_METAL: GlassMetalOptions = {
     curve: CURVE,
   },
   dispersion: { amount: 0, reach: 12 },
-  blurRadius: 2,
+  blurRadius: 1,
   frost: 0,
   saturation: 1.5,
   noise: 0,
@@ -96,11 +102,11 @@ const GLASS_BUTTON_METAL: GlassMetalOptions = {
  * The regular bar reads through a 42% container fill, which is what guarantees a label stays
  * legible over anything. Take that away and legibility has to come from the material itself, so
  * this leans the other way from `GLASS_BAR_METAL` on every axis the base library's own
- * `CLEAR_DEFAULTS` does: a whisper of frost instead of none, saturation pulled back toward life,
+ * `CLEAR_DEFAULTS` does: no frost at all (0.6.6), saturation pulled back toward life,
  * dispersion raised so the rim actually reads, and a brighter border and highlight because with no
  * fill behind it the edge is the only thing left saying "this is a surface".
  *
- * The blur stays low on purpose. Blurring hard is how you fake a scrim; a clear bar that blurs its
+ * The blur is 1dp on purpose (0.6.6: was 3dp). Blurring hard is how you fake a scrim; a clear bar that blurs its
  * backdrop into mush is just a scrim with extra steps.
  */
 const GLASS_BAR_CLEAR_METAL: GlassMetalOptions = {
@@ -117,13 +123,13 @@ const GLASS_BAR_CLEAR_METAL: GlassMetalOptions = {
     curve: CURVE,
   },
   dispersion: { amount: 10, reach: 24, quadrant: 0 },
-  blurRadius: 3,
-  frost: 0.06,
+  blurRadius: 1,
+  frost: 0,
   saturation: 1.15,
   noise: 0,
   light: 0,
   opacity: 1,
-  highlight: { intensity: 0.35, angle: 45, width: 0.75, falloff: 1 },
+  highlight: { intensity: 0.5, angle: 45, width: 0.75, falloff: 1 },
   border: { width: 1, opacity: 0.4 },
   android: { quality: "medium" },
 };
@@ -133,37 +139,44 @@ const GLASS_BAR_CLEAR_METAL: GlassMetalOptions = {
  * early-returns when both arguments are zero, so no render effect is attached at all and the
  * pill becomes a literal clipped window onto its backdrop — and on device that read as a solid
  * grey chip: two solid fills (the 30%-white resting wash under the glyph, the bar's own surface
- * behind it) over a blur-only glass. The resting pill now bends a little — amount 5 over a 14dp
- * band, a cubic profile (`power: 3`) and `depth: 1` exactly matching the dragged metal, so the
+ * behind it) over a blur-only glass. The resting pill now bends a little — amount 8 over an
+ * 18dp band (0.6.6: was 5 over 14dp — the target pill bends the background visibly at rest), a
+ * cubic profile (`power: 3`) and `depth: 1` exactly matching the dragged metal, so the
  * `lerpMetal` rest→dragged blend stays smooth and the lens is already there as the grab lands —
- * with a small dispersion (amount 4, reach 14, riding the lens's own band) so the rim reads.
+ * with a small dispersion (amount 5, reach 18, riding the lens's own band) so the rim reads.
  *
  * This is the `from` end of a blend, not a state to be swapped to — see {@link lerpMetal} and the
  * tab bar's `pillProps`. Every field it names is a field the grab animates, and it names them at
  * their resting value rather than omitting them, so the blend has both ends of every channel.
  */
 const GLASS_PILL_METAL: GlassMetalOptions = {
+  // 0.6.6: stronger rest lens (5/14 -> 8/18) — the target pill bends the
+  // background visibly at rest, like the bar; the glyphs sit above the glass,
+  // so the wider band does not distort them.
   refraction: {
-    amount: 5,
-    width: 14,
-    height: 14,
+    amount: 8,
+    width: 18,
+    height: 18,
     depth: 1,
     swirl: 0,
     curve: { power: 3, bias: 0 },
   },
-  dispersion: { amount: 4, reach: 14, quadrant: 0 },
+  dispersion: { amount: 5, reach: 18, quadrant: 0 },
   // The mild lens does not carry the bar's blur: on Android the accent clone it reads through
   // *is* the bar's recipe (lens, blur, vibrancy), so the pill adds nothing; on iOS the window
   // capture excludes every glass view, so the pill would otherwise be a sharp, unwashed hole in
   // a blurred bar. There it carries the bar's blur and vibrancy itself (its lens cannot follow:
   // it would bend at the pill's rim, not the bar's) and melts them away as the grab lands.
-  blurRadius: Platform.OS === "ios" ? 8 : 0,
+  // (0.6.6: the bar's blur is 1dp, so the pill carries 1dp on iOS.)
+  blurRadius: Platform.OS === "ios" ? 1 : 0,
   frost: 0,
   saturation: Platform.OS === "ios" ? 1.5 : 1,
   noise: 0,
   light: 0,
   opacity: 1,
-  highlight: { intensity: 0, angle: 45, width: 0.5, falloff: 1 },
+  // 0.6.6: a glossy sheen (was 0) — the target pill carries the same bright
+  // top highlight as the bar, so it reads as glass, not a solid chip.
+  highlight: { intensity: 0.4, angle: 45, width: 0.5, falloff: 1 },
   border: { width: 1, opacity: 0 },
   innerShadow: { radius: 0, opacity: 0 },
   android: { quality: "high" },
@@ -223,7 +236,7 @@ const GLASS_PILL_DRAGGED_METAL: GlassMetalOptions = {
 };
 
 /**
- * The toggle thumb at rest: an 8dp frost under an opaque white fill — `blur(8dp * (1 - p))` —
+ * The toggle thumb at rest: a 1dp frost under an opaque white fill — `blur(1dp * (1 - p))` — (0.6.6: was 8dp)
  * with a mild lens already in it (amount 4 over a 10dp band). Blur-only at rest read as a flat
  * lozenge on device, and the lens was invisible until the press had already landed; the rest
  * lens is there as the white fill starts fading, so the thumb bends instead of merely un-blurring.
@@ -239,7 +252,7 @@ const GLASS_THUMB_METAL: GlassMetalOptions = {
     curve: CURVE,
   },
   dispersion: { amount: 2, reach: 10 },
-  blurRadius: 8,
+  blurRadius: 1,
   frost: 0,
   saturation: 1,
   noise: 0,
