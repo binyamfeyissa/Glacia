@@ -121,6 +121,14 @@ const CUTOUT_IS_HARD = Platform.OS === "android";
  */
 const PILL_WASH_ALPHA = 0.03;
 
+/**
+ * 0.6.7: how much of the soft cutout's two fills (the bar's surface tint and the resting wash)
+ * stays on the pill at rest. They used to sit at full opacity over the pill's glass, which hid
+ * the rest lens — the pill read as a solid chip. At 0.3 the pill keeps a hint of the wash (so it
+ * is not a hole in the bar) and the lens shows through.
+ */
+const CUTOUT_REST_FILL = 0.3;
+
 /** The recipe with its `tint` removed — the tab bar paints that beneath the glyphs itself. */
 const withoutTint = (metal: GlassMetalOptions): GlassMetalOptions => {
   if (metal.tint == null) return metal;
@@ -635,13 +643,18 @@ const LiquidGlassTabBarBase: React.FC<ILiquidGlassTabBarProps> = ({
     ],
   }));
   const cutoutFillStyle = useAnimatedStyle(() => ({
-    opacity: 1 - drag.pressProgress.value,
+    opacity: CUTOUT_REST_FILL * (1 - drag.pressProgress.value),
   }));
   // The bar's wash inside the soft cutout: the window capture the pill reads there excludes
   // every glass view, so without this the resting pill is a hole in the bar's wash. It fades with
   // the lift, like the reference's container fill leaving the grabbed pill clear.
+  //
+  // 0.6.7: at full opacity these two fills painted over the pill's glass at rest and hid its
+  // lens — the pill read as a solid chip and the 0.6.6 rest lens (8/18dp) was invisible on
+  // device. At 30% the pill keeps a hint of the wash (so it is not a hole in the bar) and the
+  // lens shows through.
   const cutoutWashStyle = useAnimatedStyle(() => ({
-    opacity: 1 - drag.pressProgress.value,
+    opacity: CUTOUT_REST_FILL * (1 - drag.pressProgress.value),
   }));
 
   const handleLayout = (event: LayoutChangeEvent): void => {

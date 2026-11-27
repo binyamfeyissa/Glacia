@@ -236,29 +236,31 @@ const GLASS_PILL_DRAGGED_METAL: GlassMetalOptions = {
 };
 
 /**
- * The toggle thumb at rest: a 1dp frost under an opaque white fill — `blur(1dp * (1 - p))` — (0.6.6: was 8dp)
- * with a mild lens already in it (amount 4 over a 10dp band). Blur-only at rest read as a flat
- * lozenge on device, and the lens was invisible until the press had already landed; the rest
- * lens is there as the white fill starts fading, so the thumb bends instead of merely un-blurring.
- * The small dispersion (amount 2, reach 10) rides the lens's own band.
+ * The toggle thumb at rest: a clear lens — no white fill, no frost to lift. (0.6.7: the fill is
+ * gone — it covered the lens at rest, so the thumb read as a solid lozenge and the refraction
+ * was invisible on device. The target, iOS Settings' Wi-Fi thumb, is a clear lens: the green
+ * track refracts through it at rest.) The rest lens is now a real lens: amount 8 over a 12dp
+ * band, `depth: 1` (the radial term that makes it read as a lens ball, not just an edge bend),
+ * cubic profile, and a 0.4 highlight so the lens carries the bright glossy top edge the target
+ * shows. The small dispersion (amount 4, reach 12) rides the lens's own band.
  */
 const GLASS_THUMB_METAL: GlassMetalOptions = {
   refraction: {
-    amount: 4,
-    width: 10,
-    height: 10,
-    depth: 0,
+    amount: 8,
+    width: 12,
+    height: 12,
+    depth: 1,
     swirl: 0,
-    curve: CURVE,
+    curve: { power: 3, bias: 0 },
   },
-  dispersion: { amount: 2, reach: 10 },
+  dispersion: { amount: 4, reach: 12 },
   blurRadius: 1,
   frost: 0,
   saturation: 1,
   noise: 0,
   light: 0,
   opacity: 1,
-  highlight: { intensity: 0, angle: 45, width: 0.33, falloff: 1 },
+  highlight: { intensity: 0.4, angle: 45, width: 0.33, falloff: 1 },
   border: { width: 1, opacity: 0 },
   innerShadow: { radius: 0, opacity: 0 },
   android: { quality: "medium" },
@@ -282,9 +284,11 @@ const GLASS_THUMB_PRESSED_METAL: GlassMetalOptions = {
     amount: 12,
     width: 14,
     height: 14,
-    depth: 0,
+    // 0.6.7: depth 1 + cubic, like the rest lens — the held thumb is a lens too, and the
+    // lerpMetal rest→held blend stays smooth when both ends share depth and curve.
+    depth: 1,
     swirl: 0,
-    curve: CURVE,
+    curve: { power: 3, bias: 0 },
   },
   dispersion: { amount: 5, reach: 14 },
   blurRadius: 0,
@@ -302,20 +306,21 @@ const GLASS_THUMB_PRESSED_METAL: GlassMetalOptions = {
   android: { quality: "medium" },
 };
 
-/** The slider thumb at rest — identical frost, deeper lens waiting behind it. The rest lens is
- *  amount 5 over a 12dp band (wider than the toggle's 10dp: the slider thumb is dragged for
- *  seconds at a time, so its resting glass is on show longer), dispersion riding the band. */
+/** The slider thumb at rest — a clear lens like the toggle's (0.6.7: no white fill, depth 1,
+ *  cubic profile, 0.4 highlight). The rest lens is amount 8 over a 14dp band (wider than the
+ *  toggle's 12dp: the slider thumb is dragged for seconds at a time, so its resting glass is
+ *  on show longer), dispersion riding the band. */
 const GLASS_SLIDER_THUMB_METAL: GlassMetalOptions = {
   ...GLASS_THUMB_METAL,
   refraction: {
-    amount: 5,
-    width: 12,
-    height: 12,
-    depth: 0,
+    amount: 8,
+    width: 14,
+    height: 14,
+    depth: 1,
     swirl: 0,
-    curve: CURVE,
+    curve: { power: 3, bias: 0 },
   },
-  dispersion: { amount: 2, reach: 12 },
+  dispersion: { amount: 4, reach: 14 },
 };
 
 /**
@@ -330,9 +335,10 @@ const GLASS_SLIDER_THUMB_PRESSED_METAL: GlassMetalOptions = {
     amount: 16,
     width: 16,
     height: 16,
-    depth: 0,
+    // 0.6.7: depth 1 + cubic, like the rest lens and the toggle's held lens.
+    depth: 1,
     swirl: 0,
-    curve: CURVE,
+    curve: { power: 3, bias: 0 },
   },
   dispersion: { amount: 6, reach: 16 },
 };

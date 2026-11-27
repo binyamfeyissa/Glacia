@@ -156,13 +156,16 @@ const LiquidGlassSwitchBase: React.FC<ILiquidGlassSwitchProps> = ({
       ],
     };
   });
-  const fillStyle = useAnimatedStyle(() => ({
-    opacity: 1 - drag.pressProgress.value,
-  }));
   /**
-   * The frost lifting as the lens comes in, continuously — the reference animates the effect chain
-   * itself, and it holds the pressed material through the whole snap rather than dropping it on
-   * finger-up. A React state swap can do neither: it lands a render late and it lands at release.
+   * The lens itself, continuously — the reference animates the effect chain itself, and it holds
+   * the pressed material through the whole snap rather than dropping it on finger-up. A React
+   * state swap can do neither: it lands a render late and it lands at release.
+   *
+   * 0.6.7: there is no white fill under the lens any more. The fill (`opacity: 1 - pressProgress`,
+   * `#FFFFFF`, full face) covered the lens at rest, so the thumb read as a solid lozenge and the
+   * refraction was invisible on device. The target, iOS Settings' Wi-Fi thumb, is a clear lens
+   * at rest — the green track refracts through it — so the thumb is glass alone now, rest and
+   * pressed, and the rim + highlight + lens carry its visibility.
    */
   const thumbProps = useAnimatedProps(() => ({
     metal: lerpMetal(restMetal, heldMetal, drag.pressProgress.value),
@@ -180,10 +183,13 @@ const LiquidGlassSwitchBase: React.FC<ILiquidGlassSwitchProps> = ({
    * }
    * ```
    *
-   * `scaleY` starting at **zero** is the part that matters: a resting thumb sees no track at all,
-   * so it is a plain frosted lozenge, and the green body swells into view out of nothing as the
-   * grab lands. Kyant scales the layer at draw time; there is no per-layer transform on a
-   * `providerId` list, so the copy is scaled here instead and recorded from a provider of its own.
+   * 0.6.7: the reference's `scaleY` starts at zero, so a resting thumb sees no track at all —
+   * and a lens with nothing to refract reads as a dark blob on device (the target, iOS Settings,
+   * refracts the green track through the thumb at rest). So this kit's copy now holds 0.75 on Y
+   * at rest too (`SWITCH_TRACK_COPY_SCALE_Y = [0.75, 0.75]`): the thumb always sees the track,
+   * and the lens bends it. Kyant scales the layer at draw time; there is no per-layer transform
+   * on a `providerId` list, so the copy is scaled here instead and recorded from a provider of
+   * its own.
    */
   const trackCopyStyle = useAnimatedStyle(() => {
     const p = drag.pressProgress.value;
@@ -232,15 +238,14 @@ const LiquidGlassSwitchBase: React.FC<ILiquidGlassSwitchProps> = ({
           <AnimatedGlassView
             // The reference's `rememberCombinedBackdrop(backdrop, scaled(trackBackdrop))`: the
             // screen, then the *shrunk* copy of the track — never the track at its real size.
+            // 0.6.7: no fill child — the thumb is glass alone, so the lens is visible at rest.
             providerId={[providerId ?? "default", copyLayerId]}
             cornerRadius={SWITCH_THUMB_HEIGHT / 2}
             cornerStyle="continuous"
             animatedProps={thumbProps}
             style={styles.thumbGlass}
             containerStyle={styles.thumbContent}
-          >
-            <Animated.View style={[styles.thumbFill, fillStyle]} />
-          </AnimatedGlassView>
+          />
         </Animated.View>
       </View>
     </GestureDetector>
@@ -281,11 +286,6 @@ const styles = StyleSheet.create({
   trackCopyLayer: {
     ...ABSOLUTE_FILL,
     opacity: 0.02,
-  },
-  thumbFill: {
-    ...ABSOLUTE_FILL,
-    borderRadius: SWITCH_THUMB_HEIGHT / 2,
-    backgroundColor: "#FFFFFF",
   },
 });
 

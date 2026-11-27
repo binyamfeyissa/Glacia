@@ -221,10 +221,9 @@ const LiquidGlassSliderBase: React.FC<ILiquidGlassSliderProps> = ({
       ],
     };
   });
-  const thumbFillStyle = useAnimatedStyle(() => ({
-    opacity: 1 - drag.pressProgress.value,
-  }));
-
+  // 0.6.7: no white fill under the lens any more — it covered the lens at rest (see the
+  // toggle), so the thumb read as a solid lozenge and the refraction was invisible on device.
+  // The thumb is glass alone now, rest and pressed.
   const handleLayout = (event: LayoutChangeEvent): void => {
     setWidth(event.nativeEvent.layout.width);
   };
@@ -258,15 +257,14 @@ const LiquidGlassSliderBase: React.FC<ILiquidGlassSliderProps> = ({
         {width > 0 ? (
           <Animated.View style={[styles.thumb, thumbStyle]}>
             <AnimatedGlassView
+              // 0.6.7: no fill child — the thumb is glass alone, so the lens is visible at rest.
               providerId={[providerId ?? "default", layerId]}
               cornerRadius={SLIDER_THUMB_HEIGHT / 2}
               cornerStyle="continuous"
               animatedProps={thumbProps}
               style={styles.thumbGlass}
               containerStyle={styles.thumbContent}
-            >
-              <Animated.View style={[styles.thumbFill, thumbFillStyle]} />
-            </AnimatedGlassView>
+            />
           </Animated.View>
         ) : null}
       </View>
@@ -312,11 +310,6 @@ const styles = StyleSheet.create({
   },
   thumbContent: {
     ...ABSOLUTE_FILL,
-  },
-  thumbFill: {
-    ...ABSOLUTE_FILL,
-    borderRadius: SLIDER_THUMB_HEIGHT / 2,
-    backgroundColor: "#FFFFFF",
   },
 });
 

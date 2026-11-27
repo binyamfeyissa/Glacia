@@ -147,12 +147,14 @@ describe("GLASS_PILL_METAL — a mild rest lens, matching the dragged metal", ()
 describe("thumb metals — a mild rest lens, a wider lightened pressed lens", () => {
   it("the switch thumb refracts at rest", () => {
     expect(GLASS_THUMB_METAL.refraction?.amount).toBeGreaterThan(0);
-    expect(GLASS_THUMB_METAL.refraction?.width).toBe(10);
+    // 0.6.7: was 10 — the rest lens widened so it covers the 24dp-tall thumb face.
+    expect(GLASS_THUMB_METAL.refraction?.width).toBe(12);
   });
 
   it("the slider thumb refracts at rest", () => {
     expect(GLASS_SLIDER_THUMB_METAL.refraction?.amount).toBeGreaterThan(0);
-    expect(GLASS_SLIDER_THUMB_METAL.refraction?.width).toBe(12);
+    // 0.6.7: was 12.
+    expect(GLASS_SLIDER_THUMB_METAL.refraction?.width).toBe(14);
   });
 
   it("the pressed switch lens is wider and stronger than rest", () => {

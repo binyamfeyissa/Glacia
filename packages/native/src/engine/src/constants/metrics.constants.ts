@@ -18,14 +18,17 @@ const SWITCH_THUMB_TRAVEL =
 const SWITCH_THUMB_PRESSED_SCALE = 1.5;
 /**
  * How far the track is shrunk in the copy the thumb reads, `[at rest, fully grabbed]` —
- * `LiquidToggle`'s `lerp(2/3, 0.75)` on X and `lerp(0, 0.75)` on Y.
+ * `LiquidToggle`'s `lerp(2/3, 0.75)` on X and `lerp(0.75, 0.75)` on Y.
  *
- * The zero is the interesting end: a resting thumb reads a track squashed to no height at all, so
- * it sees only the screen and reads as a plain frosted lozenge. Grab it and the green body swells
- * out of nothing underneath the glass.
+ * 0.6.7: the Y rest value was 0 — a resting thumb read a track squashed to no height at all,
+ * so it saw only the screen and the lens had nothing to refract (a uniform dark field reads as
+ * a dark blob). The target, iOS Settings' Wi-Fi thumb, refracts the green track through the
+ * thumb at rest, so the copy now holds its 0.75 height at rest too: the thumb always sees the
+ * track, and the lens bends it. The X rest value (2/3) stays — the copy is still shrunk, just
+ * never flattened.
  */
 const SWITCH_TRACK_COPY_SCALE_X: readonly [number, number] = [2 / 3, 0.75];
-const SWITCH_TRACK_COPY_SCALE_Y: readonly [number, number] = [0, 0.75];
+const SWITCH_TRACK_COPY_SCALE_Y: readonly [number, number] = [0.75, 0.75];
 /**
  * Short-throw controls divide velocity by 50 before it reaches the jelly; full-width ones use 10.
  * The toggle is the short-throw case, so its squash is 5x gentler than the slider's.
