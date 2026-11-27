@@ -1,6 +1,6 @@
 {
   "name": "glacia-native",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "description": "Liquid Glass UI components for React Native \u2014 real iOS 26 glass, with a clean fallback on Android and older iOS.",
   "author": "Binyam Feyissa (https://github.com/binyamfeyissa)",
   "license": "MIT",
