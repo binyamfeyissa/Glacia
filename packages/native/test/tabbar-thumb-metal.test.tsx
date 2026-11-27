@@ -91,18 +91,19 @@ const ITEMS = [
   { id: "profile", label: "Profile" },
 ];
 
-describe("TabBar — the engine's own surface, resolved from the template theme", () => {
-  it("passes the light-blue glass tint in dark mode, not Glacia's opaque glass", () => {
+describe("TabBar — the neutral engine surface, resolved from the template theme", () => {
+  it("passes the neutral glass tint in dark mode, not Glacia's opaque glass", () => {
     render(createElement(TabBar, { items: ITEMS, defaultActiveId: "home", isDark: true }));
     expect(globalThis.__lastEngineTabBarProps).not.toBeNull();
-    // 0.6.6: the Revolut target — a cool pale-blue tint, not the engine's dark surface.
-    expect(globalThis.__lastEngineTabBarProps.tint).toBe("rgba(140,170,255,0.25)");
+    // 0.6.8: the 0.6.6 light-blue tint was reverted — the owner reported the
+    // bar "just looks blue" on device. Neutral wash; the blur ~1 clarity stays.
+    expect(globalThis.__lastEngineTabBarProps.tint).toBe("rgba(18,18,18,0.4)");
   });
 
-  it("passes the light-blue glass tint in light mode, not the phone's dark scheme", () => {
+  it("passes the neutral glass tint in light mode, not the phone's dark scheme", () => {
     render(createElement(TabBar, { items: ITEMS, defaultActiveId: "home", isDark: false }));
     expect(globalThis.__lastEngineTabBarProps).not.toBeNull();
-    expect(globalThis.__lastEngineTabBarProps.tint).toBe("rgba(200,225,255,0.35)");
+    expect(globalThis.__lastEngineTabBarProps.tint).toBe("rgba(250,250,250,0.42)");
   });
 
   it("still hands the bar its tabs, selection and colours", () => {
