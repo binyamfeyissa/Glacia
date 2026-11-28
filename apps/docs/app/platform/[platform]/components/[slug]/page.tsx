@@ -70,6 +70,7 @@ export default async function PlatformComponentPage({
       <PlatformPage
         platform={platform}
         current="components"
+        activeComponent={slug}
         title={component.name}
         kicker={`${component.category} · ${meta.pkg}`}
         description={component.description}
@@ -194,6 +195,7 @@ export default async function PlatformComponentPage({
     <PlatformPage
       platform={platform}
       current="components"
+      activeComponent={slug}
       title={component.name}
       kicker={`${component.category} · ${meta.pkg}`}
       description={component.description}

@@ -4,10 +4,13 @@ import { DOC_GROUPS, docSections } from "../data/doc-nav";
 import { PLATFORMS, platformHref, type Platform } from "../data/platforms";
 import { NATIVE_COMPONENTS } from "../data/platform-components";
 import { COMPONENTS_DATA } from "../data/components-data";
-import { ChevronDownIcon } from "./icons";
 
-// The category order used by both platforms' component lists.
-const WEB_CATEGORIES = [
+// The category order used by both platforms' component lists, filtered at
+// render time to the categories a platform actually has — so a category
+// rename can never silently empty a platform's list (the native list used to
+// filter by hardcoded categories that matched none of its entries, and
+// rendered no component links at all).
+const CATEGORY_ORDER = [
   "Buttons & Actions",
   "Text & Forms",
   "Showing Things",
@@ -16,18 +19,27 @@ const WEB_CATEGORIES = [
   "Chat & AI",
 ] as const;
 
-const NATIVE_CATEGORIES = ["Actions", "Forms", "Navigation", "Layout"] as const;
-
-export function DocsSidebar({ platform, current }: { platform: Platform; current: string }) {
+export function DocsSidebar({
+  platform,
+  current,
+  activeComponent,
+}: {
+  platform: Platform;
+  current: string;
+  /** Slug of the component page being viewed, so its sub-link is marked active. */
+  activeComponent?: string;
+}) {
   const sections = docSections(platform);
 
   // Components are listed inline under the "Components" section so a reader can
   // reach any component in one click, grouped by category.
-  const categories = platform === "web" ? WEB_CATEGORIES : NATIVE_CATEGORIES;
   const entries =
     platform === "web"
       ? COMPONENTS_DATA.map((c) => ({ slug: c.slug, name: c.name, category: c.category }))
       : NATIVE_COMPONENTS.map((c) => ({ slug: c.slug, name: c.name, category: c.category }));
+  const categories = CATEGORY_ORDER.filter((category) =>
+    entries.some((e) => e.category === category),
+  );
 
   return (
     <nav className="docs-side-nav" aria-label={`${PLATFORMS[platform].label} documentation`}>
@@ -59,6 +71,7 @@ export function DocsSidebar({ platform, current }: { platform: Platform; current
                               key={entry.slug}
                               href={platformHref(platform, "components", entry.slug)}
                               className="docs-nav-link docs-nav-link-sub"
+                              aria-current={entry.slug === activeComponent ? "page" : undefined}
                             >
                               {entry.name}
                             </Link>
@@ -74,20 +87,5 @@ export function DocsSidebar({ platform, current }: { platform: Platform; current
         );
       })}
     </nav>
-  );
-}
-
-/** The same navigation, collapsed, for narrow viewports. */
-export function DocsMobileNav({ platform, current }: { platform: Platform; current: string }) {
-  return (
-    <details className="docs-mobile-nav">
-      <summary>
-        Browse {PLATFORMS[platform].label} docs
-        <ChevronDownIcon width={14} height={14} />
-      </summary>
-      <div className="docs-mobile-nav-panel">
-        <DocsSidebar platform={platform} current={current} />
-      </div>
-    </details>
   );
 }

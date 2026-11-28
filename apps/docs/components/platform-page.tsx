@@ -1,13 +1,16 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-import { DocsMobileNav, DocsSidebar } from "./docs-sidebar";
+import { DocsMobileNav, DocsSidebarScroll } from "./docs-sidebar-state";
+import { DocsSidebar } from "./docs-sidebar";
 import { PLATFORMS, platformHref, type Platform } from "../data/platforms";
 
 export interface PlatformPageProps {
   platform: Platform;
   /** The section slug this page belongs to, e.g. "installation". */
   current: string;
+  /** Slug of the component page being viewed, so its sidebar link is marked active. */
+  activeComponent?: string;
   title: string;
   kicker?: string;
   description?: string;
@@ -23,6 +26,7 @@ export interface PlatformPageProps {
 export function PlatformPage({
   platform,
   current,
+  activeComponent,
   title,
   kicker,
   description,
@@ -33,16 +37,18 @@ export function PlatformPage({
   return (
     <div className="docs-shell">
       <aside className="docs-side">
-        <div className="docs-side-inner">
+        <DocsSidebarScroll storageKey={`platform:${platform}`}>
           <Link href={platformHref(platform)} className="docs-side-back">
             {meta.label} docs
           </Link>
-          <DocsSidebar platform={platform} current={current} />
-        </div>
+          <DocsSidebar platform={platform} current={current} activeComponent={activeComponent} />
+        </DocsSidebarScroll>
       </aside>
 
       <article className="docs-main">
-        <DocsMobileNav platform={platform} current={current} />
+        <DocsMobileNav storageKey={`platform:${platform}`} summary={`Browse ${meta.label} docs`}>
+          <DocsSidebar platform={platform} current={current} activeComponent={activeComponent} />
+        </DocsMobileNav>
 
         <nav className="breadcrumbs" aria-label="Breadcrumb">
           <Link href={platformHref(platform)}>{meta.label}</Link>

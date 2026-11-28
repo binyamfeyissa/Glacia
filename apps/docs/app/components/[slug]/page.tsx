@@ -5,7 +5,8 @@ import { COMPONENTS_DATA } from "../../../data/components-data";
 import { ComponentPreview } from "../../../components/component-preview";
 import { ComponentDemo } from "../../../components/demos";
 import { ComponentThumb } from "../../../components/component-thumb";
-import { ArrowRightIcon, ChevronDownIcon } from "../../../components/icons";
+import { DocsMobileNav, DocsSidebarScroll } from "../../../components/docs-sidebar-state";
+import { ArrowRightIcon } from "../../../components/icons";
 import { pageMetadata, canonical } from "../../../lib/seo";
 
 const CATEGORY_ORDER = [
@@ -62,7 +63,7 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
   return (
     <div className="docs-shell">
       <aside className="docs-side">
-        <div className="docs-side-inner">
+        <DocsSidebarScroll storageKey="components">
           <Link href="/components/button" className="docs-side-back">
             <ArrowRightIcon
               width={12}
@@ -90,33 +91,27 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
               </div>
             );
           })}
-        </div>
+        </DocsSidebarScroll>
       </aside>
 
       <article className="docs-main">
-        <details className="docs-mobile-nav">
-          <summary>
-            Browse all components
-            <ChevronDownIcon width={14} height={14} />
-          </summary>
-          <div className="docs-mobile-nav-panel">
-            {CATEGORY_ORDER.map((category) => (
-              <div className="docs-nav-group" key={category}>
-                <h3>{category}</h3>
-                {COMPONENTS_DATA.filter((item) => item.category === category).map((item) => (
-                  <Link
-                    key={item.slug}
-                    href={`/components/${item.slug}`}
-                    className="docs-nav-link"
-                    aria-current={item.slug === component.slug ? "page" : undefined}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-              </div>
-            ))}
-          </div>
-        </details>
+        <DocsMobileNav storageKey="components" summary="Browse all components">
+          {CATEGORY_ORDER.map((category) => (
+            <div className="docs-nav-group" key={category}>
+              <h3>{category}</h3>
+              {COMPONENTS_DATA.filter((item) => item.category === category).map((item) => (
+                <Link
+                  key={item.slug}
+                  href={`/components/${item.slug}`}
+                  className="docs-nav-link"
+                  aria-current={item.slug === component.slug ? "page" : undefined}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+          ))}
+        </DocsMobileNav>
 
         <nav className="breadcrumbs" aria-label="Breadcrumb">
           <Link href="/components/button">Components</Link>
