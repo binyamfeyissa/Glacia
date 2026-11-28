@@ -120,4 +120,88 @@ describe("Segmented control layout", () => {
       /\.gl-segmented > \.gl-tab[\s\S]{0,200}text-overflow: ellipsis/,
     );
   });
+
+  it("centres the thumb on its label, like Tabs centres its pill", () => {
+    // The resting thumb must sit its inset inside its tab on every side, so
+    // its centre is its label's centre — the geometry Tabs gets for free,
+    // its pill being the trigger itself. Before the fix the segmented
+    // override pinned the thumb's left/top to the inset alone (2px), while
+    // the bar's padding is also 2px, so the thumb sat 2px up and left of
+    // its label and the lens's copy of the labels sat 2px off them too.
+    const block = (selector: string) => {
+      const start = css.indexOf(selector);
+      return css.slice(start, css.indexOf("}", start));
+    };
+    // A length that is a custom property, a bare pixel value, or a sum of
+    // the two, resolved against the block that declares the properties.
+    const resolve = (value: string, vars: Record<string, number>): number =>
+      value
+        .replace(/^calc\((.*)\)$/, "$1")
+        .split("+")
+        .map((part) => {
+          const variable = /var\(--([\w-]+)\)/.exec(part.trim());
+          if (variable) return vars[variable[1]!] ?? Number.NaN;
+          return Number.parseFloat(part);
+        })
+        .reduce((a, b) => a + b, 0);
+    const customProperties = (text: string): Record<string, number> =>
+      Object.fromEntries(
+        [...text.matchAll(/--([\w-]+):\s*([\d.]+)px/g)].map(([, name, value]) => [
+          name!,
+          Number.parseFloat(value!),
+        ]),
+      );
+    const declaration = (text: string, property: string): string | null => {
+      const match = new RegExp(`^\\s*${property}:\\s*([^;]+);`, "m").exec(text);
+      return match ? match[1]!.trim() : null;
+    };
+
+    const segmented = block("\n.gl-segmented {");
+    const vars = customProperties(segmented);
+    const padding = resolve(declaration(segmented, "padding")!, vars);
+    const thumbInset = vars["gl-thumb-inset"]!;
+    const tabHeight = vars["gl-tab-height"]!;
+    // The bar's padding is --gl-tab-inset: that is what the shared
+    // selection rule and the script's light() both assume.
+    expect(vars["gl-tab-inset"]).toBe(padding);
+    expect(padding).toBe(2);
+
+    // The thumb's left/top: the segmented override's, if it sets them, else
+    // the shared rule's. Either way they must be padding plus thumb inset.
+    const override = block(
+      ".gl-segmented :is(.gl-tab-lens, .gl-tab-tint, .gl-segmented-thumb) {",
+    );
+    const shared = block(".gl-tab-lens,\n.gl-tab-tint,\n.gl-segmented-thumb {");
+    const left = resolve(declaration(override, "left") ?? declaration(shared, "left")!, vars);
+    const top = resolve(declaration(override, "top") ?? declaration(shared, "top")!, vars);
+    expect(left).toBe(padding + thumbInset);
+    expect(top).toBe(padding + thumbInset);
+    // Its width is still the track shared evenly, less the inset each side.
+    expect(declaration(override, "width")).toContain(
+      "(100% - 2 * var(--gl-thumb-inset)) / var(--gl-tabs, 1) - 2 * var(--gl-thumb-inset)",
+    );
+
+    // The centring itself, on the lift test's mocked geometry: three
+    // segments in a 252px bar, the thumb slot-wide less its inset.
+    const clientWidth = 252;
+    const slot = (clientWidth - 2 * padding) / 3;
+    const thumbWidth = slot - 2 * thumbInset;
+    const thumbHeight = tabHeight - 2 * thumbInset;
+    expect(left + thumbWidth / 2).toBeCloseTo(padding + slot / 2, 5);
+    expect(top + thumbHeight / 2).toBeCloseTo(padding + tabHeight / 2, 5);
+
+    // The lens's copy of the labels starts where the labels do.
+    const lensed = block("\n.gl-tab-lensed {");
+    expect(resolve(declaration(lensed, "left")!, vars)).toBe(padding);
+    expect(resolve(declaration(lensed, "top")!, vars)).toBe(padding);
+
+    // The tab bar is untouched: its selection already sat at padding plus
+    // inset (4px + 0px), centred on its tab.
+    const bar = block("\n.gl-tab-bar {");
+    const barVars = customProperties(bar);
+    const barPadding = resolve(declaration(bar, "padding")!, barVars);
+    expect(resolve(declaration(shared, "left")!, barVars)).toBe(
+      barPadding + barVars["gl-thumb-inset"]!,
+    );
+  });
 });

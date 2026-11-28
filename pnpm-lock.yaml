@@ -277,8 +277,8 @@ importers:
   packages/core:
     dependencies:
       glacia-tokens:
-        specifier: workspace:*
-        version: link:../tokens
+        specifier: 0.5.2
+        version: 0.5.2
       radix-ui:
         specifier: ^1.8.1
         version: 1.8.1(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)

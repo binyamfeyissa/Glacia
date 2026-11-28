@@ -457,13 +457,14 @@
 /* A segmented control's segments share the track evenly, so the resting width
    of its thumb is the track divided by the number of segments rather than the
    fixed tab width. The script writes the measured transform on paint; this is
-   only the shape before the first measurement. */
+   only the shape before the first measurement. Left and top stay on the
+   shared rule above (bar padding plus thumb inset), so the thumb sits 2px
+   inside its tab on every side and its centre is its label's centre, as
+   Tabs centres its pill on its trigger. */
 .gl-segmented :is(.gl-tab-lens, .gl-tab-tint, .gl-segmented-thumb) {
   width: calc(
     (100% - 2 * var(--gl-thumb-inset)) / var(--gl-tabs, 1) - 2 * var(--gl-thumb-inset)
   );
-  left: var(--gl-thumb-inset);
-  top: var(--gl-thumb-inset);
 }
 
 /* The labels again, set back by the tint's inset so they line up. */
@@ -566,7 +567,7 @@
 .gl-segmented {
   --gl-tab-width: 84px;
   --gl-tab-height: 32px;
-  --gl-tab-inset: 0px;
+  --gl-tab-inset: 2px;
   --gl-thumb-inset: 2px;
   --gl-lens-grow-x: 24px;
   --gl-lens-grow-y: 16px;
@@ -579,8 +580,10 @@
   user-select: none;
   -webkit-user-select: none;
   /* Room for the thumb's 2px inset, so the first and last labels are not
-     pushed under the capsule's curve. */
-  padding: var(--gl-thumb-inset);
+     pushed under the capsule's curve. The padding is --gl-tab-inset, as on
+     a tab bar, so the selection's left and top (bar padding plus thumb
+     inset, see below) put it 2px inside its tab on every side. */
+  padding: var(--gl-tab-inset);
   max-width: 100%;
 }
 
