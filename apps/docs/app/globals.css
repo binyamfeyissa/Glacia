@@ -1252,6 +1252,14 @@ html {
   box-shadow:
     0 60px 160px rgb(0 0 0 / 0.5),
     inset 0 1px 0 rgb(255 255 255 / 0.07);
+  /* While the hub is off-screen the browser skips rendering it entirely
+     (its 25 SVG-refraction glass layers are the most expensive paint on the
+     page), which is what makes scrolling past it cheap again. The intrinsic
+     size is the hub's real rendered height at desktop width, so the scrollbar
+     does not jump when it renders; `auto` remembers the real height after
+     the first paint. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 894px;
 }
 
 [data-theme="light"] .lab-frame {
@@ -1396,7 +1404,11 @@ html {
   width: 280px;
   height: 280px;
   border-radius: 50%;
-  filter: blur(48px);
+  /* Was blur(48px): same soft-orb read at a smaller radius, and promoted to
+     its own layer so scrolling re-composites instead of re-rasterizing. */
+  filter: blur(28px);
+  transform: translateZ(0);
+  will-change: transform;
   opacity: 0.55;
   pointer-events: none;
 }
@@ -4566,7 +4578,12 @@ body {
   inset: auto -10% -40% -10%;
   height: 70%;
   background: radial-gradient(60% 70% at 50% 100%, rgb(40 190 220 / 0.5), transparent 70%);
-  filter: blur(40px);
+  /* Was blur(40px): the wash is a soft gradient already, so a smaller blur
+     reads the same and costs far less to re-raster. Promoted to its own
+     layer so scrolling re-composites it instead of re-painting it. */
+  filter: blur(24px);
+  transform: translateZ(0);
+  will-change: transform;
   pointer-events: none;
   z-index: 1;
 }
@@ -4690,7 +4707,10 @@ body {
   color: var(--gl-muted);
 }
 
-.lab-slider-card {
+/* Slider — NO Card behind it: it sits directly on the hub backdrop.
+   Same geometry the card had, so the row does not move; only the glass
+   panel (and its SVG-refraction backdrop-filter layer) is gone. */
+.lab-slider-bare {
   flex: 1 1 200px;
   display: flex;
   flex-direction: column;
@@ -4698,8 +4718,27 @@ body {
   gap: 8px;
   padding: 10px 18px;
   height: 50px;
-  border-radius: 18px;
-  /* Paint comes from the library's Card (gl-glass); only geometry lives here. */
+}
+
+/* The bare labels sit on the photograph now, so they get a soft shadow to
+   stay legible with no panel behind them. */
+.lab-slider-bare .lab-slider-meta,
+.lab-slider-bare .lab-slider-val,
+.lab-switches-bare .lab-switch-label {
+  text-shadow: 0 1px 8px rgb(0 0 0 / 0.55);
+}
+
+/* The stage photo is the same dark image in both themes (the Tahoe JPGs are
+   byte-identical), so the bare labels keep the light treatment even in light
+   mode — the library's --gl-muted goes dark in light mode, which is
+   unreadable on the dark photo with no card behind it. */
+.lab-slider-bare .lab-slider-meta,
+.lab-switches-bare .lab-switch-label {
+  color: rgb(235 240 250 / 0.78);
+}
+
+.lab-slider-bare .lab-slider-val {
+  color: rgb(255 255 255 / 0.95);
 }
 
 .lab-slider-meta {
@@ -4717,16 +4756,17 @@ body {
   color: var(--gl-foreground);
 }
 
-.lab-switches-card {
+/* Switch + Optics — NO Card behind them: they sit directly on the hub
+   backdrop. Same geometry the card had; only the glass panel (and its
+   SVG-refraction backdrop-filter layer) is gone. */
+.lab-switches-bare {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 16px;
   padding: 0 18px;
   height: 50px;
-  border-radius: 18px;
   flex-shrink: 0;
-  /* Paint comes from the library's Card (gl-glass); only geometry lives here. */
 }
 
 .lab-switch-unit {
@@ -4815,6 +4855,12 @@ body {
   grid-template-columns: 290px minmax(280px, 1fr) minmax(320px, 1.15fr);
   gap: 14px;
   align-items: stretch;
+  /* Skip painting this row while it is below the fold; same treatment as
+     the frame, so a scroll that only shows rows 1–2 never pays for row 3.
+     The intrinsic size is the row's real rendered height, so the frame does
+     not grow (and shift content below it) when the row renders. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 518px;
 }
 
 .lab-grid-col-calendar {
