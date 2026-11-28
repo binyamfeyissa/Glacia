@@ -165,13 +165,16 @@ button {
 .site-main {
   position: relative;
   min-height: calc(100vh - 260px);
-  /* Clearance for the fixed bottom tab bar: without it the bar rests on top
-     of the last content on every page (catalog chips, table rows, footers). */
-  padding-bottom: 104px;
+  /* Clearance for the fixed bottom tab bar (the site's general navigation,
+     which must not be touched): without it the bar rests on top of the last
+     content on every page — the Material Hub code block was hidden behind
+     it. The bar itself is ~56px tall sitting 14px off the viewport bottom,
+     so 168px here plus 150px on body leaves it clear with room to spare. */
+  padding-bottom: 168px;
 }
 
 html {
-  scroll-padding-bottom: 120px;
+  scroll-padding-bottom: 180px;
 }
 
 /* ==========================================================================
@@ -1287,37 +1290,10 @@ html {
   color: var(--accent);
 }
 
-.surface-chips {
-  display: flex;
-  align-items: center;
-  gap: 1px;
-  padding: 3px;
-  border: 1px solid rgb(255 255 255 / 0.08);
-  border-radius: 10px;
-  background: rgb(255 255 255 / 0.04);
-}
-
-.surface-chip {
-  height: 26px;
-  padding: 0 9px;
-  border: 0;
-  border-radius: 7px;
-  background: transparent;
-  color: rgb(235 240 250 / 0.42);
-  font-size: 11px;
-  cursor: pointer;
-  transition:
-    color 150ms var(--ease),
-    background-color 150ms var(--ease);
-}
-
-.surface-chip:hover {
-  color: rgb(235 240 250 / 0.8);
-}
-
-.surface-chip[data-active="true"] {
-  background: rgb(255 255 255 / 0.11);
-  color: #f3f6fb;
+/* The surface switcher is the library's SegmentedControl (see
+   material-lab.tsx); it paints itself, the hub only sizes it. */
+.lab-surface-control {
+  flex-shrink: 0;
 }
 
 .lab-stage {
@@ -1420,7 +1396,7 @@ html {
   width: 280px;
   height: 280px;
   border-radius: 50%;
-  filter: blur(70px);
+  filter: blur(48px);
   opacity: 0.55;
   pointer-events: none;
 }
@@ -1625,7 +1601,7 @@ html {
 
 .lab-meta {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1px;
   border-top: 1px solid var(--line);
   background: var(--line);
@@ -4393,7 +4369,7 @@ html {
 
 /* Nothing should sit under the floating bar. */
 body {
-  padding-bottom: 96px;
+  padding-bottom: 150px;
 }
 
 @media (max-width: 860px) {
@@ -4590,7 +4566,7 @@ body {
   inset: auto -10% -40% -10%;
   height: 70%;
   background: radial-gradient(60% 70% at 50% 100%, rgb(40 190 220 / 0.5), transparent 70%);
-  filter: blur(60px);
+  filter: blur(40px);
   pointer-events: none;
   z-index: 1;
 }
@@ -4614,69 +4590,9 @@ body {
   flex-wrap: wrap;
 }
 
-.lab-tabs-wrap {
-  flex: 0 0 auto;
-  width: fit-content;
-}
-
-.lab-tabs-wrap .gl-tab-bar {
-  --gl-tab-width: 72px;
-  --gl-tab-height: 48px;
-  --gl-tab-selected: #38bdf8;
-  --gl-tab-inset: 3px;
-  --gl-thumb-inset: 0px;
-  width: fit-content;
-  border-radius: 9999px;
-  background: rgba(16, 20, 32, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  padding: 3px;
-}
-
-.lab-tabs-wrap .gl-tab-bar .gl-tab {
-  --gl-tab-width: 72px;
-  --gl-tab-height: 48px;
-  border-radius: 9999px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  color: rgba(235, 240, 250, 0.65);
-  transition: color 160ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.lab-tabs-wrap .gl-tab-bar .gl-tab:hover {
-  color: #ffffff;
-}
-
-.lab-tabs-wrap .gl-tab-bar .gl-tab[data-selected] {
-  color: #38bdf8 !important;
-}
-
-.lab-tabs-wrap .gl-tab-bar .gl-tab-icon svg {
-  width: 16px;
-  height: 16px;
-  display: block;
-}
-
-.lab-tabs-wrap .gl-tab-bar .gl-tab-text {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  line-height: 1.1;
-}
-
-.lab-tabs-wrap .gl-tab-bar .gl-tab-lens {
-  border-radius: 9999px !important;
-  background: rgba(30, 95, 215, 0.35) !important;
-  border: 1px solid rgba(56, 189, 248, 0.45) !important;
-  box-shadow:
-    0 0 18px rgba(56, 189, 248, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
-}
+/* The hub no longer renders its own TabBar: the site's floating bottom
+   navigation is the live TabBar, and a second identical one here only
+   duplicated it. The TabBar's own demo lives on its component page. */
 
 .lab-top-actions {
   display: flex;
@@ -4694,8 +4610,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  /* Paint comes from the library's glass Button; only geometry lives here. */
   color: var(--gl-foreground);
 }
 
@@ -4713,8 +4628,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  /* Paint comes from the library's glass Button; only geometry lives here. */
   color: var(--gl-foreground);
   transition: all 160ms cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -4736,23 +4650,18 @@ body {
   height: 40px !important;
   padding: 0 18px !important;
   border-radius: 9999px !important;
-  background: #0088ff !important;
-  color: #fff !important;
+  /* The filled blue comes from the library's Button variant="filled". */
   font-weight: 600 !important;
   font-size: 13px !important;
-  border: none !important;
-  box-shadow: 0 4px 14px rgba(0, 136, 255, 0.35) !important;
 }
 
 .lab-secondary-pill {
   height: 40px !important;
   padding: 0 18px !important;
   border-radius: 9999px !important;
-  background: rgba(255, 255, 255, 0.08) !important;
-  color: #fff !important;
+  /* Paint comes from the library's glass Button. */
   font-weight: 500 !important;
   font-size: 13px !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
 }
 
 /* Row 2 — Search, Slider, Switches, Avatars, Kbd */
@@ -4772,6 +4681,15 @@ body {
   height: 44px;
 }
 
+/* Empty state for the hub's live search filter. */
+.lab-search-empty {
+  margin: 0;
+  padding: 28px 12px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--gl-muted);
+}
+
 .lab-slider-card {
   flex: 1 1 200px;
   display: flex;
@@ -4781,8 +4699,7 @@ body {
   padding: 10px 18px;
   height: 50px;
   border-radius: 18px;
-  background: rgba(18, 22, 34, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  /* Paint comes from the library's Card (gl-glass); only geometry lives here. */
 }
 
 .lab-slider-meta {
@@ -4802,14 +4719,14 @@ body {
 
 .lab-switches-card {
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 16px;
   padding: 0 18px;
   height: 50px;
   border-radius: 18px;
   flex-shrink: 0;
-  background: rgba(18, 22, 34, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  /* Paint comes from the library's Card (gl-glass); only geometry lives here. */
 }
 
 .lab-switch-unit {
@@ -4830,9 +4747,9 @@ body {
   border-radius: 18px;
   flex-shrink: 0;
   display: flex;
+  flex-direction: row;
   align-items: center;
-  background: rgba(18, 22, 34, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  /* Paint comes from the library's Card (gl-glass); only geometry lives here. */
 }
 
 .lab-avatars-row {
@@ -4870,14 +4787,14 @@ body {
 
 .lab-kbd-card {
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 8px;
   padding: 0 16px;
   height: 50px;
   border-radius: 18px;
   flex-shrink: 0;
-  background: rgba(18, 22, 34, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  /* Paint comes from the library's Card (gl-glass); only geometry lives here. */
 }
 
 .lab-kbd-label {
@@ -4913,8 +4830,8 @@ body {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  background: rgba(18, 22, 34, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  /* Paint comes from the library's Card; the Calendar inside stays
+     transparent (rule below) so the glass is not painted twice. */
 }
 
 .lab-calendar-shell .gl-calendar {
@@ -4942,8 +4859,13 @@ body {
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
-  background: rgba(18, 22, 34, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  /* Paint comes from the library's Card (gl-glass); only geometry lives here. */
+}
+
+/* The real Form component, stretched inside its Card so the submit button
+   (margin-top: auto) sits at the card's foot. */
+.lab-form-inner {
+  flex: 1;
 }
 
 .lab-form-head {
@@ -4979,21 +4901,8 @@ body {
   gap: 6px;
 }
 
-.lab-form-field label {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--gl-muted);
-}
-
-.lab-form-field input {
-  height: 42px;
-  border-radius: 9999px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 0 16px;
-  font-size: 13px;
-  color: #fff;
-}
+/* The Apple ID field is the library's Input; its own .gl-input owns the
+   pill, background and border — no hand-rolled paint here. */
 
 .lab-form-row {
   display: flex;
@@ -5011,14 +4920,10 @@ body {
 .lab-form-btn {
   height: 42px !important;
   border-radius: 9999px !important;
-  background: #0088ff !important;
-  color: #fff !important;
-  font-weight: 600 !important;
+  /* The filled blue comes from the library's Button variant="filled". */
   font-size: 14px !important;
   width: 100% !important;
   margin-top: auto;
-  border: none !important;
-  box-shadow: 0 4px 14px rgba(0, 136, 255, 0.35) !important;
 }
 
 .lab-grid-col-chart {
@@ -5031,8 +4936,7 @@ body {
 .lab-chart-card {
   padding: 16px 18px 10px;
   border-radius: 20px;
-  background: rgba(18, 22, 34, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  /* Paint comes from the library's Card (gl-glass); only geometry lives here. */
 }
 
 .lab-chart-head {
@@ -5364,6 +5268,10 @@ body {
   box-shadow: 0 12px 36px -8px rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  /* Below-the-fold cards skip rendering (including their backdrop blur)
+     until scrolled near — the templates page has 49 of these. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 480px;
   transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1), border-color 220ms ease;
 }
 
@@ -5630,6 +5538,12 @@ body {
 .feature-check {
   color: #34d399;
   flex-shrink: 0;
+  display: inline-flex;
+}
+
+.feature-check svg {
+  width: 15px;
+  height: 15px;
 }
 
 .template-pages-preview {
@@ -6765,6 +6679,10 @@ a.template-card {
 .template-buy-points svg {
   color: #34d399;
   flex-shrink: 0;
+  /* Icons must never size themselves: a bare <svg> defaults to 300x150 and
+     blew the buy card apart. The same guard covers the feature lists. */
+  width: 16px;
+  height: 16px;
 }
 
 .template-shots {

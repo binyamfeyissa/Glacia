@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
   Button,
   Calendar,
+  Card,
   Chart,
   CodeBlock,
   Form,
@@ -14,21 +15,11 @@ import {
   Kbd,
   Label,
   SearchField,
+  SegmentedControl,
   Slider,
   Switch,
-  TabBar,
-  type TabBarItem,
 } from "glacia";
-import {
-  CodeIcon,
-  GridIcon,
-  LayersIcon,
-  SearchIcon,
-  SparkIcon,
-  HomeIcon,
-  TemplateIcon,
-} from "./icons";
-import { GlaciaMark } from "./glacia-mark";
+import { SearchIcon, SparkIcon, HeartIcon, ShareIcon, MoreIcon } from "./icons";
 
 const SURFACES = [
   { id: "tahoe", label: "Tahoe" },
@@ -38,56 +29,6 @@ const SURFACES = [
 ] as const;
 
 type Surface = (typeof SURFACES)[number]["id"];
-
-/* Three action buttons glyphs (Heart, Share, Three-dots) */
-const HeartIcon = ({ filled = false }: { filled?: boolean }) => (
-  <svg
-    viewBox="0 0 24 24"
-    width={17}
-    height={17}
-    fill={filled ? "#ff375f" : "none"}
-    stroke={filled ? "#ff375f" : "currentColor"}
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M12 20s-7-4.6-7-9.4A4 4 0 0 1 12 7a4 4 0 0 1 7 3.6C19 15.4 12 20 12 20Z" />
-  </svg>
-);
-
-const ShareIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    width={17}
-    height={17}
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M12 15V4m0 0 4 4m-4-4L8 8M5 14v5h14v-5" />
-  </svg>
-);
-
-const MoreIcon = () => (
-  <svg viewBox="0 0 24 24" width={17} height={17} fill="currentColor" aria-hidden="true">
-    <circle cx="12" cy="5" r="1.8" />
-    <circle cx="12" cy="12" r="1.8" />
-    <circle cx="12" cy="19" r="1.8" />
-  </svg>
-);
-
-/* Exact same tabs as the website navigation tabs */
-const WEBSITE_TABS: TabBarItem[] = [
-  { value: "overview", label: "Overview", icon: <HomeIcon width={14} height={14} /> },
-  { value: "components", label: "Components", icon: <GridIcon width={14} height={14} /> },
-  { value: "blocks", label: "Blocks", icon: <LayersIcon width={14} height={14} /> },
-  { value: "templates", label: "Templates", icon: <TemplateIcon width={14} height={14} /> },
-  { value: "report", label: "Build report", icon: <CodeIcon width={14} height={14} /> },
-];
 
 const CODE_EXAMPLE = `import { Glass, Button } from "glacia";
 
@@ -111,7 +52,7 @@ const CHART_DATA = [
 
 export function MaterialLab() {
   const [surface, setSurface] = useState<Surface>("tahoe");
-  const [activeTab, setActiveTab] = useState("overview");
+  const [query, setQuery] = useState("");
   const [sliderVal, setSliderVal] = useState(65);
   const [switchA, setSwitchA] = useState(true);
   const [switchB, setSwitchB] = useState(false);
@@ -120,30 +61,38 @@ export function MaterialLab() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date(2026, 10, 11)
   );
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  // The hub search filters the cards below, live as you type.
+  const q = query.trim().toLowerCase();
+  const match = (keywords: string) => !q || keywords.toLowerCase().includes(q);
+  const row3Match =
+    match("calendar november date picker") ||
+    match("apple account form passkey apple id") ||
+    match("dispersion curve chart transmission index") ||
+    match("liquidhero code glass button snippet");
+  const anyMatch =
+    match("slider refraction value") ||
+    match("switch optics toggle") ||
+    match("avatar team people") ||
+    match("shortcut keyboard command k") ||
+    row3Match;
 
   return (
     <div className="lab-frame">
-      {/* Surface switcher bar */}
+      {/* Surface switcher bar — the library's own SegmentedControl. */}
       <div className="lab-bar">
         <span className="lab-bar-label">
           <SparkIcon width={13} height={13} />
           <span>Material hub</span>
         </span>
-        <div className="surface-chips" role="tablist" aria-label="Backdrop surface">
-          {SURFACES.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              role="tab"
-              aria-selected={surface === item.id}
-              className="surface-chip"
-              data-active={surface === item.id}
-              onClick={() => setSurface(item.id)}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
+        <SegmentedControl
+          className="lab-surface-control"
+          items={SURFACES.map((item) => ({ value: item.id, label: item.label }))}
+          value={surface}
+          onValueChange={(value) => setSurface(value as Surface)}
+          aria-label="Backdrop surface"
+        />
       </div>
 
       {/* Live Stage with refraction backdrop */}
@@ -153,23 +102,18 @@ export function MaterialLab() {
         <div className="lab-glow" aria-hidden="true" />
 
         <div className="lab-board">
-          {/* Row 1 — Compact Website Tabs, Search Button, 3 Action Buttons, Primary & Secondary Buttons */}
+          {/* Row 1 — Search Button, 3 Action Buttons, Primary & Secondary Buttons.
+              (The site's floating bottom navigation IS the live TabBar — the
+              same component, running as the site nav — so the hub does not
+              render a second, identical TabBar here.) */}
           <div className="lab-row-top">
-            <div className="lab-tabs-wrap">
-              <TabBar
-                items={WEBSITE_TABS}
-                value={activeTab}
-                onValueChange={setActiveTab}
-                aria-label="Navigation tabs"
-              />
-            </div>
-
             <div className="lab-top-actions">
               <Button
                 variant="glass"
                 size="sm"
-                aria-label="Search button"
+                aria-label="Search components"
                 className="lab-round-search"
+                onClick={() => searchRef.current?.focus()}
               >
                 <SearchIcon width={18} height={18} />
               </Button>
@@ -182,21 +126,21 @@ export function MaterialLab() {
                   onClick={() => setLiked(!liked)}
                   className={liked ? "is-liked" : ""}
                 >
-                  <HeartIcon filled={liked} />
+                  <HeartIcon width={17} height={17} filled={liked} />
                 </Button>
                 <Button
                   variant="glass"
                   size="sm"
                   aria-label="Share button"
                 >
-                  <ShareIcon />
+                  <ShareIcon width={17} height={17} />
                 </Button>
                 <Button
                   variant="glass"
                   size="sm"
                   aria-label="Three dot button"
                 >
-                  <MoreIcon />
+                  <MoreIcon width={17} height={17} />
                 </Button>
               </div>
 
@@ -215,153 +159,183 @@ export function MaterialLab() {
           <div className="lab-row-controls">
             <div className="lab-search-wrap">
               <SearchField
+                ref={searchRef}
                 placeholder="Search components..."
-                aria-label="Search"
+                aria-label="Search components"
                 className="lab-search-input"
+                value={query}
+                onValueChange={setQuery}
               />
             </div>
 
-            <div className="gl-glass lab-slider-card" suppressHydrationWarning>
-              <div className="lab-slider-meta">
-                <span className="lab-slider-label">Slider</span>
-                <span className="lab-slider-val">{sliderVal}%</span>
-              </div>
-              <Slider
-                value={sliderVal}
-                min={0}
-                max={100}
-                aria-label="Refraction slider"
-                onValueChange={(v) => setSliderVal(typeof v === "number" ? v : 65)}
-              />
-            </div>
-
-            <div className="gl-glass lab-switches-card" suppressHydrationWarning>
-              <div className="lab-switch-unit">
-                <span className="lab-switch-label">Switch</span>
-                <Switch
-                  checked={switchA}
-                  onCheckedChange={setSwitchA}
-                  aria-label="Primary switch"
+            {match("slider refraction value") && (
+              <Card variant="glass" className="lab-slider-card">
+                <div className="lab-slider-meta">
+                  <span className="lab-slider-label">Slider</span>
+                  <span className="lab-slider-val">{sliderVal}%</span>
+                </div>
+                <Slider
+                  value={sliderVal}
+                  min={0}
+                  max={100}
+                  aria-label="Refraction slider"
+                  onValueChange={(v) => setSliderVal(typeof v === "number" ? v : 65)}
                 />
-              </div>
-              <div className="lab-switch-unit">
-                <span className="lab-switch-label">Optics</span>
-                <Switch
-                  checked={switchB}
-                  onCheckedChange={setSwitchB}
-                  aria-label="Secondary switch"
-                />
-              </div>
-            </div>
+              </Card>
+            )}
 
-            <div className="gl-glass lab-avatars-card" aria-label="Avatars" suppressHydrationWarning>
-              <div className="lab-avatars-row">
-                <Avatar className="lab-avatar-item">
-                  <AvatarImage src="/avatars/avatar-1.jpg" alt="Sarah Chen" />
-                  <AvatarFallback>SC</AvatarFallback>
-                </Avatar>
-                <Avatar className="lab-avatar-item">
-                  <AvatarImage src="/avatars/avatar-2.jpg" alt="Alex Rivera" />
-                  <AvatarFallback>AR</AvatarFallback>
-                </Avatar>
-                <Avatar className="lab-avatar-item">
-                  <AvatarImage src="/avatars/avatar-3.jpg" alt="Elena Rostova" />
-                  <AvatarFallback>ER</AvatarFallback>
-                </Avatar>
-                <Avatar className="lab-avatar-item lab-avatar-count">
-                  <AvatarFallback>+4</AvatarFallback>
-                </Avatar>
-              </div>
-            </div>
+            {match("switch optics toggle") && (
+              <Card variant="glass" className="lab-switches-card">
+                <div className="lab-switch-unit">
+                  <span className="lab-switch-label">Switch</span>
+                  <Switch
+                    checked={switchA}
+                    onCheckedChange={setSwitchA}
+                    aria-label="Primary switch"
+                  />
+                </div>
+                <div className="lab-switch-unit">
+                  <span className="lab-switch-label">Optics</span>
+                  <Switch
+                    checked={switchB}
+                    onCheckedChange={setSwitchB}
+                    aria-label="Secondary switch"
+                  />
+                </div>
+              </Card>
+            )}
 
-            <div className="gl-glass lab-kbd-card" aria-label="Keyboard shortcuts" suppressHydrationWarning>
-              <span className="lab-kbd-label">Shortcut</span>
-              <div className="lab-kbd-cluster">
-                <Kbd size="md">⌘</Kbd>
-                <Kbd size="md">K</Kbd>
-              </div>
-            </div>
+            {match("avatar team people") && (
+              <Card variant="glass" className="lab-avatars-card" aria-label="Avatars">
+                <div className="lab-avatars-row">
+                  <Avatar className="lab-avatar-item">
+                    <AvatarImage src="/avatars/avatar-1.jpg" alt="Sarah Chen" />
+                    <AvatarFallback>SC</AvatarFallback>
+                  </Avatar>
+                  <Avatar className="lab-avatar-item">
+                    <AvatarImage src="/avatars/avatar-2.jpg" alt="Alex Rivera" />
+                    <AvatarFallback>AR</AvatarFallback>
+                  </Avatar>
+                  <Avatar className="lab-avatar-item">
+                    <AvatarImage src="/avatars/avatar-3.jpg" alt="Elena Rostova" />
+                    <AvatarFallback>ER</AvatarFallback>
+                  </Avatar>
+                  <Avatar className="lab-avatar-item lab-avatar-count">
+                    <AvatarFallback>+4</AvatarFallback>
+                  </Avatar>
+                </div>
+              </Card>
+            )}
+
+            {match("shortcut keyboard command k") && (
+              <Card variant="glass" className="lab-kbd-card" aria-label="Keyboard shortcuts">
+                <span className="lab-kbd-label">Shortcut</span>
+                <div className="lab-kbd-cluster">
+                  <Kbd size="md">⌘</Kbd>
+                  <Kbd size="md">K</Kbd>
+                </div>
+              </Card>
+            )}
           </div>
 
           {/* Row 3 — Calendar, Form, Chart, Code Block */}
-          <div className="lab-row-grid">
-            {/* Calendar Column */}
-            <div className="lab-grid-col-calendar">
-              <div className="gl-glass lab-calendar-shell" suppressHydrationWarning>
-                <Calendar
-                  selected={selectedDate}
-                  onSelect={setSelectedDate}
-                />
-              </div>
-            </div>
-
-            {/* Form Column */}
-            <div className="lab-grid-col-form">
-              <Form
-                className="gl-glass lab-form-card"
-                  suppressHydrationWarning
-                onSubmit={(e) => e.preventDefault()}
-              >
-                <div className="lab-form-head">
-                  <div>
-                    <h4 className="lab-form-title">Apple Account</h4>
-                    <span className="lab-form-desc">Manage passkeys and sync</span>
-                  </div>
-                  <Kbd size="sm">⌘S</Kbd>
-                </div>
-
-                <div className="lab-form-body">
-                  <div className="lab-form-field">
-                    <Label htmlFor="hub-email">Apple ID</Label>
-                    <Input
-                      id="hub-email"
-                      type="email"
-                      defaultValue="user@apple.com"
-                      placeholder="user@apple.com"
+          {row3Match && (
+            <div className="lab-row-grid">
+              {/* Calendar Column */}
+              {match("calendar november date picker") && (
+                <div className="lab-grid-col-calendar">
+                  <Card variant="glass" className="lab-calendar-shell">
+                    <Calendar
+                      selected={selectedDate}
+                      onSelect={setSelectedDate}
                     />
-                  </div>
-
-                  <div className="lab-form-row">
-                    <Label htmlFor="hub-passkey" className="lab-form-row-label">
-                      Passkey Authentication
-                    </Label>
-                    <Switch
-                      id="hub-passkey"
-                      checked={passkeyActive}
-                      onCheckedChange={setPasskeyActive}
-                      aria-label="Passkey Authentication"
-                    />
-                  </div>
+                  </Card>
                 </div>
+              )}
 
-                <Button type="submit" variant="filled" size="sm" className="lab-form-btn">
-                  Save Changes
-                </Button>
-              </Form>
-            </div>
+              {/* Form Column */}
+              {match("apple account form passkey apple id") && (
+                <div className="lab-grid-col-form">
+                  <Card variant="glass" className="lab-form-card">
+                    <Form
+                      className="lab-form-inner"
+                      onSubmit={(e) => e.preventDefault()}
+                    >
+                      <div className="lab-form-head">
+                        <div>
+                          <h4 className="lab-form-title">Apple Account</h4>
+                          <span className="lab-form-desc">Manage passkeys and sync</span>
+                        </div>
+                        <Kbd size="sm">⌘S</Kbd>
+                      </div>
 
-            {/* Chart & Code Block Column */}
-            <div className="lab-grid-col-chart">
-              <div className="gl-glass lab-chart-card" suppressHydrationWarning>
-                <div className="lab-chart-head">
-                  <div>
-                    <span className="lab-chart-eyebrow">Transmission Index</span>
-                    <strong className="lab-chart-title">Dispersion Curve</strong>
-                  </div>
-                  <Kbd size="sm">60 FPS</Kbd>
+                      <div className="lab-form-body">
+                        <div className="lab-form-field">
+                          <Label htmlFor="hub-email">Apple ID</Label>
+                          <Input
+                            id="hub-email"
+                            type="email"
+                            defaultValue="user@apple.com"
+                            placeholder="user@apple.com"
+                          />
+                        </div>
+
+                        <div className="lab-form-row">
+                          <Label htmlFor="hub-passkey" className="lab-form-row-label">
+                            Passkey Authentication
+                          </Label>
+                          <Switch
+                            id="hub-passkey"
+                            checked={passkeyActive}
+                            onCheckedChange={setPasskeyActive}
+                            aria-label="Passkey Authentication"
+                          />
+                        </div>
+                      </div>
+
+                      <Button type="submit" variant="filled" size="sm" className="lab-form-btn">
+                        Save Changes
+                      </Button>
+                    </Form>
+                  </Card>
                 </div>
-                <Chart data={CHART_DATA} type="line" height={125} color="#38bdf8" />
-              </div>
+              )}
 
-              <div className="lab-code-wrap">
-                <CodeBlock
-                  code={CODE_EXAMPLE}
-                  language="tsx"
-                  filename="LiquidHero.tsx"
-                />
-              </div>
+              {/* Chart & Code Block Column */}
+              {(match("dispersion curve chart transmission index") ||
+                match("liquidhero code glass button snippet")) && (
+                <div className="lab-grid-col-chart">
+                  {match("dispersion curve chart transmission index") && (
+                    <Card variant="glass" className="lab-chart-card">
+                      <div className="lab-chart-head">
+                        <div>
+                          <span className="lab-chart-eyebrow">Transmission Index</span>
+                          <strong className="lab-chart-title">Dispersion Curve</strong>
+                        </div>
+                        <Kbd size="sm">60 FPS</Kbd>
+                      </div>
+                      <Chart data={CHART_DATA} type="line" height={125} color="#38bdf8" />
+                    </Card>
+                  )}
+
+                  {match("liquidhero code glass button snippet") && (
+                    <div className="lab-code-wrap">
+                      <CodeBlock
+                        code={CODE_EXAMPLE}
+                        language="tsx"
+                        filename="LiquidHero.tsx"
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
-          </div>
+          )}
+          {!anyMatch && (
+            <p className="lab-search-empty" role="status">
+              No components match “{query}”.
+            </p>
+          )}
         </div>
 
         <span className="lab-stage-caption">Rendered live · every control is a Glacia component</span>
@@ -380,6 +354,10 @@ export function MaterialLab() {
         <div className="lab-meta-item">
           <span>Native</span>
           <strong>iOS 26 UIGlassEffect</strong>
+        </div>
+        <div className="lab-meta-item">
+          <span>Navigation</span>
+          <strong>The floating bar at the bottom of this page is the live TabBar</strong>
         </div>
       </div>
     </div>

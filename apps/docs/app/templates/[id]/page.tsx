@@ -96,13 +96,13 @@ export default async function TemplateDetailPage({
             </p>
             <ul className="template-buy-points">
               <li>
-                <ShieldIcon /> 14-day money-back guarantee
+                <ShieldIcon width={16} height={16} /> 14-day money-back guarantee
               </li>
               <li>
-                <CheckIcon /> Unlimited projects license
+                <CheckIcon width={16} height={16} /> Unlimited projects license
               </li>
               <li>
-                <CheckIcon /> Yours to keep — no subscription
+                <CheckIcon width={16} height={16} /> Yours to keep — no subscription
               </li>
             </ul>
           </aside>
@@ -124,6 +124,8 @@ export default async function TemplateDetailPage({
                   src={shotPath(t, n)}
                   alt={`${t.name} screenshot ${n} (${shotLabel(n)})`}
                   loading={n === 1 ? "eager" : "lazy"}
+                  decoding="async"
+                  fetchPriority={n === 1 ? "high" : undefined}
                   style={{ maxWidth: "100%" }}
                 />
                 <figcaption style={{ fontSize: "12.5px", color: "var(--text-3)", marginTop: 6 }}>
@@ -147,7 +149,7 @@ export default async function TemplateDetailPage({
               {t.features.map((f) => (
                 <li key={f}>
                   <span className="feature-check">
-                    <CheckIcon />
+                    <CheckIcon width={15} height={15} />
                   </span>
                   {f}
                 </li>
@@ -160,7 +162,7 @@ export default async function TemplateDetailPage({
               {INCLUDED.map((f) => (
                 <li key={f}>
                   <span className="feature-check">
-                    <CheckIcon />
+                    <CheckIcon width={15} height={15} />
                   </span>
                   {f}
                 </li>

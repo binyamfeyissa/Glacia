@@ -225,6 +225,7 @@ import {
 } from "glacia";
 import { ChartDemo, CHART_SLUGS } from "./chart-demos";
 import { AIDemo, AI_SLUGS } from "./ai-demos";
+import { PhoneIcon } from "./icons";
 
 function QuestionnaireDemo() {
   const [choice, setChoice] = useState<"glass" | "blur">("glass");
@@ -1112,10 +1113,7 @@ export function ComponentDemo({ slug }: { slug: string }) {
                 <CarouselItem key={i}>
                   <div className="p-8 border rounded-2xl text-center gl-glass">
                     <span className="mb-2 flex justify-center" aria-hidden>
-                      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                        <rect x="7" y="2.5" width="10" height="19" rx="2.5" />
-                        <line x1="10.5" y1="18.5" x2="13.5" y2="18.5" />
-                      </svg>
+                      <PhoneIcon width={26} height={26} />
                     </span>
                     <h4 className="font-semibold">{title}</h4>
                     <p className="text-xs opacity-70 mt-1">Engineered with Liquid Glass</p>

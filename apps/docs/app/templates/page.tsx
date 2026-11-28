@@ -73,6 +73,7 @@ export default function TemplatesPage() {
                 src={shotPath(template, 1)}
                 alt={`${template.name} preview`}
                 loading="lazy"
+                decoding="async"
               />
               <div className="template-card-body">
                 <div className="template-title-row">
